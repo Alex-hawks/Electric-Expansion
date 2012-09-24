@@ -1,17 +1,15 @@
 package mattredsox.electricexpansion;
 
-import universalelectricity.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityMachine;
-import universalelectricity.extend.TileEntityConductor;
+import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.TileEntityElectricityReceiver;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 
-public class TileEntityVoltDetector extends TileEntityMachine
-
+public class TileEntityVoltDetector extends TileEntityElectricityReceiver
 {
 
 	double energyStored = 0;
@@ -52,9 +50,9 @@ public class TileEntityVoltDetector extends TileEntityMachine
 	}
 
 	@Override
-    public void onReceive(double amps, double voltage, ForgeDirection side)
-    {
-        super.onReceive(amps, voltage, side);
+	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+	{ 
+		super.onReceive(sender, amps, voltage, side);
   
         TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
         
@@ -67,7 +65,7 @@ public class TileEntityVoltDetector extends TileEntityMachine
         		energyStored = amps * voltage / 3600;
         		energyNeeded = ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID);
         		double transferAmps = Math.max(Math.min(ElectricInfo.getAmps(energyNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.energyStored, this.getVoltage())), 0);                        
-        		ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferAmps, this.getVoltage());   
+        		ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, , transferAmps, this.getVoltage());   
         		
         	}
        	}      
@@ -95,5 +93,6 @@ public class TileEntityVoltDetector extends TileEntityMachine
     {
         par1NBTTagCompound.setDouble("voltsin", this.voltsin);
         NBTTagList var2 = new NBTTagList(); 
-    }   
+    }
+
 }
