@@ -34,7 +34,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 
-@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = "0.8.3", dependencies = "after:BasicComponents")
+@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = "0.8.4", dependencies = "after:BasicComponents")
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class ElectricExpansion
@@ -85,10 +85,10 @@ public class ElectricExpansion
 	public void load(FMLInitializationEvent evt)
     {
     	proxy.init(); 
-    	blockBigBatteryBox= new BlockBigBatteryBox(blockBigBoxid, 0).setCreativeTab(CreativeTabs.tabDecorations);
-		blockVoltDet = new BlockVoltDetector(blockVoltDetid, 0).setCreativeTab(CreativeTabs.tabDecorations);
-		blockUPTransformer = new BlockUPTransformer(blockuptransid, 0).setCreativeTab(CreativeTabs.tabDecorations);
-		blockDOWNTransformer = new BlockDOWNTransformer(blockdowntransid, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    	blockBigBatteryBox= new BlockBigBatteryBox(3004, 0).setCreativeTab(CreativeTabs.tabDecorations);
+		blockVoltDet = new BlockVoltDetector(3005, 0).setCreativeTab(CreativeTabs.tabDecorations);
+		blockUPTransformer = new BlockUPTransformer(3006, 0).setCreativeTab(CreativeTabs.tabDecorations);
+		blockDOWNTransformer = new BlockDOWNTransformer(3007, 0).setCreativeTab(CreativeTabs.tabDecorations);
     	//Register Blocks
     	GameRegistry.registerBlock(blockBigBatteryBox);
     	GameRegistry.registerBlock(blockUPTransformer);

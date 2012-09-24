@@ -1,30 +1,81 @@
 package mattredsox.electricexpansion;
 
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.prefab.TileEntityConductor;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
+import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.EnergyNet;
+import ic2.api.IElectricItem;
+import ic2.api.IEnergySink;
+import ic2.api.IEnergySource;
+import ic2.api.IEnergyStorage;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
+import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.Ticker;
+import universalelectricity.UniversalElectricity;
+import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
+import universalelectricity.implement.IElectricityStorage;
+import universalelectricity.implement.IItemElectric;
+import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.network.ConnectionHandler;
+import universalelectricity.network.ConnectionHandler.ConnectionType;
+import universalelectricity.network.IPacketReceiver;
+import universalelectricity.network.ISimpleConnectionHandler;
+import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.prefab.Vector3;
+import buildcraft.api.core.Orientations;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerProvider;
 
-public class TileEntityVoltDetector extends TileEntityElectricityReceiver
-{
+import com.google.common.io.ByteArrayDataInput;
 
-	double energyStored = 0;
-	double energyNeeded = 0;
-	public double voltsin = 0;
-	double scale = 2;
+import cpw.mods.fml.common.Loader;
+
+public class TileEntityVoltDetector extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, ISimpleConnectionHandler
+{	
+	private double wattHourStored = 0;
+
+    private boolean isFull = false;
+    
+	private int playersUsing = 0;
 	
-	public TileEntityVoltDetector()	
-    {
-        super();
-    }
+	public IPowerProvider powerProvider;
+	
+	public boolean initialized = false;
 
-    public boolean canProduceElectricity(ForgeDirection side)
+	private boolean sendUpdate = false;
+	
+	public double voltsin = 0;
+	
+    public TileEntityVoltDetector()
     {
-        return canConnect(side) && !this.isDisabled();
+    	super();
+    	ConnectionHandler.registerConnectionHandler(this);
+    	this.setPowerProvider(null);
+    }
+    
+    @Override
+    public double wattRequest()
+    {
+        if (!this.isDisabled())
+        {
+            return ElectricInfo.getWatts(this.getMaxWattHours()) - ElectricInfo.getWatts(this.wattHourStored);
+        }
+
+        return 0;
     }
 
     @Override
@@ -32,67 +83,317 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver
     {
     	return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
-    
+
     @Override
     public boolean canConnect(ForgeDirection side)
     {
         return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();
     }
 
-	@Override
-	public double wattRequest() {
-		
-		if (!this.isDisabled())
+    @Override
+    public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+    {        
+    	
+    	voltsin = voltage;
+    	
+        if (voltage > this.getVoltage())
         {
-			return energyNeeded;
+            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+            return;
         }
-		return 0;
+        
+        if(!this.isDisabled())
+        {
+        	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
+        }
+    }
+    
+    @Override
+    public void updateEntity() 
+    {
+    	super.updateEntity();
+    	
+    	if(!this.initialized)
+    	{
+    		if(Loader.isModLoaded("IC2"))
+    		{
+    			EnergyNet.getForWorld(worldObj).addTileEntity(this);
+    		}
+    		
+    		this.initialized = true;
+    	}
+    	
+        if(!this.isDisabled())
+        {
+        	if(this.powerProvider != null)
+        	{
+        		this.setWattHours(this.wattHourStored + this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO);
+        	}
+        	
+            }
+
+            //Power redstone if the battery box is full
+            boolean isFullThisCheck = false;
+
+            if (this.wattHourStored >= this.getMaxWattHours())
+            {
+                isFullThisCheck = true;
+            }
+
+            if (this.isFull != isFullThisCheck)
+            {
+                this.isFull = isFullThisCheck;
+                this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+            }
+            
+            //Output electricity
+            if (this.wattHourStored > 0)
+            {
+                TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
+            	
+                //Output IC2 energy
+            	if(Loader.isModLoaded("IC2"))
+            	{
+	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            {
+	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+	 	            }
+            	}
+            	
+            	//Output BC energy
+            	if(Loader.isModLoaded("BuildCraft|Transport"))
+            	{
+	 	            if(this.isPoweredTile(tileEntity))
+	 	            {
+	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
+	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
+	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
+	 	            }
+            	}
+            	
+                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
+                
+                if (connector != null)
+                {
+                	//Output UE electricity
+                    if (connector instanceof TileEntityConductor)
+                    {
+                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
+                        ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
+                        this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
+                    } 
+                }
+            }
+        
+        if(!this.worldObj.isRemote)
+        {
+	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
+	        {
+	        	PacketManager.sendTileEntityPacketWithRange(this, "ElecEx", 15, this.wattHourStored, this.disabledTicks);
+	        	this.sendUpdate = false;
+	        }
+        }
+    }
+    
+    @Override
+	public void handelConnection(ConnectionType type, Object... data)
+    {
+    	if(type == ConnectionType.LOGIN_SERVER)
+    	{
+    		this.sendUpdate  = true;
+    	}
+	}
+    
+    @Override
+	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	{
+		try
+        {
+			this.wattHourStored = dataStream.readDouble();
+	        this.disabledTicks = dataStream.readInt();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+	}
+    
+    /**
+     * Reads a tile entity from NBT.
+     */
+    @Override
+    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+    {
+        super.readFromNBT(par1NBTTagCompound);
+        this.wattHourStored = par1NBTTagCompound.getDouble("electricityStored");
+      
+        }
+    
+    /**
+     * Writes a tile entity to NBT.
+     */
+    @Override
+    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+    {
+        super.writeToNBT(par1NBTTagCompound);
+        par1NBTTagCompound.setDouble("electricityStored", this.wattHourStored);
+        NBTTagList var2 = new NBTTagList();
+       }
+
+    
+    
+    @Override
+    public boolean isPoweringTo(byte side)
+    {
+        return this.isFull;
+    }
+
+    @Override
+    public boolean isIndirectlyPoweringTo(byte side)
+    {
+        return isPoweringTo(side);
+    }
+    
+    @Override
+    public double getWattHours(Object... data)
+    {
+    	return this.wattHourStored;
+    }
+
+	@Override
+	public void setWattHours(double wattHours, Object... data)
+	{
+		this.wattHourStored = Math.max(Math.min(wattHours, this.getMaxWattHours()), 0);
+	}
+	
+	@Override
+	public double getMaxWattHours()
+	{
+		return 10;
+	}
+	
+	/**
+	 * BUILDCRAFT FUNCTIONS
+	 */
+	
+	/**
+	 * Is this tile entity a BC tile?
+	 */
+	public boolean isPoweredTile(TileEntity tileEntity)
+	{
+		if(tileEntity instanceof IPowerReceptor) 
+		{
+			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+			IPowerProvider provider = receptor.getPowerProvider();
+			return provider != null && provider.getClass().getSuperclass().equals(PowerProvider.class);
+		}
+
+		return false;
 	}
 
 	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
-	{ 
-		super.onReceive(sender, amps, voltage, side);
-  
-        TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
-        
-        voltsin = voltage;
-        
-        if (tileEntity != null)
-        {
-        	if (tileEntity instanceof TileEntityConductor)
-        	{
-        		energyStored = amps * voltage / 3600;
-        		energyNeeded = ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID);
-        		double transferAmps = Math.max(Math.min(ElectricInfo.getAmps(energyNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.energyStored, this.getVoltage())), 0);                        
-        		ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, , transferAmps, this.getVoltage());   
-        		
-        	}
-       	}      
-    }
+	public void setPowerProvider(IPowerProvider provider)
+    {
+		if(provider == null)
+		{
+			if(PowerFramework.currentFramework != null)
+	    	{
+		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
+				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
+	    	}
+		}
+		else
+		{
+			this.powerProvider = provider;
+		}
+	}
+
+	@Override
+	public IPowerProvider getPowerProvider()
+	{
+		return this.powerProvider;
+	}
+
+	@Override
+	public void doWork() { }
+
+	@Override
+	public int powerRequest()
+	{
+		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
+	}
+
+	/**
+	 * INDUSTRIALCRAFT FUNCTIONS
+	 */
+	public int getStored() 
+	{
+		return (int) (this.wattHourStored*UniversalElectricity.IC2_RATIO);
+	}
 	
 	@Override
-	public double getVoltage()
+	public boolean isAddedToEnergyNet()
 	{
-		return voltsin;
+		return initialized;
 	}
-	/**
-     * Reads a tile entity from NBT.
-     */
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
+	{
+		return canReceiveFromSide(direction.toForgeDirection());
+	}
+
+	@Override
+	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
+	{
+		return direction.toForgeDirection() ==ForgeDirection.getOrientation(this.getBlockMetadata());
+	}
+
+	@Override
+	public int getCapacity() 
+	{
+		return (int)(this.getMaxWattHours()/UniversalElectricity.IC2_RATIO);
+	}
+
+	@Override
+	public int getOutput() 
+	{
+		return 32;
+	}
+
+	@Override
+	public int getMaxEnergyOutput()
+	{
+		return 32;
+	}
+
+	@Override
+	public boolean demandsEnergy()
+	{
+		return this.wattHourStored < getMaxWattHours();
+	}
+
+	@Override
+	public int injectEnergy(Direction directionFrom, int euAmount) 
+	{
+		double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
+		
+		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
+		this.setWattHours(wattHourStored + inputElectricity);
+		
+		return (int) rejectedElectricity;
+		
+
+	
+	}
+	
+    @Override
+    public double getVoltage()
     {
-    	super.readFromNBT(par1NBTTagCompound);
-        this.voltsin = par1NBTTagCompound.getDouble("voltsin");
-              
-    }
-    
-	/**
-     * Writes a tile entity to NBT.
-     */
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
-    {
-        par1NBTTagCompound.setDouble("voltsin", this.voltsin);
-        NBTTagList var2 = new NBTTagList(); 
+		return voltsin;
     }
 
 }

@@ -9,10 +9,9 @@ import net.minecraft.src.MathHelper;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.extend.BlockMachine;
-import universalelectricity.extend.IRedstoneProvider;
 
-public class BlockDOWNTransformer extends BlockMachine
+
+public class BlockDOWNTransformer extends universalelectricity.prefab.BlockMachine
 {
 	public TileEntityUPTransformer transformer;
 	
@@ -87,27 +86,6 @@ public class BlockDOWNTransformer extends BlockMachine
         }
 
         return true;
-    }
-
-
-    /**
-     * Is this block powering the block on the specified side
-     */
-    @Override
-    public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        IRedstoneProvider tileEntity = (IRedstoneProvider)par1IBlockAccess.getBlockTileEntity(x, y, z);
-        return tileEntity.isPoweringTo((byte)side);
-    }
-
-    /**
-     * Is this block indirectly powering the block on the specified side
-     */
-    @Override
-    public boolean isIndirectlyPoweringTo(World par1World, int x, int y, int z, int side)
-    {
-        IRedstoneProvider tileEntity = (IRedstoneProvider)par1World.getBlockTileEntity(x, y, z);
-        return tileEntity.isIndirectlyPoweringTo((byte)side);
     }
 
     @Override

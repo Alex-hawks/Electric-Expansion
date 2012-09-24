@@ -1,5 +1,12 @@
 package mattredsox.electricexpansion;
 
+import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.EnergyNet;
+import ic2.api.IElectricItem;
+import ic2.api.IEnergySink;
+import ic2.api.IEnergySource;
+import ic2.api.IEnergyStorage;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -11,21 +18,33 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Vector3;
-import universalelectricity.basiccomponents.BlockBasicMachine;
+import universalelectricity.Ticker;
+import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.electricity.TileEntityMachine;
-import universalelectricity.extend.IElectricityStorage;
-import universalelectricity.extend.IItemElectric;
-import universalelectricity.extend.IRedstoneProvider;
-import universalelectricity.extend.TileEntityConductor;
+import universalelectricity.implement.IConductor;
+import universalelectricity.implement.IElectricityStorage;
+import universalelectricity.implement.IItemElectric;
+import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.network.ConnectionHandler;
+import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.network.IPacketReceiver;
+import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.prefab.Vector3;
+import buildcraft.api.core.Orientations;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityBigBatteryBox extends TileEntityMachine implements IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+import cpw.mods.fml.common.Loader;
+
+public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, ISimpleConnectionHandler
 {	
 	private double wattHourStored = 0;
 
@@ -34,18 +53,26 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
     private boolean isFull = false;
     
 	private int playersUsing = 0;
+	
+	public IPowerProvider powerProvider;
+	
+	public boolean initialized = false;
+
+	private boolean sendUpdate = false;
 
     public TileEntityBigBatteryBox()
     {
     	super();
+    	ConnectionHandler.registerConnectionHandler(this);
+    	this.setPowerProvider(null);
     }
-
+    
     @Override
     public double wattRequest()
     {
         if (!this.isDisabled())
         {
-            return this.getMaxWattHours() - this.wattHourStored;
+            return ElectricInfo.getWatts(this.getMaxWattHours()) - ElectricInfo.getWatts(this.wattHourStored);
         }
 
         return 0;
@@ -54,7 +81,7 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
     @Override
     public boolean canReceiveFromSide(ForgeDirection side)
     {
-        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+    	return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
 
     @Override
@@ -64,9 +91,13 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
     }
 
     @Override
-    public void onReceive(double amps, double voltage, ForgeDirection side)
-    {
-        super.onReceive(amps, voltage, side);
+    public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+    {        
+        if (voltage > this.getVoltage())
+        {
+            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+            return;
+        }
         
         if(!this.isDisabled())
         {
@@ -77,8 +108,25 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
     @Override
     public void updateEntity() 
     {
+    	super.updateEntity();
+    	
+    	if(!this.initialized)
+    	{
+    		if(Loader.isModLoaded("IC2"))
+    		{
+    			EnergyNet.getForWorld(worldObj).addTileEntity(this);
+    		}
+    		
+    		this.initialized = true;
+    	}
+    	
         if(!this.isDisabled())
-        {            
+        {
+        	if(this.powerProvider != null)
+        	{
+        		this.setWattHours(this.wattHourStored + this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO);
+        	}
+        	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
             if (this.containingItems[0] != null && this.wattHourStored > 0)
             {
@@ -87,6 +135,11 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
                     IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
                     double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
                     this.setWattHours(this.wattHourStored - (electricItem.getTransferRate() - rejectedElectricity));
+                }
+                else if(this.containingItems[0].getItem() instanceof IElectricItem)
+                {
+                	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
+                	this.setWattHours(wattHourStored - sent);
                 }
             }
 
@@ -103,8 +156,18 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
                         this.setWattHours(this.wattHourStored + wattHourReceived);
                     }
                 }
+                else if(containingItems[1].getItem() instanceof IElectricItem)
+                {
+                	IElectricItem item = (IElectricItem)containingItems[1].getItem();
+                	if(item.canProvideEnergy())
+                	{
+                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
+                		this.setWattHours(wattHourStored + gain);
+                	}
+                }
             }
 
+            //Power redstone if the battery box is full
             boolean isFullThisCheck = false;
 
             if (this.wattHourStored >= this.getMaxWattHours())
@@ -117,31 +180,68 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
                 this.isFull = isFullThisCheck;
                 this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
             }
-
+            
+            //Output electricity
             if (this.wattHourStored > 0)
             {
-            	 TileEntity tileEntity = Vector3.getUEUnitFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
-                if (tileEntity != null)
+                TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
+            	
+                //Output IC2 energy
+            	if(Loader.isModLoaded("IC2"))
+            	{
+	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            {
+	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+	 	            }
+            	}
+            	
+            	//Output BC energy
+            	if(Loader.isModLoaded("BuildCraft|Transport"))
+            	{
+	 	            if(this.isPoweredTile(tileEntity))
+	 	            {
+	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
+	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
+	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
+	 	            }
+            	}
+            	
+                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
+                
+                if (connector != null)
                 {
-                    if (tileEntity instanceof TileEntityConductor)
+                	//Output UE electricity
+                    if (connector instanceof TileEntityConductor)
                     {
-                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((TileEntityConductor)tileEntity).connectionID);
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 10000), 0);                        
-                        ElectricityManager.instance.produceElectricity((TileEntityConductor)tileEntity, transferAmps, this.getVoltage());
+                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
+                        ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
-                    }
+                    } 
                 }
             }
         }
         
         if(!this.worldObj.isRemote)
         {
-	        if(ElectricityManager.inGameTicks % 40 == 0 && this.playersUsing > 0)
+	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
 	        {
 	        	PacketManager.sendTileEntityPacketWithRange(this, "ElecEx", 15, this.wattHourStored, this.disabledTicks);
+	        	this.sendUpdate = false;
 	        }
         }
     }
+    
+    @Override
+	public void handelConnection(ConnectionType type, Object... data)
+    {
+    	if(type == ConnectionType.LOGIN_SERVER)
+    	{
+    		this.sendUpdate  = true;
+    	}
+	}
     
     @Override
 	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
@@ -162,7 +262,7 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
     {
     	if(!this.worldObj.isRemote)
         {
-    		PacketManager.sendTileEntityPacketWithRange(this, "ElecEx", 15, this.wattHourStored, this.disabledTicks);
+    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
         }
     	
     	this.playersUsing  ++;
@@ -231,10 +331,10 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
 
         if(side == side.UP)
         {
-            return 0;
+            return 1;
         }
 
-        return 2;
+        return 0;
     }
 
     @Override
@@ -326,7 +426,7 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
     @Override
     public boolean isPoweringTo(byte side)
     {
-        return isFull;
+        return this.isFull;
     }
 
     @Override
@@ -353,9 +453,115 @@ public class TileEntityBigBatteryBox extends TileEntityMachine implements IElect
 		return 7000;
 	}
 	
-	@Override
-	public double getVoltage()
+	/**
+	 * BUILDCRAFT FUNCTIONS
+	 */
+	
+	/**
+	 * Is this tile entity a BC tile?
+	 */
+	public boolean isPoweredTile(TileEntity tileEntity)
 	{
-		return 960;
+		if(tileEntity instanceof IPowerReceptor) 
+		{
+			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+			IPowerProvider provider = receptor.getPowerProvider();
+			return provider != null && provider.getClass().getSuperclass().equals(PowerProvider.class);
+		}
+
+		return false;
+	}
+
+	@Override
+	public void setPowerProvider(IPowerProvider provider)
+    {
+		if(provider == null)
+		{
+			if(PowerFramework.currentFramework != null)
+	    	{
+		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
+				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
+	    	}
+		}
+		else
+		{
+			this.powerProvider = provider;
+		}
+	}
+
+	@Override
+	public IPowerProvider getPowerProvider()
+	{
+		return this.powerProvider;
+	}
+
+	@Override
+	public void doWork() { }
+
+	@Override
+	public int powerRequest()
+	{
+		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
+	}
+
+	/**
+	 * INDUSTRIALCRAFT FUNCTIONS
+	 */
+	public int getStored() 
+	{
+		return (int) (this.wattHourStored*UniversalElectricity.IC2_RATIO);
+	}
+	
+	@Override
+	public boolean isAddedToEnergyNet()
+	{
+		return initialized;
+	}
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
+	{
+		return canReceiveFromSide(direction.toForgeDirection());
+	}
+
+	@Override
+	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
+	{
+		return direction.toForgeDirection() ==ForgeDirection.getOrientation(this.getBlockMetadata());
+	}
+
+	@Override
+	public int getCapacity() 
+	{
+		return (int)(this.getMaxWattHours()/UniversalElectricity.IC2_RATIO);
+	}
+
+	@Override
+	public int getOutput() 
+	{
+		return 45;
+	}
+
+	@Override
+	public int getMaxEnergyOutput()
+	{
+		return 45;
+	}
+
+	@Override
+	public boolean demandsEnergy()
+	{
+		return this.wattHourStored < getMaxWattHours();
+	}
+
+	@Override
+	public int injectEnergy(Direction directionFrom, int euAmount) 
+	{
+		double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
+		
+		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
+		this.setWattHours(wattHourStored + inputElectricity);
+		
+		return (int) rejectedElectricity;
 	}
 }

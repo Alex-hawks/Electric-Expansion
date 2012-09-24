@@ -1,20 +1,21 @@
 package mattredsox.electricexpansion;
 
+import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import universalelectricity.basiccomponents.SlotElectricItem;
-import universalelectricity.extend.IItemElectric;
+import universalelectricity.implement.IItemElectric;
 
 public class ContainerBigBatteryBox extends Container
 {
-    private TileEntityBigBatteryBox batteryBox;
+    private TileEntityBigBatteryBox tileEntity;
 
     public ContainerBigBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBigBatteryBox batteryBox)
     {
-        this.batteryBox = batteryBox;
+        this.tileEntity = batteryBox;
         this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot
         this.addSlotToContainer(new SlotElectricItem(batteryBox, 1, 33, 48)); //Bottom slot
         int var3;
@@ -31,12 +32,20 @@ public class ContainerBigBatteryBox extends Container
         {
             this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
         }
+        
+        tileEntity.openChest();
+    }
+    
+    public void onCraftGuiClosed(EntityPlayer entityplayer)
+    {
+		super.onCraftGuiClosed(entityplayer);
+		tileEntity.closeChest();
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer par1EntityPlayer)
     {
-        return this.batteryBox.isUseableByPlayer(par1EntityPlayer);
+        return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
     }
 
     /**
@@ -71,6 +80,22 @@ public class ContainerBigBatteryBox extends Container
                             return null;
                         }
                     }
+                }
+                else if(var4.getItem() instanceof IElectricItem)
+                {
+                	if(((IElectricItem)var4.getItem()).canProvideEnergy())
+                	{
+                		if(!mergeItemStack(var4, 1, 2, false))
+                		{
+                			return null;
+                		}
+                	}
+                	else {
+                		if(!mergeItemStack(var4, 0, 1, false))
+                		{
+                			return null;
+                		}
+                	}
                 }
                 else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
                 {

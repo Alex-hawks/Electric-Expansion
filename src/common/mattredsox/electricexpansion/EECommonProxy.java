@@ -9,9 +9,8 @@ import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.basiccomponents.TileEntityCopperWire;
-import universalelectricity.extend.CommonProxy;
 
-public class EECommonProxy extends CommonProxy
+public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 {
 
 	@Override
