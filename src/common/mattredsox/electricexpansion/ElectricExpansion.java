@@ -11,8 +11,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.*;
 import universalelectricity.basiccomponents.BCCommonProxy;
+import universalelectricity.basiccomponents.BasicComponents;
 import universalelectricity.basiccomponents.BlockBCOre;
 import universalelectricity.basiccomponents.BlockBasicMachine;
 import universalelectricity.basiccomponents.BlockCopperWire;
@@ -62,12 +62,12 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ElectricExpansion
 {
-    protected static final String VERSION = "0.8.4";
+    protected static final String VERSION = "0.0.5";
 
     public static final String FILE_PATH = "/basiccomponents/textures/";
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 
-    @Instance
+    
     public static ElectricExpansion instance;
     
     @SidedProxy(clientSide = "mattredsox.electricexpansion.client.EEClientProxy", serverSide = "mattredsox.electricexpansion.EECommonProxy")
