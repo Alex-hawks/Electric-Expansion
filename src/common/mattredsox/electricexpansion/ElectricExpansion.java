@@ -11,8 +11,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import universalelectricity.UniversalElectricity;
 import universalelectricity.basiccomponents.BCCommonProxy;
-import universalelectricity.basiccomponents.BasicComponents;
 import universalelectricity.basiccomponents.BlockBCOre;
 import universalelectricity.basiccomponents.BlockBasicMachine;
 import universalelectricity.basiccomponents.BlockCopperWire;
@@ -57,7 +57,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
  *
  */
 
-@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, dependencies = "after:*")
+@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents")
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 
 public class ElectricExpansion
@@ -87,7 +87,6 @@ public class ElectricExpansion
     {
 		instance = this;
 		
-		UniversalElectricity.registerMod(this, "ElectricExpansion", VERSION);
 		
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
