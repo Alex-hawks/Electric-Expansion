@@ -8,6 +8,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -64,7 +65,7 @@ public class ElectricExpansion
 {
     protected static final String VERSION = "0.0.5";
 
-    public static final String FILE_PATH = "/basiccomponents/textures/";
+    public static final String FILE_PATH = "/electricexpansion/textures/";
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 
     
@@ -81,13 +82,16 @@ public class ElectricExpansion
     public static final Block blockVoltDet = new BlockVoltDetector(getBlockConfigID(CONFIGURATION, "VoltDetector", BLOCK_ID_PREFIX + 1), 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockUPTransformer = new BlockUPTransformer(getBlockConfigID(CONFIGURATION, "UPTransformer", BLOCK_ID_PREFIX + 2), 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(getBlockConfigID(CONFIGURATION, "DOWNTransformer", BLOCK_ID_PREFIX + 3), 0).setCreativeTab(CreativeTabs.tabDecorations);
-    
+    public static final Block blockEtcher = new BlockEtcher(getBlockConfigID(CONFIGURATION, "Etcher", BLOCK_ID_PREFIX + 4)).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
+    public static final Block blockFuse = new BlockFuse(getBlockConfigID(CONFIGURATION, "Relay", BLOCK_ID_PREFIX + 5), 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
+
     @PreInit
 	public void preInit(FMLPreInitializationEvent event)
     {
 		instance = this;
 		
-		
+		MinecraftForgeClient.preloadTexture("/electricexpansion/blocks1.png");
+
 		
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -96,7 +100,9 @@ public class ElectricExpansion
     	GameRegistry.registerBlock(blockUPTransformer);
     	GameRegistry.registerBlock(blockDOWNTransformer);
     	GameRegistry.registerBlock(blockVoltDet);
-		
+    	GameRegistry.registerBlock(blockEtcher);
+    	GameRegistry.registerBlock(blockFuse);
+
     	proxy.preInit();
     }
     
@@ -109,12 +115,15 @@ public class ElectricExpansion
         LanguageRegistry.addName(blockBigBatteryBox, "Larger Battery Box");
         LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
         LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
-		
+        LanguageRegistry.addName(blockEtcher, "Etcher");
+        LanguageRegistry.addName(blockFuse, "120 Volt Relay");
+
 		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
 		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
-		
+		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
+
 		//Recipes
 		//Oil Bucket
 	//	RecipeManager.addRecipe(new ItemStack(blockOre), new Object [] {"CCC", "CBC", "CCC", 'B', Item.bucketWater, 'C', Item.coal});

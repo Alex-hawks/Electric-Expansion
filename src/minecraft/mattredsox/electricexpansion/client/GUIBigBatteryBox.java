@@ -8,7 +8,7 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.basiccomponents.BasicComponents;
+import universalelectricity.BasicComponents;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 
