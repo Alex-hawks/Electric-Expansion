@@ -1,5 +1,6 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
+import electricexpansion.ElectricExpansion;
 import net.minecraft.src.Block;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
@@ -10,7 +11,7 @@ import net.minecraft.src.World;
 
 public class BlockEtcher extends BlockContainer
 {
-protected BlockEtcher(int par1)
+public BlockEtcher(int par1)
 {
          super(par1, Material.wood);
          this.setCreativeTab(CreativeTabs.tabDecorations);

@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;

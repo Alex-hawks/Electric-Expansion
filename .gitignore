@@ -16,8 +16,8 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
-!/src/minecraft/mattredsox/
-!/src/common/mattredsox/
+!/src/minecraft/electricexpansion/
+!/src/common/electricexpansion/
 !/src/common/mcmod.info
 !/modversion.txt
 !/electricexpansion/*

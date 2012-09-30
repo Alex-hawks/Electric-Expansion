@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

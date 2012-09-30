@@ -1,5 +1,6 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
+import electricexpansion.ElectricExpansion;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -10,13 +11,11 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class BlockVoltDetector extends universalelectricity.prefab.BlockMachine
+public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
 {
-	public TileEntityVoltDetector transformer;
-	
-    public BlockVoltDetector(int id, int textureIndex)
+    public BlockBigBatteryBox(int id, int textureIndex)
     {
-        super("VoltDetec", id, Material.wood);
+        super("Big Battery Box", id, Material.wood);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
@@ -25,7 +24,7 @@ public class BlockVoltDetector extends universalelectricity.prefab.BlockMachine
     @Override
     public String getTextureFile()
     {
-        return "/electricexpansion/blocks1.png";
+        return "/electricexpansion/blocks.png";
     }
 
     @Override
@@ -33,7 +32,7 @@ public class BlockVoltDetector extends universalelectricity.prefab.BlockMachine
     {
         if (side == 0 || side == 1)
         {
-            return this.blockIndexInTexture + 1;
+            return this.blockIndexInTexture;
         }
         else
         {
@@ -87,6 +86,22 @@ public class BlockVoltDetector extends universalelectricity.prefab.BlockMachine
         return true;
     }
 
+    /**
+     * Called when the block is right clicked by the player
+     */
+    @Override
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+    {
+        if (!par1World.isRemote)
+        {
+            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
+            return true;
+        }
+
+        return true;
+    }
+
+
     @Override
     public boolean isOpaqueCube()
     {
@@ -108,20 +123,7 @@ public class BlockVoltDetector extends universalelectricity.prefab.BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityVoltDetector();
+		return new TileEntityBigBatteryBox();
 	}
 
-@Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-    {
-	  if (!par1World.isRemote)
-      {
-          par5EntityPlayer.openGui(ElectricExpansion.instance, 1, par1World, par2, par3, par4);
-          return true;
-      }
-
-      return true;
-  }
-
-   
 }

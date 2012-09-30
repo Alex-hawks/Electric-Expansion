@@ -1,14 +1,15 @@
-package mattredsox.electricexpansion.client;
+package electricexpansion.client.Mattredsox;
 
-import mattredsox.electricexpansion.ContainerBigBatteryBox;
-import mattredsox.electricexpansion.TileEntityBigBatteryBox;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import electricexpansion.Mattredsox.*;
+
 import universalelectricity.BasicComponents;
+import universalelectricity.basiccomponents.TileEntityBatteryBox;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 

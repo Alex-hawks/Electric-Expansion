@@ -1,7 +1,6 @@
-package mattredsox.electricexpansion;
+package electricexpansion;
 
 import java.io.File;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
@@ -51,6 +50,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import electricexpansion.Mattredsox.*;
 
 /**
  * The main class for managing Basic Component items and blocks.
@@ -71,7 +71,7 @@ public class ElectricExpansion
     
     public static ElectricExpansion instance;
     
-    @SidedProxy(clientSide = "mattredsox.electricexpansion.client.EEClientProxy", serverSide = "mattredsox.electricexpansion.EECommonProxy")
+    @SidedProxy(clientSide = "electricexpansion.client.EEClientProxy", serverSide = "electricexpansion.EECommonProxy")
 	public static EECommonProxy proxy;
     
     /**
@@ -117,6 +117,7 @@ public class ElectricExpansion
         LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
         LanguageRegistry.addName(blockEtcher, "Etcher");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
+
 
 		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
 		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");

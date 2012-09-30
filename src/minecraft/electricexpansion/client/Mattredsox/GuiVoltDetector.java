@@ -1,11 +1,12 @@
-package mattredsox.electricexpansion.client;
+package electricexpansion.client.Mattredsox;
 
-import mattredsox.electricexpansion.TileEntityVoltDetector;
 import net.minecraft.src.*;
 import net.minecraftforge.common.ForgeDirection;
 
 
 import org.lwjgl.opengl.GL11;
+
+import electricexpansion.Mattredsox.TileEntityVoltDetector;
 
 import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricInfo;

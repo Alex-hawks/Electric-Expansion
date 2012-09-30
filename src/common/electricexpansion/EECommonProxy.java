@@ -1,9 +1,8 @@
-package mattredsox.electricexpansion;
+package electricexpansion;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import mattredsox.electricexpansion.client.GUIBigBatteryBox;
-import mattredsox.electricexpansion.client.GuiEtcher;
-import mattredsox.electricexpansion.client.GuiVoltDetector;
+import electricexpansion.Mattredsox.*;
+import electricexpansion.client.Mattredsox.*;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;

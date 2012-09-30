@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
@@ -44,7 +44,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityFuse extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, ISimpleConnectionHandler
+public class TileEntityUPTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, ISimpleConnectionHandler
 {	
 	private double wattHourStored = 0;
 
@@ -60,8 +60,9 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 	
 	public double voltsin = 0;
 	
+	private int scale = 2;
 
-    public TileEntityFuse()
+    public TileEntityUPTransformer()
     {
     	super();
     	ConnectionHandler.registerConnectionHandler(this);
@@ -176,18 +177,15 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
             	
                 TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
                 
-                if(connector != null)
+                if (connector != null)
                 {
                 	//Output UE electricity
                     if (connector instanceof TileEntityConductor)
                     {
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
                         double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
-                        this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
-                    if (voltsin < 121)
-                    {
                         ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                    }
+                        this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     } 
                 }
             }
@@ -397,7 +395,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
     @Override
     public double getVoltage()
     {
-		return voltsin;
+		return voltsin * scale;
     }
 
 }

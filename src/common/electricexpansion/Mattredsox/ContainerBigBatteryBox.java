@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import ic2.api.IElectricItem;
 import net.minecraft.src.Container;

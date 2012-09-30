@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
@@ -44,7 +44,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityUPTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, ISimpleConnectionHandler
+public class TileEntityVoltDetector extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, ISimpleConnectionHandler
 {	
 	private double wattHourStored = 0;
 
@@ -60,9 +60,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	
 	public double voltsin = 0;
 	
-	private int scale = 2;
-
-    public TileEntityUPTransformer()
+    public TileEntityVoltDetector()
     {
     	super();
     	ConnectionHandler.registerConnectionHandler(this);
@@ -395,7 +393,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
     @Override
     public double getVoltage()
     {
-		return voltsin * scale;
+		return voltsin;
     }
 
 }

@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;

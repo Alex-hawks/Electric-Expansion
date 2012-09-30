@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -11,13 +11,13 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 
 
-public class BlockFuse extends universalelectricity.prefab.BlockMachine
+public class BlockDOWNTransformer extends universalelectricity.prefab.BlockMachine
 {
-	public TileEntityFuse transformer;
+	public TileEntityUPTransformer transformer;
 	
-    public BlockFuse(int id, int textureIndex)
+    public BlockDOWNTransformer(int id, int textureIndex)
     {
-        super("fuse", id, Material.wood);
+        super("DOWNTransformer", id, Material.wood);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
@@ -109,7 +109,7 @@ public class BlockFuse extends universalelectricity.prefab.BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityFuse();
+		return new TileEntityDOWNTransformer();
 	}
 /**
     @Override

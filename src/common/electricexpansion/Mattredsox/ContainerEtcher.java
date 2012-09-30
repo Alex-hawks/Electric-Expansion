@@ -1,5 +1,6 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
+import electricexpansion.ElectricExpansion;
 import net.minecraft.src.*;
 
 public class ContainerEtcher extends Container

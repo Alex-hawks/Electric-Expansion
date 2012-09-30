@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 
 import ic2.api.Direction;
 import ic2.api.ElectricItem;

@@ -1,4 +1,4 @@
-package mattredsox.electricexpansion;
+package electricexpansion.Mattredsox;
 import java.util.Comparator;
 
 import net.minecraft.src.*;
