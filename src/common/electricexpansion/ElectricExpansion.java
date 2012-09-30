@@ -63,7 +63,7 @@ import electricexpansion.Mattredsox.*;
 
 public class ElectricExpansion
 {
-    protected static final String VERSION = "0.0.6";
+    protected static final String VERSION = "0.0.7";
 
     public static final String FILE_PATH = "/electricexpansion/textures/";
 	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
