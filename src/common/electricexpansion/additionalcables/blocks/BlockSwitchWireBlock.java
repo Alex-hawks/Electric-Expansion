@@ -9,8 +9,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import electricexpansion.additionalcables.ACCommonProxy;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWireBlock;
+import electricexpansion.EECommonProxy;import electricexpansion.additionalcables.cables.TileEntitySwitchWireBlock;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import universalelectricity.prefab.BlockConductor;
@@ -102,7 +101,7 @@ public class BlockSwitchWireBlock extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return ACCommonProxy.BLOCK;
+        return EECommonProxy.BLOCK;
     }
     
     @SideOnly(Side.CLIENT)

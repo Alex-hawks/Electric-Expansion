@@ -5,7 +5,7 @@ package electricexpansion.additionalcables.blocks;
 
 import java.util.logging.Logger;
 
-import electricexpansion.additionalcables.AdditionalCables;
+import electricexpansion.ElectricExpansion;
 import cpw.mods.fml.common.Mod.Instance;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.Block;
@@ -15,7 +15,7 @@ public class ItemBlockRawWire extends ItemBlock
 {
 	@Instance
 	public static Object instance;
-	private Logger logger = AdditionalCables.ACLogger;
+	private Logger logger = ElectricExpansion.ACLogger;
 	public final static Object instance()
 	{
 		return instance;

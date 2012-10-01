@@ -1,8 +1,8 @@
-package additionalcables.cables;
+package electricexpansion.additionalcables.cables;
 
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import additionalcables.AdditionalCables;
+import electricexpansion.ElectricExpansion;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.network.PacketManager;
@@ -19,7 +19,7 @@ public class TileEntitySwitchWireBlock extends TileEntityConductor
 	public void updateEntity()
 	{
 		if(!this.getWorld().isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord))
-			this.getWorld().setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, AdditionalCables.offSwitchWireBlock, this.getWorld().getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+			this.getWorld().setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.offSwitchWireBlock, this.getWorld().getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 	}
 	
 

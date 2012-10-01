@@ -1,6 +1,6 @@
-package additionalcables.cables;
+package electricexpansion.additionalcables.cables;
 
-import additionalcables.AdditionalCables;
+import electricexpansion.ElectricExpansion;
 import net.minecraft.src.TileEntity;
 
 public class TileEntitySwitchWireBlockOff extends TileEntity 
@@ -14,6 +14,6 @@ public class TileEntitySwitchWireBlockOff extends TileEntity
 	public void updateEntity()
 	{
 		if(this.worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord))
-			this.worldObj.setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, AdditionalCables.onSwitchWireBlock, this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+			this.worldObj.setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.onSwitchWireBlock, this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
 	}
 }

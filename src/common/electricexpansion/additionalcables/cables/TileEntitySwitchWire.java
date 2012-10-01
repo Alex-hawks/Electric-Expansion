@@ -1,7 +1,7 @@
-package additionalcables.cables;
+package electricexpansion.additionalcables.cables;
 
-import additionalcables.AdditionalCables;
 import universalelectricity.prefab.TileEntityConductor;
+import electricexpansion.ElectricExpansion;
 
 public class TileEntitySwitchWire extends TileEntityConductor 
 {
@@ -15,7 +15,7 @@ public class TileEntitySwitchWire extends TileEntityConductor
 	public void updateEntity()
 	{
 		if(!this.getWorld().isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord))
-			this.getWorld().setBlockAndMetadataWithUpdate(this.xCoord, this.yCoord, this.zCoord, AdditionalCables.offSwitchWire, this.getWorld().getBlockMetadata(this.xCoord, this.yCoord, this.zCoord), true);
+			this.getWorld().setBlockAndMetadataWithUpdate(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.offSwitchWire, this.getWorld().getBlockMetadata(this.xCoord, this.yCoord, this.zCoord), true);
 	}    
 	
     @Override

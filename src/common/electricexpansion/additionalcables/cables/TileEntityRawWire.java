@@ -1,8 +1,7 @@
-package additionalcables.cables;
+package electricexpansion.additionalcables.cables;
 
-import additionalcables.ACCommonProxy;
-import net.minecraft.src.World;
 import universalelectricity.prefab.TileEntityConductor;
+import electricexpansion.EECommonProxy;
 
 public class TileEntityRawWire extends TileEntityConductor
 {

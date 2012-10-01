@@ -1,7 +1,7 @@
-package additionalcables.cables;
+package electricexpansion.additionalcables.cables;
 
-import additionalcables.AdditionalCables;
 import universalelectricity.prefab.TileEntityConductor;
+import electricexpansion.ElectricExpansion;
 
 public class TileEntityInsulatedWire extends TileEntityConductor 
 {

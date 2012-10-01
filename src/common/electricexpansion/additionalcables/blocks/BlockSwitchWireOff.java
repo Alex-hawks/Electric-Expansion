@@ -4,7 +4,7 @@ import java.util.Random;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import electricexpansion.additionalcables.AdditionalCables;
+import electricexpansion.ElectricExpansion;
 import electricexpansion.additionalcables.cables.TileEntitySwitchWireOff;
 
 public class BlockSwitchWireOff extends BlockSwitchWire 

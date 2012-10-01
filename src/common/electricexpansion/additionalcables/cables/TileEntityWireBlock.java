@@ -1,6 +1,6 @@
-package additionalcables.cables;
+package electricexpansion.additionalcables.cables;
 
-import additionalcables.ACCommonProxy;
+import electricexpansion.EECommonProxy;
 import net.minecraft.src.World;
 import universalelectricity.prefab.TileEntityConductor;
 
