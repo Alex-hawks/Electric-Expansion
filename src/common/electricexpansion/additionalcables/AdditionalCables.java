@@ -117,11 +117,11 @@ public class AdditionalCables {
 		//Redstone'd Cable Blocks
 		
 		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
-		VoltDet = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockVoltDetID);
-		UPTransformer = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockUPTransformerID);
-		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
-		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
-		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		VoltDet = UniversalElectricity.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
+		UPTransformer = UniversalElectricity.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
+		DOWNTransformer = UniversalElectricity.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
+		Etcher = UniversalElectricity.getBlockConfigID(i, "Etcher", blockEtcherID);
+		Fuse = UniversalElectricity.getBlockConfigID(i, "Relay", blockFuseID);
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
@@ -173,6 +173,13 @@ public class AdditionalCables {
 		Item.itemsList[offSwitchWireBlock] = new ItemBlockSwitchWireBlockOff(offSwitchWireBlock-256, blockSwitchWireBlockOff);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
+		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
+		Item.itemsList[VoltDet] = new ItemBlockRawWire(VoltDet-256, blockVoltDet);
+		Item.itemsList[UPTransformer] = new ItemBlockRawWire(UPTransformer-256, blockUPTransformer);
+		Item.itemsList[DOWNTransformer] = new ItemBlockRawWire(DOWNTransformer-256, blockDOWNTransformer);
+		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
+		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
+
 	}
 	
 	@Init
