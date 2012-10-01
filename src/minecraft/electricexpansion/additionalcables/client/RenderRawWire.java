@@ -1,4 +1,4 @@
-package additionalcables.client;
+package electricexpansion.additionalcables.client;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -6,9 +6,9 @@ import net.minecraft.src.World;
 
 import org.lwjgl.opengl.GL11;
 
-import additionalcables.cables.TileEntityRawWire;
-import additionalcables.ACCommonProxy;
-import additionalcables.AdditionalCables;
+import electricexpansion.EECommonProxy;
+import electricexpansion.additionalcables.cables.TileEntityRawWire;
+
 
 public class RenderRawWire extends TileEntitySpecialRenderer
 {
@@ -25,13 +25,13 @@ public class RenderRawWire extends TileEntitySpecialRenderer
         if(meta != -1)
         {
         	if(meta == 0)
-        		textureToUse = ACCommonProxy.TEXTURES + "RawCopperWire.png";
+        		textureToUse = EECommonProxy.TEXTURES + "RawCopperWire.png";
         	else if(meta == 1)
-        		textureToUse = ACCommonProxy.TEXTURES + "RawTinWire";
+        		textureToUse = EECommonProxy.TEXTURES + "RawTinWire";
         	else if(meta == 2)
-        		textureToUse = ACCommonProxy.TEXTURES + "RawSilverWire";
+        		textureToUse = EECommonProxy.TEXTURES + "RawSilverWire";
         	else if(meta == 3)
-        		textureToUse = ACCommonProxy.TEXTURES + "RawHVWire";
+        		textureToUse = EECommonProxy.TEXTURES + "RawHVWire";
         }
         
     	//Texture file

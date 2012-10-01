@@ -7,8 +7,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import electricexpansion.additionalcables.ACCommonProxy;
-import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
+import electricexpansion.EECommonProxy;import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
 import electricexpansion.additionalcables.cables.TileEntityRedstoneWire;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
@@ -59,7 +58,7 @@ public class BlockRedstoneWire extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return ACCommonProxy.ITEMS;
+        return EECommonProxy.ITEMS;
     }
     
     @SideOnly(Side.CLIENT)

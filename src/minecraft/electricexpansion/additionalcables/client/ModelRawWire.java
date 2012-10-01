@@ -1,4 +1,4 @@
-package additionalcables.client;
+package electricexpansion.additionalcables.client;
 
 import net.minecraft.src.Entity;
 import net.minecraft.src.ModelBase;

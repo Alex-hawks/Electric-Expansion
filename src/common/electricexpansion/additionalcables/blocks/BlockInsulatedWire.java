@@ -2,8 +2,7 @@ package electricexpansion.additionalcables.blocks;
 
 import java.util.List;
 
-import electricexpansion.additionalcables.ACCommonProxy;
-import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
+import electricexpansion.EECommonProxy;import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.Block;
@@ -59,7 +58,7 @@ public class BlockInsulatedWire extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return ACCommonProxy.ITEMS;
+        return EECommonProxy.ITEMS;
     }
     
     @SideOnly(Side.CLIENT)

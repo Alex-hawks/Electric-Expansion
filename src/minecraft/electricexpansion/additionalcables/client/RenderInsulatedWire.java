@@ -1,13 +1,11 @@
-package additionalcables.client;
+package electricexpansion.additionalcables.client;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.basiccomponents.BasicComponents;
+import electricexpansion.EECommonProxy;
+import electricexpansion.ElectricExpansion;
+import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
 import universalelectricity.basiccomponents.ModelCopperWire;
-
-import additionalcables.ACCommonProxy;
-import additionalcables.AdditionalCables;
-import additionalcables.cables.TileEntityInsulatedWire;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -27,38 +25,38 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
     	int meta = tileEntity.getBlockMetadata();
         if(meta != -1)
         {
-        	if(ID == AdditionalCables.insulatedWire)
+        	if(ID == ElectricExpansion.insulatedWire)
         	{
         		if(meta == 0)
-        			textureToUse = ACCommonProxy.TEXTURES + "CopperWire.png";
+        			textureToUse = EECommonProxy.TEXTURES + "CopperWire.png";
         		else if(meta == 1)
-        			textureToUse = ACCommonProxy.TEXTURES + "InsulatedTinWire.png";
+        			textureToUse = EECommonProxy.TEXTURES + "InsulatedTinWire.png";
         		else if(meta == 2)
-        			textureToUse = ACCommonProxy.TEXTURES + "InsulatedSilverWire.png";
+        			textureToUse = EECommonProxy.TEXTURES + "InsulatedSilverWire.png";
         		else if(meta == 3)
-        			textureToUse = ACCommonProxy.TEXTURES + "InsulatedHVWire.png";
+        			textureToUse = EECommonProxy.TEXTURES + "InsulatedHVWire.png";
         	}
-        	else if(ID == AdditionalCables.onSwitchWire)
+        	else if(ID == ElectricExpansion.onSwitchWire)
         	{
         		if(meta == 0)
-        			textureToUse = ACCommonProxy.TEXTURES + "CopperSwitchWireOn.png";
+        			textureToUse = EECommonProxy.TEXTURES + "CopperSwitchWireOn.png";
         		else if(meta == 1)
-        			textureToUse = ACCommonProxy.TEXTURES + "TinSwitchWireOn.png";
+        			textureToUse = EECommonProxy.TEXTURES + "TinSwitchWireOn.png";
         		else if(meta == 2)
-        			textureToUse = ACCommonProxy.TEXTURES + "SilverSwitchWireOn.png";
+        			textureToUse = EECommonProxy.TEXTURES + "SilverSwitchWireOn.png";
         		else if(meta == 3)
-        			textureToUse = ACCommonProxy.TEXTURES + "HVSwitchWireOn.png";
+        			textureToUse = EECommonProxy.TEXTURES + "HVSwitchWireOn.png";
         	}	
-        	else if(ID == AdditionalCables.offSwitchWire)
+        	else if(ID == ElectricExpansion.offSwitchWire)
         	{
         		if(meta == 0)
-        			textureToUse = ACCommonProxy.TEXTURES + "CopperSwitchWireOff.png";
+        			textureToUse = EECommonProxy.TEXTURES + "CopperSwitchWireOff.png";
         		else if(meta == 1)
-        			textureToUse = ACCommonProxy.TEXTURES + "TinSwitchWireOff.png";
+        			textureToUse = EECommonProxy.TEXTURES + "TinSwitchWireOff.png";
         		else if(meta == 2)
-        			textureToUse = ACCommonProxy.TEXTURES + "SilverSwitchWireOff.png";
+        			textureToUse = EECommonProxy.TEXTURES + "SilverSwitchWireOff.png";
         		else if(meta == 3)
-        			textureToUse = ACCommonProxy.TEXTURES + "HVSwitchWireOff.png";
+        			textureToUse = EECommonProxy.TEXTURES + "HVSwitchWireOff.png";
         	}	
         }
         

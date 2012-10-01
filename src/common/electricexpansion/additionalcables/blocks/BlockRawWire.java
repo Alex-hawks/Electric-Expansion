@@ -10,8 +10,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.prefab.BlockConductor;
-import electricexpansion.additionalcables.ACCommonProxy;
-import electricexpansion.additionalcables.cables.TileEntityRawWire;
+import electricexpansion.EECommonProxy;import electricexpansion.additionalcables.cables.TileEntityRawWire;
 
 public class BlockRawWire extends BlockConductor
 { 
@@ -58,7 +57,7 @@ public class BlockRawWire extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return ACCommonProxy.ITEMS;
+        return EECommonProxy.ITEMS;
     }
     
     @SideOnly(Side.CLIENT)

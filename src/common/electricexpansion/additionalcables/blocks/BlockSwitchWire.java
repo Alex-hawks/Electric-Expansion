@@ -58,7 +58,7 @@ public class BlockSwitchWire extends BlockConductor
     @Override
     public String getTextureFile()
     {
-        return ACCommonProxy.ITEMS;
+        return EECommonProxy.ITEMS;
     }
    
     @Override

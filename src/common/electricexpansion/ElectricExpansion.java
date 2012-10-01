@@ -173,12 +173,11 @@ public class ElectricExpansion {
 		Item.itemsList[offSwitchWireBlock] = new ItemBlockSwitchWireBlockOff(offSwitchWireBlock-256, blockSwitchWireBlockOff);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
-		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
-		Item.itemsList[VoltDet] = new ItemBlockRawWire(VoltDet-256, blockVoltDet);
-		Item.itemsList[UPTransformer] = new ItemBlockRawWire(UPTransformer-256, blockUPTransformer);
-		Item.itemsList[DOWNTransformer] = new ItemBlockRawWire(DOWNTransformer-256, blockDOWNTransformer);
-		Item.itemsList[Etcher] = new ItemBlockRawWire(Etcher-256, blockEtcher);
-		Item.itemsList[Fuse] = new ItemBlockRawWire(Fuse-256, blockFuse);
+		GameRegistry.registerBlock(blockBigBatteryBox);
+		GameRegistry.registerBlock(blockDOWNTransformer);
+		GameRegistry.registerBlock(blockUPTransformer);
+		GameRegistry.registerBlock(blockEtcher);
+		GameRegistry.registerBlock(blockVoltDet);
 
 	}
 	
