@@ -115,6 +115,14 @@ public class AdditionalCables {
 		offSwitchWireBlock = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Block_Off", offSwitchWireBlockID);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
+		
+		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		VoltDet = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockVoltDetID);
+		UPTransformer = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockUPTransformerID);
+		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
 	}
