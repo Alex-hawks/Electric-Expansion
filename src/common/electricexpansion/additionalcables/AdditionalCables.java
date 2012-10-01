@@ -177,8 +177,8 @@ public class AdditionalCables {
 		Item.itemsList[VoltDet] = new ItemBlockRawWire(VoltDet-256, blockVoltDet);
 		Item.itemsList[UPTransformer] = new ItemBlockRawWire(UPTransformer-256, blockUPTransformer);
 		Item.itemsList[DOWNTransformer] = new ItemBlockRawWire(DOWNTransformer-256, blockDOWNTransformer);
-		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
-		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
+		Item.itemsList[Etcher] = new ItemBlockRawWire(Etcher-256, blockEtcher);
+		Item.itemsList[Fuse] = new ItemBlockRawWire(Fuse-256, blockFuse);
 
 	}
 	
@@ -294,6 +294,13 @@ public class AdditionalCables {
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Silver.name", "Hidden Silver Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.HV.name", "Hidden HV Switch Wire");
 
-		RecipeManager.addRecipes();
+		LanguageRegistry.addName(blockUPTransformer, "Up Transformer");
+        LanguageRegistry.addName(blockBigBatteryBox, "Larger Battery Box");
+        LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
+        LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
+        LanguageRegistry.addName(blockEtcher, "Etcher");
+        LanguageRegistry.addName(blockFuse, "120 Volt Relay");
+        
+	//	RecipeManager.addRecipes();
 	}
 }

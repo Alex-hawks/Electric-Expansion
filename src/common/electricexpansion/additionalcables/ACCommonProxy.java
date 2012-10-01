@@ -7,6 +7,11 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import electricexpansion.Mattredsox.TileEntityBigBatteryBox;
+import electricexpansion.Mattredsox.TileEntityDOWNTransformer;
+import electricexpansion.Mattredsox.TileEntityFuse;
+import electricexpansion.Mattredsox.TileEntityUPTransformer;
+import electricexpansion.Mattredsox.TileEntityVoltDetector;
 import electricexpansion.additionalcables.cables.*;
 import electricexpansion.additionalcables.client.*;
 
@@ -29,6 +34,11 @@ public class ACCommonProxy extends CommonProxy {
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlockOff.class, "TileEntitySwitchWireBlockOff");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
+		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
+		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
+		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
+		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
+		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
 	}
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

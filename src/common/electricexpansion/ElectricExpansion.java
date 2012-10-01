@@ -1,149 +1,306 @@
 package electricexpansion;
 
 import java.io.File;
+import java.util.logging.Logger;
+
+import electricexpansion.Mattredsox.BlockBigBatteryBox;
+import electricexpansion.Mattredsox.BlockDOWNTransformer;
+import electricexpansion.Mattredsox.BlockEtcher;
+import electricexpansion.Mattredsox.BlockFuse;
+import electricexpansion.Mattredsox.BlockUPTransformer;
+import electricexpansion.Mattredsox.BlockVoltDetector;
+import electricexpansion.additionalcables.blocks.*;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.BCCommonProxy;
-import universalelectricity.basiccomponents.BlockBCOre;
-import universalelectricity.basiccomponents.BlockBasicMachine;
-import universalelectricity.basiccomponents.BlockCopperWire;
-import universalelectricity.basiccomponents.BlockOilFlowing;
-import universalelectricity.basiccomponents.BlockOilStill;
-import universalelectricity.basiccomponents.ItemBasic;
-import universalelectricity.basiccomponents.ItemBasicMachine;
-import universalelectricity.basiccomponents.ItemBattery;
-import universalelectricity.basiccomponents.ItemCircuit;
-import universalelectricity.basiccomponents.ItemCopperWire;
-import universalelectricity.basiccomponents.ItemOilBucket;
-import universalelectricity.basiccomponents.ItemOre;
-import universalelectricity.basiccomponents.ItemWrench;
-import universalelectricity.basiccomponents.TileEntityBatteryBox;
-import universalelectricity.basiccomponents.TileEntityCoalGenerator;
-import universalelectricity.basiccomponents.TileEntityElectricFurnace;
-import universalelectricity.network.PacketManager;
-import universalelectricity.ore.OreGenBase;
-import universalelectricity.ore.OreGenReplaceStone;
-import universalelectricity.ore.OreGenerator;
-import universalelectricity.recipe.RecipeManager;
-import buildcraft.api.liquids.LiquidData;
-import buildcraft.api.liquids.LiquidManager;
-import buildcraft.api.liquids.LiquidStack;
-import cpw.mods.fml.common.ICraftingHandler;
-import cpw.mods.fml.common.Loader;
+import net.minecraft.src.TileEntity;
+
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import electricexpansion.Mattredsox.*;
 
-/**
- * The main class for managing Basic Component items and blocks.
- * @author Calclavia
- *
- */
+import net.minecraftforge.common.Configuration;
 
-@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents")
-@NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
+import universalelectricity.BasicComponents;
+import universalelectricity.UniversalElectricity;
+import universalelectricity.recipe.RecipeManager;
 
-public class ElectricExpansion
-{
-    protected static final String VERSION = "0.0.7";
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.3.5", dependencies = "after:BasicComponents", useMetadata = true)
+@NetworkMod(clientSideRequired=true, serverSideRequired=false)
+public class ElectricExpansion {
 
-    public static final String FILE_PATH = "/electricexpansion/textures/";
-	public static final Configuration CONFIGURATION = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
+	public static int[] versionArray = {0, 3, 5}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public static String version;
+	public static final int BLOCK_ID_PREFIX = 3980;
+	
+	public static int rawWireID = BLOCK_ID_PREFIX;
+	public static int insulatedWireID = BLOCK_ID_PREFIX + 1;
+	public static int wireBlocksID = BLOCK_ID_PREFIX + 2;
+	public static int switchWireID = BLOCK_ID_PREFIX + 3;
+	public static int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
+	public static int offSwitchWireID = BLOCK_ID_PREFIX + 5;
+	public static int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
+	//public static int redstoneWireID = BLOCK_ID_PREFIX + 7;
+	//public static int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
+	public static int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
+	public static int blockVoltDetID = BLOCK_ID_PREFIX + 10;
+	public static int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
+	public static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
+	public static int blockEtcherID = BLOCK_ID_PREFIX + 13;
+	public static int blockFuseID = BLOCK_ID_PREFIX + 14;
 
-    
-    public static ElectricExpansion instance;
-    
-    @SidedProxy(clientSide = "electricexpansion.client.EEClientProxy", serverSide = "electricexpansion.EECommonProxy")
+	public static int rawWire;
+	public static int insulatedWire;
+	public static int wireBlocks;
+	public static int onSwitchWire;
+	public static int onSwitchWireBlock;
+	public static int offSwitchWire;
+	public static int offSwitchWireBlock;
+	//public static int redstoneWire;
+	//public static int redstoneWireBlock;
+	public static int BigBatteryBox;
+	public static int VoltDet;
+	public static int UPTransformer;
+	public static int DOWNTransformer;
+	public static int Etcher;
+	public static int Fuse;
+	
+	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
+	public static boolean configLoaded = configLoad(CONFIG);
+	
+	public static final Block blockRawWire = new BlockRawWire(rawWire, 0);
+	public static final Block blockInsulatedWire = new BlockInsulatedWire(insulatedWire, 0);
+	public static final Block blockWireBlock = new BlockWireBlock(wireBlocks, 0);
+	public static final Block blockSwitchWire = new BlockSwitchWire(onSwitchWire, 0);
+	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(onSwitchWireBlock, 0);
+	public static final Block blockSwitchWireOff = new BlockSwitchWireOff(offSwitchWire, 0);
+	public static final Block blockSwitchWireBlockOff = new BlockSwitchWireBlockOff(offSwitchWireBlock, 0);
+	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
+	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	public static final Block blockBigBatteryBox = new BlockBigBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockEtcher = new BlockEtcher(Etcher).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
+    public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
+	
+	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
+	public static boolean[] startLogLogged = {false, false, false, false};
+	
+	public static ElectricExpansion instance;
+	
+	@SidedProxy(clientSide="electricexpansion.client.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
 	public static EECommonProxy proxy;
-    
-    /**
-     * Here is where all the Universal Components are defined. You may reference to these variables.
-    */
-    public static final int BLOCK_ID_PREFIX = 3004;
-    public static final Block blockBigBatteryBox = new BlockBigBatteryBox(getBlockConfigID(CONFIGURATION, "LargerBatBox", BLOCK_ID_PREFIX), 0).setCreativeTab(CreativeTabs.tabDecorations);
-    public static final Block blockVoltDet = new BlockVoltDetector(getBlockConfigID(CONFIGURATION, "VoltDetector", BLOCK_ID_PREFIX + 1), 0).setCreativeTab(CreativeTabs.tabDecorations);
-    public static final Block blockUPTransformer = new BlockUPTransformer(getBlockConfigID(CONFIGURATION, "UPTransformer", BLOCK_ID_PREFIX + 2), 0).setCreativeTab(CreativeTabs.tabDecorations);
-    public static final Block blockDOWNTransformer = new BlockDOWNTransformer(getBlockConfigID(CONFIGURATION, "DOWNTransformer", BLOCK_ID_PREFIX + 3), 0).setCreativeTab(CreativeTabs.tabDecorations);
-    public static final Block blockEtcher = new BlockEtcher(getBlockConfigID(CONFIGURATION, "Etcher", BLOCK_ID_PREFIX + 4)).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
-    public static final Block blockFuse = new BlockFuse(getBlockConfigID(CONFIGURATION, "Relay", BLOCK_ID_PREFIX + 5), 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
-
-    @PreInit
-	public void preInit(FMLPreInitializationEvent event)
-    {
-		instance = this;
+	
+	public static boolean configLoad(Configuration i)
+	{
+		rawWire = UniversalElectricity.getBlockConfigID(i, "Uninsulated_Wire", rawWireID);
+		insulatedWire = UniversalElectricity.getBlockConfigID(i, "Insualted_Wire", insulatedWireID);
+		wireBlocks = UniversalElectricity.getBlockConfigID(i, "Wire_Block", wireBlocksID);
+		onSwitchWire = UniversalElectricity.getBlockConfigID(i, "Switch_Wire", switchWireID);
+		onSwitchWireBlock = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Block", switchWireBlockID);
+		offSwitchWire = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Off", offSwitchWireID);
+		offSwitchWireBlock = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Block_Off", offSwitchWireBlockID);
+		//Redstone'd Insulated Cable
+		//Redstone'd Cable Blocks
 		
-		MinecraftForgeClient.preloadTexture("/electricexpansion/blocks1.png");
+		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		VoltDet = UniversalElectricity.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
+		UPTransformer = UniversalElectricity.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
+		DOWNTransformer = UniversalElectricity.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
+		Etcher = UniversalElectricity.getBlockConfigID(i, "Etcher", blockEtcherID);
+		Fuse = UniversalElectricity.getBlockConfigID(i, "Relay", blockFuseID);
 
+		configLoaded = true;
+		return true; //returns true to configLoaded VAR
+	}
+	
+	private static void StartLog(String string1)
+	{
+		int i;
+		version = "v";
+		for (i=0; i<versionArray.length; i++)
+			version = version + "." + versionArray[i];
+		String string2 = null;
+		int j = 0;
 		
-		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
+		if(string1 != null && string1 == "preInit")
+			{
+			string2 = "PreInitializing";
+			j = 1;
+			}
+		if(string1 != null && string1 == "Init")
+			{
+			string2 = "Initializing";
+			j = 2;
+			}
+		if(string1 != null && string1 == "postInit")
+			{
+			string2 = "PostInitializing";
+			j = 3;
+			}
+		
+		ACLogger.setParent(FMLLog.getLogger());
+		ACLogger.info(string2 + " Additional Cables " + version);
+		startLogLogged[j] = true;
+		if(startLogLogged[1] && startLogLogged[2] && startLogLogged[3])
+			startLogLogged[0] = true;
+	}
+	
+	@PreInit
+	public void preInit(FMLPreInitializationEvent event) 
+	{
+		if(!configLoaded){configLoad(CONFIG);}
+		if(startLogLogged[1] != true){StartLog("preInit");}
+		Item.itemsList[rawWire] = new ItemBlockRawWire(rawWire-256, blockRawWire);
+		Item.itemsList[insulatedWire] = new ItemBlockInsualtedWire(insulatedWire-256, blockInsulatedWire);
+		Item.itemsList[wireBlocks] = new ItemBlockWireBlock(wireBlocks-256, blockWireBlock);
+		Item.itemsList[onSwitchWire] = new ItemBlockSwitchWire(onSwitchWire-256, blockSwitchWire);
+		Item.itemsList[onSwitchWireBlock] = new ItemBlockSwitchWireBlock(onSwitchWireBlock-256, blockSwitchWireBlock);
+		Item.itemsList[offSwitchWire] = new ItemBlockSwitchWireOff(offSwitchWire-256, blockSwitchWireOff);
+		Item.itemsList[offSwitchWireBlock] = new ItemBlockSwitchWireBlockOff(offSwitchWireBlock-256, blockSwitchWireBlockOff);
+		//Redstone'd Insulated Cable
+		//Redstone'd Cable Blocks
+		Item.itemsList[BigBatteryBox] = new ItemBlockRawWire(BigBatteryBox-256, blockBigBatteryBox);
+		Item.itemsList[VoltDet] = new ItemBlockRawWire(VoltDet-256, blockVoltDet);
+		Item.itemsList[UPTransformer] = new ItemBlockRawWire(UPTransformer-256, blockUPTransformer);
+		Item.itemsList[DOWNTransformer] = new ItemBlockRawWire(DOWNTransformer-256, blockDOWNTransformer);
+		Item.itemsList[Etcher] = new ItemBlockRawWire(Etcher-256, blockEtcher);
+		Item.itemsList[Fuse] = new ItemBlockRawWire(Fuse-256, blockFuse);
 
-    	//Register Blocks
-	   	GameRegistry.registerBlock(blockBigBatteryBox);
-    	GameRegistry.registerBlock(blockUPTransformer);
-    	GameRegistry.registerBlock(blockDOWNTransformer);
-    	GameRegistry.registerBlock(blockVoltDet);
-    	GameRegistry.registerBlock(blockEtcher);
-    	GameRegistry.registerBlock(blockFuse);
+	}
+	
+	@Init
+	public void load(FMLInitializationEvent event) 
+	{
+		if(startLogLogged[2] != true){StartLog("Init");}
+		proxy.init();
+		
+		//Uninsulated Wire Recipes
+		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 0), new Object [] {" @ ", " @ ", " @ ", '@', "ingotCopper"});
+		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 1), new Object [] {" @ ", " @ ", " @ ", '@', "ingotTin"});
+		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 2), new Object [] {" @ ", " @ ", " @ ", '@', "ingotSilver"});
+		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"});
+		
+		//Recipes for supporting other UE add-ons, the slack way...
+		RecipeManager.addShapelessRecipe(new ItemStack(BasicComponents.blockCopperWire, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(BasicComponents.blockCopperWire, 1)});
 
-    	proxy.preInit();
-    }
-    
-    @Init
-	public void load(FMLInitializationEvent evt)
-    {
-    	proxy.init();
-    					
+		//Shapeless Insulated Wire Recipes (From insulation, and the corresponding Uninsulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(blockRawWire, 1, 0), Block.cloth});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 1), new Object[]{new ItemStack(blockRawWire, 1, 1), Block.cloth});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 2), new Object[]{new ItemStack(blockRawWire, 1, 2), Block.cloth});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 3), new Object[]{new ItemStack(blockRawWire, 1, 3), Block.cloth});
+		
+		//Shaped Insulated Wire Recipes (From insulation, and the corresponding OreDictionary Ingots)
+		RecipeManager.addRecipe(new ItemStack(blockInsulatedWire, 7, 0), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotCopper"});
+		RecipeManager.addRecipe(new ItemStack(blockInsulatedWire, 7, 1), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotTin"});
+		RecipeManager.addRecipe(new ItemStack(blockInsulatedWire, 7, 2), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotSilver"});
+		RecipeManager.addRecipe(new ItemStack(blockInsulatedWire, 7, 3), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotAluminium"});
+		
+		//Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[]{new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.stone});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 1), new Object[]{new ItemStack(blockRawWire, 1, 1), Block.cloth, Block.stone});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 2), new Object[]{new ItemStack(blockRawWire, 1, 2), Block.cloth, Block.stone});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 3), new Object[]{new ItemStack(blockRawWire, 1, 3), Block.cloth, Block.stone});
+		
+		//Wire Block Recipes (From Block.stone, and the corresponding Insulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[]{new ItemStack(blockInsulatedWire, 1, 0), Block.stone});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 1), Block.stone});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 2), new Object[]{new ItemStack(blockInsulatedWire, 1, 2), Block.stone});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 3), new Object[]{new ItemStack(blockInsulatedWire, 1, 3), Block.stone});
+		
+		//Shapeless Switch Wire Recipes (From insulation, a lever, and the corresponding Uninsulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 0), new Object[]{new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 1), new Object[]{new ItemStack(blockRawWire, 1, 1), Block.cloth, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 2), new Object[]{new ItemStack(blockRawWire, 1, 2), Block.cloth, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 3), new Object[]{new ItemStack(blockRawWire, 1, 3), Block.cloth, Block.lever});
+		
+		//Shapeless Switch Wire Recipes (From insulation, a lever, and the corresponding Uninsulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 0), new Object[]{new ItemStack(blockInsulatedWire, 1, 0), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 1), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 2), new Object[]{new ItemStack(blockInsulatedWire, 1, 2), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireOff, 1, 3), new Object[]{new ItemStack(blockInsulatedWire, 1, 3), Block.lever});
+		
+		//Switch Wire Block Recipes (From insulation, Block.stone, Block.lever and the corresponding Uninsulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 0), new Object[]{new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.stone, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockRawWire, 1, 1), Block.cloth, Block.stone, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockRawWire, 1, 2), Block.cloth, Block.stone, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockRawWire, 1, 3), Block.cloth, Block.stone, Block.lever});
+		
+		//Switch Wire Block Recipes (From Block.stone, Block,lever and the corresponding Insulated Wire)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 0), new Object[]{new ItemStack(blockInsulatedWire, 1, 0), Block.stone, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 1), Block.stone, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockInsulatedWire, 1, 2), Block.stone, Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockInsulatedWire, 1, 3), Block.stone, Block.lever});
+		
+		//Switch Wire Block Recipes (From Block.lever, and the corresponding Wire Block)
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 0), new Object[]{new ItemStack(blockWireBlock, 1, 0), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
+	}
+	
+	@PostInit
+	public void postInit(FMLPostInitializationEvent event) 
+	{
+		if(startLogLogged[3] != true){StartLog("postInit");}
+		
+		//Set the Uninsulated Cable Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Copper.name", "Uninsulated Copper Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Tin.name", "Uninsulated Tin Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Silver.name", "Uninsulated Silver Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.RawWire.HV.name", "Uninsulated HV Wire");
+		//Set the Insulated Cable Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Copper.name", "Insulated Copper Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Tin.name", "Insulated Tin Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Silver.name", "Insulated Silver Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.HV.name", "Insulated HV Wire");
+		//Set the Hidden Cable Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Copper.name", "Hidden Copper Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Tin.name", "Hidden Tin Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Silver.name", "Hidden Silver Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.HV.name", "Hidden HV Wire");
+		//Set the Switch Cable (On/Crafted) Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Copper.name", "Copper Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Tin.name", "Tin Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Silver.name", "Silver Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.HV.name", "HV Switch Wire");
+		//Set the Switch Cable Block (On/Crafted) Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Copper.name", "Hidden Copper Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Tin.name", "Hidden Tin Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Silver.name", "Hidden Silver Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.HV.name", "Hidden HV Switch Wire");
+		//Set the Switch Cable (Off) Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.Copper.name", "Copper Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.Tin.name", "Tin Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.Silver.name", "Silver Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.HV.name", "HV Switch Wire");
+		//Set the Switch Cable Block (Off) Name(s)
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Copper.name", "Hidden Copper Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Tin.name", "Hidden Tin Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Silver.name", "Hidden Silver Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.HV.name", "Hidden HV Switch Wire");
+
 		LanguageRegistry.addName(blockUPTransformer, "Up Transformer");
         LanguageRegistry.addName(blockBigBatteryBox, "Larger Battery Box");
         LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
         LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
         LanguageRegistry.addName(blockEtcher, "Etcher");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
-
-
-		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
-		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
-		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
-		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
-		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
-
-		//Recipes
-		//Oil Bucket
-	//	RecipeManager.addRecipe(new ItemStack(blockOre), new Object [] {"CCC", "CBC", "CCC", 'B', Item.bucketWater, 'C', Item.coal});
-    }
-
-    public static int getBlockConfigID(Configuration configuration, String name, int defaultID)
-    {
-        configuration.load();
-        int id = defaultID;
-
-        id = Integer.parseInt(configuration.getOrCreateIntProperty(name, Configuration.CATEGORY_BLOCK, defaultID).value);
-
-        if (id <= 136)
-        {
-            return defaultID;
-        }
-          
-        configuration.save();
-        return id;
-    }
+        
+	//	RecipeManager.addRecipes();
+	}
 }
-
