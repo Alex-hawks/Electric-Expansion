@@ -35,11 +35,7 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlockOff.class, "TileEntitySwitchWireBlockOff");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
-		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
-		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
-		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
-		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
-		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
+
 	}
 	
 	

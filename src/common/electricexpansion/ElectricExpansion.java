@@ -9,7 +9,13 @@ import electricexpansion.Mattredsox.BlockEtcher;
 import electricexpansion.Mattredsox.BlockFuse;
 import electricexpansion.Mattredsox.BlockUPTransformer;
 import electricexpansion.Mattredsox.BlockVoltDetector;
+import electricexpansion.Mattredsox.TileEntityBigBatteryBox;
+import electricexpansion.Mattredsox.TileEntityDOWNTransformer;
+import electricexpansion.Mattredsox.TileEntityFuse;
+import electricexpansion.Mattredsox.TileEntityUPTransformer;
+import electricexpansion.Mattredsox.TileEntityVoltDetector;
 import electricexpansion.additionalcables.blocks.*;
+import universalelectricity.network.PacketManager;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
@@ -28,20 +34,22 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 
 import universalelectricity.BasicComponents;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.recipe.RecipeManager;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.3.5", dependencies = "after:BasicComponents", useMetadata = true)
-@NetworkMod(clientSideRequired=true, serverSideRequired=false)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.0", dependencies = "after:BasicComponents", useMetadata = true)
+@NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	public static int[] versionArray = {0, 3, 5}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public static int[] versionArray = {0, 2, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static String version;
 	public static final int BLOCK_ID_PREFIX = 3980;
 	
@@ -178,6 +186,12 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockEtcher);
 		GameRegistry.registerBlock(blockVoltDet);
+		instance = this;
+
+		MinecraftForgeClient.preloadTexture("/electricexpansion/blocks1.png");
+
+
+		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
 	}
 	
@@ -250,6 +264,11 @@ public class ElectricExpansion {
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
+		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
+		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
+		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
+		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
+		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
 	}
 	
 	@PostInit
