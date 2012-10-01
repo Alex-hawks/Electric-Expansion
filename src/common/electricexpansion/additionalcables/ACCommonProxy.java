@@ -1,4 +1,4 @@
-package additionalcables;
+package electricexpansion.additionalcables;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.World;
@@ -7,16 +7,8 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-import additionalcables.cables.TileEntityInsulatedWire;
-import additionalcables.cables.TileEntityRawWire;
-import additionalcables.cables.TileEntityRedstoneWire;
-import additionalcables.cables.TileEntitySwitchWire;
-import additionalcables.cables.TileEntitySwitchWireBlock;
-import additionalcables.cables.TileEntitySwitchWireBlockOff;
-import additionalcables.cables.TileEntitySwitchWireOff;
-import additionalcables.cables.TileEntityWireBlock;
-import additionalcables.client.RenderInsulatedWire;
-import additionalcables.client.RenderRawWire;
+import electricexpansion.additionalcables.cables.*;
+import electricexpansion.additionalcables.client.*;
 
 import universalelectricity.prefab.CommonProxy;
 

@@ -1,7 +1,9 @@
-package additionalcables;
+package electricexpansion.additionalcables;
 
 import java.io.File;
 import java.util.logging.Logger;
+
+import electricexpansion.additionalcables.blocks.*;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -24,12 +26,9 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import net.minecraftforge.common.Configuration;
 
+import universalelectricity.BasicComponents;
 import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.BasicComponents;
 import universalelectricity.recipe.RecipeManager;
-
-import additionalcables.cables.*;
-import additionalcables.blocks.*;
 
 @Mod(modid="AdditionalCables", name="Additional Cables", version="0.3.5", dependencies = "after:BasicComponents", useMetadata = true)
 @NetworkMod(clientSideRequired=true, serverSideRequired=false)
