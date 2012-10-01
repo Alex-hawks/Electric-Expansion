@@ -1,11 +1,11 @@
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
 import java.util.Random;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import additionalcables.AdditionalCables;
-import additionalcables.cables.TileEntitySwitchWireOff;
+import electricexpansion.additionalcables.AdditionalCables;
+import electricexpansion.additionalcables.cables.TileEntitySwitchWireOff;
 
 public class BlockSwitchWireOff extends BlockSwitchWire 
 {

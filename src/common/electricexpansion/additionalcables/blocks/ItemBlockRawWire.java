@@ -1,11 +1,11 @@
 /**
  * 
  */
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
 import java.util.logging.Logger;
 
-import additionalcables.AdditionalCables;
+import electricexpansion.additionalcables.AdditionalCables;
 import cpw.mods.fml.common.Mod.Instance;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.Block;

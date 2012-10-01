@@ -1,4 +1,4 @@
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import additionalcables.ACCommonProxy;
-import additionalcables.cables.TileEntityRedstoneWireBlock;
-import additionalcables.cables.TileEntityWireBlock;
+import electricexpansion.additionalcables.ACCommonProxy;
+import electricexpansion.additionalcables.cables.TileEntityRedstoneWireBlock;
+import electricexpansion.additionalcables.cables.TileEntityWireBlock;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import universalelectricity.prefab.BlockConductor;

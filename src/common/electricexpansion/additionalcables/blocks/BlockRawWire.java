@@ -1,4 +1,4 @@
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.prefab.BlockConductor;
-import additionalcables.ACCommonProxy;
-import additionalcables.cables.TileEntityRawWire;
+import electricexpansion.additionalcables.ACCommonProxy;
+import electricexpansion.additionalcables.cables.TileEntityRawWire;
 
 public class BlockRawWire extends BlockConductor
 { 

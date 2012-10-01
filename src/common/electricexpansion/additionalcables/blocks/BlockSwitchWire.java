@@ -1,9 +1,9 @@
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
 import java.util.List;
 
-import additionalcables.ACCommonProxy;
-import additionalcables.cables.TileEntitySwitchWire;
+import electricexpansion.additionalcables.ACCommonProxy;
+import electricexpansion.additionalcables.cables.TileEntitySwitchWire;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.CreativeTabs;

@@ -1,6 +1,5 @@
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
-import additionalcables.AdditionalCables;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;

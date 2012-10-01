@@ -1,4 +1,4 @@
-package additionalcables.blocks;
+package electricexpansion.additionalcables.blocks;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Side;
@@ -15,10 +15,10 @@ import net.minecraft.src.World;
 
 import universalelectricity.prefab.BlockConductor;
 
-import additionalcables.ACCommonProxy;
-import additionalcables.cables.TileEntityRawWire;
-import additionalcables.cables.TileEntityWireBlock;
-import additionalcables.client.RenderRawWire;
+import electricexpansion.additionalcables.ACCommonProxy;
+import electricexpansion.additionalcables.cables.TileEntityRawWire;
+import electricexpansion.additionalcables.cables.TileEntityWireBlock;
+import electricexpansion.additionalcables.client.RenderRawWire;
 
 public class BlockWireBlock extends BlockConductor
 {

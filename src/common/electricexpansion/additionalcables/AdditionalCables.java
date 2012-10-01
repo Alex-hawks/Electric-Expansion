@@ -3,9 +3,16 @@ package electricexpansion.additionalcables;
 import java.io.File;
 import java.util.logging.Logger;
 
+import electricexpansion.Mattredsox.BlockBigBatteryBox;
+import electricexpansion.Mattredsox.BlockDOWNTransformer;
+import electricexpansion.Mattredsox.BlockEtcher;
+import electricexpansion.Mattredsox.BlockFuse;
+import electricexpansion.Mattredsox.BlockUPTransformer;
+import electricexpansion.Mattredsox.BlockVoltDetector;
 import electricexpansion.additionalcables.blocks.*;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
@@ -47,7 +54,13 @@ public class AdditionalCables {
 	public static int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
 	//public static int redstoneWireID = BLOCK_ID_PREFIX + 7;
 	//public static int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
-	
+	public static int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
+	public static int blockVoltDetID = BLOCK_ID_PREFIX + 10;
+	public static int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
+	public static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
+	public static int blockEtcherID = BLOCK_ID_PREFIX + 13;
+	public static int blockFuseID = BLOCK_ID_PREFIX + 14;
+
 	public static int rawWire;
 	public static int insulatedWire;
 	public static int wireBlocks;
@@ -57,8 +70,14 @@ public class AdditionalCables {
 	public static int offSwitchWireBlock;
 	//public static int redstoneWire;
 	//public static int redstoneWireBlock;
+	public static int BigBatteryBox;
+	public static int VoltDet;
+	public static int UPTransformer;
+	public static int DOWNTransformer;
+	public static int Etcher;
+	public static int Fuse;
 	
-	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/additionalcables.cfg"));
+	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
 	
 	public static final Block blockRawWire = new BlockRawWire(rawWire, 0);
@@ -70,6 +89,12 @@ public class AdditionalCables {
 	public static final Block blockSwitchWireBlockOff = new BlockSwitchWireBlockOff(offSwitchWireBlock, 0);
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	public static final Block blockBigBatteryBox = new BlockBigBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
+    public static final Block blockEtcher = new BlockEtcher(Etcher).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
+    public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
 	
 	public static Logger ACLogger = Logger.getLogger("AdditionalCables");
 	public static boolean[] startLogLogged = {false, false, false, false};
