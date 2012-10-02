@@ -161,7 +161,7 @@ public class ElectricExpansion {
 			}
 		
 		ACLogger.setParent(FMLLog.getLogger());
-		ACLogger.info(string2 + " Additional Cables " + version);
+		ACLogger.info(string2 + " ElectricExpansion " + version);
 		startLogLogged[j] = true;
 		if(startLogLogged[1] && startLogLogged[2] && startLogLogged[3])
 			startLogLogged[0] = true;
