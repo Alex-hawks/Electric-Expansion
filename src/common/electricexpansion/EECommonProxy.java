@@ -1,7 +1,6 @@
 package electricexpansion;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.Mattredsox.*;
 import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
 import electricexpansion.additionalcables.cables.TileEntityRawWire;
 import electricexpansion.additionalcables.cables.TileEntitySwitchWire;
@@ -9,7 +8,8 @@ import electricexpansion.additionalcables.cables.TileEntitySwitchWireBlock;
 import electricexpansion.additionalcables.cables.TileEntitySwitchWireBlockOff;
 import electricexpansion.additionalcables.cables.TileEntitySwitchWireOff;
 import electricexpansion.additionalcables.cables.TileEntityWireBlock;
-import electricexpansion.client.Mattredsox.*;
+import electricexpansion.client.mattredsox.*;
+import electricexpansion.mattredsox.*;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;

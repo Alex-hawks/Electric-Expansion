@@ -1,4 +1,4 @@
-package electricexpansion.additionalcables.client;
+package electricexpansion.client.additionalcables.client;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;

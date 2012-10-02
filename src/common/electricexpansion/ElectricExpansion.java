@@ -3,17 +3,7 @@ package electricexpansion;
 import java.io.File;
 import java.util.logging.Logger;
 
-import electricexpansion.Mattredsox.BlockBigBatteryBox;
-import electricexpansion.Mattredsox.BlockDOWNTransformer;
-import electricexpansion.Mattredsox.BlockEtcher;
-import electricexpansion.Mattredsox.BlockFuse;
-import electricexpansion.Mattredsox.BlockUPTransformer;
-import electricexpansion.Mattredsox.BlockVoltDetector;
-import electricexpansion.Mattredsox.TileEntityBigBatteryBox;
-import electricexpansion.Mattredsox.TileEntityDOWNTransformer;
-import electricexpansion.Mattredsox.TileEntityFuse;
-import electricexpansion.Mattredsox.TileEntityUPTransformer;
-import electricexpansion.Mattredsox.TileEntityVoltDetector;
+import electricexpansion.mattredsox.*;
 import electricexpansion.additionalcables.blocks.*;
 import universalelectricity.network.PacketManager;
 

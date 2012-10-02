@@ -12,8 +12,8 @@ import electricexpansion.additionalcables.cables.TileEntityRawWire;
 import electricexpansion.additionalcables.cables.TileEntityRedstoneWire;
 import electricexpansion.additionalcables.cables.TileEntitySwitchWire;
 import electricexpansion.additionalcables.cables.TileEntitySwitchWireOff;
-import electricexpansion.additionalcables.client.RenderInsulatedWire;
-import electricexpansion.additionalcables.client.RenderRawWire;
+import electricexpansion.client.additionalcables.client.RenderInsulatedWire;
+import electricexpansion.client.additionalcables.client.RenderRawWire;
 
 
 

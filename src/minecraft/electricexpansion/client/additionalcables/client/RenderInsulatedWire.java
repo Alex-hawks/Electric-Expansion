@@ -1,4 +1,4 @@
-package electricexpansion.additionalcables.client;
+package electricexpansion.client.additionalcables.client;
 
 import org.lwjgl.opengl.GL11;
 

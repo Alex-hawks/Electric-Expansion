@@ -18,7 +18,6 @@ import universalelectricity.prefab.BlockConductor;
 import electricexpansion.EECommonProxy;
 import electricexpansion.additionalcables.cables.TileEntityRawWire;
 import electricexpansion.additionalcables.cables.TileEntityWireBlock;
-import electricexpansion.additionalcables.client.RenderRawWire;
 
 public class BlockWireBlock extends BlockConductor
 {
