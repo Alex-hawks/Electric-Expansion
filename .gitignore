@@ -20,7 +20,7 @@ LICENSE.txt
 !/src/common/electricexpansion/
 !/src/common/mcmod.info
 !/modversion.txt
-!/electricexpansion/*
+!/textures/*
 !/README
 
 *.bat
