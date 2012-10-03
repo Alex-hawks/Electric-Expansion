@@ -1,13 +1,14 @@
 package electricexpansion;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
-import electricexpansion.additionalcables.cables.TileEntityRawWire;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWire;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWireBlock;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWireBlockOff;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWireOff;
-import electricexpansion.additionalcables.cables.TileEntityWireBlock;
+
+import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
+import electricexpansion.alex_hawks.cables.TileEntityRawWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlockOff;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
+import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
 import electricexpansion.client.mattredsox.*;
 import electricexpansion.mattredsox.*;
 import net.minecraft.src.EntityPlayer;
@@ -19,9 +20,12 @@ import universalelectricity.basiccomponents.TileEntityCopperWire;
 
 public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 {
-	public static String TEXTURES = "/additionalcables/textures/";
-	public static String ITEMS = "/additionalcables/textures/items.png";
-	public static String BLOCK = "/additionalcables/textures/block.png";
+	//Mattredsox's Textures
+	public static String MTEXTURES = "electricexpansion/textures/mattredsox/";	
+	//Alex_hawks' Textures
+	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/";
+	public static String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
+	public static String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
 	
 	@Override
 	public void init()

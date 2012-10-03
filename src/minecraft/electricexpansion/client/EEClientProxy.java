@@ -7,23 +7,21 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import universalelectricity.basiccomponents.RenderCopperWire;
 import universalelectricity.basiccomponents.TileEntityCopperWire;
 import cpw.mods.fml.client.registry.ClientRegistry;
-import electricexpansion.additionalcables.cables.TileEntityInsulatedWire;
-import electricexpansion.additionalcables.cables.TileEntityRawWire;
-import electricexpansion.additionalcables.cables.TileEntityRedstoneWire;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWire;
-import electricexpansion.additionalcables.cables.TileEntitySwitchWireOff;
-import electricexpansion.client.additionalcables.client.RenderInsulatedWire;
-import electricexpansion.client.additionalcables.client.RenderRawWire;
-
-
+import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
+import electricexpansion.alex_hawks.cables.TileEntityRawWire;
+import electricexpansion.alex_hawks.cables.TileEntityRedstoneWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
+import electricexpansion.client.alex_hawks.RenderInsulatedWire;
+import electricexpansion.client.alex_hawks.RenderRawWire;
 
 public class EEClientProxy extends electricexpansion.EECommonProxy{
 
 	//@Override
 	public static void registerRenderers() 
 	{
-		MinecraftForgeClient.preloadTexture(ITEMS);
-		MinecraftForgeClient.preloadTexture(BLOCK);
+		MinecraftForgeClient.preloadTexture(AITEMS);
+		MinecraftForgeClient.preloadTexture(ABLOCK);
 	}
 	
 	@Override

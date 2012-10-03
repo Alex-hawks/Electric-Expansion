@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 
 import electricexpansion.mattredsox.TileEntityVoltDetector;
 
-
 import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
