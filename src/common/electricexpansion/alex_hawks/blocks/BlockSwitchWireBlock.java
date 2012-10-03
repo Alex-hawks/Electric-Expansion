@@ -9,7 +9,8 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import electricexpansion.EECommonProxy;import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
+import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import universalelectricity.prefab.BlockConductor;
@@ -25,6 +26,7 @@ public class BlockSwitchWireBlock extends BlockConductor
         this.setRequiresSelfNotify();
         this.setHardness(1.5F);
         this.setResistance(10.0F);
+        this.setCreativeTab(CreativeTabs.tabRedstone);
     }
 	
 	@Override

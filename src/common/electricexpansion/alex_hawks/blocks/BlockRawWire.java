@@ -22,6 +22,7 @@ public class BlockRawWire extends BlockConductor
         this.setResistance(0.2F);
         this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
         this.setRequiresSelfNotify();
+        this.setCreativeTab(CreativeTabs.tabRedstone);
     }
 	
     @Override
