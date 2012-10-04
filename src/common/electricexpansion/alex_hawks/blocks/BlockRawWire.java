@@ -5,12 +5,16 @@ import java.util.List;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.DamageSource;
+import net.minecraft.src.Entity;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import universalelectricity.implement.UEDamageSource;
 import universalelectricity.prefab.BlockConductor;
-import electricexpansion.EECommonProxy;import electricexpansion.alex_hawks.cables.TileEntityRawWire;
+import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 
 public class BlockRawWire extends BlockConductor
 { 
@@ -59,6 +63,18 @@ public class BlockRawWire extends BlockConductor
     public String getTextureFile()
     {
         return EECommonProxy.AITEMS;
+    }
+    
+    public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+    {
+        if(par1World.getBlockMetadata(par2, par3, par4) == 0)
+        	par5Entity.attackEntityFrom(UEDamageSource.electrocution, 3);
+        if(par1World.getBlockMetadata(par2, par3, par4) == 1)
+        	par5Entity.attackEntityFrom(UEDamageSource.electrocution, 2);
+        if(par1World.getBlockMetadata(par2, par3, par4) == 2)
+        	par5Entity.attackEntityFrom(UEDamageSource.electrocution, 1);
+    	if(par1World.getBlockMetadata(par2, par3, par4) == 3)
+        	par5Entity.attackEntityFrom(UEDamageSource.electrocution, 8);
     }
     
     @SideOnly(Side.CLIENT)
