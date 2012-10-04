@@ -228,7 +228,7 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
         {
 	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
 	        {
-	        	PacketManager.sendTileEntityPacketWithRange(this, "ElecEx", 15, this.wattHourStored, this.disabledTicks);
+	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	        	this.sendUpdate = false;
 	        }
         }
@@ -262,12 +262,11 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
     {
     	if(!this.worldObj.isRemote)
         {
-    		PacketManager.sendTileEntityPacketWithRange(this, "BasicComponents", 15, this.wattHourStored, this.disabledTicks);
+    		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
         }
     	
     	this.playersUsing  ++;
     }
-    
     @Override
     public void closeChest()
     {

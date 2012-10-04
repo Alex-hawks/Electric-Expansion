@@ -56,6 +56,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 
 import universalelectricity.BasicComponents;
+import universalelectricity.UEConfig;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.recipe.RecipeManager;
 
@@ -128,22 +129,22 @@ public class ElectricExpansion {
 	
 	public static boolean configLoad(Configuration i)
 	{
-		rawWire = UniversalElectricity.getBlockConfigID(i, "Uninsulated_Wire", rawWireID);
-		insulatedWire = UniversalElectricity.getBlockConfigID(i, "Insualted_Wire", insulatedWireID);
-		wireBlocks = UniversalElectricity.getBlockConfigID(i, "Wire_Block", wireBlocksID);
-		onSwitchWire = UniversalElectricity.getBlockConfigID(i, "Switch_Wire", switchWireID);
-		onSwitchWireBlock = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Block", switchWireBlockID);
-		offSwitchWire = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Off", offSwitchWireID);
-		offSwitchWireBlock = UniversalElectricity.getBlockConfigID(i, "Switch_Wire_Block_Off", offSwitchWireBlockID);
+		rawWire = UEConfig.getBlockConfigID(i, "Uninsulated_Wire", rawWireID);
+		insulatedWire = UEConfig.getBlockConfigID(i, "Insualted_Wire", insulatedWireID);
+		wireBlocks = UEConfig.getBlockConfigID(i, "Wire_Block", wireBlocksID);
+		onSwitchWire = UEConfig.getBlockConfigID(i, "Switch_Wire", switchWireID);
+		onSwitchWireBlock = UEConfig.getBlockConfigID(i, "Switch_Wire_Block", switchWireBlockID);
+		offSwitchWire = UEConfig.getBlockConfigID(i, "Switch_Wire_Off", offSwitchWireID);
+		offSwitchWireBlock = UEConfig.getBlockConfigID(i, "Switch_Wire_Block_Off", offSwitchWireBlockID);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		
-		BigBatteryBox = UniversalElectricity.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
-		VoltDet = UniversalElectricity.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
-		UPTransformer = UniversalElectricity.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
-		DOWNTransformer = UniversalElectricity.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
-		wireMill = UniversalElectricity.getBlockConfigID(i, "Etcher", blockWireMillID);
-		Fuse = UniversalElectricity.getBlockConfigID(i, "Relay", blockFuseID);
+		BigBatteryBox = UEConfig.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		VoltDet = UEConfig.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
+		UPTransformer = UEConfig.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
+		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
+		wireMill = UEConfig.getBlockConfigID(i, "Etcher", blockWireMillID);
+		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR

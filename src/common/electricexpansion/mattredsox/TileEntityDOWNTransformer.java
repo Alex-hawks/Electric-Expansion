@@ -190,14 +190,14 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
                 }
             }
         
-        if(!this.worldObj.isRemote)
-        {
-	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
-	        {
-	        	PacketManager.sendTileEntityPacketWithRange(this, "ElecEx", 15, this.wattHourStored, this.disabledTicks);
-	        	this.sendUpdate = false;
-	        }
-        }
+            if(!this.worldObj.isRemote)
+            {
+    	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
+    	        {
+    	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+    	        	this.sendUpdate = false;
+    	        }
+            }
     }
     
     @Override
