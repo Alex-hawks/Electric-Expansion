@@ -39,7 +39,7 @@ public class GuiVoltDetector extends GuiScreen {
 		this.drawTexturedModalRect(var5, var6, 0, 0, this.xSize, this.ySize);
 	}
 	protected void drawForegroundLayer() {
-		this.drawCenteredString(mc.fontRenderer, ElectricInfo.getDisplay(voltDetect.voltsin, ElectricUnit.VOLTAGE), (this.width - (this.xSize - 180)) / 2, (this.height - (this.ySize - 80)) / 2, 0xFFFFFF);
+		this.drawCenteredString(mc.fontRenderer, ElectricInfo.getDisplay(voltDetect.voltin, ElectricUnit.VOLTAGE), (this.width - (this.xSize - 180)) / 2, (this.height - (this.ySize - 80)) / 2, 0xFFFFFF);
 
 		mc.fontRenderer.drawString("Volt Detector", (this.width - (this.xSize - 110)) / 2, (this.height - (this.ySize - 20)) / 2, 0x333333);
 	}

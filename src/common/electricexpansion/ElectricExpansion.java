@@ -29,6 +29,8 @@ import electricexpansion.mattredsox.TileEntityFuse;
 import electricexpansion.mattredsox.TileEntityUPTransformer;
 import electricexpansion.mattredsox.TileEntityVoltDetector;
 import electricexpansion.mattredsox.TileEntityWireMill;
+import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
 import universalelectricity.network.PacketManager;
 
 import net.minecraft.src.Block;

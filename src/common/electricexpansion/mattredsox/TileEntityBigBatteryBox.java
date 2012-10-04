@@ -14,22 +14,21 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.NetworkManager;
+import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Ticker;
 import universalelectricity.UniversalElectricity;
+import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IElectricityStorage;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.network.ConnectionHandler;
-import universalelectricity.network.ConnectionHandler.ConnectionType;
 import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.ISimpleConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
@@ -44,7 +43,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, ISimpleConnectionHandler
+public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
 	private double wattHourStored = 0;
 
@@ -58,12 +57,11 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
 	
 	public boolean initialized = false;
 
-	private boolean sendUpdate = false;
+	private boolean sendUpdate = true;
 
     public TileEntityBigBatteryBox()
     {
     	super();
-    	ConnectionHandler.registerConnectionHandler(this);
     	this.setPowerProvider(null);
     }
     
@@ -81,14 +79,13 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public boolean canReceiveFromSide(ForgeDirection side)
     {
-    	return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
     }
 
     @Override
     public boolean canConnect(ForgeDirection side)
     {
-        return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();
-    }
+        return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();    }
 
     @Override
     public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
@@ -124,7 +121,13 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
         {
         	if(this.powerProvider != null)
         	{
-        		this.setWattHours(this.wattHourStored + this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO);
+        		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
+        		this.setWattHours(this.wattHourStored + receivedElectricity);
+        	
+        		if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
+        		{
+        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+        		}
         	}
         	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
@@ -184,7 +187,7 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
             //Output electricity
             if (this.wattHourStored > 0)
             {
-                TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this.xCoord, this.yCoord, this.zCoord), ForgeDirection.getOrientation(this.getBlockMetadata()));
+                TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
             	
                 //Output IC2 energy
             	if(Loader.isModLoaded("IC2"))
@@ -235,16 +238,13 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
     }
     
     @Override
-	public void handelConnection(ConnectionType type, Object... data)
+    public Packet getDescriptionPacket()
     {
-    	if(type == ConnectionType.LOGIN_SERVER)
-    	{
-    		this.sendUpdate  = true;
-    	}
-	}
+        return PacketManager.getPacket("ElecEx", this, this.wattHourStored, this.disabledTicks);
+    }
     
     @Override
-	public void handlePacketData(NetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {
@@ -267,6 +267,7 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
     	
     	this.playersUsing  ++;
     }
+    
     @Override
     public void closeChest()
     {
@@ -520,7 +521,7 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
 	{
-		return canReceiveFromSide(direction.toForgeDirection());
+		return canReceiveFromSide(direction.toForgeDirection());		
 	}
 
 	@Override
@@ -538,29 +539,51 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public int getOutput() 
 	{
-		return 45;
+		return 32;
 	}
 
 	@Override
 	public int getMaxEnergyOutput()
 	{
-		return 45;
+		return 32;
 	}
 
 	@Override
 	public boolean demandsEnergy()
 	{
-		return this.wattHourStored < getMaxWattHours();
+		if(!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0)
+		{
+			return this.wattHourStored < getMaxWattHours();
+		}
+		
+		return false;
 	}
 
 	@Override
 	public int injectEnergy(Direction directionFrom, int euAmount) 
 	{
-		double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
+		if(!this.isDisabled())
+		{
+			double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
+
+			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxWattHours() - this.wattHourStored), 0);
 		
-		double rejectedElectricity = Math.max(this.wattHourStored - (this.wattHourStored - inputElectricity), 0);
-		this.setWattHours(wattHourStored + inputElectricity);
+			this.setWattHours(wattHourStored + inputElectricity);
+			
+			if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0)
+			{
+				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+			}
 		
-		return (int) rejectedElectricity;
+			return (int) (rejectedElectricity*UniversalElectricity.Wh_IC2_RATIO);
+		}
+		
+		return euAmount;
 	}
+	
+    @Override
+    public double getVoltage()
+    {
+		return 960;
+    }
 }
