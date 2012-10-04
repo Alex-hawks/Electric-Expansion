@@ -19,15 +19,16 @@ import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireOff;
 import electricexpansion.alex_hawks.blocks.ItemBlockWireBlock;
 import electricexpansion.mattredsox.BlockBigBatteryBox;
 import electricexpansion.mattredsox.BlockDOWNTransformer;
-import electricexpansion.mattredsox.BlockEtcher;
 import electricexpansion.mattredsox.BlockFuse;
 import electricexpansion.mattredsox.BlockUPTransformer;
 import electricexpansion.mattredsox.BlockVoltDetector;
+import electricexpansion.mattredsox.BlockWireMill;
 import electricexpansion.mattredsox.TileEntityBigBatteryBox;
 import electricexpansion.mattredsox.TileEntityDOWNTransformer;
 import electricexpansion.mattredsox.TileEntityFuse;
 import electricexpansion.mattredsox.TileEntityUPTransformer;
 import electricexpansion.mattredsox.TileEntityVoltDetector;
+import electricexpansion.mattredsox.TileEntityWireMill;
 import universalelectricity.network.PacketManager;
 
 import net.minecraft.src.Block;
@@ -79,7 +80,7 @@ public class ElectricExpansion {
 	public static int blockVoltDetID = BLOCK_ID_PREFIX + 10;
 	public static int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
 	public static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
-	public static int blockEtcherID = BLOCK_ID_PREFIX + 13;
+	public static int blockWireMillID = BLOCK_ID_PREFIX + 13;
 	public static int blockFuseID = BLOCK_ID_PREFIX + 14;
 
 	public static int rawWire;
@@ -95,7 +96,7 @@ public class ElectricExpansion {
 	public static int VoltDet;
 	public static int UPTransformer;
 	public static int DOWNTransformer;
-	public static int Etcher;
+	public static int wireMill;
 	public static int Fuse;
 	
 	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
@@ -114,7 +115,7 @@ public class ElectricExpansion {
     public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
-    public static final Block blockEtcher = new BlockEtcher(Etcher).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
+    public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
     public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
 	
 	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
@@ -141,7 +142,7 @@ public class ElectricExpansion {
 		VoltDet = UniversalElectricity.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
 		UPTransformer = UniversalElectricity.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
 		DOWNTransformer = UniversalElectricity.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
-		Etcher = UniversalElectricity.getBlockConfigID(i, "Etcher", blockEtcherID);
+		wireMill = UniversalElectricity.getBlockConfigID(i, "Etcher", blockWireMillID);
 		Fuse = UniversalElectricity.getBlockConfigID(i, "Relay", blockFuseID);
 
 		configLoaded = true;
@@ -197,7 +198,7 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockBigBatteryBox);
 		GameRegistry.registerBlock(blockDOWNTransformer);
 		GameRegistry.registerBlock(blockUPTransformer);
-		GameRegistry.registerBlock(blockEtcher);
+		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
 		instance = this;
 
@@ -282,6 +283,7 @@ public class ElectricExpansion {
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
 		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
+		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TEWM");
 	}
 	
 	@PostInit
@@ -329,7 +331,7 @@ public class ElectricExpansion {
         LanguageRegistry.addName(blockBigBatteryBox, "Larger Battery Box");
         LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
         LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
-        LanguageRegistry.addName(blockEtcher, "Etcher");
+        LanguageRegistry.addName(blockWireMill, "Wire Mill");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
         
 	//	RecipeManager.addRecipes();

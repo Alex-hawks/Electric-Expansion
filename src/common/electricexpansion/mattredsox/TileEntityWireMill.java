@@ -6,11 +6,11 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 
-public class TileEntityEtcher extends TileEntity implements IInventory
+public class TileEntityWireMill extends TileEntity implements IInventory
 {
 	public ItemStack[] craftingMatrix;
 
-	public TileEntityEtcher()
+	public TileEntityWireMill()
 	{
 		craftingMatrix = new ItemStack[9];
 	}

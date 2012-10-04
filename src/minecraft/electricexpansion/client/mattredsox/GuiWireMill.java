@@ -6,12 +6,13 @@ import net.minecraft.src.World;
 
 import org.lwjgl.opengl.GL11;
 
-import electricexpansion.mattredsox.ContainerEtcher;
-public class GuiEtcher extends GuiContainer
+import electricexpansion.mattredsox.ContainerWireMill;
+
+public class GuiWireMill extends GuiContainer
 {
-public GuiEtcher(InventoryPlayer inventory, World world, int x, int y, int z)
+public GuiWireMill(InventoryPlayer inventory, World world, int x, int y, int z)
 {
-         super(new ContainerEtcher(inventory, world, x, y, z));
+         super(new ContainerWireMill(inventory, world, x, y, z));
 }
 /**
          * Draw the foreground layer for the GuiContainer (everything in front of the items)

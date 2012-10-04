@@ -3,7 +3,7 @@ package electricexpansion.mattredsox;
 import electricexpansion.ElectricExpansion;
 import net.minecraft.src.*;
 
-public class ContainerEtcher extends Container
+public class ContainerWireMill extends Container
 {
 /** The crafting matrix inventory (3x3). */
 public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
@@ -12,7 +12,7 @@ private World worldObj;
 private int posX;
 private int posY;
 private int posZ;
-public ContainerEtcher(InventoryPlayer inventory, World world, int x, int y, int z)
+public ContainerWireMill(InventoryPlayer inventory, World world, int x, int y, int z)
 {
          this.worldObj = world;
          this.posX = x;
@@ -68,7 +68,7 @@ public void onCraftGuiClosed(EntityPlayer player)
 }
 public boolean canInteractWith(EntityPlayer player)
 {
-         return this.worldObj.getBlockId(this.posX, this.posY, this.posZ) != ElectricExpansion.blockEtcher.blockID ? false : player.getDistanceSq((double)this.posX + 0.5D, (double)this.posY + 0.5D, (double)this.posZ + 0.5D) <= 64.0D;
+         return this.worldObj.getBlockId(this.posX, this.posY, this.posZ) != ElectricExpansion.blockWireMill.blockID ? false : player.getDistanceSq((double)this.posX + 0.5D, (double)this.posY + 0.5D, (double)this.posZ + 0.5D) <= 64.0D;
 }
 
 /**

@@ -9,9 +9,9 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 
-public class BlockEtcher extends BlockContainer
+public class BlockWireMill extends BlockContainer
 {
-public BlockEtcher(int par1)
+public BlockWireMill(int par1)
 {
          super(par1, Material.wood);
          this.setCreativeTab(CreativeTabs.tabDecorations);
@@ -45,7 +45,7 @@ public boolean onBlockActivated(World par1World, int par2, int par3, int par4, E
 }
 @Override
 public TileEntity createNewTileEntity(World var1) {
-	return new TileEntityEtcher();
+	return new TileEntityWireMill();
 }
 
 }
