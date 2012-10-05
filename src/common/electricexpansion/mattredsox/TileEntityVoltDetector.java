@@ -203,7 +203,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(NetworkManager network, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {
@@ -215,7 +215,6 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
             e.printStackTrace();
         }
 	}
-
 
     /**
      * Reads a tile entity from NBT.
