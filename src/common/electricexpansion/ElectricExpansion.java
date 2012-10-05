@@ -205,7 +205,8 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockVoltDet);
 		instance = this;
 
-		MinecraftForgeClient.preloadTexture("/electricexpansion/blocks1.png");
+		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks1.png");
+		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks.png");
 
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);

@@ -1,5 +1,6 @@
 package electricexpansion.mattredsox;
 
+import electricexpansion.EECommonProxy;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -25,7 +26,7 @@ public class BlockUPTransformer extends universalelectricity.prefab.BlockMachine
     @Override
     public String getTextureFile()
     {
-        return "/electricexpansion/blocks1.png";
+        return EECommonProxy.MattBLOCK1_TEXTURE_FILE;
     }
 
     @Override

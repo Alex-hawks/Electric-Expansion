@@ -1,5 +1,6 @@
 package electricexpansion.mattredsox;
 
+import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -26,7 +27,7 @@ public class BlockVoltDetector extends universalelectricity.prefab.BlockMachine
     @Override
     public String getTextureFile()
     {
-        return "/electricexpansion/blocks1.png";
+        return EECommonProxy.MattBLOCK1_TEXTURE_FILE;
     }
 
     @Override

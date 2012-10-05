@@ -20,8 +20,12 @@ import universalelectricity.basiccomponents.TileEntityCopperWire;
 
 public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 {
+	
+
 	//Mattredsox's Textures
-	public static String MTEXTURES = "electricexpansion/textures/mattredsox/";	
+	public static final String MattFILE_PATH = "/electricexpansion/textures/mattredsox/";
+	public static final String MattBLOCK_TEXTURE_FILE = MattFILE_PATH + "blocks.png";
+	public static final String MattBLOCK1_TEXTURE_FILE = MattFILE_PATH + "blocks1.png";
 	//Alex_hawks' Textures
 	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/";
 	public static String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";

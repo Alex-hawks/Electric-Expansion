@@ -1,5 +1,7 @@
 package electricexpansion.mattredsox;
 
+import universalelectricity.BasicComponents;
+import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -24,7 +26,8 @@ public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
     @Override
     public String getTextureFile()
     {
-        return "/electricexpansion/blocks.png";
+        return EECommonProxy.MattBLOCK_TEXTURE_FILE;
+
     }
 
     @Override
