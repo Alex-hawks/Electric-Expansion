@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL11;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
 import universalelectricity.basiccomponents.ModelCopperWire;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
@@ -18,7 +20,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
     {
         model = new ModelCopperWire();
     }
-    public void renderAModelAt(TileEntityInsulatedWire tileEntity, double x, double y, double z, float f)
+    public void renderAModelAt(TileEntity tileEntity, double x, double y, double z, float f)
     {
     	String textureToUse = null;
     	int ID = tileEntity.getBlockType().blockID;
@@ -66,36 +68,30 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
 
-        if (tileEntity.connectedBlocks[0] != null)
+        if (tileEntity instanceof TileEntityInsulatedWire)
         {
-            model.renderBottom();
+        if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[0] != null) {model.renderBottom();}
+        if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[1] != null) {model.renderTop();}
+        if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[2] != null) {model.renderBack();}
+        if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[3] != null) {model.renderFront();}
+        if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[4] != null) {model.renderLeft();}
+        if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[5] != null) {model.renderRight();}
         }
-
-        if (tileEntity.connectedBlocks[1] != null)
+        
+        else if (tileEntity instanceof TileEntitySwitchWire)
         {
-            model.renderTop();
+        if (((TileEntitySwitchWire)tileEntity).connectedBlocks[0] != null) {model.renderBottom();}
+        if (((TileEntitySwitchWire)tileEntity).connectedBlocks[1] != null) {model.renderTop();}
+        if (((TileEntitySwitchWire)tileEntity).connectedBlocks[2] != null) {model.renderBack();}
+        if (((TileEntitySwitchWire)tileEntity).connectedBlocks[3] != null) {model.renderFront();}
+        if (((TileEntitySwitchWire)tileEntity).connectedBlocks[4] != null) {model.renderLeft();}
+        if (((TileEntitySwitchWire)tileEntity).connectedBlocks[5] != null) {model.renderRight();}
         }
-
-        if (tileEntity.connectedBlocks[2] != null)
+        
+        else if (tileEntity instanceof TileEntitySwitchWireOff)
         {
-        	model.renderBack();
+        	//model.renderNothing();
         }
-
-        if (tileEntity.connectedBlocks[3] != null)
-        {
-        	model.renderFront();
-        }
-
-        if (tileEntity.connectedBlocks[4] != null)
-        {
-        	model.renderLeft();
-        }
-
-        if (tileEntity.connectedBlocks[5] != null)
-        {
-        	model.renderRight();
-        }
-
         model.renderMiddle();
         GL11.glPopMatrix();
     }
@@ -103,6 +99,6 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8)
     {
-        this.renderAModelAt((TileEntityInsulatedWire)tileEntity, var2, var4, var6, var8);
+    this.renderAModelAt(tileEntity, var2, var4, var6, var8);
     }
 }
