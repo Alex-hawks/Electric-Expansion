@@ -62,7 +62,7 @@ import universalelectricity.UEConfig;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.recipe.RecipeManager;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.1", dependencies = "after:UniversalElectricity", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.2", dependencies = "after:UniversalElectricity", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
