@@ -17,13 +17,14 @@ import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireBlock;
 import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireBlockOff;
 import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireOff;
 import electricexpansion.alex_hawks.blocks.ItemBlockWireBlock;
-import electricexpansion.mattredsox.BlockBigBatteryBox;
+import electricexpansion.mattredsox.BlockAdvBatteryBox;
 import electricexpansion.mattredsox.BlockDOWNTransformer;
 import electricexpansion.mattredsox.BlockFuse;
 import electricexpansion.mattredsox.BlockUPTransformer;
 import electricexpansion.mattredsox.BlockVoltDetector;
 import electricexpansion.mattredsox.BlockWireMill;
-import electricexpansion.mattredsox.TileEntityBigBatteryBox;
+import electricexpansion.mattredsox.ItemUpgrade;
+import electricexpansion.mattredsox.TileEntityAdvBatteryBox;
 import electricexpansion.mattredsox.TileEntityDOWNTransformer;
 import electricexpansion.mattredsox.TileEntityFuse;
 import electricexpansion.mattredsox.TileEntityUPTransformer;
@@ -31,6 +32,7 @@ import electricexpansion.mattredsox.TileEntityVoltDetector;
 import electricexpansion.mattredsox.TileEntityWireMill;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
+import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
 
 import net.minecraft.src.Block;
@@ -63,12 +65,13 @@ import universalelectricity.UniversalElectricity;
 import universalelectricity.recipe.RecipeManager;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.2", dependencies = "after:UniversalElectricity", useMetadata = true)
-@NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
+@NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
 	public static int[] versionArray = {0, 2, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static String version;
 	public static final int BLOCK_ID_PREFIX = 3980;
+	public static final int ITEM_ID_PREFIX = 15970;
 	
 	public static int rawWireID = BLOCK_ID_PREFIX;
 	public static int insulatedWireID = BLOCK_ID_PREFIX + 1;
@@ -85,6 +88,7 @@ public class ElectricExpansion {
 	public static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
 	public static int blockWireMillID = BLOCK_ID_PREFIX + 13;
 	public static int blockFuseID = BLOCK_ID_PREFIX + 14;
+	public static int itemUpgradeID = ITEM_ID_PREFIX;
 
 	public static int rawWire;
 	public static int insulatedWire;
@@ -101,6 +105,7 @@ public class ElectricExpansion {
 	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
+	public static int Upgrade;
 	
 	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -114,13 +119,14 @@ public class ElectricExpansion {
 	public static final Block blockSwitchWireBlockOff = new BlockSwitchWireBlockOff(offSwitchWireBlock, 0);
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
-	public static final Block blockBigBatteryBox = new BlockBigBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations);
+	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
     public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
-	
+	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc);
+    
 	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 	
@@ -141,12 +147,13 @@ public class ElectricExpansion {
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		
-		BigBatteryBox = UEConfig.getBlockConfigID(i, "Larger_Bat_Box", blockBigBatteryBoxID);
+		BigBatteryBox = UEConfig.getBlockConfigID(i, "Advanced_Bat_Box", blockBigBatteryBoxID);
 		VoltDet = UEConfig.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
 		UPTransformer = UEConfig.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
 		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
 		wireMill = UEConfig.getBlockConfigID(i, "Etcher", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
+		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
@@ -282,7 +289,7 @@ public class ElectricExpansion {
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
-		GameRegistry.registerTileEntity(TileEntityBigBatteryBox.class, "TEBBB");
+		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TEBBB");
 		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
@@ -332,11 +339,12 @@ public class ElectricExpansion {
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.HV.name", "Hidden HV Switch Wire");
 
 		LanguageRegistry.addName(blockUPTransformer, "Up Transformer");
-        LanguageRegistry.addName(blockBigBatteryBox, "Larger Battery Box");
+        LanguageRegistry.addName(blockBigBatteryBox, "Advanced Battery Box");
         LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
         LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
         LanguageRegistry.addName(blockWireMill, "Wire Mill");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
+        LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
         
 	//	RecipeManager.addRecipes();
 	}

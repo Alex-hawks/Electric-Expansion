@@ -1,8 +1,10 @@
 package electricexpansion.mattredsox;
 
 import universalelectricity.BasicComponents;
+import universalelectricity.prefab.BlockMachine;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
+import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -13,11 +15,11 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 
-public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
+public class BlockAdvBatteryBox extends BlockMachine
 {
-    public BlockBigBatteryBox(int id, int textureIndex)
+    public BlockAdvBatteryBox(int id, int textureIndex)
     {
-        super("Big Battery Box", id, Material.wood);
+        super("Adv Battery Box", id, Material.wood);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
@@ -29,6 +31,7 @@ public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
         return EECommonProxy.MattBLOCK_TEXTURE_FILE;
 
     }
+        
 
     @Override
     public int getBlockTextureFromSideAndMetadata(int side, int metadata)
@@ -62,7 +65,7 @@ public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
     {
         int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
         int change = 3;
-
+        par1World.getBlockId(x, y, z);
         switch (angle)
         {
             case 0: par1World.setBlockMetadataWithNotify(x, y, z, 5); break;
@@ -97,13 +100,35 @@ public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
     {
         if (!par1World.isRemote)
         {
+            TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
+
+            if(par5EntityPlayer.inventory.getCurrentItem() == null || par5EntityPlayer.inventory.getCurrentItem().itemID != ElectricExpansion.itemUpgrade.shiftedIndex)
+        	{
             par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
             return true;
+        	}
+            
+            if(par5EntityPlayer.inventory.getCurrentItem().itemID != ElectricExpansion.itemUpgrade.shiftedIndex && tileEntity.isUpgraded == false)
+        	{
+            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
+            return true;
+        	}
+         
+            if(par5EntityPlayer.inventory.getCurrentItem().itemID == ElectricExpansion.itemUpgrade.shiftedIndex && tileEntity.isUpgraded == false)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                tileEntity.isUpgraded = true;
+                tileEntity.upgradeType = 1;
+
+ 
+                return true;
+            }
+
         }
 
         return true;
     }
-
+    
 
     @Override
     public boolean isOpaqueCube()
@@ -126,7 +151,7 @@ public class BlockBigBatteryBox extends universalelectricity.prefab.BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityBigBatteryBox();
+		return new TileEntityAdvBatteryBox();
 	}
 
 }

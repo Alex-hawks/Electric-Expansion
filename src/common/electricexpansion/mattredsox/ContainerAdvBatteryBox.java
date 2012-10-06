@@ -9,11 +9,11 @@ import net.minecraft.src.Slot;
 import universalelectricity.basiccomponents.SlotElectricItem;
 import universalelectricity.implement.IItemElectric;
 
-public class ContainerBigBatteryBox extends Container
+public class ContainerAdvBatteryBox extends Container
 {
-    private TileEntityBigBatteryBox tileEntity;
+    private TileEntityAdvBatteryBox tileEntity;
 
-    public ContainerBigBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBigBatteryBox batteryBox)
+    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox batteryBox)
     {
         this.tileEntity = batteryBox;
         this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot

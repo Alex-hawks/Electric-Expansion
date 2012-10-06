@@ -17,6 +17,7 @@ import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.TileEntityPiston;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Ticker;
@@ -43,7 +44,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
 	private double wattHourStored = 0;
 
@@ -58,8 +59,12 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
 	public boolean initialized = false;
 
 	private boolean sendUpdate = true;
-
-    public TileEntityBigBatteryBox()
+	
+	public boolean isUpgraded = false;
+	
+	public int upgradeType = 0;
+		
+    public TileEntityAdvBatteryBox()
     {
     	super();
     	this.setPowerProvider(null);
@@ -236,11 +241,11 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
 	        }
         }
     }
-    
+  
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this, this.wattHourStored, this.disabledTicks);
+        return PacketManager.getPacket("ElecEx", this, this.wattHourStored, this.disabledTicks, this.upgradeType);
     }
     
     @Override
@@ -250,6 +255,7 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
         {
 			this.wattHourStored = dataStream.readDouble();
 	        this.disabledTicks = dataStream.readInt();
+	        this.upgradeType = dataStream.readInt();
         }
         catch(Exception e)
         {
@@ -410,7 +416,14 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public String getInvName()
     {
-        return "Larger Battery Box";
+        if(this.upgradeType == 1)
+        {
+    	return "Superconducting Magnet Box";
+        }
+        else
+        {
+        return "     Advanced Battery Box";
+        }
     }
     @Override
     public int getInventoryStackLimit()
@@ -450,7 +463,14 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public double getMaxWattHours()
 	{
+		if (this.upgradeType == 1) 
+		{
 		return 7000;
+		}
+		else
+		{
+			return 1000;
+		}
 	}
 	
 	/**
@@ -584,6 +604,13 @@ public class TileEntityBigBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public double getVoltage()
     {
-		return 960;
+    	if (this.upgradeType == 1) 
+    	{
+    		return 960;
+	   	}
+
+    	else {
+    		return 120;
+    	}
     }
 }

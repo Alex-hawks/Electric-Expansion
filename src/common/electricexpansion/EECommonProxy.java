@@ -56,7 +56,7 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
         {
 			switch(ID)
 			{
-				case 0: return new GUIBigBatteryBox(player.inventory, ((TileEntityBigBatteryBox)tileEntity));
+				case 0: return new GUIAdvBatteryBox(player.inventory, ((TileEntityAdvBatteryBox)tileEntity));
 				case 1: return new GuiVoltDetector(player.inventory, (TileEntityVoltDetector)tileEntity);
 				case 2: return new GuiWireMill(player.inventory, world, x, y, z);
 
@@ -74,7 +74,7 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
         {
 			switch(ID)
 			{
-				case 0: return new ContainerBigBatteryBox(player.inventory, ((TileEntityBigBatteryBox)tileEntity));
+				case 0: return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvBatteryBox)tileEntity));
 				case 1: return new ContainerVoltDetector();
 				case 2: return new ContainerWireMill(player.inventory, world, x, y, z);
 
