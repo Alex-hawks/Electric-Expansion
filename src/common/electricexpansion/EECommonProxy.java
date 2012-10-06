@@ -27,9 +27,9 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 	public static final String MattBLOCK_TEXTURE_FILE = MattFILE_PATH + "blocks.png";
 	public static final String MattBLOCK1_TEXTURE_FILE = MattFILE_PATH + "blocks1.png";
 	//Alex_hawks' Textures
-	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/";
-	public static String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
-	public static String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
+	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/textures/";
+	public static String AITEMS = "/electricexpansion/textures/alex_hawks/textures/items.png";
+	public static String ABLOCK = "/electricexpansion/textures/alex_hawks/textures/block.png";
 	
 	@Override
 	public void init()
