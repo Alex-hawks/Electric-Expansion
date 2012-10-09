@@ -21,7 +21,7 @@ LICENSE.txt
 !/src/common/electricexpansion/
 !/src/common/mcmod.info
 !/modversion.txt
-!/textures/*
+!/textures
 !/README
 
 *.bat
