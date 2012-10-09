@@ -20,8 +20,6 @@ import universalelectricity.basiccomponents.TileEntityCopperWire;
 
 public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 {
-	
-
 	//Mattredsox's Textures
 	public static final String MattFILE_PATH = "/electricexpansion/textures/mattredsox/";
 	public static final String MattBLOCK_TEXTURE_FILE = MattFILE_PATH + "blocks.png";
@@ -29,13 +27,14 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 	public static final String MattItem_TEXTURE_FILE = MattFILE_PATH + "items.png";
         
 	//Alex_hawks' Textures
-	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/textures/";
-	public static String AITEMS = "/electricexpansion/textures/alex_hawks/textures/items.png";
-	public static String ABLOCK = "/electricexpansion/textures/alex_hawks/textures/block.png";
+	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/";
+	public static String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
+	public static String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
 	
 	@Override
 	public void init()
 	{
+		//Alex_hawks' Tile entity registrations
 		GameRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire");
 		GameRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire");
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
@@ -45,15 +44,20 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlockOff.class, "TileEntitySwitchWireBlockOff");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
-
+		
+		//Mattredsox's Tile entity registrations
+		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TEBBB");
+		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
+		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
+		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
+		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
+		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TEWM");
 	}
-	
 	
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		
 		if (tileEntity != null)
         {
 			switch(ID)
@@ -61,17 +65,15 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 				case 0: return new GUIAdvBatteryBox(player.inventory, ((TileEntityAdvBatteryBox)tileEntity));
 				case 1: return new GuiVoltDetector(player.inventory, (TileEntityVoltDetector)tileEntity);
 				case 2: return new GuiWireMill(player.inventory, world, x, y, z);
-
 			}
         }
-		
 		return null;
 	}
+	
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		
 		if (tileEntity != null)
         {
 			switch(ID)
@@ -79,10 +81,8 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 				case 0: return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvBatteryBox)tileEntity));
 				case 1: return new ContainerVoltDetector();
 				case 2: return new ContainerWireMill(player.inventory, world, x, y, z);
-
 			}
         }
-		
 		return null;
 	}
 }

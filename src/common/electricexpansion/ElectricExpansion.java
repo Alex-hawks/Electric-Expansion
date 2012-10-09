@@ -3,6 +3,7 @@ package electricexpansion;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.Instance;
 
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
@@ -60,27 +61,28 @@ import universalelectricity.recipe.RecipeManager;
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	public static int[] versionArray = {0, 2, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public static int[] versionArray = {0, 2, 2}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static String version;
 	public static final int BLOCK_ID_PREFIX = 3980;
 	public static final int ITEM_ID_PREFIX = 15970;
 	
-	public static int rawWireID = BLOCK_ID_PREFIX;
-	public static int insulatedWireID = BLOCK_ID_PREFIX + 1;
-	public static int wireBlocksID = BLOCK_ID_PREFIX + 2;
-	public static int switchWireID = BLOCK_ID_PREFIX + 3;
-	public static int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
-	public static int offSwitchWireID = BLOCK_ID_PREFIX + 5;
-	public static int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
-	//public static int redstoneWireID = BLOCK_ID_PREFIX + 7;
-	//public static int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
-	public static int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
-	public static int blockVoltDetID = BLOCK_ID_PREFIX + 10;
-	public static int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
-	public static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
-	public static int blockWireMillID = BLOCK_ID_PREFIX + 13;
-	public static int blockFuseID = BLOCK_ID_PREFIX + 14;
-	public static int itemUpgradeID = ITEM_ID_PREFIX;
+	//private, these are the default options.
+	private static int rawWireID = BLOCK_ID_PREFIX;
+	private static int insulatedWireID = BLOCK_ID_PREFIX + 1;
+	private static int wireBlocksID = BLOCK_ID_PREFIX + 2;
+	private static int switchWireID = BLOCK_ID_PREFIX + 3;
+	private static int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
+	private static int offSwitchWireID = BLOCK_ID_PREFIX + 5;
+	private static int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
+	//private static int redstoneWireID = BLOCK_ID_PREFIX + 7;
+	//private static int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
+	private static int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
+	private static int blockVoltDetID = BLOCK_ID_PREFIX + 10;
+	private static int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
+	private static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
+	private static int blockWireMillID = BLOCK_ID_PREFIX + 13;
+	private static int blockFuseID = BLOCK_ID_PREFIX + 14;
+	private static int itemUpgradeID = ITEM_ID_PREFIX;
 
 	public static int rawWire;
 	public static int insulatedWire;
@@ -102,6 +104,7 @@ public class ElectricExpansion {
 	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
 	
+	//Blocks
 	public static final Block blockRawWire = new BlockRawWire(rawWire, 0);
 	public static final Block blockInsulatedWire = new BlockInsulatedWire(insulatedWire, 0);
 	public static final Block blockWireBlock = new BlockWireBlock(wireBlocks, 0);
@@ -117,11 +120,13 @@ public class ElectricExpansion {
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
     public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
-	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
+	//Items
+    public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     
 	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 	
+	@Instance("ElectricExpansion")
 	public static ElectricExpansion instance;
 	
 	@SidedProxy(clientSide="electricexpansion.client.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
@@ -207,9 +212,7 @@ public class ElectricExpansion {
 		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks1.png");
 		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks.png");
 
-
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
-
 	}
 	
 	@Init
@@ -281,12 +284,6 @@ public class ElectricExpansion {
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
-		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TEBBB");
-		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
-		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
-		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
-		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
-		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TEWM");
 	}
 	
 	@PostInit
