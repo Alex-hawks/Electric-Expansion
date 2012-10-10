@@ -34,4 +34,11 @@ public interface IPanelElectric
 	 * @return In pixels GIVEN a 16*16 texture pack.
 	 */
 	public byte offset(int BlockID, int meta);
+	
+	/**
+	 * @param BlockID
+	 * @param meta
+	 * @return the usable height, in pixels GIVEN a 16*16 texture pack, after offset.
+	 */
+	public byte usableArea(int BlockID, int meta);
 }
