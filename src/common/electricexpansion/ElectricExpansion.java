@@ -16,6 +16,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import electricexpansion.alex_hawks.blocks.*;
+import electricexpansion.alex_hawks.items.ItemBlockInsualtedWire;
+import electricexpansion.alex_hawks.items.ItemBlockRawWire;
+import electricexpansion.alex_hawks.items.ItemBlockSwitchWire;
+import electricexpansion.alex_hawks.items.ItemBlockSwitchWireBlock;
+import electricexpansion.alex_hawks.items.ItemBlockSwitchWireBlockOff;
+import electricexpansion.alex_hawks.items.ItemBlockSwitchWireOff;
+import electricexpansion.alex_hawks.items.ItemBlockWireBlock;
 import electricexpansion.mattredsox.*;
 
 import java.io.File;
@@ -46,23 +53,29 @@ public class ElectricExpansion {
 	public static final int ITEM_ID_PREFIX = 15970;
 	
 	//private, these are the default options.
-	private static int rawWireID = BLOCK_ID_PREFIX;
-	private static int insulatedWireID = BLOCK_ID_PREFIX + 1;
-	private static int wireBlocksID = BLOCK_ID_PREFIX + 2;
-	private static int switchWireID = BLOCK_ID_PREFIX + 3;
-	private static int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
-	private static int offSwitchWireID = BLOCK_ID_PREFIX + 5;
-	private static int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
-	//private static int redstoneWireID = BLOCK_ID_PREFIX + 7;
-	//private static int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
-	private static int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
-	private static int blockVoltDetID = BLOCK_ID_PREFIX + 10;
-	private static int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
-	private static int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
-	private static int blockWireMillID = BLOCK_ID_PREFIX + 13;
-	private static int blockFuseID = BLOCK_ID_PREFIX + 14;
-	private static int itemUpgradeID = ITEM_ID_PREFIX;
+	//Blocks
+	private static final int rawWireID = BLOCK_ID_PREFIX;
+	private static final int insulatedWireID = BLOCK_ID_PREFIX + 1;
+	private static final int wireBlocksID = BLOCK_ID_PREFIX + 2;
+	private static final int switchWireID = BLOCK_ID_PREFIX + 3;
+	private static final int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
+	private static final int offSwitchWireID = BLOCK_ID_PREFIX + 5;
+	private static final int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
+	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 7;
+	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
+	private static final int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
+	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 10;
+	private static final int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
+	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
+	private static final int blockWireMillID = BLOCK_ID_PREFIX + 13;
+	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
+	//Items
+	private static final int itemUpgradeID = ITEM_ID_PREFIX;
+	//Other
+	private static final int superConductorUpkeepDefault = 500;
 
+	//Runtime Values
+	//Blocks
 	public static int rawWire;
 	public static int insulatedWire;
 	public static int wireBlocks;
@@ -78,7 +91,10 @@ public class ElectricExpansion {
 	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
+	//Items
 	public static int Upgrade;
+	//Other
+	public static double superConductorUpkeep;
 	
 	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -99,6 +115,7 @@ public class ElectricExpansion {
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
     public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
+    
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     
@@ -130,6 +147,9 @@ public class ElectricExpansion {
 		wireMill = UEConfig.getBlockConfigID(i, "Etcher", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
+		
+		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
+		i.getOrCreateIntProperty("Super_Conductor_Upkeep", Configuration.CATEGORY_GENERAL, superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost for EACH Super-Conductor Cable's super-conducting function.";
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
@@ -207,6 +227,8 @@ public class ElectricExpansion {
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"});
 		
 		//Recipes for supporting other UE add-ons, the slack way...
+		RecipeManager.removeRecipe(new ItemStack(BasicComponents.blockCopperWire));
+		RecipeManager.removeShapelessRecipe(new ItemStack(BasicComponents.blockCopperWire));
 		RecipeManager.addShapelessRecipe(new ItemStack(BasicComponents.blockCopperWire, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(BasicComponents.blockCopperWire, 1)});
 
