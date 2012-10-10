@@ -2,7 +2,8 @@ package electricexpansion.alex_hawks.blocks;
 
 import java.util.List;
 
-import electricexpansion.EECommonProxy;import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
+import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.Block;

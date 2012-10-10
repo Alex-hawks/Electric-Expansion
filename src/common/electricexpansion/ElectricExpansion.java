@@ -4,7 +4,6 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
-
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
@@ -15,42 +14,22 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import electricexpansion.alex_hawks.blocks.BlockInsulatedWire;
-import electricexpansion.alex_hawks.blocks.BlockRawWire;
-import electricexpansion.alex_hawks.blocks.BlockSwitchWire;
-import electricexpansion.alex_hawks.blocks.BlockSwitchWireBlock;
-import electricexpansion.alex_hawks.blocks.BlockSwitchWireBlockOff;
-import electricexpansion.alex_hawks.blocks.BlockSwitchWireOff;
-import electricexpansion.alex_hawks.blocks.BlockWireBlock;
-import electricexpansion.alex_hawks.blocks.ItemBlockInsualtedWire;
-import electricexpansion.alex_hawks.blocks.ItemBlockRawWire;
-import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWire;
-import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireBlock;
-import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireBlockOff;
-import electricexpansion.alex_hawks.blocks.ItemBlockSwitchWireOff;
-import electricexpansion.alex_hawks.blocks.ItemBlockWireBlock;
-import electricexpansion.mattredsox.BlockAdvBatteryBox;
-import electricexpansion.mattredsox.BlockDOWNTransformer;
-import electricexpansion.mattredsox.BlockFuse;
-import electricexpansion.mattredsox.BlockUPTransformer;
-import electricexpansion.mattredsox.BlockVoltDetector;
-import electricexpansion.mattredsox.BlockWireMill;
-import electricexpansion.mattredsox.ItemUpgrade;
-import electricexpansion.mattredsox.TileEntityAdvBatteryBox;
-import electricexpansion.mattredsox.TileEntityDOWNTransformer;
-import electricexpansion.mattredsox.TileEntityFuse;
-import electricexpansion.mattredsox.TileEntityUPTransformer;
-import electricexpansion.mattredsox.TileEntityVoltDetector;
-import electricexpansion.mattredsox.TileEntityWireMill;
+
+import electricexpansion.alex_hawks.blocks.*;
+import electricexpansion.mattredsox.*;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
+
 import universalelectricity.BasicComponents;
 import universalelectricity.UEConfig;
 import universalelectricity.network.ConnectionHandler;

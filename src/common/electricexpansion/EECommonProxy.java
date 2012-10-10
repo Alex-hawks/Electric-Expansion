@@ -2,13 +2,7 @@ package electricexpansion;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
-import electricexpansion.alex_hawks.cables.TileEntityRawWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlockOff;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
-import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
+import electricexpansion.alex_hawks.cables.*;
 import electricexpansion.client.mattredsox.*;
 import electricexpansion.mattredsox.*;
 import net.minecraft.src.EntityPlayer;
@@ -16,7 +10,6 @@ import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.basiccomponents.TileEntityCopperWire;
 
 public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 {

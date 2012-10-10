@@ -1,25 +1,14 @@
-/**
- * 
- */
 package electricexpansion.alex_hawks.blocks;
 
 import java.util.logging.Logger;
 
 import electricexpansion.ElectricExpansion;
-import cpw.mods.fml.common.Mod.Instance;
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 
 public class ItemBlockRawWire extends ItemBlock 
 {
-	@Instance
-	public static Object instance;
-	private Logger logger = ElectricExpansion.ACLogger;
-	public final static Object instance()
-	{
-		return instance;
-	}
 	public ItemBlockRawWire(int par1, Block mainBlock)
 	{
 	super(par1);

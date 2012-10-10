@@ -16,7 +16,6 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
 
 public class BlockSwitchWireOff extends BlockConductor
