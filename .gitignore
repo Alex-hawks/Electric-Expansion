@@ -17,11 +17,13 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
-!/src/*/electricexpansion/
+!/src/common/electricexpansion/
+!/src/minecraft/electricexpansion/
 !/src/common/mcmod.info
 !/modversion.txt
 !/textures
 !/README
+/src/*/electricexpansion/alex_hawks/machines
 
 *.bat
 *.sh
