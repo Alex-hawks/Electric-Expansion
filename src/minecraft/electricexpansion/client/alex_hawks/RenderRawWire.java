@@ -42,6 +42,9 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
 
+		for(int i=2; i<6; i++)
+			if(tileEntity.connectedBlocks[i] instanceof IPanelElectricMachine)
+				model.renderPanel();
 		if (tileEntity.connectedBlocks[0] != null)
 		{model.renderBottom();}
 		if (tileEntity.connectedBlocks[1] != null)
@@ -49,28 +52,28 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 		if (tileEntity.connectedBlocks[2] != null)
 		{
 			if (tileEntity.connectedBlocks[2] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity).canConnectToBase(meta, ForgeDirection.getOrientation(3)))
+				if(((IPanelElectricMachine)tileEntity.connectedBlocks[2]).canConnectToBase(meta, ForgeDirection.getOrientation(3)))
 					model.renderPanelBack();
 			else model.renderBack();
 		}
 		if (tileEntity.connectedBlocks[3] != null)
 		{
 			if (tileEntity.connectedBlocks[3] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity).canConnectToBase(meta, ForgeDirection.getOrientation(2)))
+				if(((IPanelElectricMachine)tileEntity.connectedBlocks[3]).canConnectToBase(meta, ForgeDirection.getOrientation(2)))
 					model.renderPanelFront();
 			else model.renderFront();
 		}
 		if (tileEntity.connectedBlocks[4] != null)
 		{
 			if (tileEntity.connectedBlocks[4] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity).canConnectToBase(meta, ForgeDirection.getOrientation(5)))
+				if(((IPanelElectricMachine)tileEntity.connectedBlocks[4]).canConnectToBase(meta, ForgeDirection.getOrientation(5)))
 					model.renderPanelLeft();
 			else model.renderLeft();
 		}
 		if (tileEntity.connectedBlocks[5] != null)
 		{
 			if (tileEntity.connectedBlocks[5] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity).canConnectToBase(meta, ForgeDirection.getOrientation(4)))
+				if(((IPanelElectricMachine)tileEntity.connectedBlocks[5]).canConnectToBase(meta, ForgeDirection.getOrientation(4)))
 					model.renderPanelRight();
 			else model.renderRight();
 		}

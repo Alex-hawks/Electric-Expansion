@@ -98,38 +98,18 @@ public class ModelRawWire extends ModelBase
 		setRotation(Panel, 0F, 0F, 0F);
 	}
 	
-	public void renderMiddle()
-	{Middle.render(0.0625F);}
-	public void renderBottom()
-	{Bottom.render(0.0625F);}
-	public void renderTop()
-	{Top.render(0.0625F);}
-	public void renderLeft()
-	{Left.render(0.0625F);}
-	public void renderRight()
-	{Right.render(0.0625F);}
-	public void renderBack()
-	{Back.render(0.0625F);}
-	public void renderFront()
-	{Front.render(0.0625F);}
-	public void renderPanel()
-	{Panel.render(0.0625F);}
-	public void renderPanelRight()
-	{
-		PanelRight.render(0.0625F);
-	}
-	public void renderPanelFront()
-	{
-		PanelFront.render(0.0625F);
-	}
-	public void renderPanelBack()
-	{
-		PanelBack.render(0.0625F);
-	}
-	public void renderPanelLeft()
-	{
-		PanelLeft.render(0.0625F);
-	}
+	public void renderMiddle() 		{Middle.render(0.0625F);}
+	public void renderBottom()		{Bottom.render(0.0625F);}
+	public void renderTop()			{Top.render(0.0625F);}
+	public void renderLeft()		{Left.render(0.0625F);}
+	public void renderRight()		{Right.render(0.0625F);}
+	public void renderBack()		{Back.render(0.0625F);}
+	public void renderFront()		{Front.render(0.0625F);}
+	public void renderPanel()		{Panel.render(0.0625F);}
+	public void renderPanelRight()	{PanelRight.render(0.0625F);}
+	public void renderPanelFront()	{PanelFront.render(0.0625F);}
+	public void renderPanelBack()	{PanelBack.render(0.0625F);}
+	public void renderPanelLeft()	{PanelLeft.render(0.0625F);}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)
 	{
