@@ -80,6 +80,3 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		return null;
 	}
 }
-	
-	
-

@@ -21,37 +21,20 @@ public class CableConnectionInterfaces
 	 */
 	public interface IPanelElectricMachine 
 	{
-		/**
-		 * solidPixels[side of block][x coordinate][y coordinate]
-		 * coordinates are 0 indexed, (0,0) is at the bottom left of the 16*16 texture, if it were a standard 1*1*1 block
-		 */
-		boolean[][][] solidPixels = new boolean[6][16][16];
 		/** 
-		 * @param BlockID
 		 * @param meta
 		 * @return the side on which your block exists
 		 * f.e. Atrain99's Solar Panels would be bottom.
 		 */
-		public ForgeDirection sideMountedTo(int BlockID, int meta, ForgeDirection side);
+		public ForgeDirection sideMountedTo(int meta, ForgeDirection side);
 		
 		/**
-		 * set the solidPixels[][][] array for this instance, by BlockID, Block metadata, and side.
-		 * @param BlockID
 		 * @param meta
 		 * @param side
+		 * @return true if there is a 4*4 gap, at the bottom of your machine,
+		 * @return on the side passed, for a cable to connect to
 		 */
-		public void setSolidPixels(int BlockID, int meta, ForgeDirection side);
-		
-		/**
-		 * Only returns, does NOT set
-		 * @param BlockID
-		 * @param meta
-		 * @param side
-		 * @param x The x coordinate of the pixel in question. See above creation of solidPixels[][][]
-		 * @param y The y coordinate of the pixel in question. See above creation of solidPixels[][][]
-		 * @return an array in the form of this.solidPixels[][][]
-		 * @return see above for explanation.
-		 */
-		public boolean[][][] getSolidPixels(int BlockID, int meta, ForgeDirection side, byte x, byte y);
+		public boolean canConnectToBase(int meta, ForgeDirection side);
+
 	}
 }
