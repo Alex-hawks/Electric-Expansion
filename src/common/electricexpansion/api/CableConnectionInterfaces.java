@@ -22,21 +22,19 @@ public class CableConnectionInterfaces
 	public interface IPanelElectricMachine 
 	{
 		/** 
-		 * @param BlockID
 		 * @param meta
 		 * @return the side on which your block exists
 		 * f.e. Atrain99's Solar Panels would be bottom.
 		 */
-		public ForgeDirection sideMountedTo(int BlockID, int meta, ForgeDirection side);
+		public ForgeDirection sideMountedTo(int meta, ForgeDirection side);
 		
 		/**
-		 * @param BlockID
 		 * @param meta
 		 * @param side
 		 * @return true if there is a 4*4 gap, at the bottom of your machine,
 		 * @return on the side passed, for a cable to connect to
 		 */
-		public boolean canConnectToBase(int BlockID, int meta, ForgeDirection side);
+		public boolean canConnectToBase(int meta, ForgeDirection side);
 
 	}
 }

@@ -21,10 +21,10 @@ public class BlockPanelMachine extends BlockMachine implements IPanelElectricMac
 	}
 
 	@Override
-	public ForgeDirection sideMountedTo(int BlockID, int meta, ForgeDirection side) 
+	public ForgeDirection sideMountedTo(int meta, ForgeDirection side) 
 	{return ForgeDirection.DOWN;}
 
 	@Override
-	public boolean canConnectToBase(int BlockID, int meta, ForgeDirection side) 
+	public boolean canConnectToBase(int meta, ForgeDirection side) 
 	{return true;}
 }
