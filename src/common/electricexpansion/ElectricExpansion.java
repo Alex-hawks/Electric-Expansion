@@ -227,8 +227,6 @@ public class ElectricExpansion {
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"});
 		
 		//Recipes for supporting other UE add-ons, the slack way...
-		RecipeManager.removeRecipe(new ItemStack(BasicComponents.blockCopperWire));
-		RecipeManager.removeShapelessRecipe(new ItemStack(BasicComponents.blockCopperWire));
 		RecipeManager.addShapelessRecipe(new ItemStack(BasicComponents.blockCopperWire, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(BasicComponents.blockCopperWire, 1)});
 
