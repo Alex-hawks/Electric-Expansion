@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
-import electricexpansion.mattredsox.TileEntityVoltDetector;
+import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricInfo;

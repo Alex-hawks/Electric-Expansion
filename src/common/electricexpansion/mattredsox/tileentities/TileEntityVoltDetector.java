@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox;
+package electricexpansion.mattredsox.tileentities;
 
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
@@ -43,7 +43,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityFuse extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider {
+public class TileEntityVoltDetector extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider {
 	private double wattHourStored = 0;
 
 
@@ -59,7 +59,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 	
 	public double voltin;
 	
-    public TileEntityFuse()
+    public TileEntityVoltDetector()
     {
     	super();
     	this.setPowerProvider(null);
@@ -152,11 +152,8 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
             	if(Loader.isModLoaded("IC2"))
             	{
 	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
-	 	            {                        
-	 	            	if (voltin < 121)
-	 	            	{
+	 	            {
 	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
-	 	            	}
 	 	            }
             	}
             	
@@ -164,16 +161,12 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
             	if(Loader.isModLoaded("BuildCraft|Transport"))
             	{
 	 	            if(this.isPoweredTile(tileEntity))
-	 	            {    
-	 	            	if (voltin < 121)
-	 	            	{
+	 	            {
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
 	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
 	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
 	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
-	 	            
-	 	            	}
 	 	            }
             	}
             	
@@ -184,10 +177,8 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
                 	//Output UE electricity
                     if (connector instanceof TileEntityConductor)
                     {
-                        if (voltin < 121)
-                        {
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                      
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
                         ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
                         this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     } 
@@ -203,7 +194,6 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 	        	this.sendUpdate = false;
 	        }
         }
-            }
     }
     
     @Override

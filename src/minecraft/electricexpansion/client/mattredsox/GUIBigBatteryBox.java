@@ -7,7 +7,7 @@ import net.minecraft.src.StatCollector;
 import org.lwjgl.opengl.GL11;
 
 import electricexpansion.mattredsox.*;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityBigBatteryBox;
 
 import universalelectricity.BasicComponents;
 import universalelectricity.basiccomponents.TileEntityBatteryBox;
@@ -15,16 +15,16 @@ import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 
 
-public class GUIAdvBatteryBox extends GuiContainer
+public class GUIBigBatteryBox extends GuiContainer
 {
-    private TileEntityAdvBatteryBox tileEntity;
+    private TileEntityBigBatteryBox tileEntity;
 
     private int containerWidth;
     private int containerHeight;
     
-    public GUIAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox batteryBox)
+    public GUIBigBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBigBatteryBox batteryBox)
     {
-        super(new ContainerAdvBatteryBox(par1InventoryPlayer, batteryBox));
+        super(new ContainerBigBatteryBox(par1InventoryPlayer, batteryBox));
         this.tileEntity = batteryBox;
     }
 
@@ -34,7 +34,7 @@ public class GUIAdvBatteryBox extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer()
     {
-        this.fontRenderer.drawString(this.tileEntity.getInvName(), 15, 6, 4210752);
+        this.fontRenderer.drawString(this.tileEntity.getInvName(), 65, 6, 4210752);
         String displayWattHours = ElectricInfo.getDisplay(tileEntity.getWattHours(), ElectricUnit.WATT_HOUR, 3, true);
         String displayMaxWattHours = ElectricInfo.getDisplaySimple(tileEntity.getMaxWattHours(), ElectricUnit.WATT_HOUR, 0);
 

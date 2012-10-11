@@ -1,5 +1,6 @@
 package electricexpansion.mattredsox;
 
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;

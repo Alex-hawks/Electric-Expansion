@@ -1,25 +1,24 @@
 package electricexpansion.mattredsox;
 
+import electricexpansion.mattredsox.tileentities.TileEntityBigBatteryBox;
+import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import net.minecraft.src.SlotFurnace;
 import universalelectricity.basiccomponents.SlotElectricItem;
 import universalelectricity.implement.IItemElectric;
 
-public class ContainerWireMill extends Container
+public class ContainerBigBatteryBox extends Container
 {
-    private TileEntityWireMill tileEntity;
+    private TileEntityBigBatteryBox tileEntity;
 
-    public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
+    public ContainerBigBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBigBatteryBox batteryBox)
     {
-        this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
-        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); //To be smelted
-        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); //Smelting result
+        this.tileEntity = batteryBox;
+        this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot
+        this.addSlotToContainer(new SlotElectricItem(batteryBox, 1, 33, 48)); //Bottom slot
         int var3;
 
         for (var3 = 0; var3 < 3; ++var3)
@@ -64,44 +63,47 @@ public class ContainerWireMill extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if (par1 == 2)
-            {
-                if (!this.mergeItemStack(var4, 3, 39, true))
-                {
-                    return null;
-                }
-
-                var3.onSlotChange(var4, var2);
-            }
-            else if (par1 != 1 && par1 != 0)
+            if (par1 != 0 && par1 != 1)
             {
                 if (var4.getItem() instanceof IItemElectric)
                 {
-                    if (!this.mergeItemStack(var4, 0, 1, false))
+                    if (((IItemElectric)var4.getItem()).canProduceElectricity())
                     {
-                        return null;
+                        if (!this.mergeItemStack(var4, 1, 2, false))
+                        {
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        if (!this.mergeItemStack(var4, 0, 1, false))
+                        {
+                            return null;
+                        }
                     }
                 }
-                else if (FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
+                else if(var4.getItem() instanceof IElectricItem)
                 {
-                    if (!this.mergeItemStack(var4, 1, 2, false))
-                    {
-                        return null;
-                    }
+                	if(((IElectricItem)var4.getItem()).canProvideEnergy())
+                	{
+                		if(!mergeItemStack(var4, 1, 2, false))
+                		{
+                			return null;
+                		}
+                	}
+                	else {
+                		if(!mergeItemStack(var4, 0, 1, false))
+                		{
+                			return null;
+                		}
+                	}
                 }
-                else if (par1 >= 3 && par1 < 30)
-                {
-                    if (!this.mergeItemStack(var4, 30, 39, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
+                else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
                 {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(var4, 3, 39, false))
+            else if (!this.mergeItemStack(var4, 3, 38, false))
             {
                 return null;
             }

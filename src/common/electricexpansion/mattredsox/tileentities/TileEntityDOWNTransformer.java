@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox;
+package electricexpansion.mattredsox.tileentities;
 
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
@@ -17,7 +17,6 @@ import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntityPiston;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.Ticker;
@@ -44,11 +43,9 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
-{	
+public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider {
 	private double wattHourStored = 0;
 
-    private ItemStack[] containingItems = new ItemStack[2];
 
     private boolean isFull = false;
     
@@ -60,11 +57,9 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 
 	private boolean sendUpdate = true;
 	
-	public boolean isUpgraded = false;
+	public double voltin;
 	
-	public int upgradeType = 0;
-		
-    public TileEntityAdvBatteryBox()
+    public TileEntityDOWNTransformer()
     {
     	super();
     	this.setPowerProvider(null);
@@ -95,11 +90,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
     {        
-        if (voltage > this.getVoltage())
-        {
-            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
-            return;
-        }
+    	voltin = voltage;
         
         if(!this.isDisabled())
         {
@@ -135,45 +126,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
         		}
         	}
         	
-            //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
-            if (this.containingItems[0] != null && this.wattHourStored > 0)
-            {
-                if (this.containingItems[0].getItem() instanceof IItemElectric)
-                {
-                    IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
-                    double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.setWattHours(this.wattHourStored - (electricItem.getTransferRate() - rejectedElectricity));
                 }
-                else if(this.containingItems[0].getItem() instanceof IElectricItem)
-                {
-                	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
-                	this.setWattHours(wattHourStored - sent);
-                }
-            }
-
-            //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-            if (this.containingItems[1] != null && this.wattHourStored < this.getMaxWattHours())
-            {
-                if (this.containingItems[1].getItem() instanceof IItemElectric)
-                {
-                    IItemElectric electricItem = (IItemElectric)this.containingItems[1].getItem();
-
-                    if (electricItem.canProduceElectricity())
-                    {
-                        double wattHourReceived = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-                        this.setWattHours(this.wattHourStored + wattHourReceived);
-                    }
-                }
-                else if(containingItems[1].getItem() instanceof IElectricItem)
-                {
-                	IElectricItem item = (IElectricItem)containingItems[1].getItem();
-                	if(item.canProvideEnergy())
-                	{
-                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
-                		this.setWattHours(wattHourStored + gain);
-                	}
-                }
-            }
 
             //Power redstone if the battery box is full
             boolean isFullThisCheck = false;
@@ -230,7 +183,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
                     } 
                 }
             }
-        }
+       
         
         if(!this.worldObj.isRemote)
         {
@@ -241,11 +194,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	        }
         }
     }
-  
+    
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this, this.wattHourStored, this.disabledTicks, this.upgradeType);
+        return PacketManager.getPacket("ElecEx", this, this.wattHourStored, this.disabledTicks);
     }
     
     @Override
@@ -255,30 +208,13 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
         {
 			this.wattHourStored = dataStream.readDouble();
 	        this.disabledTicks = dataStream.readInt();
-	        this.upgradeType = dataStream.readInt();
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
 	}
-    
-    @Override
-    public void openChest()
-    {
-    	if(!this.worldObj.isRemote)
-        {
-    		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-        }
-    	
-    	this.playersUsing  ++;
-    }
-    
-    @Override
-    public void closeChest()
-    {
-    	this.playersUsing --;
-    }
+
 
     /**
      * Reads a tile entity from NBT.
@@ -289,19 +225,6 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
         super.readFromNBT(par1NBTTagCompound);
         this.wattHourStored = par1NBTTagCompound.getDouble("electricityStored");
         
-        NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
-        this.containingItems = new ItemStack[this.getSizeInventory()];
-
-        for (int var3 = 0; var3 < var2.tagCount(); ++var3)
-        {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-            byte var5 = var4.getByte("Slot");
-
-            if (var5 >= 0 && var5 < this.containingItems.length)
-            {
-                this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
-            }
-        }
     }
     /**
      * Writes a tile entity to NBT.
@@ -311,131 +234,10 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setDouble("electricityStored", this.wattHourStored);
-        NBTTagList var2 = new NBTTagList();
-
-        for (int var3 = 0; var3 < this.containingItems.length; ++var3)
-        {
-            if (this.containingItems[var3] != null)
-            {
-                NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
-                this.containingItems[var3].writeToNBT(var4);
-                var2.appendTag(var4);
-            }
         }
-
-        par1NBTTagCompound.setTag("Items", var2);
-    }
-
-    @Override
-    public int getStartInventorySide(ForgeDirection side)
-    {
-        if(side == side.DOWN)
-        {
-            return 1;
-        }
-
-        if(side == side.UP)
-        {
-            return 1;
-        }
-
-        return 0;
-    }
-
-    @Override
-    public int getSizeInventorySide(ForgeDirection side)
-    {
-        return 1;
-    }
     
-    @Override
-    public int getSizeInventory()
-    {
-        return this.containingItems.length;
-    }
-    @Override
-    public ItemStack getStackInSlot(int par1)
-    {
-        return this.containingItems[par1];
-    }
-    @Override
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (this.containingItems[par1] != null)
-        {
-            ItemStack var3;
 
-            if (this.containingItems[par1].stackSize <= par2)
-            {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            }
-            else
-            {
-                var3 = this.containingItems[par1].splitStack(par2);
-
-                if (this.containingItems[par1].stackSize == 0)
-                {
-                    this.containingItems[par1] = null;
-                }
-
-                return var3;
-            }
-        }
-        else
-        {
-            return null;
-        }
-    }
-    @Override
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (this.containingItems[par1] != null)
-        {
-            ItemStack var2 = this.containingItems[par1];
-            this.containingItems[par1] = null;
-            return var2;
-        }
-        else
-        {
-            return null;
-        }
-    }
-    @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        this.containingItems[par1] = par2ItemStack;
-
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
-    @Override
-    public String getInvName()
-    {
-        if(this.upgradeType == 1)
-        {
-    	return "Superconducting Magnet Box";
-        }
-        else
-        {
-        return "     Advanced Battery Box";
-        }
-    }
-    @Override
-    public int getInventoryStackLimit()
-    {
-        return 1;
-    }
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-    {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
-    }
-    
+  
     @Override
     public boolean isPoweringTo(byte side)
     {
@@ -463,14 +265,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public double getMaxWattHours()
 	{
-		if (this.upgradeType == 1) 
-		{
-		return 7000;
-		}
-		else
-		{
-			return 1000;
-		}
+		return 10;
 	}
 	
 	/**
@@ -604,13 +399,6 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public double getVoltage()
     {
-    	if (this.upgradeType == 1) 
-    	{
-    		return 960;
-	   	}
-
-    	else {
-    		return 120;
-    	}
+		return voltin / 2;
     }
 }

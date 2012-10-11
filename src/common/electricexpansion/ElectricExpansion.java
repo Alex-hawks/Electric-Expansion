@@ -24,6 +24,11 @@ import electricexpansion.alex_hawks.items.ItemBlockSwitchWireBlockOff;
 import electricexpansion.alex_hawks.items.ItemBlockSwitchWireOff;
 import electricexpansion.alex_hawks.items.ItemBlockWireBlock;
 import electricexpansion.mattredsox.*;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
+import electricexpansion.mattredsox.blocks.BlockFuse;
+import electricexpansion.mattredsox.blocks.BlockUPTransformer;
+import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 
 import java.io.File;
 import java.util.ArrayList;
