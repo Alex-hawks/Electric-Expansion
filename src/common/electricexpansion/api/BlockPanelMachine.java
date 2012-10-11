@@ -1,9 +1,11 @@
 package electricexpansion.api;
 
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Material;
 import net.minecraftforge.common.ForgeDirection;
 import electricexpansion.api.CableConnectionInterfaces.IPanelElectricMachine;
 import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.BlockMachine;
 
 /**
  * 
@@ -11,10 +13,11 @@ import universalelectricity.prefab.BlockConductor;
  * Extend this to make it easier to make neat and tidy cable connections to your slab-sized, panel-sized, etc UE Machine.
  *
  */
-public class BlockPanelConductor extends BlockConductor implements IPanelElectricMachine
+public class BlockPanelMachine extends BlockMachine implements IPanelElectricMachine
 {
-	public BlockPanelConductor(int id, Material material) {
-		super(id, material);
+	public BlockPanelMachine(String name, int id, Material material) 
+	{
+		super(name, id, material);
 	}
 
 	@Override
