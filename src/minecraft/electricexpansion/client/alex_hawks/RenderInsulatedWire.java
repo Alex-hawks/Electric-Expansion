@@ -7,18 +7,19 @@ import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
-import universalelectricity.basiccomponents.ModelCopperWire;
+import electricexpansion.api.CableConnectionInterfaces.IPanelElectricMachine;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
+import net.minecraftforge.common.ForgeDirection;
 
 public class RenderInsulatedWire extends TileEntitySpecialRenderer 
 {
-	private ModelCopperWire model;
+	private ModelInsulatedWire model;
 
 	public RenderInsulatedWire()
 	{
-		model = new ModelCopperWire();
+		model = new ModelInsulatedWire();
 	}
 	public void renderAModelAt(TileEntity tileEntity, double x, double y, double z, float f)
 	{
@@ -70,34 +71,90 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 
 		if (tileEntity instanceof TileEntityInsulatedWire)
 		{
-			if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[0] != null) {model.renderBottom();}
-			if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[1] != null) {model.renderTop();}
-			if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[2] != null) 
+			TileEntityInsulatedWire TE = (TileEntityInsulatedWire)tileEntity;
+			int[] metaConnected = new int[6];
+			for(int i=0; i<6; i++)
+				metaConnected[i] = TE.connectedBlocks[i].blockMetadata;
+			
+			for(int i=0; i<6; i++)
+				if (TE.connectedBlocks[i] != null)
+					if (TE.connectedBlocks[i] instanceof IPanelElectricMachine)
+						model.renderBottom();
+			
+			if (TE.connectedBlocks[0] != null) {model.renderBottom();}
+			if (TE.connectedBlocks[1] != null) {model.renderTop();}
+			if (TE.connectedBlocks[2] != null) 
 			{
-				model.renderBack();
+				if (TE.connectedBlocks[2] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
+						model.renderPanelBack();
+				else model.renderBack();
 			}
-			if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[3] != null) 
+			if (TE.connectedBlocks[3] != null) 
 			{
-				model.renderFront();
+				if (TE.connectedBlocks[3] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
+						model.renderPanelFront();
+				else model.renderFront();
 			}
-			if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[4] != null) 
+			if (TE.connectedBlocks[4] != null) 
 			{
-				model.renderLeft();
+				if (TE.connectedBlocks[4] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
+						model.renderPanelLeft();
+				else model.renderLeft();
 			}
-			if (((TileEntityInsulatedWire)tileEntity).connectedBlocks[5] != null) 
+			if (TE.connectedBlocks[5] != null) 
 			{
-				model.renderRight();
+				if (TE.connectedBlocks[5] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
+						model.renderPanelRight();
+				else model.renderRight();
 			}
 		}
 
 		else if (tileEntity instanceof TileEntitySwitchWire)
 		{
-			if (((TileEntitySwitchWire)tileEntity).connectedBlocks[0] != null) {model.renderBottom();}
-			if (((TileEntitySwitchWire)tileEntity).connectedBlocks[1] != null) {model.renderTop();}
-			if (((TileEntitySwitchWire)tileEntity).connectedBlocks[2] != null) {model.renderBack();}
-			if (((TileEntitySwitchWire)tileEntity).connectedBlocks[3] != null) {model.renderFront();}
-			if (((TileEntitySwitchWire)tileEntity).connectedBlocks[4] != null) {model.renderLeft();}
-			if (((TileEntitySwitchWire)tileEntity).connectedBlocks[5] != null) {model.renderRight();}
+			TileEntitySwitchWire TE = (TileEntitySwitchWire)tileEntity;
+			int[] metaConnected = new int[6];
+			for(int i=0; i<6; i++)
+				metaConnected[i] = TE.connectedBlocks[i].blockMetadata;
+			
+			for(int i=0; i<6; i++)
+				if (TE.connectedBlocks[i] != null)
+					if (TE.connectedBlocks[i] instanceof IPanelElectricMachine)
+						model.renderBottom();
+			
+			if (TE.connectedBlocks[0] != null) {model.renderBottom();}
+			if (TE.connectedBlocks[1] != null) {model.renderTop();}
+			if (TE.connectedBlocks[2] != null) 
+			{
+				if (TE.connectedBlocks[2] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
+						model.renderPanelBack();
+				else model.renderBack();
+			}
+			if (TE.connectedBlocks[3] != null) 
+			{
+				if (TE.connectedBlocks[3] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
+						model.renderPanelFront();
+				else model.renderFront();
+			}
+			if (TE.connectedBlocks[4] != null) 
+			{
+				if (TE.connectedBlocks[4] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
+						model.renderPanelLeft();
+				else model.renderLeft();
+			}
+			if (TE.connectedBlocks[5] != null) 
+			{
+				if (TE.connectedBlocks[5] instanceof IPanelElectricMachine)
+					if(((IPanelElectricMachine)TE.connectedBlocks[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
+						model.renderPanelRight();
+				else model.renderRight();
+			}
 		}
 
 		else if (tileEntity instanceof TileEntitySwitchWireOff)
