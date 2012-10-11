@@ -1,127 +1,128 @@
 package electricexpansion.mattredsox;
 
-import electricexpansion.ElectricExpansion;
-import net.minecraft.src.*;
+import net.minecraft.src.Container;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.FurnaceRecipes;
+import net.minecraft.src.InventoryPlayer;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.Slot;
+import net.minecraft.src.SlotFurnace;
+import universalelectricity.basiccomponents.SlotElectricItem;
+import universalelectricity.implement.IItemElectric;
 
 public class ContainerWireMill extends Container
 {
-/** The crafting matrix inventory (3x3). */
-public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
-public IInventory craftResult = new InventoryCraftResult();
-private World worldObj;
-private int posX;
-private int posY;
-private int posZ;
-public ContainerWireMill(InventoryPlayer inventory, World world, int x, int y, int z)
-{
-         this.worldObj = world;
-         this.posX = x;
-         this.posY = y;
-         this.posZ = z;
-         this.addSlotToContainer(new SlotCrafting(inventory.player, this.craftMatrix, this.craftResult, 0, 124, 35));
-         int var6;
-         int var7;
-         for (var6 = 0; var6 < 3; ++var6)
-         {
-                 for (var7 = 0; var7 < 3; ++var7)
-                 {
-                         this.addSlotToContainer(new Slot(this.craftMatrix, var7 + var6 * 3, 30 + var7 * 18, 17 + var6 * 18));
-                 }
-         }
-         for (var6 = 0; var6 < 3; ++var6)
-         {
-                 for (var7 = 0; var7 < 9; ++var7)
-                 {
-                         this.addSlotToContainer(new Slot(inventory, var7 + var6 * 9 + 9, 8 + var7 * 18, 84 + var6 * 18));
-                 }
-         }
-         for (var6 = 0; var6 < 9; ++var6)
-         {
-                 this.addSlotToContainer(new Slot(inventory, var6, 8 + var6 * 18, 142));
-         }
-         this.onCraftMatrixChanged(this.craftMatrix);
-}
-/**
-         * Callback for when the crafting matrix is changed.
-         */
-public void onCraftMatrixChanged(IInventory inventory)
-{
-         this.craftResult.setInventorySlotContents(0, CraftingEtcher.getInstance().findMatchingRecipe(this.craftMatrix));
-}
-/**
-         * Callback for when the crafting gui is closed.
-         */
-public void onCraftGuiClosed(EntityPlayer player)
-{
-         super.onCraftGuiClosed(player);
-         if (!this.worldObj.isRemote)
-         {
-                 for (int var2 = 0; var2 < 9; ++var2)
-                 {
-                         ItemStack var3 = this.craftMatrix.getStackInSlotOnClosing(var2);
-                         if (var3 != null)
-                         {
-                                 player.dropPlayerItem(var3);
-                         }
-                 }
-         }
-}
-public boolean canInteractWith(EntityPlayer player)
-{
-         return this.worldObj.getBlockId(this.posX, this.posY, this.posZ) != ElectricExpansion.blockWireMill.blockID ? false : player.getDistanceSq((double)this.posX + 0.5D, (double)this.posY + 0.5D, (double)this.posZ + 0.5D) <= 64.0D;
-}
+    private TileEntityWireMill tileEntity;
 
-/**
-         * Called to transfer a stack from one inventory to the other eg. when shift clicking.
-         */
-public ItemStack transferStackInSlot(int slotNumber)
-{
-         ItemStack itemstack2 = null;
-         Slot slot = (Slot)this.inventorySlots.get(slotNumber);
-         if (slot != null && slot.getHasStack())
-         {
-                 ItemStack itemstack = slot.getStack();
-                 itemstack2 = itemstack.copy();
-                 if (slotNumber == 0)
-                 {
-                         if (!this.mergeItemStack(itemstack, 10, 46, true))
-                         {
-                                 return null;
-                         }
-                         slot.onSlotChange(itemstack, itemstack2);
-                 }
-                 else if (slotNumber >= 10 && slotNumber < 37)
-                 {
-                         if (!this.mergeItemStack(itemstack, 37, 46, false))
-                         {
-                                 return null;
-                         }
-                 }
-                 else if (slotNumber >= 37 && slotNumber < 46)
-                 {
-                         if (!this.mergeItemStack(itemstack, 10, 37, false))
-                         {
-                                 return null;
-                         }
-                 }
-                 else if (!this.mergeItemStack(itemstack, 10, 46, false))
-                 {
-                         return null;
-                 }
-                 if (itemstack.stackSize == 0)
-                 {
-                         slot.putStack((ItemStack)null);
-                 }
-                 else
-                 {
-                         slot.onSlotChanged();
-                 }
-                 if (itemstack.stackSize == itemstack2.stackSize)
-                 {
-                         return null;
-                 }
-                 slot.onPickupFromSlot(itemstack);
-         }
-         return itemstack2;
-}
+    public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
+    {
+        this.tileEntity = tileEntity;
+        this.addSlotToContainer(new SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); //To be smelted
+        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); //Smelting result
+        int var3;
+
+        for (var3 = 0; var3 < 3; ++var3)
+        {
+            for (int var4 = 0; var4 < 9; ++var4)
+            {
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+            }
+        }
+
+        for (var3 = 0; var3 < 9; ++var3)
+        {
+            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
+        }
+        
+        tileEntity.openChest();
+    }
+    
+    public void onCraftGuiClosed(EntityPlayer entityplayer)
+    {
+		super.onCraftGuiClosed(entityplayer);
+		tileEntity.closeChest();
+    }
+
+    @Override
+    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
+    {
+        return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
+    }
+
+    /**
+     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
+     */
+    @Override
+    public ItemStack transferStackInSlot(int par1)
+    {
+        ItemStack var2 = null;
+        Slot var3 = (Slot)this.inventorySlots.get(par1);
+
+        if (var3 != null && var3.getHasStack())
+        {
+            ItemStack var4 = var3.getStack();
+            var2 = var4.copy();
+
+            if (par1 == 2)
+            {
+                if (!this.mergeItemStack(var4, 3, 39, true))
+                {
+                    return null;
+                }
+
+                var3.onSlotChange(var4, var2);
+            }
+            else if (par1 != 1 && par1 != 0)
+            {
+                if (var4.getItem() instanceof IItemElectric)
+                {
+                    if (!this.mergeItemStack(var4, 0, 1, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
+                {
+                    if (!this.mergeItemStack(var4, 1, 2, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par1 >= 3 && par1 < 30)
+                {
+                    if (!this.mergeItemStack(var4, 30, 39, false))
+                    {
+                        return null;
+                    }
+                }
+                else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
+                {
+                    return null;
+                }
+            }
+            else if (!this.mergeItemStack(var4, 3, 39, false))
+            {
+                return null;
+            }
+
+            if (var4.stackSize == 0)
+            {
+                var3.putStack((ItemStack)null);
+            }
+            else
+            {
+                var3.onSlotChanged();
+            }
+
+            if (var4.stackSize == var2.stackSize)
+            {
+                return null;
+            }
+
+            var3.onPickupFromSlot(var4);
+        }
+
+        return var2;
+    }
 }
