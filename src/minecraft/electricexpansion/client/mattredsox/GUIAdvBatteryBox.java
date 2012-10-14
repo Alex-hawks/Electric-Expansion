@@ -64,4 +64,9 @@ public class GUIAdvBatteryBox extends GuiContainer
         int scale = (int)(((double)this.tileEntity.getWattHours() / this.tileEntity.getMaxWattHours()) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
     }
+    
+    @Override
+    public void onGuiClosed()
+    {
+    }
 }

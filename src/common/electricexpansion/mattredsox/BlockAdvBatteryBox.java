@@ -119,6 +119,7 @@ public class BlockAdvBatteryBox extends BlockMachine
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                 tileEntity.isUpgraded = true;
                 tileEntity.upgradeType = 1;
+                
 
  
                 return true;

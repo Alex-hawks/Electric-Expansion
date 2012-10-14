@@ -1,3 +1,4 @@
+/*
 package electricexpansion.client.alex_hawks;
 
 import org.lwjgl.opengl.GL11;
@@ -171,3 +172,4 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		this.renderAModelAt(tileEntity, var2, var4, var6, var8);
 	}
 }
+*/

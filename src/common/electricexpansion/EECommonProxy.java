@@ -39,12 +39,12 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
 		
 		//Mattredsox's Tile entity registrations
-		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TEBBB");
-		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUp");
-		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVD");
-		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDown");
-		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse120");
-		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TEWM");
+		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdv");
+		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TileEntityUp");
+		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
+		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDown");
+		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 	}
 	
 	@Override
