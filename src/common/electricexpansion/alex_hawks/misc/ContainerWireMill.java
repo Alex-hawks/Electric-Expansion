@@ -1,5 +1,6 @@
-package electricexpansion.mattredsox;
+package electricexpansion.alex_hawks.misc;
 
+import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FurnaceRecipes;

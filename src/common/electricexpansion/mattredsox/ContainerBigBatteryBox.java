@@ -1,6 +1,6 @@
 package electricexpansion.mattredsox;
 
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityBigBatteryBox;
 import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -10,11 +10,11 @@ import net.minecraft.src.Slot;
 import universalelectricity.basiccomponents.SlotElectricItem;
 import universalelectricity.implement.IItemElectric;
 
-public class ContainerAdvBatteryBox extends Container
+public class ContainerBigBatteryBox extends Container
 {
-    private TileEntityAdvBatteryBox tileEntity;
+    private TileEntityBigBatteryBox tileEntity;
 
-    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox batteryBox)
+    public ContainerBigBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBigBatteryBox batteryBox)
     {
         this.tileEntity = batteryBox;
         this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot

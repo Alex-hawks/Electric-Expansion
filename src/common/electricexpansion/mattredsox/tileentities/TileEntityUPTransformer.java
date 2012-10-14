@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox;
+package electricexpansion.mattredsox.tileentities;
 
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
@@ -43,7 +43,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider {
+public class TileEntityUPTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider {
 	private double wattHourStored = 0;
 
 
@@ -59,7 +59,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 	
 	public double voltin;
 	
-    public TileEntityDOWNTransformer()
+    public TileEntityUPTransformer()
     {
     	super();
     	this.setPowerProvider(null);
@@ -91,6 +91,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
     public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
     {        
     	voltin = voltage;
+
         
         if(!this.isDisabled())
         {
@@ -399,6 +400,6 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
     @Override
     public double getVoltage()
     {
-		return voltin / 2;
+		return voltin * 2;
     }
 }

@@ -1,6 +1,7 @@
-package electricexpansion.mattredsox;
+package electricexpansion.mattredsox.blocks;
 
 import electricexpansion.EECommonProxy;
+import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;

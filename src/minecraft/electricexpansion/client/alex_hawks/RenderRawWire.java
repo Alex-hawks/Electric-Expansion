@@ -1,5 +1,6 @@
 package electricexpansion.client.alex_hawks;
 
+import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
 import net.minecraft.src.World;
@@ -43,11 +44,16 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 		GL11.glScalef(1.0F, -1F, -1F);
 
 		int[] metaConnected = new int[6];
+		Block[] neighbors = new Block[6];
 		for(int i=0; i<6; i++)
-			metaConnected[i] = tileEntity.connectedBlocks[i].blockMetadata;
+			if(tileEntity.connectedBlocks[i] != null)
+				neighbors[i] = tileEntity.connectedBlocks[i].getBlockType();
+		for(int i=0; i<6; i++)
+			if(tileEntity.connectedBlocks[i] != null)
+				metaConnected[i] = tileEntity.connectedBlocks[i].blockMetadata;
 		for(int i=2; i<6; i++)
 			if(tileEntity.connectedBlocks[i] != null)
-				if(tileEntity.connectedBlocks[i] instanceof IPanelElectricMachine)
+				if(neighbors[i] instanceof IPanelElectricMachine)
 					model.renderPanel();
 		
 		if (tileEntity.connectedBlocks[0] != null)
@@ -56,29 +62,29 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 		{model.renderTop();}
 		if (tileEntity.connectedBlocks[2] != null)
 		{
-			if (tileEntity.connectedBlocks[2] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity.connectedBlocks[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
+			if (neighbors[2] instanceof IPanelElectricMachine)
+				if(((IPanelElectricMachine)neighbors[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
 					model.renderPanelBack();
 			else model.renderBack();
 		}
 		if (tileEntity.connectedBlocks[3] != null)
 		{
-			if (tileEntity.connectedBlocks[3] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity.connectedBlocks[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
+			if (neighbors[3] instanceof IPanelElectricMachine)
+				if(((IPanelElectricMachine)neighbors[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
 					model.renderPanelFront();
 			else model.renderFront();
 		}
 		if (tileEntity.connectedBlocks[4] != null)
 		{
-			if (tileEntity.connectedBlocks[4] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity.connectedBlocks[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
+			if (neighbors[4] instanceof IPanelElectricMachine)
+				if(((IPanelElectricMachine)neighbors[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
 					model.renderPanelLeft();
 			else model.renderLeft();
 		}
 		if (tileEntity.connectedBlocks[5] != null)
 		{
-			if (tileEntity.connectedBlocks[5] instanceof IPanelElectricMachine)
-				if(((IPanelElectricMachine)tileEntity.connectedBlocks[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
+			if (neighbors[5] instanceof IPanelElectricMachine)
+				if(((IPanelElectricMachine)neighbors[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
 					model.renderPanelRight();
 			else model.renderRight();
 		}

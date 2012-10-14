@@ -1,4 +1,4 @@
-package electricexpansion.client.mattredsox;
+package electricexpansion.client.alex_hawks;
 
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
@@ -6,8 +6,8 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import electricexpansion.mattredsox.ContainerWireMill;
-import electricexpansion.mattredsox.TileEntityWireMill;
+import electricexpansion.alex_hawks.machines.TileEntityWireMill;
+import electricexpansion.alex_hawks.misc.ContainerWireMill;
 
 import universalelectricity.BasicComponents;
 import universalelectricity.electricity.ElectricInfo;
@@ -33,7 +33,7 @@ public class GuiWireMill extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Wire Mill", 60, 6, 4210752);
-        this.fontRenderer.drawString("Smelting:", 10, 28, 4210752);
+        this.fontRenderer.drawString("Processing:", 10, 28, 4210752);
         this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
         String displayText = "";
 
@@ -43,7 +43,7 @@ public class GuiWireMill extends GuiContainer
         }
         else if (this.tileEntity.smeltingTicks > 0)
         {
-            displayText = "Smelting";
+            displayText = "Working";
         }
         else
         {
@@ -71,7 +71,7 @@ public class GuiWireMill extends GuiContainer
 
         if (this.tileEntity.smeltingTicks > 0)
         {
-            int scale = (int)(((double)this.tileEntity.smeltingTicks / this.tileEntity.SMELTING_TIME_REQUIRED) * 23);
+            int scale = (int)(((double)this.tileEntity.smeltingTicks / this.tileEntity.getDrawingTime()) * 23);
             this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
         }
     }

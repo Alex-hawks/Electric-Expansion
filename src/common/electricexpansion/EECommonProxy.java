@@ -3,8 +3,16 @@ package electricexpansion;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import electricexpansion.alex_hawks.cables.*;
+import electricexpansion.alex_hawks.machines.TileEntityWireMill;
+import electricexpansion.alex_hawks.misc.ContainerWireMill;
+import electricexpansion.client.alex_hawks.GuiWireMill;
 import electricexpansion.client.mattredsox.*;
 import electricexpansion.mattredsox.*;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
+import electricexpansion.mattredsox.tileentities.TileEntityFuse;
+import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
+import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;
