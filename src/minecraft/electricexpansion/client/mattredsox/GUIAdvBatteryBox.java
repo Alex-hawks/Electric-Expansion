@@ -35,16 +35,16 @@ public class GUIAdvBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 15, 6, 4210752);
-        String displayWattHours = ElectricInfo.getDisplay(tileEntity.getWattHours(), ElectricUnit.WATT_HOUR, 3, true);
-        String displayMaxWattHours = ElectricInfo.getDisplaySimple(tileEntity.getMaxWattHours(), ElectricUnit.WATT_HOUR, 0);
+        String displayJoules = ElectricInfo.getDisplay(tileEntity.getJoules(), ElectricUnit.WATT_HOUR, 3, true);
+        String displayMaxJoules = ElectricInfo.getDisplaySimple(tileEntity.getMaxJoules(), ElectricUnit.WATT_HOUR, 0);
 
         if (this.tileEntity.isDisabled())
         {
-            displayMaxWattHours = "Disabled";
+            displayMaxJoules = "Disabled";
         }
 
-        this.fontRenderer.drawString(displayWattHours + " of", 98 - displayWattHours.length(), 30, 4210752);
-        this.fontRenderer.drawString(displayMaxWattHours, 83, 40, 4210752);
+        this.fontRenderer.drawString(displayJoules + " of", 98 - displayJoules.length(), 30, 4210752);
+        this.fontRenderer.drawString(displayMaxJoules, 83, 40, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
@@ -62,7 +62,7 @@ public class GUIAdvBatteryBox extends GuiContainer
         containerWidth = (this.width - this.xSize) / 2;
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-        int scale = (int)(((double)this.tileEntity.getWattHours() / this.tileEntity.getMaxWattHours()) * 72);
+        int scale = (int)(((double)this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
     }
     

@@ -26,8 +26,8 @@ import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IElectricityStorage;
 import universalelectricity.implement.IItemElectric;
+import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
@@ -44,9 +44,9 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
+public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory
 {	
-	private double wattHourStored = 0;
+	private double Joulestored = 0;
 
     private ItemStack[] containingItems = new ItemStack[2];
 
@@ -75,7 +75,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     {
         if (!this.isDisabled())
         {
-            return ElectricInfo.getWatts(this.getMaxWattHours()) - ElectricInfo.getWatts(this.wattHourStored);
+            return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.Joulestored);
         }
 
         return 0;
@@ -103,7 +103,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
         
         if(!this.isDisabled())
         {
-        	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
+        	this.setJoules(this.Joulestored+ElectricInfo.getJoules(amps, voltage));
         }
     }
     
@@ -112,47 +112,33 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     {
     	super.updateEntity();
     	
-    	if(!this.initialized)
-    	{
-    		if(Loader.isModLoaded("IC2"))
-    		{
-    			EnergyNet.getForWorld(worldObj).addTileEntity(this);
-    		}
-    		
-    		this.initialized = true;
-    	}
-    	
         if(!this.isDisabled())
         {
         	if(this.powerProvider != null)
         	{
         		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
-        		this.setWattHours(this.wattHourStored + receivedElectricity);
-        	
-        		if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
-        		{
-        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
-        		}
+        		this.setJoules(this.Joulestored + receivedElectricity);
         	}
         	
             //The top slot is for recharging items. Check if the item is a electric item. If so, recharge it.
-            if (this.containingItems[0] != null && this.wattHourStored > 0)
+            if (this.containingItems[0] != null && this.Joulestored > 0)
             {
                 if (this.containingItems[0].getItem() instanceof IItemElectric)
                 {
                     IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
-                    double rejectedElectricity = electricItem.onReceiveElectricity(electricItem.getTransferRate(), this.containingItems[0]);
-                    this.setWattHours(this.wattHourStored - (electricItem.getTransferRate() - rejectedElectricity));
+                    double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules()*0.005, this.getVoltage()), this.Joulestored);
+                    double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
+                    this.setJoules(this.Joulestored - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
                 }
                 else if(this.containingItems[0].getItem() instanceof IElectricItem)
                 {
-                	double sent = ElectricItem.charge(containingItems[0], (int) (wattHourStored*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
-                	this.setWattHours(wattHourStored - sent);
+                	double sent = ElectricItem.charge(containingItems[0], (int) (Joulestored*UniversalElectricity.TO_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
+                	this.setJoules(Joulestored - sent);
                 }
             }
 
             //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
-            if (this.containingItems[1] != null && this.wattHourStored < this.getMaxWattHours())
+            if (this.containingItems[1] != null && this.Joulestored < this.getMaxJoules())
             {
                 if (this.containingItems[1].getItem() instanceof IItemElectric)
                 {
@@ -160,8 +146,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 
                     if (electricItem.canProduceElectricity())
                     {
-                        double wattHourReceived = electricItem.onUseElectricity(electricItem.getTransferRate(), this.containingItems[1]);
-                        this.setWattHours(this.wattHourStored + wattHourReceived);
+                        double joulesReceived = electricItem.onUse(electricItem.getMaxJoules()*0.005, this.containingItems[1]);
+                        this.setJoules(this.Joulestored + joulesReceived);
                     }
                 }
                 else if(containingItems[1].getItem() instanceof IElectricItem)
@@ -169,8 +155,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
                 	IElectricItem item = (IElectricItem)containingItems[1].getItem();
                 	if(item.canProvideEnergy())
                 	{
-                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxWattHours()-wattHourStored)*UniversalElectricity.Wh_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
-                		this.setWattHours(wattHourStored + gain);
+                		double gain = ElectricItem.discharge(containingItems[1], (int) ((int)(getMaxJoules()-Joulestored)*UniversalElectricity.TO_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
+                		this.setJoules(Joulestored + gain);
                 	}
                 }
             }
@@ -178,7 +164,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
             //Power redstone if the battery box is full
             boolean isFullThisCheck = false;
 
-            if (this.wattHourStored >= this.getMaxWattHours())
+            if (this.Joulestored >= this.getMaxJoules())
             {
                 isFullThisCheck = true;
             }
@@ -190,16 +176,16 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
             }
             
             //Output electricity
-            if (this.wattHourStored > 0)
+            if (this.Joulestored > 0)
             {
                 TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
             	
                 //Output IC2 energy
             	if(Loader.isModLoaded("IC2"))
             	{
-	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            if(this.Joulestored*UniversalElectricity.TO_IC2_RATIO >= 32)
 	 	            {
-	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+	 	            	this.setJoules(this.Joulestored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
 	 	            }
             	}
             	
@@ -209,10 +195,10 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	 	            if(this.isPoweredTile(tileEntity))
 	 	            {
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
-	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
-	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
+	 	            	double JoulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
+	 	            	float transferJoules = (float) Math.max(Math.min(Math.min(JoulesNeeded, this.Joulestored), 54000), 0);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferJoules*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
+	 	            	this.setJoules(this.Joulestored - transferJoules);
 	 	            }
             	}
             	
@@ -224,9 +210,9 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
                     if (connector instanceof TileEntityConductor)
                     {
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
+                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.Joulestored, this.getVoltage()) ), 15), 0);                        
                         ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                        this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
+                        this.setJoules(this.Joulestored - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
                     } 
                 }
             }
@@ -245,7 +231,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this, this.wattHourStored, this.disabledTicks, this.upgradeType);
+        return PacketManager.getPacket("ElecEx", this, this.Joulestored, this.disabledTicks, this.upgradeType);
     }
     
     @Override
@@ -253,7 +239,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		try
         {
-			this.wattHourStored = dataStream.readDouble();
+			this.Joulestored = dataStream.readDouble();
 	        this.disabledTicks = dataStream.readInt();
 	        this.upgradeType = dataStream.readInt();
         }
@@ -287,7 +273,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        this.wattHourStored = par1NBTTagCompound.getDouble("electricityStored");
+        this.Joulestored = par1NBTTagCompound.getDouble("electricityStored");
         
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
@@ -310,7 +296,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setDouble("electricityStored", this.wattHourStored);
+        par1NBTTagCompound.setDouble("electricityStored", this.Joulestored);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -449,19 +435,19 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     }
     
     @Override
-    public double getWattHours(Object... data)
+    public double getJoules(Object... data)
     {
-    	return this.wattHourStored;
+    	return this.Joulestored;
     }
 
 	@Override
-	public void setWattHours(double wattHours, Object... data)
+	public void setJoules(double Joules, Object... data)
 	{
-		this.wattHourStored = Math.max(Math.min(wattHours, this.getMaxWattHours()), 0);
+		this.Joulestored = Math.max(Math.min(Joules, this.getMaxJoules()), 0);
 	}
 	
 	@Override
-	public double getMaxWattHours()
+	public double getMaxJoules()
 	{
 		if (this.upgradeType == 1) 
 		{
@@ -469,7 +455,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 		}
 		else
 		{
-			return 1000;
+			return 2000;
 		}
 	}
 	
@@ -500,7 +486,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 			if(PowerFramework.currentFramework != null)
 	    	{
 		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
-				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
+				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxJoules()*UniversalElectricity.BC3_RATIO));
 	    	}
 		}
 		else
@@ -521,7 +507,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public int powerRequest()
 	{
-		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
+		return (int) Math.ceil((this.getMaxJoules() - this.Joulestored)*UniversalElectricity.BC3_RATIO);
 	}
 
 	/**
@@ -529,7 +515,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	 */
 	public int getStored() 
 	{
-		return (int) (this.wattHourStored*UniversalElectricity.IC2_RATIO);
+		return (int) (this.Joulestored*UniversalElectricity.IC2_RATIO);
 	}
 	
 	@Override
@@ -553,7 +539,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public int getCapacity() 
 	{
-		return (int)(this.getMaxWattHours()/UniversalElectricity.IC2_RATIO);
+		return (int)(this.getMaxJoules()/UniversalElectricity.IC2_RATIO);
 	}
 
 	@Override
@@ -573,7 +559,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		if(!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0)
 		{
-			return this.wattHourStored < getMaxWattHours();
+			return this.Joulestored < getMaxJoules();
 		}
 		
 		return false;
@@ -586,16 +572,16 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 		{
 			double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
 
-			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxWattHours() - this.wattHourStored), 0);
+			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxJoules() - this.Joulestored), 0);
 		
-			this.setWattHours(wattHourStored + inputElectricity);
+			this.setJoules(Joulestored + inputElectricity);
 			
 			if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0)
 			{
 				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		
-			return (int) (rejectedElectricity*UniversalElectricity.Wh_IC2_RATIO);
+			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
 		}
 		
 		return euAmount;

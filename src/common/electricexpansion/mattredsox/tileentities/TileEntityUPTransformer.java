@@ -25,8 +25,8 @@ import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IElectricityStorage;
 import universalelectricity.implement.IItemElectric;
+import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.network.IPacketReceiver;
 import universalelectricity.network.PacketManager;
@@ -43,7 +43,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityUPTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IElectricityStorage, IPacketReceiver, IRedstoneProvider {
+public class TileEntityUPTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider {
 	private double wattHourStored = 0;
 
 
@@ -70,7 +70,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
     {
         if (!this.isDisabled())
         {
-            return ElectricInfo.getWatts(this.getMaxWattHours()) - ElectricInfo.getWatts(this.wattHourStored);
+            return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.wattHourStored);
         }
 
         return 0;
@@ -95,7 +95,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
         
         if(!this.isDisabled())
         {
-        	this.setWattHours(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
+        	this.setJoules(this.wattHourStored+ElectricInfo.getWattHours(amps, voltage));
         }
     }
     
@@ -119,7 +119,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
         	if(this.powerProvider != null)
         	{
         		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
-        		this.setWattHours(this.wattHourStored + receivedElectricity);
+        		this.setJoules(this.wattHourStored + receivedElectricity);
         	
         		if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
@@ -132,7 +132,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
             //Power redstone if the battery box is full
             boolean isFullThisCheck = false;
 
-            if (this.wattHourStored >= this.getMaxWattHours())
+            if (this.wattHourStored >= this.getMaxJoules())
             {
                 isFullThisCheck = true;
             }
@@ -151,9 +151,9 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
                 //Output IC2 energy
             	if(Loader.isModLoaded("IC2"))
             	{
-	 	            if(this.wattHourStored*UniversalElectricity.Wh_IC2_RATIO >= 32)
+	 	            if(this.wattHourStored*UniversalElectricity.TO_IC2_RATIO >= 32)
 	 	            {
-	 	            	this.setWattHours(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+	 	            	this.setJoules(this.wattHourStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
 	 	            }
             	}
             	
@@ -165,8 +165,8 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
 	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.wattHourStored), 54000), 0);
-	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.Wh_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
-	 	            	this.setWattHours(this.wattHourStored - transferWattHours);
+	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
+	 	            	this.setJoules(this.wattHourStored - transferWattHours);
 	 	            }
             	}
             	
@@ -180,7 +180,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
                         double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
                         double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.wattHourStored, this.getVoltage()) ), 15), 0);                        
                         ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                        this.setWattHours(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
+                        this.setJoules(this.wattHourStored - ElectricInfo.getWattHours(transferAmps, this.getVoltage()));
                     } 
                 }
             }
@@ -252,19 +252,19 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
     }
     
     @Override
-    public double getWattHours(Object... data)
+    public double getJoules(Object... data)
     {
     	return this.wattHourStored;
     }
 
 	@Override
-	public void setWattHours(double wattHours, Object... data)
+	public void setJoules(double wattHours, Object... data)
 	{
-		this.wattHourStored = Math.max(Math.min(wattHours, this.getMaxWattHours()), 0);
+		this.wattHourStored = Math.max(Math.min(wattHours, this.getMaxJoules()), 0);
 	}
 	
 	@Override
-	public double getMaxWattHours()
+	public double getMaxJoules()
 	{
 		return 10;
 	}
@@ -296,7 +296,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 			if(PowerFramework.currentFramework != null)
 	    	{
 		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
-				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxWattHours()*UniversalElectricity.BC3_RATIO));
+				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxJoules()*UniversalElectricity.BC3_RATIO));
 	    	}
 		}
 		else
@@ -317,7 +317,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	@Override
 	public int powerRequest()
 	{
-		return (int) Math.ceil((this.getMaxWattHours() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
+		return (int) Math.ceil((this.getMaxJoules() - this.wattHourStored)*UniversalElectricity.BC3_RATIO);
 	}
 
 	/**
@@ -349,7 +349,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	@Override
 	public int getCapacity() 
 	{
-		return (int)(this.getMaxWattHours()/UniversalElectricity.IC2_RATIO);
+		return (int)(this.getMaxJoules()/UniversalElectricity.IC2_RATIO);
 	}
 
 	@Override
@@ -369,7 +369,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	{
 		if(!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0)
 		{
-			return this.wattHourStored < getMaxWattHours();
+			return this.wattHourStored < getMaxJoules();
 		}
 		
 		return false;
@@ -382,16 +382,16 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 		{
 			double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
 
-			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxWattHours() - this.wattHourStored), 0);
+			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxJoules() - this.wattHourStored), 0);
 		
-			this.setWattHours(wattHourStored + inputElectricity);
+			this.setJoules(wattHourStored + inputElectricity);
 			
 			if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0)
 			{
 				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		
-			return (int) (rejectedElectricity*UniversalElectricity.Wh_IC2_RATIO);
+			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
 		}
 		
 		return euAmount;

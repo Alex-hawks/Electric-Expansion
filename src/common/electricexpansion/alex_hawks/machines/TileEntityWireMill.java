@@ -80,9 +80,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 				if (electricItem.canProduceElectricity())
 				{
-					double receivedWattHours = electricItem.onUseElectricity(Math.min(electricItem.getTransferRate(), ElectricInfo.getWattHours(WATTS_PER_TICK)), this.containingItems[0]);
+					double receivedWattHours = electricItem.onUse(electricItem.getMaxJoules()*0.005, this.containingItems[1]);;
 					this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
-				}
+				} 
 			}
 		}
 

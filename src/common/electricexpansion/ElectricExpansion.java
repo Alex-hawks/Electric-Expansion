@@ -48,11 +48,11 @@ import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.RecipeManager;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.2", dependencies = "after:UniversalElectricity", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:UniversalElectricity", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	public static int[] versionArray = {0, 2, 2}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	public static int[] versionArray = {0, 2, 3}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static String version;
 	public static final int BLOCK_ID_PREFIX = 3980;
 	public static final int ITEM_ID_PREFIX = 15970;
