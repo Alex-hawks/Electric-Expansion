@@ -53,6 +53,17 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDownTrans");
 		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TEWireMill");
+
+		TileEntity.addMapping(TileEntityInsulatedWire.class, "Raw_Wire");
+		TileEntity.addMapping(TileEntityRawWire.class, "Insulated_Wire");
+		TileEntity.addMapping(TileEntityWireBlock.class, "Hidden_Wire");
+		TileEntity.addMapping(TileEntitySwitchWire.class, "Switch_Wire");
+		TileEntity.addMapping(TileEntitySwitchWireBlock.class, "Hidden_Switch_Wire");
+		TileEntity.addMapping(TileEntitySwitchWireOff.class, "Switch_Wire_Off");
+		TileEntity.addMapping(TileEntitySwitchWireBlockOff.class, "Hidden_Switch_Wire_Off");
+		//TileEntity.addMapping(TileEntityRedstoneWire.class, "Redstone_Wire");
+		//TileEntity.addMapping(TileEntityRedstoneWireBlock.class, "Hidden_Redstone_Wire");
+		//TileEntity.addMapping(TileEntitySuperConductor.class, "Super_Wire");
 	}
 	
 	@Override

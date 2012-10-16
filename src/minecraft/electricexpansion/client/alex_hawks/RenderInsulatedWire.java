@@ -1,4 +1,4 @@
-/*
+
 package electricexpansion.client.alex_hawks;
 
 import org.lwjgl.opengl.GL11;
@@ -75,44 +75,45 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			TileEntityInsulatedWire TE = (TileEntityInsulatedWire)tileEntity;
 			Block[] neighbors = new Block[6];
 			for(int i=0; i<6; i++)
-				if(TE.connectedBlocks[i] != null)
-					neighbors[i] = TE.connectedBlocks[i].getBlockType();
+				if(TE.getConnectedBlocks()[i] != null)
+					neighbors[i] = TE.getConnectedBlocks()[i].getBlockType();
 			int[] metaConnected = new int[6];
 			for(int i=0; i<6; i++)
-				metaConnected[i] = TE.connectedBlocks[i].blockMetadata;
+				if(TE.getConnectedBlocks()[i] != null)
+					metaConnected[i] = TE.getConnectedBlocks()[i].blockMetadata;
 			
 			for(int i=0; i<6; i++)
-				if (TE.connectedBlocks[i] != null)
+				if (TE.getConnectedBlocks()[i] != null)
 					if (neighbors[i] instanceof IPanelElectricMachine)
 						model.renderBottom();
 			
-			if (TE.connectedBlocks[0] != null) {model.renderBottom();}
-			if (TE.connectedBlocks[1] != null) {model.renderTop();}
-			if (TE.connectedBlocks[2] != null) 
+			if (TE.getConnectedBlocks()[0] != null) {model.renderBottom();}
+			if (TE.getConnectedBlocks()[1] != null) {model.renderTop();}
+			if (TE.getConnectedBlocks()[2] != null) 
 			{
 				if (neighbors[2] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
 						model.renderPanelBack();
 				else model.renderBack();
 			}
-			if (TE.connectedBlocks[3] != null) 
+			if (TE.getConnectedBlocks()[3] != null) 
 			{
 				if (neighbors[3] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
 						model.renderPanelFront();
 				else model.renderFront();
 			}
-			if (TE.connectedBlocks[4] != null) 
+			if (TE.getConnectedBlocks()[4] != null) 
 			{
 				if (neighbors[4] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
 						model.renderPanelLeft();
 				else model.renderLeft();
 			}
-			if (TE.connectedBlocks[5] != null) 
+			if (TE.getConnectedBlocks()[5] != null) 
 			{
 				if (neighbors[5] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
 						model.renderPanelRight();
 				else model.renderRight();
 			}
@@ -123,45 +124,45 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			TileEntitySwitchWire TE = (TileEntitySwitchWire)tileEntity;
 			Block[] neighbors = new Block[6];
 			for(int i=0; i<6; i++)
-				if(TE.connectedBlocks[i] != null)
-					neighbors[i] = TE.connectedBlocks[i].getBlockType();
+				if(TE.getConnectedBlocks()[i] != null)
+					neighbors[i] = TE.getConnectedBlocks()[i].getBlockType();
 			int[] metaConnected = new int[6];
 			for(int i=0; i<6; i++)
-				if(TE.connectedBlocks[i] != null)
-					metaConnected[i] = TE.connectedBlocks[i].blockMetadata;
+				if(TE.getConnectedBlocks()[i] != null)
+					metaConnected[i] = TE.getConnectedBlocks()[i].blockMetadata;
 			
 			for(int i=0; i<6; i++)
-				if (TE.connectedBlocks[i] != null)
+				if (TE.getConnectedBlocks()[i] != null)
 					if (neighbors[i] instanceof IPanelElectricMachine)
 						model.renderBottom();
 			
-			if (TE.connectedBlocks[0] != null) {model.renderBottom();}
-			if (TE.connectedBlocks[1] != null) {model.renderTop();}
-			if (TE.connectedBlocks[2] != null) 
+			if (TE.getConnectedBlocks()[0] != null) {model.renderBottom();}
+			if (TE.getConnectedBlocks()[1] != null) {model.renderTop();}
+			if (TE.getConnectedBlocks()[2] != null) 
 			{
 				if (neighbors[2] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[2]).canConnectToBase(metaConnected[2], ForgeDirection.getOrientation(3)))
 						model.renderPanelBack();
 				else model.renderBack();
 			}
-			if (TE.connectedBlocks[3] != null) 
+			if (TE.getConnectedBlocks()[3] != null) 
 			{
 				if (neighbors[3] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[3]).canConnectToBase(metaConnected[3], ForgeDirection.getOrientation(2)))
 						model.renderPanelFront();
 				else model.renderFront();
 			}
-			if (TE.connectedBlocks[4] != null) 
+			if (TE.getConnectedBlocks()[4] != null) 
 			{
 				if (neighbors[4] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[4]).canConnectToBase(metaConnected[4], ForgeDirection.getOrientation(5)))
 						model.renderPanelLeft();
 				else model.renderLeft();
 			}
-			if (TE.connectedBlocks[5] != null) 
+			if (TE.getConnectedBlocks()[5] != null) 
 			{
 				if (neighbors[5] instanceof IPanelElectricMachine)
-					if(((IPanelElectricMachine)TE.connectedBlocks[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
+					if(((IPanelElectricMachine)TE.getConnectedBlocks()[5]).canConnectToBase(metaConnected[5], ForgeDirection.getOrientation(4)))
 						model.renderPanelRight();
 				else model.renderRight();
 			}
@@ -181,4 +182,4 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		this.renderAModelAt(tileEntity, var2, var4, var6, var8);
 	}
 }
-*/
+
