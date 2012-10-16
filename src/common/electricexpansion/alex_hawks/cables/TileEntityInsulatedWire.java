@@ -4,10 +4,10 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Packet;
 import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.network.PacketManager;
-import universalelectricity.prefab.TileEntityConductor;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
 
-public class TileEntityInsulatedWire extends TileEntityConductor 
+public class TileEntityInsulatedWire extends TileEntityCableHelper 
 {
     @Override
 	public double getResistance() 
@@ -45,9 +45,4 @@ public class TileEntityInsulatedWire extends TileEntityConductor
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);
 		}
 	}
-	@Override
-    public Packet getDescriptionPacket()
-    {
-        return PacketManager.getPacket(UELoader.CHANNEL, this);
-    }
 }

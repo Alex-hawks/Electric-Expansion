@@ -28,7 +28,7 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 	@Override
 	public void init()
 	{
-			//
+			//Alex's Tile Entity Renderer registrations
 			ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
 			ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());
 			ClientRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire", new RenderInsulatedWire());

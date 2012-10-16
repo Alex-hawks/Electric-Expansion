@@ -1,14 +1,10 @@
 package electricexpansion.alex_hawks.cables;
 
 import net.minecraft.src.Block;
-import net.minecraft.src.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 import electricexpansion.ElectricExpansion;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.prefab.TileEntityConductor;
-import universalelectricity.network.PacketManager;
+import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
 
-public class TileEntitySwitchWireBlock extends TileEntityConductor 
+public class TileEntitySwitchWireBlock extends TileEntityCableHelper 
 {
 	@Override
 	public boolean canUpdate()

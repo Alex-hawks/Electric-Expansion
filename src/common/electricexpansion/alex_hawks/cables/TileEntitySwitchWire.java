@@ -1,9 +1,9 @@
 package electricexpansion.alex_hawks.cables;
 
-import universalelectricity.prefab.TileEntityConductor;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
 
-public class TileEntitySwitchWire extends TileEntityConductor 
+public class TileEntitySwitchWire extends TileEntityCableHelper 
 {
 	@Override
 	public boolean canUpdate()

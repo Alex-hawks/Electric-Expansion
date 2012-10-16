@@ -1,8 +1,8 @@
 package electricexpansion.alex_hawks.cables;
 
-import universalelectricity.prefab.TileEntityConductor;
+import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
 
-public class TileEntitySuperConductor extends TileEntityConductor 
+public class TileEntitySuperConductor extends TileEntityCableHelper 
 {
 	@Override
 	public double getResistance() 

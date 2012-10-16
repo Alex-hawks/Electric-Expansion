@@ -10,7 +10,6 @@ public class TileEntitySwitchWireOff extends TileEntity
 	{
 		return true;
 	}
-	
 	@Override
 	public void updateEntity()
 	{

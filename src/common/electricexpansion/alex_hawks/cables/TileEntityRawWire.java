@@ -1,9 +1,13 @@
 package electricexpansion.alex_hawks.cables;
 
+import net.minecraft.src.Packet;
+import universalelectricity.basiccomponents.UELoader;
+import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
 
-public class TileEntityRawWire extends TileEntityConductor
+public class TileEntityRawWire extends TileEntityCableHelper
 {
     @Override
 	public double getResistance() 

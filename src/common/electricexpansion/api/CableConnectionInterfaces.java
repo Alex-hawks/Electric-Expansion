@@ -14,10 +14,6 @@ public class CableConnectionInterfaces
 	 *	Implement this if you want your electric machine in UE to be able to render cables connected to the side properly.
 	 *	Every @return is 0 indexed, not 1 indexed.
 	 *	
-	 *	Row 0 is at the bottom of the 1 unit by 1 unit Block face.
-	 *	Column 0 is at the far left of the 1 unit by 1 unit Block face.
-	 *	As it appears in the texture file, if the texture is not modified before applying it to the block.
-	 *	This will be for my render code to find a suitable location on your block to connect to.
 	 */
 	public interface IPanelElectricMachine 
 	{
