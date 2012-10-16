@@ -177,6 +177,7 @@ public class ElectricExpansion {
 		if(string1 != null && string1 == "Init")
 			{
 			string2 = "Initializing";
+			
 			j = 2;
 			}
 		if(string1 != null && string1 == "postInit")

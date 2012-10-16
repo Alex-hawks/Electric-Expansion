@@ -6,11 +6,10 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import electricexpansion.mattredsox.*;
+import electricexpansion.mattredsox.ContainerAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
 import universalelectricity.BasicComponents;
-import universalelectricity.basiccomponents.TileEntityBatteryBox;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 
@@ -35,16 +34,16 @@ public class GUIAdvBatteryBox extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 15, 6, 4210752);
-        String displayJoules = ElectricInfo.getDisplay(tileEntity.getJoules(), ElectricUnit.WATT_HOUR, 3, true);
-        String displayMaxJoules = ElectricInfo.getDisplaySimple(tileEntity.getMaxJoules(), ElectricUnit.WATT_HOUR, 0);
+        String displayWattHours = ElectricInfo.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);
+        String displayMaxWattHours = ElectricInfo.getDisplay(tileEntity.getMaxJoules(), ElectricUnit.JOULES);
 
         if (this.tileEntity.isDisabled())
         {
-            displayMaxJoules = "Disabled";
+            displayMaxWattHours = "Disabled";
         }
 
-        this.fontRenderer.drawString(displayJoules + " of", 98 - displayJoules.length(), 30, 4210752);
-        this.fontRenderer.drawString(displayMaxJoules, 83, 40, 4210752);
+        this.fontRenderer.drawString(displayWattHours + " of", 98 - displayWattHours.length(), 30, 4210752);
+        this.fontRenderer.drawString(displayMaxWattHours, 83, 40, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
@@ -64,10 +63,5 @@ public class GUIAdvBatteryBox extends GuiContainer
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
         int scale = (int)(((double)this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
         this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
-    }
-    
-    @Override
-    public void onGuiClosed()
-    {
     }
 }
