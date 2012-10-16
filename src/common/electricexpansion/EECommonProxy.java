@@ -64,6 +64,7 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		//TileEntity.addMapping(TileEntityRedstoneWire.class, "Redstone_Wire");
 		//TileEntity.addMapping(TileEntityRedstoneWireBlock.class, "Hidden_Redstone_Wire");
 		//TileEntity.addMapping(TileEntitySuperConductor.class, "Super_Wire");
+		TileEntity.addMapping(TileEntityWireMill.class, "Wire_Mill");
 	}
 	
 	@Override
