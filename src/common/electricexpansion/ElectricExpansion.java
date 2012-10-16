@@ -154,7 +154,7 @@ public class ElectricExpansion {
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
-		i.getOrCreateIntProperty("Super_Conductor_Upkeep", Configuration.CATEGORY_GENERAL, superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost for EACH Super-Conductor Cable's super-conducting function.";
+		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost for EACH Super-Conductor Cable's super-conducting function.";
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
