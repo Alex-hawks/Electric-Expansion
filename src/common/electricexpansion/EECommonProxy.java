@@ -43,16 +43,23 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireOff.class, "TileEntitySwitchWireOff");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlockOff.class, "TileEntitySwitchWireBlockOff");
+		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
 		
 		//Mattredsox's Tile entity registrations
-		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TEAdvBox");
-		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TEUpTrans");
-		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TEVoltDet");
-		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TEDownTrans");
-		GameRegistry.registerTileEntity(TileEntityFuse.class, "TEFuse");
-		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TEWireMill");
+		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
+		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TileEntityUpTrans");
+		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
+		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
+		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+		
+		TileEntity.addMapping(TileEntityAdvBatteryBox.class, "Adv_Box");
+		TileEntity.addMapping(TileEntityUPTransformer.class, "Up_Trans");
+		TileEntity.addMapping(TileEntityVoltDetector.class, "Volt_Det");
+		TileEntity.addMapping(TileEntityDOWNTransformer.class, "Down_Trans");
+		TileEntity.addMapping(TileEntityFuse.class, "Fuse");
+		
 
 		TileEntity.addMapping(TileEntityInsulatedWire.class, "Raw_Wire");
 		TileEntity.addMapping(TileEntityRawWire.class, "Insulated_Wire");
