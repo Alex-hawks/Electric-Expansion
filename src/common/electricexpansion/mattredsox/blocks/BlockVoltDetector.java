@@ -33,7 +33,7 @@ public class BlockVoltDetector extends BlockMachine
 	public static final int BATTERY_BOX_METADATA = 0;	
     public BlockVoltDetector(int id, int textureIndex)
     {
-        super("Basic Machine", id, UniversalElectricity.machine, CreativeTabs.tabDecorations);
+        super("VoltDet", id, UniversalElectricity.machine, CreativeTabs.tabDecorations);
         this.blockIndexInTexture = textureIndex;
         this.setStepSound(soundMetalFootstep);
         this.setRequiresSelfNotify();
