@@ -7,8 +7,7 @@ import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWireOff;
-import electricexpansion.api.CableConnectionInterfaces.IPanelElectricMachine;
+import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -40,7 +39,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				else if(meta == 3)
 					textureToUse = EECommonProxy.ATEXTURES + "InsulatedHVWire.png";
 			}
-			else if(ID == ElectricExpansion.onSwitchWire)
+			else if(ID == ElectricExpansion.SwitchWire && tileEntity.getWorldObj().isBlockGettingPowered(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord))
 			{
 				if(meta == 0)
 					textureToUse = EECommonProxy.ATEXTURES + "CopperSwitchWireOn.png";
@@ -51,7 +50,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				else if(meta == 3)
 					textureToUse = EECommonProxy.ATEXTURES + "HVSwitchWireOn.png";
 			}	
-			else if(ID == ElectricExpansion.offSwitchWire)
+			else if(ID == ElectricExpansion.SwitchWire && !(tileEntity.getWorldObj().isBlockGettingPowered(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord)))
 			{
 				if(meta == 0)
 					textureToUse = EECommonProxy.ATEXTURES + "CopperSwitchWireOff.png";
@@ -115,7 +114,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			}
 		}
 
-		else if (tileEntity instanceof TileEntitySwitchWire)
+		else if (tileEntity instanceof TileEntitySwitchWire && tileEntity.getWorldObj().isBlockGettingPowered(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord))
 		{
 			TileEntitySwitchWire TE = (TileEntitySwitchWire)tileEntity;
 			TileEntity[] neighbors = new TileEntity[6];
@@ -158,11 +157,6 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 						model.renderPanelRight();
 				else model.renderRight();
 			}
-		}
-
-		else if (tileEntity instanceof TileEntitySwitchWireOff)
-		{
-			//model.renderNothing();
 		}
 		model.renderMiddle();
 		GL11.glPopMatrix();

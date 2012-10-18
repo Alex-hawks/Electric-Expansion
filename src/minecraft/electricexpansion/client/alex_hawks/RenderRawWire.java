@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
-import electricexpansion.api.CableConnectionInterfaces.IPanelElectricMachine;
+import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 
 
 public class RenderRawWire extends TileEntitySpecialRenderer

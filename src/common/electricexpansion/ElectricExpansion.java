@@ -62,11 +62,11 @@ public class ElectricExpansion {
 	//Blocks
 	private static final int rawWireID = BLOCK_ID_PREFIX;
 	private static final int insulatedWireID = BLOCK_ID_PREFIX + 1;
-	private static final int wireBlocksID = BLOCK_ID_PREFIX + 2;
+	private static final int wireBlockID = BLOCK_ID_PREFIX + 2;
 	private static final int switchWireID = BLOCK_ID_PREFIX + 3;
 	private static final int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
-	private static final int offSwitchWireID = BLOCK_ID_PREFIX + 5;
-	private static final int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6;
+	//private static final int offSwitchWireID = BLOCK_ID_PREFIX + 5; //redundant
+	//private static final int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6; //redundant
 	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 7;
 	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
 	private static final int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
@@ -84,11 +84,9 @@ public class ElectricExpansion {
 	//Blocks
 	public static int rawWire;
 	public static int insulatedWire;
-	public static int wireBlocks;
-	public static int onSwitchWire;
-	public static int onSwitchWireBlock;
-	public static int offSwitchWire;
-	public static int offSwitchWireBlock;
+	public static int wireBlock;
+	public static int SwitchWire;
+	public static int SwitchWireBlock;
 	//public static int redstoneWire;
 	//public static int redstoneWireBlock;
 	public static int BigBatteryBox;
@@ -108,11 +106,9 @@ public class ElectricExpansion {
 	//Blocks
 	public static final Block blockRawWire = new BlockRawWire(rawWire, 0);
 	public static final Block blockInsulatedWire = new BlockInsulatedWire(insulatedWire, 0);
-	public static final Block blockWireBlock = new BlockWireBlock(wireBlocks, 0);
-	public static final Block blockSwitchWire = new BlockSwitchWire(onSwitchWire, 0);
-	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(onSwitchWireBlock, 0);
-	public static final Block blockSwitchWireOff = new BlockSwitchWireOff(offSwitchWire, 0);
-	public static final Block blockSwitchWireBlockOff = new BlockSwitchWireBlockOff(offSwitchWireBlock, 0);
+	public static final Block blockWireBlock = new BlockWireBlock(wireBlock, 0);
+	public static final Block blockSwitchWire = new BlockSwitchWire(SwitchWire, 0);
+	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(SwitchWireBlock, 0);
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations);
@@ -138,11 +134,9 @@ public class ElectricExpansion {
 	{
 		rawWire = UEConfig.getBlockConfigID(i, "Uninsulated_Wire", rawWireID);
 		insulatedWire = UEConfig.getBlockConfigID(i, "Insualted_Wire", insulatedWireID);
-		wireBlocks = UEConfig.getBlockConfigID(i, "Wire_Block", wireBlocksID);
-		onSwitchWire = UEConfig.getBlockConfigID(i, "Switch_Wire", switchWireID);
-		onSwitchWireBlock = UEConfig.getBlockConfigID(i, "Switch_Wire_Block", switchWireBlockID);
-		offSwitchWire = UEConfig.getBlockConfigID(i, "Switch_Wire_Off", offSwitchWireID);
-		offSwitchWireBlock = UEConfig.getBlockConfigID(i, "Switch_Wire_Block_Off", offSwitchWireBlockID);
+		wireBlock = UEConfig.getBlockConfigID(i, "Wire_Block", wireBlockID);
+		SwitchWire = UEConfig.getBlockConfigID(i, "Switch_Wire", switchWireID);
+		SwitchWireBlock = UEConfig.getBlockConfigID(i, "Switch_Wire_Block", switchWireBlockID);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		
@@ -201,11 +195,9 @@ public class ElectricExpansion {
 		if(startLogLogged[1] != true){StartLog("preInit");}
 		Item.itemsList[rawWire] = new ItemBlockRawWire(rawWire-256, blockRawWire);
 		Item.itemsList[insulatedWire] = new ItemBlockInsualtedWire(insulatedWire-256, blockInsulatedWire);
-		Item.itemsList[wireBlocks] = new ItemBlockWireBlock(wireBlocks-256, blockWireBlock);
-		Item.itemsList[onSwitchWire] = new ItemBlockSwitchWire(onSwitchWire-256, blockSwitchWire);
-		Item.itemsList[onSwitchWireBlock] = new ItemBlockSwitchWireBlock(onSwitchWireBlock-256, blockSwitchWireBlock);
-		Item.itemsList[offSwitchWire] = new ItemBlockSwitchWireOff(offSwitchWire-256, blockSwitchWireOff);
-		Item.itemsList[offSwitchWireBlock] = new ItemBlockSwitchWireBlockOff(offSwitchWireBlock-256, blockSwitchWireBlockOff);
+		Item.itemsList[wireBlock] = new ItemBlockWireBlock(wireBlock-256, blockWireBlock);
+		Item.itemsList[SwitchWire] = new ItemBlockSwitchWire(SwitchWire-256, blockSwitchWire);
+		Item.itemsList[SwitchWireBlock] = new ItemBlockSwitchWireBlock(SwitchWireBlock-256, blockSwitchWireBlock);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		GameRegistry.registerBlock(blockBigBatteryBox);

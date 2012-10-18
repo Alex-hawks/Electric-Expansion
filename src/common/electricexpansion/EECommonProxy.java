@@ -41,8 +41,6 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
-		GameRegistry.registerTileEntity(TileEntitySwitchWireOff.class, "TileEntitySwitchWireOff");
-		GameRegistry.registerTileEntity(TileEntitySwitchWireBlockOff.class, "TileEntitySwitchWireBlockOff");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
@@ -66,8 +64,6 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		TileEntity.addMapping(TileEntityWireBlock.class, "Hidden_Wire");
 		TileEntity.addMapping(TileEntitySwitchWire.class, "Switch_Wire");
 		TileEntity.addMapping(TileEntitySwitchWireBlock.class, "Hidden_Switch_Wire");
-		TileEntity.addMapping(TileEntitySwitchWireOff.class, "Switch_Wire_Off");
-		TileEntity.addMapping(TileEntitySwitchWireBlockOff.class, "Hidden_Switch_Wire_Off");
 		//TileEntity.addMapping(TileEntityRedstoneWire.class, "Redstone_Wire");
 		//TileEntity.addMapping(TileEntityRedstoneWireBlock.class, "Hidden_Redstone_Wire");
 		//TileEntity.addMapping(TileEntitySuperConductor.class, "Super_Wire");

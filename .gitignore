@@ -14,9 +14,6 @@
 CHANGELOG
 LICENSE.txt
 
-/src/minecraft/*
-/src/minecraft_server/*
-/src/common/*
 !/src/common/electricexpansion/*
 !/src/minecraft/electricexpansion/*
 !/src/common/mcmod.info
@@ -24,7 +21,7 @@ LICENSE.txt
 !/textures
 !/README
 !/misc, not for compilation or distribution/
-/src/*/electricexpansion/alex_hawks/machines
+/src/
 
 *.bat
 *.sh

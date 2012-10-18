@@ -1,23 +1,11 @@
 package electricexpansion.alex_hawks.cables;
 
+import net.minecraftforge.common.ForgeDirection;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
 
 public class TileEntitySwitchWire extends TileEntityCableHelper 
 {
-	@Override
-	public boolean canUpdate()
-	{
-		return true;
-	}
-	
-	@Override
-	public void updateEntity()
-	{
-		if(!this.getWorld().isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord))
-			this.getWorld().setBlockAndMetadataWithUpdate(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.offSwitchWire, this.getWorld().getBlockMetadata(this.xCoord, this.yCoord, this.zCoord), true);
-	}    
-	
     @Override
 	public double getResistance() 
     //Values will NOT be actual values or precise relative values. But if x is meant to be greater than y, it will be. 
@@ -47,11 +35,10 @@ public class TileEntitySwitchWire extends TileEntityCableHelper
 		}
 	}
 	@Override
-	public void onConductorMelt()
+	public boolean canConnect(int side)
 	{
-		if(!this.worldObj.isRemote)
-		{
-			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);
-		}
+		if(this.getWorld().isBlockGettingPowered(this.xCoord, this.yCoord, this.zCoord))
+			return super.canConnect(side);
+		else return false;
 	}
 }

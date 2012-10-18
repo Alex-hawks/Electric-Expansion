@@ -3,7 +3,7 @@ package electricexpansion.api;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Material;
 import net.minecraftforge.common.ForgeDirection;
-import electricexpansion.api.CableConnectionInterfaces.IPanelElectricMachine;
+import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 import universalelectricity.implement.IDisableable;
 import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.network.IPacketReceiver;
