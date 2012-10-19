@@ -154,8 +154,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			{canWork = false;}
 			else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) != null && outputSlot == null)
 			{canWork = true;}
-			else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) != outputSlot && outputSlot != null)
-			{canWork = false;}
 			else if (outputSlot != null) 
 				if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == outputSlot && !(outputSlot.stackSize < outputSlot.getMaxStackSize()))
 				{canWork = false;}

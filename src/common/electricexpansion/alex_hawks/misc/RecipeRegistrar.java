@@ -92,8 +92,8 @@ public class RecipeRegistrar
 		WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 30000);
 		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 30000);
 		
+		WireMillRecipes.addDrawing(new ItemStack(Block.cloth), new ItemStack(Item.silk, 3), 20000);
+		
 		ElectricExpansion.EELogger.info("Wire Mill recipes have been added.");
-		ElectricExpansion.EELogger.info(WireMillRecipes.drawing().getDrawingResult(new ItemStack(BasicComponents.itemCopperIngot)) + "");
-		ElectricExpansion.EELogger.info(WireMillRecipes.drawing().getDrawingResult(new ItemStack(BasicComponents.itemTinIngot)) + "");
 	}
 }
