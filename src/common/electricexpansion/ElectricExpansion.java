@@ -30,6 +30,7 @@ import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockFuse;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ public class ElectricExpansion {
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
+	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -99,6 +101,7 @@ public class ElectricExpansion {
 	public static int Fuse;
 	//Items
 	public static int Upgrade;
+	public static int SuperBat;
 	//Other
 	public static double superConductorUpkeep;
 	
@@ -124,6 +127,7 @@ public class ElectricExpansion {
     
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
+    public static final Item itemSuper = new ItemSuperconductorBattery(SuperBat, 0).setCreativeTab(CreativeTabs.tabMisc);
     
 	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
@@ -153,6 +157,7 @@ public class ElectricExpansion {
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
+		SuperBat = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemSuperBatID);
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost for EACH Super-Conductor Cable's super-conducting function.";
