@@ -1,6 +1,7 @@
 package electricexpansion.alex_hawks.misc;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import universalelectricity.BasicComponents;
 import universalelectricity.recipe.RecipeManager;
@@ -8,13 +9,16 @@ import electricexpansion.ElectricExpansion;
 
 public class RecipeRegistrar 
 {
-	private static Block blockCopperWire = BasicComponents.blockCopperWire;
+	private static final Block blockCopperWire = BasicComponents.blockCopperWire;
 	
-	private static Block blockRawWire = ElectricExpansion.blockRawWire;
-	private static Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
-	private static Block blockWireBlock = ElectricExpansion.blockWireBlock;
-	private static Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
-	private static Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
+	private static final Block blockRawWire = ElectricExpansion.blockRawWire;
+	private static final Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
+	private static final Block blockWireBlock = ElectricExpansion.blockWireBlock;
+	private static final Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
+	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
+	
+	private static final Item StoneHammer =  ElectricExpansion.itemHammerStone;
+	
 	public static void crafting()
 	{
 		//Uninsulated Wire Recipes
@@ -87,5 +91,9 @@ public class RecipeRegistrar
 		WireMillRecipes.addDrawing("ingotTin", new ItemStack(blockRawWire, 3, 1), 30000);
 		WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 30000);
 		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 30000);
+		
+		ElectricExpansion.EELogger.info("Wire Mill recipes have been added.");
+		ElectricExpansion.EELogger.info(WireMillRecipes.drawing().getDrawingResult(new ItemStack(BasicComponents.itemCopperIngot)) + "");
+		ElectricExpansion.EELogger.info(WireMillRecipes.drawing().getDrawingResult(new ItemStack(BasicComponents.itemTinIngot)) + "");
 	}
 }

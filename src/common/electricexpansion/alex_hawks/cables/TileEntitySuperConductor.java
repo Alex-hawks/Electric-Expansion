@@ -1,6 +1,6 @@
 package electricexpansion.alex_hawks.cables;
 
-import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
+import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntitySuperConductor extends TileEntityCableHelper 
 {

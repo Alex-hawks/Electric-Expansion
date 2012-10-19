@@ -5,7 +5,7 @@ import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
+import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntityRawWire extends TileEntityCableHelper
 {

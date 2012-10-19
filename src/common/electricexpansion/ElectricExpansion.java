@@ -16,20 +16,12 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 import electricexpansion.alex_hawks.blocks.*;
-import electricexpansion.alex_hawks.items.ItemBlockInsualtedWire;
-import electricexpansion.alex_hawks.items.ItemBlockRawWire;
-import electricexpansion.alex_hawks.items.ItemBlockSwitchWire;
-import electricexpansion.alex_hawks.items.ItemBlockSwitchWireBlock;
-import electricexpansion.alex_hawks.items.ItemBlockSwitchWireBlockOff;
-import electricexpansion.alex_hawks.items.ItemBlockSwitchWireOff;
-import electricexpansion.alex_hawks.items.ItemBlockWireBlock;
+import electricexpansion.alex_hawks.itemblocks.*;
+import electricexpansion.alex_hawks.items.*;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
+import electricexpansion.alex_hawks.tools.*;
 import electricexpansion.mattredsox.*;
-import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
-import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
-import electricexpansion.mattredsox.blocks.BlockFuse;
-import electricexpansion.mattredsox.blocks.BlockUPTransformer;
-import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.blocks.*;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,11 +41,11 @@ import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
 import universalelectricity.recipe.RecipeManager;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:UniversalElectricity", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "required-after:UniversalElectricity@[0.9.2,);after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	public static int[] versionArray = {0, 2, 3}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	private static int[] versionArray = {0, 2, 3}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	public static String version;
 	public static final int BLOCK_ID_PREFIX = 3980;
 	public static final int ITEM_ID_PREFIX = 15970;
@@ -77,6 +69,10 @@ public class ElectricExpansion {
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
+	private static final int connectorAlloyID = ITEM_ID_PREFIX + 1;
+	private static final int toolHammerStoneID = ITEM_ID_PREFIX + 2;
+	private static final int toolHammerIronID = ITEM_ID_PREFIX + 3;
+	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +4;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -97,6 +93,10 @@ public class ElectricExpansion {
 	public static int Fuse;
 	//Items
 	public static int Upgrade;
+	public static int ConnectionAlloy;
+	public static int toolHammerStone;
+	public static int toolHammerIron;
+	public static int toolHammerDiamond;
 	//Other
 	public static double superConductorUpkeep;
 	
@@ -120,8 +120,12 @@ public class ElectricExpansion {
     
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
+    public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
+    public static final Item itemHammerStone = new HammerStone(toolHammerStone, 0);
+    public static final Item itemHammerIron = new HammerIron(toolHammerIron, 0);
+    public static final Item itemHammerDiamond = new HammerDiamond(toolHammerDiamond, 0);
     
-	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
+	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 	
 	@Instance("ElectricExpansion")
@@ -146,10 +150,15 @@ public class ElectricExpansion {
 		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
+		
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
+		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
+		toolHammerStone = UEConfig.getItemConfigID(i, "Stone_Hammer", toolHammerStoneID);
+		toolHammerIron = UEConfig.getItemConfigID(i, "Iron_Hammer", toolHammerIronID);
+		toolHammerDiamond = UEConfig.getItemConfigID(i, "Diamond_Hammer", toolHammerDiamondID);
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
-		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost for EACH Super-Conductor Cable's super-conducting function.";
+		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
@@ -172,7 +181,6 @@ public class ElectricExpansion {
 		if(string1 != null && string1 == "Init")
 			{
 			string2 = "Initializing";
-			
 			j = 2;
 			}
 		if(string1 != null && string1 == "postInit")
@@ -181,8 +189,8 @@ public class ElectricExpansion {
 			j = 3;
 			}
 		
-		ACLogger.setParent(FMLLog.getLogger());
-		ACLogger.info(string2 + " ElectricExpansion " + version);
+		EELogger.setParent(FMLLog.getLogger());
+		EELogger.info(string2 + " ElectricExpansion " + version);
 		startLogLogged[j] = true;
 		if(startLogLogged[1] && startLogLogged[2] && startLogLogged[3])
 			startLogLogged[0] = true;
@@ -205,6 +213,7 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
+		
 		instance = this;
 
 		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks1.png");
@@ -220,6 +229,7 @@ public class ElectricExpansion {
 		proxy.init();
 		
 		RecipeRegistrar.crafting();
+		RecipeRegistrar.drawing();
 	}
 	
 	@PostInit

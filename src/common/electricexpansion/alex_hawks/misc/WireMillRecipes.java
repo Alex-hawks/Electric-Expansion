@@ -16,12 +16,10 @@ public class WireMillRecipes
 {
 	private static final WireMillRecipes drawingBase = new WireMillRecipes();
 
-	/** The arrayList of drawing results. 
-	  *	drawingList[0] input, output
-	  *	drawingList[1] input, watts needed
-	  */
-	private static Map[] drawingList = new Map[2];
-
+	private static HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
+	private static HashMap<Integer, ItemStack> recipeToOutput = new HashMap<Integer, ItemStack>();
+	private static HashMap<Integer, Double> recipeToWatts = new HashMap<Integer, Double>();
+	
 	/**
 	 * Used to call methods addSmelting and getSmeltingResult.
 	 */
@@ -37,17 +35,21 @@ public class WireMillRecipes
 	public static void addDrawing(ItemStack input, ItemStack output, double watts)
 	{
 		try
-		{if(input != null && output != null && watts < 0)
 		{
-			drawingList[0].put(input, output);
-			drawingList[1].put(input, watts);
-		}
-		else if (input == null) 
-			throw new IOException("Error: Input cannot be null.");
-		else if (output == null)
-			throw new IOException("Error: Output cannot be null.");
-		else if (watts >= 0)
-			throw new IOException("Error: Watts must be greater than 0.");
+			if(input != null && output != null && watts > 0)
+			{
+				boolean j = true;
+				int nextRecipeID = recipeToOutput.size();
+				inputToRecipe.put(input + "", nextRecipeID);
+				recipeToOutput.put(nextRecipeID, output);
+				recipeToWatts.put(nextRecipeID, watts);
+			}
+			else if (input == null) 
+				throw new IOException("Error: Input cannot be null.");
+			else if (output == null)
+				throw new IOException("Error: Output cannot be null.");
+			else if (watts <= 0)
+				throw new IOException("Error: Watts must be greater than 0.");
 		}
 		catch(IOException e)
 		{e.printStackTrace();}
@@ -65,11 +67,6 @@ public class WireMillRecipes
 			addDrawing(input2, output, watts);
 	}
 
-	public Map[] getDrawingList()
-	{
-		return this.drawingList;
-	}
-
 	/**
 	 * Used to get the resulting ItemStack from a source ItemStack
 	 * @param item The Source ItemStack
@@ -77,8 +74,16 @@ public class WireMillRecipes
 	 */
 	public ItemStack getDrawingResult(ItemStack input) 
 	{
-		try{return (ItemStack)this.drawingList[0].get(input);}
-		catch(NullPointerException e) {return (ItemStack)null;}
+		try
+		{
+			int recipeID = inputToRecipe.get(input + "");
+			return (ItemStack)this.recipeToOutput.get(recipeID);
+		}
+		catch(NullPointerException e) 
+		{
+			e.printStackTrace();
+			return (ItemStack)null;
+		}
 	}
 
 	/**
@@ -88,11 +93,18 @@ public class WireMillRecipes
 	 */
 	public double getDrawingWatts(ItemStack input) 
 	{
-		if (input == null)	
+		try
+		{
+			int recipeID = inputToRecipe.get(input + "");
+			return (Double)this.recipeToWatts.get(recipeID);
+		}
+		catch(NullPointerException e) 
+		{
+			e.printStackTrace();
 			return (Double)null;
-		return new Double(this.drawingList[1].get(input).toString());
+		}
 	}
-	
+
 	/**
 	 * 
 	 */
