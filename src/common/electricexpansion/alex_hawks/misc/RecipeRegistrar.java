@@ -19,7 +19,6 @@ public class RecipeRegistrar
 	
 	private static final Item StoneHammer =  ElectricExpansion.itemHammerStone;
 	
-<<<<<<< HEAD
 	private static Block blockRawWire = ElectricExpansion.blockRawWire;
 	private static Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
 	private static Block blockWireBlock = ElectricExpansion.blockWireBlock;
@@ -27,8 +26,7 @@ public class RecipeRegistrar
 	private static Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	
 	private static Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
-=======
->>>>>>> 3398e9272b3257d2dba944e9650266ff651a612b
+
 	public static void crafting()
 	{
 		//Uninsulated Wire Recipes
