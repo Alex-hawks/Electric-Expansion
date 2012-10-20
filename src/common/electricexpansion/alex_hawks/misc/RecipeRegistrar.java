@@ -17,8 +17,6 @@ public class RecipeRegistrar
 	private static final Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	
-	private static final Item StoneHammer =  ElectricExpansion.itemHammerStone;
-	
 	private static Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
 
 	public static void crafting()

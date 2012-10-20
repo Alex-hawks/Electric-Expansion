@@ -19,7 +19,6 @@ import electricexpansion.alex_hawks.blocks.*;
 import electricexpansion.alex_hawks.itemblocks.*;
 import electricexpansion.alex_hawks.items.*;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
-import electricexpansion.alex_hawks.tools.*;
 import electricexpansion.mattredsox.*;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 import electricexpansion.mattredsox.blocks.*;
@@ -126,9 +125,6 @@ public class ElectricExpansion {
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
     public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
-    public static final Item itemHammerStone = new HammerStone(toolHammerStone, 0);
-    public static final Item itemHammerIron = new HammerIron(toolHammerIron, 0);
-    public static final Item itemHammerDiamond = new HammerDiamond(toolHammerDiamond, 0);
     
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
