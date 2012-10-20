@@ -47,9 +47,9 @@ import universalelectricity.recipe.RecipeManager;
 public class ElectricExpansion {
 
 	private static int[] versionArray = {0, 2, 3}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	public static String version;
-	public static final int BLOCK_ID_PREFIX = 3980;
-	public static final int ITEM_ID_PREFIX = 15970;
+	private static String version;
+	private static final int BLOCK_ID_PREFIX = 3980;
+	private static final int ITEM_ID_PREFIX = 15970;
 	
 	//private, these are the default options.
 	//Blocks
@@ -58,8 +58,6 @@ public class ElectricExpansion {
 	private static final int wireBlockID = BLOCK_ID_PREFIX + 2;
 	private static final int switchWireID = BLOCK_ID_PREFIX + 3;
 	private static final int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
-	//private static final int offSwitchWireID = BLOCK_ID_PREFIX + 5; //redundant
-	//private static final int offSwitchWireBlockID = BLOCK_ID_PREFIX + 6; //redundant
 	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 7;
 	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
 	private static final int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
@@ -97,9 +95,6 @@ public class ElectricExpansion {
 	public static int Upgrade;
 	public static int SuperBat;
 	public static int ConnectionAlloy;
-	public static int toolHammerStone;
-	public static int toolHammerIron;
-	public static int toolHammerDiamond;
 	//Other
 	public static double superConductorUpkeep;
 	
@@ -155,9 +150,6 @@ public class ElectricExpansion {
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		SuperBat = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
-		toolHammerStone = UEConfig.getItemConfigID(i, "Stone_Hammer", toolHammerStoneID);
-		toolHammerIron = UEConfig.getItemConfigID(i, "Iron_Hammer", toolHammerIronID);
-		toolHammerDiamond = UEConfig.getItemConfigID(i, "Diamond_Hammer", toolHammerDiamondID);
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
