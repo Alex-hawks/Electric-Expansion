@@ -17,14 +17,6 @@ public class RecipeRegistrar
 	private static final Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	
-	private static final Item StoneHammer =  ElectricExpansion.itemHammerStone;
-	
-	private static Block blockRawWire = ElectricExpansion.blockRawWire;
-	private static Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
-	private static Block blockWireBlock = ElectricExpansion.blockWireBlock;
-	private static Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
-	private static Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
-	
 	private static Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
 
 	public static void crafting()
@@ -104,7 +96,5 @@ public class RecipeRegistrar
 		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 30000);
 		
 		WireMillRecipes.addDrawing(new ItemStack(Block.cloth), new ItemStack(Item.silk, 3), 20000);
-		
-		ElectricExpansion.EELogger.info("Wire Mill recipes have been added.");
 	}
 }

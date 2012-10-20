@@ -147,7 +147,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	{
 		boolean canWork = false;
 		ItemStack inputSlot = this.inventory[1];
-		ItemStack outputSlot =this.inventory[2];
+		ItemStack outputSlot = this.inventory[2];
 		if(inputSlot != null)
 		{
 			if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == null)
@@ -155,14 +155,17 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) != null && outputSlot == null)
 			{canWork = true;}
 			else if (outputSlot != null) 
-				if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == outputSlot && !(outputSlot.stackSize < outputSlot.getMaxStackSize()))
+			{
+				String result = (String)(WireMillRecipes.stackSizeToOne(WireMillRecipes.drawing().getDrawingResult(inputSlot)) + "");
+				String output2 = (String)(WireMillRecipes.stackSizeToOne(outputSlot) + "");
+				int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(),inputSlot.getMaxStackSize()) - WireMillRecipes.drawing().getDrawingResult(inputSlot).stackSize;
+				
+				if ((result.equals(output2)) && !(outputSlot.stackSize < maxSpaceForSuccess))
 				{canWork = false;}
-				else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == outputSlot && outputSlot.stackSize < outputSlot.getMaxStackSize())
+				else if ((result.equals(output2)) && (outputSlot.stackSize  < maxSpaceForSuccess))
 				{canWork = true;}
+			}
 		}
-		else if (this.inventory[1] == null)
-			{canWork = false;}
-
 
 		return canWork;
 	}
@@ -179,9 +182,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (this.inventory[2] == null)
 				this.inventory[2] = resultItemStack.copy();
 			else if (this.inventory[2].isItemEqual(resultItemStack))
-				this.inventory[2].stackSize ++;
+				this.inventory[2].stackSize = this.inventory[2].stackSize + resultItemStack.stackSize;
 
-			this.inventory[1].stackSize --;
+			this.inventory[1].stackSize = this.inventory[1].stackSize - WireMillRecipes.drawing().getInputQTY(this.inventory[1]);
 
 			if (this.inventory[1].stackSize <= 0)
 				this.inventory[1] = null;
