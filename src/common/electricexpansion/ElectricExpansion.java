@@ -284,5 +284,7 @@ public class ElectricExpansion {
         LanguageRegistry.addName(blockWireMill, "Wire Mill");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
         LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
+        
+        LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
 	}
 }
