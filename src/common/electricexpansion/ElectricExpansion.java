@@ -21,16 +21,8 @@ import electricexpansion.alex_hawks.items.*;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.tools.*;
 import electricexpansion.mattredsox.*;
-<<<<<<< HEAD
-import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
-import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
-import electricexpansion.mattredsox.blocks.BlockFuse;
-import electricexpansion.mattredsox.blocks.BlockUPTransformer;
-import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
-=======
 import electricexpansion.mattredsox.blocks.*;
->>>>>>> 3398e9272b3257d2dba944e9650266ff651a612b
 
 import java.io.File;
 import java.util.ArrayList;
@@ -79,14 +71,11 @@ public class ElectricExpansion {
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
-<<<<<<< HEAD
 	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
-=======
-	private static final int connectorAlloyID = ITEM_ID_PREFIX + 1;
-	private static final int toolHammerStoneID = ITEM_ID_PREFIX + 2;
-	private static final int toolHammerIronID = ITEM_ID_PREFIX + 3;
-	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +4;
->>>>>>> 3398e9272b3257d2dba944e9650266ff651a612b
+	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
+	private static final int toolHammerStoneID = ITEM_ID_PREFIX + 3;
+	private static final int toolHammerIronID = ITEM_ID_PREFIX + 4;
+	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +5;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -107,14 +96,11 @@ public class ElectricExpansion {
 	public static int Fuse;
 	//Items
 	public static int Upgrade;
-<<<<<<< HEAD
 	public static int SuperBat;
-=======
 	public static int ConnectionAlloy;
 	public static int toolHammerStone;
 	public static int toolHammerIron;
 	public static int toolHammerDiamond;
->>>>>>> 3398e9272b3257d2dba944e9650266ff651a612b
 	//Other
 	public static double superConductorUpkeep;
 	
@@ -138,14 +124,11 @@ public class ElectricExpansion {
     
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
-<<<<<<< HEAD
     public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
-=======
     public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
     public static final Item itemHammerStone = new HammerStone(toolHammerStone, 0);
     public static final Item itemHammerIron = new HammerIron(toolHammerIron, 0);
     public static final Item itemHammerDiamond = new HammerDiamond(toolHammerDiamond, 0);
->>>>>>> 3398e9272b3257d2dba944e9650266ff651a612b
     
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
@@ -174,14 +157,11 @@ public class ElectricExpansion {
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 		
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-<<<<<<< HEAD
 		SuperBat = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemSuperBatID);
-=======
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
 		toolHammerStone = UEConfig.getItemConfigID(i, "Stone_Hammer", toolHammerStoneID);
 		toolHammerIron = UEConfig.getItemConfigID(i, "Iron_Hammer", toolHammerIronID);
 		toolHammerDiamond = UEConfig.getItemConfigID(i, "Diamond_Hammer", toolHammerDiamondID);
->>>>>>> 3398e9272b3257d2dba944e9650266ff651a612b
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
