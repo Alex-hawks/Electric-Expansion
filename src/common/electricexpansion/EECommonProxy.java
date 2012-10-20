@@ -5,6 +5,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.alex_hawks.cables.*;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.alex_hawks.misc.ContainerWireMill;
+import electricexpansion.alex_hawks.misc.EECraftingHandler;
 import electricexpansion.client.alex_hawks.GuiWireMill;
 import electricexpansion.client.mattredsox.*;
 import electricexpansion.mattredsox.*;
@@ -28,9 +29,9 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 	public static final String MattItem_TEXTURE_FILE = MattFILE_PATH + "items.png";
         
 	//Alex_hawks' Textures
-	public static String ATEXTURES = "electricexpansion/textures/alex_hawks/";
-	public static String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
-	public static String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
+	public static final String ATEXTURES = "/electricexpansion/textures/alex_hawks/";
+	public static final String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
+	public static final String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
 	
 	@Override
 	public void init()
@@ -41,8 +42,6 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
-		GameRegistry.registerTileEntity(TileEntitySwitchWireOff.class, "TileEntitySwitchWireOff");
-		GameRegistry.registerTileEntity(TileEntitySwitchWireBlockOff.class, "TileEntitySwitchWireBlockOff");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
@@ -54,24 +53,7 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
 		
-		TileEntity.addMapping(TileEntityAdvBatteryBox.class, "Adv_Box");
-		TileEntity.addMapping(TileEntityUPTransformer.class, "Up_Trans");
-		TileEntity.addMapping(TileEntityVoltDetector.class, "Volt_Det");
-		TileEntity.addMapping(TileEntityDOWNTransformer.class, "Down_Trans");
-		TileEntity.addMapping(TileEntityFuse.class, "Fuse");
-		
-
-		TileEntity.addMapping(TileEntityInsulatedWire.class, "Raw_Wire");
-		TileEntity.addMapping(TileEntityRawWire.class, "Insulated_Wire");
-		TileEntity.addMapping(TileEntityWireBlock.class, "Hidden_Wire");
-		TileEntity.addMapping(TileEntitySwitchWire.class, "Switch_Wire");
-		TileEntity.addMapping(TileEntitySwitchWireBlock.class, "Hidden_Switch_Wire");
-		TileEntity.addMapping(TileEntitySwitchWireOff.class, "Switch_Wire_Off");
-		TileEntity.addMapping(TileEntitySwitchWireBlockOff.class, "Hidden_Switch_Wire_Off");
-		//TileEntity.addMapping(TileEntityRedstoneWire.class, "Redstone_Wire");
-		//TileEntity.addMapping(TileEntityRedstoneWireBlock.class, "Hidden_Redstone_Wire");
-		//TileEntity.addMapping(TileEntitySuperConductor.class, "Super_Wire");
-		TileEntity.addMapping(TileEntityWireMill.class, "Wire_Mill");
+		GameRegistry.registerCraftingHandler(new EECraftingHandler());
 	}
 	
 	@Override

@@ -5,7 +5,7 @@ import universalelectricity.basiccomponents.UELoader;
 import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
+import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntityRawWire extends TileEntityCableHelper
 {
@@ -35,14 +35,6 @@ public class TileEntityRawWire extends TileEntityCableHelper
 		case 2: return 200;
 		case 3: return 2500; //HV
 		default: return 500;
-		}
-	}
-	@Override
-	public void onConductorMelt()
-	{
-		if(!this.worldObj.isRemote)
-		{
-			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);
 		}
 	}
 }

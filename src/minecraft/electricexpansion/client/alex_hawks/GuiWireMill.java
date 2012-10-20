@@ -33,7 +33,7 @@ public class GuiWireMill extends GuiContainer
     protected void drawGuiContainerForegroundLayer()
     {
         this.fontRenderer.drawString("Wire Mill", 60, 6, 4210752);
-        this.fontRenderer.drawString("Processing:", 10, 28, 4210752);
+        this.fontRenderer.drawString("Input:", 10, 28, 4210752);
         this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
         String displayText = "";
 
@@ -41,7 +41,7 @@ public class GuiWireMill extends GuiContainer
         {
             displayText = "Disabled!";
         }
-        else if (this.tileEntity.smeltingTicks > 0)
+        else if (this.tileEntity.drawingTicks > 0)
         {
             displayText = "Working";
         }
@@ -69,9 +69,9 @@ public class GuiWireMill extends GuiContainer
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
-        if (this.tileEntity.smeltingTicks > 0)
+        if (this.tileEntity.drawingTicks > 0)
         {
-            int scale = (int)(((double)this.tileEntity.smeltingTicks / this.tileEntity.getDrawingTime()) * 23);
+            int scale = (int)(((double)this.tileEntity.drawingTicks / this.tileEntity.getDrawingTime()) * 23);
             this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
         }
     }

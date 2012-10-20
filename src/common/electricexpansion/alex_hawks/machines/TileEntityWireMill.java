@@ -22,197 +22,169 @@ import universalelectricity.prefab.Vector3;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
 public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,IPacketReceiver
 {
-	//The amount of watts required by the electric furnace per tick
+	//The amount of watts required by the Wire Mill per tick
 	public final double WATTS_PER_TICK = 500;
 
-	//How many ticks has this item been smelting for?
-	public int smeltingTicks = 0;
+	//How many ticks has this item been drawing for?
+	public int drawingTicks = 0;
 
 	public double wattsReceived = 0;
 
 	/**
-	 * The ItemStacks that hold the items currently being used in the battery box
+	 * The ItemStacks that hold the items currently being used in the wire mill;
+	 * 0 = battery;
+	 * 1 = input;
+	 * 2 = output;
 	 */
-	private ItemStack[] containingItems = new ItemStack[3];
+	private ItemStack[] inventory = new ItemStack[3];
 
 	private int playersUsing = 0;
 
 	@Override
 	public double wattRequest()
 	{
-		if(!this.isDisabled() && this.canSmelt())
-		{
-			return this.WATTS_PER_TICK;
-		}
-
-		return 0;
+		if(!this.isDisabled() && this.canDraw())
+		{return this.WATTS_PER_TICK;}
+		else return 0;
 	}
 
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 5);
-	}
+	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 5);}
 
 	@Override
 	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
 	{
 		if (voltage > this.getVoltage())
-		{
-			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
-		}
+		{this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);}
 
 		this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
 	}
 
 	@Override
+    public boolean canUpdate()
+    {return true;}
+    
+	@Override
 	public void updateEntity() 
 	{
 		//The bottom slot is for portable batteries
-		if (this.containingItems[0] != null)
-		{
-			if (this.containingItems[0].getItem() instanceof IItemElectric)
+		if (this.inventory[0] != null)
+			if (this.inventory[0].getItem() instanceof IItemElectric)
 			{
-				IItemElectric electricItem = (IItemElectric)this.containingItems[0].getItem();
+				IItemElectric electricItem = (IItemElectric)this.inventory[0].getItem();
 
 				if (electricItem.canProduceElectricity())
 				{
-					double receivedWattHours = electricItem.onUse(electricItem.getMaxJoules()*0.005, this.containingItems[1]);;
+					double receivedWattHours = electricItem.onUse(electricItem.getMaxJoules()*0.005, this.inventory[1]);;
 					this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
 				} 
 			}
-		}
 
 		if(this.wattsReceived >= this.WATTS_PER_TICK && !this.isDisabled())
 		{
-			//The left slot contains the item to be smelted
-			if (this.containingItems[1] != null && this.canSmelt() && this.smeltingTicks == 0)
-			{
-				this.smeltingTicks = this.getDrawingTime();
-			}
+			//The left slot contains the item to be drawn
+			if (this.canDraw() && this.drawingTicks == 0)
+				this.drawingTicks = this.getDrawingTime();
 
-			//Checks if the item can be smelted and if the smelting time left is greater than 0, if so, then smelt the item.
-			if (this.canSmelt() && this.smeltingTicks > 0)
+			//Checks if the item can be drawn and if the drawing time left is greater than 0, if so, then draw the item.
+			if (this.canDraw() && this.drawingTicks > 0)
 			{
-				this.smeltingTicks --;
+				this.drawingTicks --;
 
-				//When the item is finished smelting
-				if (this.smeltingTicks < 1)
+				//When the item is finished drawing
+				if (this.drawingTicks < 1)
 				{
-					this.smeltItem();
-					this.smeltingTicks = 0;
+					this.drawItem();
+					this.drawingTicks = 0;
 				}
 			}
 			else
-			{
-				this.smeltingTicks = 0;
-			}
+			{this.drawingTicks = 0;}
 
 			this.wattsReceived = 0;
 		}
 
 		if(!this.worldObj.isRemote)
-		{
 			if(Ticker.inGameTicks % 20 == 0 && this.playersUsing > 0)
-			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-			}
-		}
 	}
 
 	@Override
 	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket("ElecEx", this, this.smeltingTicks, this.disabledTicks);
-	}
+	{return PacketManager.getPacket("ElecEx", this, this.drawingTicks, this.disabledTicks);}
 
 	@Override
 	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
 		{
-			this.smeltingTicks = dataStream.readInt();
+			this.drawingTicks = dataStream.readInt();
 			this.disabledTicks = dataStream.readInt();
 		}
 		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		{e.printStackTrace();}
 	}
 
 	@Override
 	public void openChest()
 	{
 		if(!this.worldObj.isRemote)
-		{
 			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-		}
 		this.playersUsing++;
 	}
 
 	@Override
 	public void closeChest()
+	{this.playersUsing--;}
+
+	//Check all conditions and see if we can start drawing
+	public boolean canDraw()
 	{
-		this.playersUsing--;
-	}
-
-
-	//Check all conditions and see if we can start smelting
-	public boolean canSmelt()
-	{
-		if (WireMillRecipes.drawing().getDrawingResult(this.containingItems[1]) == null)
+		boolean canWork = false;
+		ItemStack inputSlot = this.inventory[1];
+		ItemStack outputSlot =this.inventory[2];
+		if(inputSlot != null)
 		{
-			return false;
+			if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == null)
+			{canWork = false;}
+			else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) != null && outputSlot == null)
+			{canWork = true;}
+			else if (outputSlot != null) 
+				if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == outputSlot && !(outputSlot.stackSize < outputSlot.getMaxStackSize()))
+				{canWork = false;}
+				else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == outputSlot && outputSlot.stackSize < outputSlot.getMaxStackSize())
+				{canWork = true;}
 		}
+		else if (this.inventory[1] == null)
+			{canWork = false;}
 
-		if (this.containingItems[1] == null)
-		{
-			return false;
-		}
 
-		if (this.containingItems[2] != null)
-		{
-			if (!this.containingItems[2].isItemEqual(WireMillRecipes.drawing().getDrawingResult(this.containingItems[1])))
-			{
-				return false;
-			}
-
-			if (this.containingItems[2].stackSize + 1 > 64)
-			{
-				return false;
-			}
-		}
-
-		return true;
+		return canWork;
 	}
 
 	/**
-	 * Turn one item from the furnace source stack into the appropriate smelted item in the furnace result stack
+	 * Turn one item from the wire mill source stack into the appropriate drawn item in the wire mill result stack
 	 */
-	public void smeltItem()
+	public void drawItem()
 	{
-		if (this.canSmelt())
+		if (this.canDraw())
 		{
-			ItemStack resultItemStack = WireMillRecipes.drawing().getDrawingResult(this.containingItems[1]);
+			ItemStack resultItemStack = WireMillRecipes.drawing().getDrawingResult(this.inventory[1]);
 
-			if (this.containingItems[2] == null)
-			{
-				this.containingItems[2] = resultItemStack.copy();
-			}
-			else if (this.containingItems[2].isItemEqual(resultItemStack))
-			{
-				this.containingItems[2].stackSize ++;
-			}
+			if (this.inventory[2] == null)
+				this.inventory[2] = resultItemStack.copy();
+			else if (this.inventory[2].isItemEqual(resultItemStack))
+				this.inventory[2].stackSize ++;
 
-			this.containingItems[1].stackSize --;
+			this.inventory[1].stackSize --;
 
-			if (this.containingItems[1].stackSize <= 0)
-			{
-				this.containingItems[1] = null;
-			}
+			if (this.inventory[1].stackSize <= 0)
+				this.inventory[1] = null;
 		}
 	}
 
@@ -223,19 +195,17 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
-		this.smeltingTicks = par1NBTTagCompound.getInteger("smeltingTicks");
+		this.drawingTicks = par1NBTTagCompound.getInteger("drawingTicks");
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
-		this.containingItems = new ItemStack[this.getSizeInventory()];
+		this.inventory = new ItemStack[this.getSizeInventory()];
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
 			NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
 			byte var5 = var4.getByte("Slot");
 
-			if (var5 >= 0 && var5 < this.containingItems.length)
-			{
-				this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
-			}
+			if (var5 >= 0 && var5 < this.inventory.length)
+				this.inventory[var5] = ItemStack.loadItemStackFromNBT(var4);
 		}
 	}
 	/**
@@ -245,16 +215,16 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setInteger("smeltingTicks", this.smeltingTicks);
+		par1NBTTagCompound.setInteger("drawingTicks", this.drawingTicks);
 		NBTTagList var2 = new NBTTagList();
 
-		for (int var3 = 0; var3 < this.containingItems.length; ++var3)
+		for (int var3 = 0; var3 < this.inventory.length; ++var3)
 		{
-			if (this.containingItems[var3] != null)
+			if (this.inventory[var3] != null)
 			{
 				NBTTagCompound var4 = new NBTTagCompound();
 				var4.setByte("Slot", (byte)var3);
-				this.containingItems[var3].writeToNBT(var4);
+				this.inventory[var3].writeToNBT(var4);
 				var2.appendTag(var4);
 			}
 		}
@@ -266,79 +236,67 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	public int getStartInventorySide(ForgeDirection side)
 	{
 		if(side == side.DOWN || side == side.UP)
-		{
 			return side.ordinal();
-		}
 
 		return 2;
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side)
-	{
-		return 1;
-	}
+	{return 1;}
 
 	@Override
 	public int getSizeInventory()
-	{
-		return this.containingItems.length;
-	}
+	{return this.inventory.length;}
+	
 	@Override
 	public ItemStack getStackInSlot(int par1)
-	{
-		return this.containingItems[par1];
-	}
+	{return this.inventory[par1];}
+	
 	@Override
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (this.containingItems[par1] != null)
+		if (this.inventory[par1] != null)
 		{
 			ItemStack var3;
 
-			if (this.containingItems[par1].stackSize <= par2)
+			if (this.inventory[par1].stackSize <= par2)
 			{
-				var3 = this.containingItems[par1];
-				this.containingItems[par1] = null;
+				var3 = this.inventory[par1];
+				this.inventory[par1] = null;
 				return var3;
 			}
 			else
 			{
-				var3 = this.containingItems[par1].splitStack(par2);
+				var3 = this.inventory[par1].splitStack(par2);
 
-				if (this.containingItems[par1].stackSize == 0)
-				{
-					this.containingItems[par1] = null;
-				}
+				if (this.inventory[par1].stackSize == 0)
+					this.inventory[par1] = null;
 
 				return var3;
 			}
 		}
 		else
-		{
-			return null;
-		}
+		{return null;}
 	}
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
-		if (this.containingItems[par1] != null)
+		if (this.inventory[par1] != null)
 		{
-			ItemStack var2 = this.containingItems[par1];
-			this.containingItems[par1] = null;
+			ItemStack var2 = this.inventory[par1];
+			this.inventory[par1] = null;
 			return var2;
 		}
 		else
-		{
-			return null;
-		}
+		{return null;}
 	}
 
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		this.containingItems[par1] = par2ItemStack;
+		this.inventory[par1] = par2ItemStack;
 
 		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
 		{
@@ -348,35 +306,35 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	@Override
 	public String getInvName()
-	{
-		return "Electric Furnace";
-	}
+	{return "Wire Mill";}
 
 	@Override
 	public int getInventoryStackLimit()
-	{
-		return 64;
-	}
+	{return 64;}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-	{
-		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
-	}
+	{return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;}
 
 	@Override
 	public double getVoltage()
+	{return 120;}
+	
+	@Override
+	public boolean canConnect(ForgeDirection side)
 	{
-		return 120;
+		if(side.ordinal() != 0)
+			return true;
+		else return false;
 	}
 	
 	/**
-	 * @return The amount of ticks required to smelt this item
+	 * @return The amount of ticks required to draw this item
 	 */
 	public int getDrawingTime()
 	{
-		if(this.containingItems[1] != null)
-			return (int) (WireMillRecipes.drawing().getDrawingWatts(this.containingItems[1]) / this.WATTS_PER_TICK);
-		else return -1;
+		if(this.inventory[1] != null)
+			return (int) (WireMillRecipes.drawing().getDrawingWatts(this.inventory[1]) / this.WATTS_PER_TICK);
+		else return 0;
 	}
 }

@@ -1,7 +1,7 @@
 package electricexpansion.alex_hawks.cables;
 
 import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.misc.TileEntityCableHelper;
+import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 import net.minecraft.src.Block;
 import net.minecraft.src.World;
 
@@ -33,14 +33,6 @@ public class TileEntityWireBlock extends TileEntityCableHelper
 		case 2: return 200;
 		case 3: return 2500; //HV
 		default: return 500;
-		}
-	}
-	@Override
-	public void onConductorMelt()
-	{
-		if(!this.worldObj.isRemote)
-		{
-			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, Block.stone.blockID);
 		}
 	}
 }
