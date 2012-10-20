@@ -24,9 +24,7 @@ public class WireMillRecipes
 	 * Used to call methods addDrawing and getDrawingResult.
 	 */
 	public static final WireMillRecipes drawing()
-	{
-		return drawingBase;
-	}
+	{return drawingBase;}
 
 	public static void addDrawing(ItemStack input, ItemStack output, double watts, boolean leaveInputStackSize)
 	{
@@ -57,7 +55,7 @@ public class WireMillRecipes
 	 * Adds a drawing recipe.
 	 * @param input As an ItemStack
 	 * @param output As an ItemStack
-	 * @param watts The Watts required for the recipe, Time  to process is directly proportional.
+	 * @param watts The Watts required for the recipe, Time to process is directly proportional.
 	 */
 	public static void addDrawing(ItemStack input, ItemStack output, double watts)
 	{addDrawing(input, output, watts, false);}
@@ -90,10 +88,7 @@ public class WireMillRecipes
 			return (ItemStack)this.recipeToOutput.get(recipeID);
 		}
 		catch(NullPointerException e) 
-		{
-			e.printStackTrace();
-			return (ItemStack)null;
-		}
+		{return (ItemStack)null;}
 	}
 
 	public ItemStack getDrawingResult(ItemStack input) 
@@ -111,10 +106,7 @@ public class WireMillRecipes
 			return (Double)this.recipeToWatts.get(recipeID);
 		}
 		catch(NullPointerException e) 
-		{
-			e.printStackTrace();
-			return (Double)null;
-		}
+		{return (Double)null;}
 	}
 	/**
 	 * Used to get the required watts from a source ItemStack
