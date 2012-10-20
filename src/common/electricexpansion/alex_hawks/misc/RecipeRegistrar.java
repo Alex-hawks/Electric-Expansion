@@ -15,6 +15,8 @@ public class RecipeRegistrar
 	private static Block blockWireBlock = ElectricExpansion.blockWireBlock;
 	private static Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
 	private static Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
+	
+	private static Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
 	public static void crafting()
 	{
 		//Uninsulated Wire Recipes
@@ -80,6 +82,9 @@ public class RecipeRegistrar
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
+	
+		//
+		RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack()});
 	}
 	public static void drawing()
 	{

@@ -48,6 +48,7 @@ import universalelectricity.BasicComponents;
 import universalelectricity.UEConfig;
 import universalelectricity.network.ConnectionHandler;
 import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.ItemElectric;
 import universalelectricity.recipe.RecipeManager;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:UniversalElectricity", useMetadata = true)
@@ -127,7 +128,7 @@ public class ElectricExpansion {
     
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
-    public static final Item itemSuper = new ItemSuperconductorBattery(SuperBat, 0).setCreativeTab(CreativeTabs.tabMisc);
+    public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
     
 	public static Logger ACLogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
