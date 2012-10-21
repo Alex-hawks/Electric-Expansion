@@ -267,7 +267,7 @@ public class BlockVoltDetector extends BlockMachine
     @Override
     public boolean renderAsNormalBlock()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -282,43 +282,4 @@ public class BlockVoltDetector extends BlockMachine
 			return new TileEntityVoltDetector();
 	}
 	
-	
-	public ItemStack getBatteryBox()
-	{
-		return new ItemStack(this.blockID, 1, BATTERY_BOX_METADATA);
-	}
-	
-
-	
-	@Override
-	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-		par3List.add(this.getBatteryBox());
-    }
-
-	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
-    {
-        int id = idPicked(world, x, y, z);
-        
-        if (id == 0)
-        {
-            return null;
-        }
-
-        Item item = Item.itemsList[id];
-        if (item == null)
-        {
-            return null;
-        }
-        
-        int metadata = getDamageValue(world, x, y, z);
-       
-		 if(metadata >= BATTERY_BOX_METADATA)
-		{
-			metadata = BATTERY_BOX_METADATA;
-		}
-		
-        return new ItemStack(id, 1, metadata);
-    }
 }

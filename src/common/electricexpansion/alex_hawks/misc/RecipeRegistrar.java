@@ -86,7 +86,9 @@ public class RecipeRegistrar
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
 	
 		//
-		RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack()});
+		
+		
+RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', BasicComponents.itemBattery.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack(), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2), '#', blockCopperWire});
 	}
 	public static void drawing()
 	{
