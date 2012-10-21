@@ -31,7 +31,7 @@ public class GuiVoltDetector extends GuiScreen {
 	}
 
 	protected void drawBackgroundLayer(float par1, int par2, int par3) {
-		int var4 = this.mc.renderEngine.getTexture("/electricexpansion/VoltDetectorGUI.png");
+		int var4 = this.mc.renderEngine.getTexture("/electricexpansion/textures/mattredsox/VoltDetectorGUI.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		int var5 = (this.width - this.xSize) / 2;
