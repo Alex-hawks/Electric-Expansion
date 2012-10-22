@@ -246,9 +246,9 @@ public class BlockVoltDetector extends BlockMachine
      * Is this block indirectly powering the block on the specified side
      */
     @Override
-    public boolean isIndirectlyPoweringTo(World par1World, int x, int y, int z, int side)
+    public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-    	TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
+    	TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
         if(tileEntity instanceof IRedstoneProvider)
         {
@@ -257,6 +257,7 @@ public class BlockVoltDetector extends BlockMachine
         
        return false;
     }
+
 
     @Override
     public boolean isOpaqueCube()

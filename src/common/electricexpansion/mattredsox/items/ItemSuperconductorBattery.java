@@ -2,30 +2,18 @@ package electricexpansion.mattredsox.items;
 
 import java.util.List;
 
-import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import universalelectricity.BasicComponents;
-import universalelectricity.basiccomponents.ItemBattery;
 import universalelectricity.prefab.ItemElectric;
 
-/**
- *
- * @author Matt
- */
-public class ItemSuperconductorBattery extends ItemBattery
+public class ItemSuperconductorBattery extends ItemElectric
 {
     public ItemSuperconductorBattery(int par1, int par2)
     {
-        super(par1, par2);
+        super(par1);
         this.iconIndex = par2;
-        this.setItemName("Superconductor Magnet Battery");
-        this.setCreativeTab(CreativeTabs.tabMisc);
-    }
-
-    @Override
-    public void addInformation(ItemStack par1ItemStack, List par2List)
-    {
-        super.addInformation(par1ItemStack, par2List);
+        this.setItemName("Superconductor Battery");
     }
 
     @Override

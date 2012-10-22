@@ -10,10 +10,10 @@ import ic2.api.IEnergyStorage;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
@@ -22,6 +22,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.UniversalElectricity;
 import universalelectricity.basiccomponents.BlockBasicMachine;
+import universalelectricity.basiccomponents.TileEntityBatteryBox;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
@@ -46,7 +47,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
-public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
+public class TileEntityAdvBatteryBox extends TileEntityBatteryBox
 {	
 	private double joules = 0;
 
@@ -96,7 +97,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     {        
         if (voltage > this.getVoltage())
         {
-            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);
+            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
             return;
         }
         
@@ -257,7 +258,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     }
     
     @Override
-	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
         {
@@ -661,3 +662,4 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	    	}
 	    }
 	}
+	

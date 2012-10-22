@@ -2,10 +2,10 @@ package electricexpansion.alex_hawks.machines;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
@@ -52,19 +52,21 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{return this.WATTS_PER_TICK;}
 		else return 0;
 	}
-
+@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 5);}
+	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 3);}
 
+
+
+	
 	@Override
 	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
 	{
 		if (voltage > this.getVoltage())
-		{this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F);}
+		{this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);}
 
 		this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
 	}
-
 	@Override
     public boolean canUpdate()
     {return true;}
@@ -119,7 +121,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	{return PacketManager.getPacket("ElecEx", this, this.drawingTicks, this.disabledTicks);}
 
 	@Override
-	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
 		{
@@ -326,9 +328,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public boolean canConnect(ForgeDirection side)
 	{
-		if(side.ordinal() != 0)
-			return true;
-		else return false;
+		return canReceiveFromSide(side);
 	}
 	
 	/**
