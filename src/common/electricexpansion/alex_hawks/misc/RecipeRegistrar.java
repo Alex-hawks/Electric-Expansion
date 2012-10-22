@@ -16,8 +16,10 @@ public class RecipeRegistrar
 	private static final Block blockWireBlock = ElectricExpansion.blockWireBlock;
 	private static final Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
+	private static final Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
+	private static final Block blockWireMill = ElectricExpansion.blockWireMill;
 	
-	private static Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
+	private static final Item itemParts = ElectricExpansion.itemParts;
 
 	public static void crafting()
 	{
@@ -85,8 +87,12 @@ public class RecipeRegistrar
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
 	
-		//
+		//Machines
 		RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack()});
+		RecipeManager.addRecipe(blockWireMill, new Object [] {"#$#", "!%!", "@!@", '!', BasicComponents.itemMotor, '#', BasicComponents.itemSteelPlate, '@', BasicComponents.itemBronzePlate, '$', new ItemStack(BasicComponents.itemCircuit, 1, 0), '%', new ItemStack(itemParts, 1, 0)});
+		
+		//Parts
+		RecipeManager.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});
 	}
 	public static void drawing()
 	{

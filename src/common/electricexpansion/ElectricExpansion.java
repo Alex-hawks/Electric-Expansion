@@ -70,9 +70,7 @@ public class ElectricExpansion {
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
 	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
-	private static final int toolHammerStoneID = ITEM_ID_PREFIX + 3;
-	private static final int toolHammerIronID = ITEM_ID_PREFIX + 4;
-	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +5;
+	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -95,6 +93,7 @@ public class ElectricExpansion {
 	public static int Upgrade;
 	public static int SuperBat;
 	public static int ConnectionAlloy;
+	public static int Parts;
 	//Other
 	public static double superConductorUpkeep;
 	
@@ -120,6 +119,7 @@ public class ElectricExpansion {
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
     public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
+    public static final Item itemParts = new ItemParts(Parts, 0);
     
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
@@ -150,6 +150,7 @@ public class ElectricExpansion {
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		SuperBat = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
+		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
@@ -276,5 +277,7 @@ public class ElectricExpansion {
         LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
         
         LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
+		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
+
 	}
 }
