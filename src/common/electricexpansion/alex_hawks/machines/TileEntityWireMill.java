@@ -1,4 +1,8 @@
 package electricexpansion.alex_hawks.machines;
+import java.util.Random;
+
+import hawksmachinery.interfaces.HMRepairInterfaces.IHMRepairable;
+import hawksmachinery.interfaces.HMRepairInterfaces.IHMSapper;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -25,7 +29,7 @@ import com.google.common.io.ByteArrayDataInput;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,IPacketReceiver
+public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IHMRepairable
 {
 	//The amount of watts required by the Wire Mill per tick
 	public final double WATTS_PER_TICK = 500;
@@ -44,6 +48,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	private ItemStack[] inventory = new ItemStack[3];
 
 	private int playersUsing = 0;
+
+	private ItemStack sapper;
+	private int machineHP;
 
 	@Override
 	public double wattRequest()
@@ -340,4 +347,58 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			return (int) (WireMillRecipes.drawing().getDrawingWatts(this.inventory[1]) / this.WATTS_PER_TICK);
 		else return 0;
 	}
+
+	public void randomlyDamageSelf()
+	{
+		if (new Random().nextInt(10) == 6)
+			--this.machineHP;
+	}
+
+	public boolean attemptToRepair(int repairAmount)
+	{
+		if (this.machineHP != this.getMaxHP() && !this.isBeingSapped())
+		{
+			this.machineHP += repairAmount;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean setSapper(ItemStack sapper)
+	{
+		if (this.sapper == null)
+		{
+			this.sapper = sapper;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean attemptToUnSap(EntityPlayer player)
+	{
+		if (this.isBeingSapped())
+		{
+			int randomDigit = new Random().nextInt(((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player));
+			if (randomDigit == ((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player) / 2)
+			{
+				((IHMSapper)this.sapper.getItem()).onRemoved(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+				this.sapper = null;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isBeingSapped()
+	{return this.sapper != null;}
+
+	@Override
+	public boolean isDisabled()
+	{return this.isBeingSapped() || this.machineHP == 0;}
+
+	public int getMaxHP()
+	{return 20;}
+
+	public int getHP()
+	{return this.machineHP;}
 }

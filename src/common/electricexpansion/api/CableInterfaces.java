@@ -5,6 +5,8 @@ package electricexpansion.api;
 
 import java.util.ArrayList;
 
+import universalelectricity.BasicComponents;
+
 import net.minecraftforge.common.ForgeDirection;
 
 public class CableInterfaces
@@ -31,6 +33,16 @@ public class CableInterfaces
 		 * @return on the side passed, for a cable to connect to
 		 */
 		public boolean canConnectToBase(int meta, ForgeDirection side);
+
+	}
+	/**
+	 * 
+	 * @author Alex
+	 * Implement this if you want cables to obey selective connective rules, works on machines too.
+	 */
+	public interface ISelectiveConnector
+	{
+		public String cableType(int ID, int meta);
 
 	}
 }
