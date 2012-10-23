@@ -14,8 +14,8 @@ CHANGELOG
 LICENSE.txt
 
 /src/minecraft/*
-/src/minecraft_server/*
 /src/common/*
+/src/resources/*
 !/src/common/electricexpansion/
 !/src/minecraft/electricexpansion/
 !/src/common/mcmod.info
