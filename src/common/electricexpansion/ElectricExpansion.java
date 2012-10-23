@@ -108,8 +108,8 @@ public class ElectricExpansion {
 	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(SwitchWireBlock, 0);
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
-	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations);
-    public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations);
+	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("AdvBatBox");
+    public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("VoltDet");
     public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
@@ -148,7 +148,7 @@ public class ElectricExpansion {
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 		
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-		SuperBat = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemSuperBatID);
+		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		

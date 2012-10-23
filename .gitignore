@@ -27,6 +27,6 @@ LICENSE.txt
 
 *.bat
 *.sh
-*/Thumbs.db
 *.log
+*.db
 *.iml

@@ -93,6 +93,9 @@ public class RecipeRegistrar
 		
 		//Parts
 		RecipeManager.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});
+		
+		//
+		RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', BasicComponents.itemBattery.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack(), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2), '#', blockCopperWire});
 	}
 	public static void drawing()
 	{

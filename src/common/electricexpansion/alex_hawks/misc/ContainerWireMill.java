@@ -1,5 +1,6 @@
 package electricexpansion.alex_hawks.misc;
 
+import ic2.api.IElectricItem;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -55,7 +56,7 @@ public class ContainerWireMill extends Container
      * Called to transfer a stack from one inventory to the other eg. when shift clicking.
      */
     @Override
-    public ItemStack transferStackInSlot(int par1)
+    public ItemStack func_82846_b(EntityPlayer par1EntityPlayer, int par1)
     {
         ItemStack var2 = null;
         Slot var3 = (Slot)this.inventorySlots.get(par1);
@@ -65,44 +66,47 @@ public class ContainerWireMill extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
 
-            if (par1 == 2)
-            {
-                if (!this.mergeItemStack(var4, 3, 39, true))
-                {
-                    return null;
-                }
-
-                var3.onSlotChange(var4, var2);
-            }
-            else if (par1 != 1 && par1 != 0)
+            if (par1 != 0 && par1 != 1)
             {
                 if (var4.getItem() instanceof IItemElectric)
                 {
-                    if (!this.mergeItemStack(var4, 0, 1, false))
+                    if (((IItemElectric)var4.getItem()).canProduceElectricity())
                     {
-                        return null;
+                        if (!this.mergeItemStack(var4, 1, 2, false))
+                        {
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        if (!this.mergeItemStack(var4, 0, 1, false))
+                        {
+                            return null;
+                        }
                     }
                 }
-                else if (FurnaceRecipes.smelting().getSmeltingResult(var4) != null)
+                else if(var4.getItem() instanceof IElectricItem)
                 {
-                    if (!this.mergeItemStack(var4, 1, 2, false))
-                    {
-                        return null;
-                    }
+                	if(((IElectricItem)var4.getItem()).canProvideEnergy())
+                	{
+                		if(!mergeItemStack(var4, 1, 2, false))
+                		{
+                			return null;
+                		}
+                	}
+                	else {
+                		if(!mergeItemStack(var4, 0, 1, false))
+                		{
+                			return null;
+                		}
+                	}
                 }
-                else if (par1 >= 3 && par1 < 30)
-                {
-                    if (!this.mergeItemStack(var4, 30, 39, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
+                else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
                 {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(var4, 3, 39, false))
+            else if (!this.mergeItemStack(var4, 3, 38, false))
             {
                 return null;
             }
@@ -121,9 +125,10 @@ public class ContainerWireMill extends Container
                 return null;
             }
 
-            var3.onPickupFromSlot(var4);
+            var3.func_82870_a(par1EntityPlayer, var4);
         }
 
         return var2;
     }
+    
 }

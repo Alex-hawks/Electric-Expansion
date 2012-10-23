@@ -10,12 +10,10 @@ import ic2.api.IEnergyStorage;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
-import net.minecraft.src.NetworkManager;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
@@ -28,8 +26,6 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.Vector3;
@@ -43,7 +39,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 
-public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider {
+public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IRedstoneProvider {
 	private double Joulestored = 0;
 
 
@@ -183,38 +179,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
                     } 
                 }
             }
-       
-        
-        if(!this.worldObj.isRemote)
-        {
-	        if(this.sendUpdate || (Ticker.inGameTicks % 40 == 0 && this.playersUsing > 0))
-	        {
-	        	PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-	        	this.sendUpdate = false;
-	        }
-        }
     }
-    
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        return PacketManager.getPacket("ElecEx", this, this.Joulestored, this.disabledTicks);
-    }
-    
-    @Override
-	public void handlePacketData(NetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
-	{
-		try
-        {
-			this.Joulestored = dataStream.readDouble();
-	        this.disabledTicks = dataStream.readInt();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-	}
-
 
     /**
      * Reads a tile entity from NBT.
