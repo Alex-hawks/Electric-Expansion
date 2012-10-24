@@ -1,16 +1,14 @@
 package electricexpansion.client.mattredsox;
 
-import net.minecraft.src.*;
+import net.minecraft.src.GuiScreen;
+import net.minecraft.src.InventoryPlayer;
 import net.minecraftforge.common.ForgeDirection;
-
 
 import org.lwjgl.opengl.GL11;
 
-import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
-
-import universalelectricity.UniversalElectricity;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
+import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 public class GuiVoltDetector extends GuiScreen {
 

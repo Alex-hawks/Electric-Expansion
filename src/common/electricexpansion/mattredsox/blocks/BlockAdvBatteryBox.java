@@ -1,7 +1,5 @@
 package electricexpansion.mattredsox.blocks;
 
-import ic2.api.IEnergyConductor;
-
 import java.util.List;
 import java.util.Random;
 
@@ -21,12 +19,10 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.BasicComponents;
-import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.TileEntityCoalGenerator;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.Vector3;
 
 public class BlockAdvBatteryBox extends BlockMachine
 {
@@ -109,11 +105,11 @@ public class BlockAdvBatteryBox extends BlockMachine
 	            case 2: par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 2); break;
 	            case 3: par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 0); break;
 	        }
-	        this.checkForConductors(par1World, x, y, z);
+	      //  this.checkForConductors(par1World, x, y, z);
         }
       
     
-    @Override
+   /* @Override
     public void onNeighborBlockChange(World par1World, int x, int y, int z, int par4)
     {
     	this.checkForConductors(par1World, x, y, z);
@@ -140,7 +136,7 @@ public class BlockAdvBatteryBox extends BlockMachine
     				if(neighborTile != null)
 		    		{
 		            	boolean tossPipe = false;
-		            	/*
+		            	
 		            	if(Loader.isModLoaded("BuildCraft|Transport"))
 		            	{
 		            		try
@@ -154,7 +150,7 @@ public class BlockAdvBatteryBox extends BlockMachine
 		            		{
 		            			System.out.println("Failed to identify Buildcraft class. Contact UE developers to update their API!");
 		            		}
-		            	}*/
+		            	}
 		            	
 		            	//IEnergyConductor
 		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
@@ -165,7 +161,7 @@ public class BlockAdvBatteryBox extends BlockMachine
     			}  			
     		}
         }
-    }
+    }*/
     
     public void breakConductor(World par1World, Vector3 position)
     {

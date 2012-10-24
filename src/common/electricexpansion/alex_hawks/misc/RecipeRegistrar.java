@@ -3,13 +3,11 @@ package electricexpansion.alex_hawks.misc;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import universalelectricity.BasicComponents;
-import universalelectricity.recipe.RecipeManager;
 import electricexpansion.ElectricExpansion;
 
 public class RecipeRegistrar 
 {
-	private static final Block blockCopperWire = BasicComponents.blockCopperWire;
+	/*private static final Block blockCopperWire = BasicComponents.blockCopperWire;
 	
 	private static final Block blockRawWire = ElectricExpansion.blockRawWire;
 	private static final Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
@@ -18,10 +16,10 @@ public class RecipeRegistrar
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	
 	private static Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
-
+*/
 	public static void crafting()
 	{
-		//Uninsulated Wire Recipes
+		/*//Uninsulated Wire Recipes
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 0), new Object [] {" @ ", " @ ", " @ ", '@', "ingotCopper"});
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 1), new Object [] {" @ ", " @ ", " @ ", '@', "ingotTin"});
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 2), new Object [] {" @ ", " @ ", " @ ", '@', "ingotSilver"});
@@ -83,19 +81,19 @@ public class RecipeRegistrar
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 0), new Object[]{new ItemStack(blockWireBlock, 1, 0), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
 		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
-		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
+		RecipeManager.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});*/
 	
 		//
 		
 		
-RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', BasicComponents.itemBattery.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack(), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2), '#', blockCopperWire});
+//RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', BasicComponents.itemBattery.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack(), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2), '#', blockCopperWire});
 	}
 	public static void drawing()
 	{
-		WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 30000);
+		/*WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 30000);
 		WireMillRecipes.addDrawing("ingotTin", new ItemStack(blockRawWire, 3, 1), 30000);
 		WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 30000);
-		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 30000);
+		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 30000);*/
 		
 		WireMillRecipes.addDrawing(new ItemStack(Block.cloth), new ItemStack(Item.silk, 3), 20000);
 	}

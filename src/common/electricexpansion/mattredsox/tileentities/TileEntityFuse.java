@@ -1,41 +1,29 @@
 package electricexpansion.mattredsox.tileentities;
 
 import ic2.api.Direction;
-import ic2.api.ElectricItem;
 import ic2.api.EnergyNet;
-import ic2.api.IElectricItem;
 import ic2.api.IEnergySink;
 import ic2.api.IEnergySource;
 import ic2.api.IEnergyStorage;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Ticker;
-import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.UELoader;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.Vector3;
 import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 import buildcraft.api.power.PowerProvider;
 
-import com.google.common.io.ByteArrayDataInput;
+import com.google.common.base.Ticker;
 
 import cpw.mods.fml.common.Loader;
 
@@ -117,7 +105,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
         		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
         		this.setJoules(this.Joulestored + receivedElectricity);
         	
-        		if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
+        		if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
         			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
         		}
@@ -175,23 +163,21 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
             	
                 TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
                 
-                if (connector != null)
-                {
-                	//Output UE electricity
-                    if (connector instanceof TileEntityConductor)
-                    {
-                        if (voltin < 121)
-                        {
-                        double wattsNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(wattsNeeded, this.getVoltage()), ElectricInfo.getAmpsFromWattHours(this.Joulestored, this.getVoltage()) ), 15), 0);                      
-                        ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                        this.setJoules(this.Joulestored - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
-                    } 
-                }
-             
-           }
-         }
-    }
+				// Output UE electricity
+				if (connector instanceof IConductor)
+				{
+					double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+					double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.Joulestored, this.getVoltage())), 80), 0);
+					if (!this.worldObj.isRemote)
+					{
+						ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
+					}
+					this.setJoules(this.Joulestored - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+				}
+			}
+		}
+	
+   
     /**
      * Reads a tile entity from NBT.
      */
@@ -361,7 +347,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 		
 			this.setJoules(Joulestored + inputElectricity);
 			
-			if(Ticker.inGameTicks % 2 == 0 && this.playersUsing > 0)
+			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
 				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}

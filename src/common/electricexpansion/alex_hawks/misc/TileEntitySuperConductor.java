@@ -18,8 +18,8 @@ public class TileEntitySuperConductor extends TileEntityCableHelper
 	}
 
 	@Override
-	public void onConductorMelt() 
-	{
+	public void onOverCharge() {
+		// TODO Auto-generated method stub
 		
 	}
 }

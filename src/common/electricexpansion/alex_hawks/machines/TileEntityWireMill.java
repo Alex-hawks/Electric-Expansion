@@ -11,21 +11,19 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Ticker;
-import universalelectricity.basiccomponents.BlockBasicMachine;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.implement.IItemElectric;
-import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.Vector3;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory,IPacketReceiver
+public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
 {
 	//The amount of watts required by the Wire Mill per tick
 	public final double WATTS_PER_TICK = 500;
@@ -112,7 +110,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 
 		if(!this.worldObj.isRemote)
-			if(Ticker.inGameTicks % 20 == 0 && this.playersUsing > 0)
+			if(this.ticks % 20 == 0 && this.playersUsing > 0)
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	}
 

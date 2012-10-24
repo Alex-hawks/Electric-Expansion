@@ -1,5 +1,6 @@
 package electricexpansion;
 
+import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import electricexpansion.alex_hawks.cables.*;
@@ -15,7 +16,7 @@ import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 
-public class EECommonProxy extends universalelectricity.prefab.CommonProxy
+public class EECommonProxy implements IGuiHandler
 {
 	//Mattredsox's Textures
 	public static final String MattFILE_PATH = "/electricexpansion/textures/mattredsox/";
@@ -28,7 +29,7 @@ public class EECommonProxy extends universalelectricity.prefab.CommonProxy
 	public static final String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
 	public static final String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
 	
-	@Override
+	
 	public void init()
 	{
 		//Alex_hawks' Tile entity registrations

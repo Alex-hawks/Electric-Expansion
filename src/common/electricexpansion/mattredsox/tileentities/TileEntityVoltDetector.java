@@ -20,17 +20,17 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.UniversalElectricity;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.Vector3;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
@@ -232,20 +232,20 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
             	
                 TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.BATTERY_BOX_METADATA + 2));
             	
-                if (connector != null)
-                {
-                	//Output UE electricity
-                    if (connector instanceof IConductor)
-                    {
-                        double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage()) ), 100), 0);
-                        ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                        this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
-                    } 
-                }
-            }
-        }
-        
+				// Output UE electricity
+				if (connector instanceof IConductor)
+				{
+					double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+					double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+					if (!this.worldObj.isRemote)
+					{
+						ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
+					}
+					this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+				}
+			}
+		}
+
         if(!this.worldObj.isRemote)
         {
 	        if(this.ticks % 2 == 0 && this.playersUsing > 0)

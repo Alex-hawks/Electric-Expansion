@@ -1,17 +1,15 @@
 package electricexpansion.alex_hawks.helpers;
 
-import electricexpansion.ElectricExpansion;
 import net.minecraft.src.Block;
 import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.BasicComponents;
-import universalelectricity.basiccomponents.TileEntityCopperWire;
-import universalelectricity.basiccomponents.UELoader;
+import universalelectricity.core.UELoader;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
-import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityConductor;
+import basiccomponents.BasicComponents;
+import electricexpansion.ElectricExpansion;
 
 /**
  * 
@@ -24,7 +22,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 	@Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(UELoader.CHANNEL, this);
+        return universalelectricity.prefab.network.PacketManager.getPacket("ElecEx", this);
     }
 	@Override
 	public boolean canConnect(ForgeDirection side)
@@ -79,6 +77,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 		}
 		return type;
 	}
+	/*
 	@Override
 	public void onConductorMelt() 
 	{
@@ -100,5 +99,5 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, setToID);
 		}
 	}
-
+*/
 }

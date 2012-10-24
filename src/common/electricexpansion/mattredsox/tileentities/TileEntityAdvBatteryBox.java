@@ -1,5 +1,9 @@
 package electricexpansion.mattredsox.tileentities;
 
+import ic2.api.ElectricItem;
+import ic2.api.EnergyNet;
+import ic2.api.IElectricItem;
+import ic2.api.IEnergySink;
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
 import ic2.api.EnergyNet;
@@ -20,20 +24,59 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.BlockBasicMachine;
-import universalelectricity.basiccomponents.TileEntityBatteryBox;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricityManager;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.PacketManager;
+import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
+import basiccomponents.BCLoader;
+import basiccomponents.block.BlockBasicMachine;
+import buildcraft.api.core.Orientations;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerProvider;
+
+import com.google.common.io.ByteArrayDataInput;
+
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Loader;
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IPeripheral;
+
+import ic2.api.IEnergySource;
+import ic2.api.IEnergyStorage;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
+import net.minecraft.src.INetworkManager;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagList;
+import net.minecraft.src.Packet;
+import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
+import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
+import universalelectricity.implement.IItemElectric;
+import universalelectricity.implement.IJouleStorage;
+import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.Vector3;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
@@ -47,7 +90,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
-public class TileEntityAdvBatteryBox extends TileEntityBatteryBox
+public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
 {	
 	private double joules = 0;
 
@@ -230,12 +273,15 @@ public class TileEntityAdvBatteryBox extends TileEntityBatteryBox
                 if (connector != null)
                 {
                 	//Output UE electricity
-                    if (connector instanceof TileEntityConductor)
-                    {
-                        double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor)connector).getConnectionID());
-                        double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage()) ), 100), 0);
-                        ElectricityManager.instance.produceElectricity(this, (IConductor)connector, transferAmps, this.getVoltage());
-                        this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+                	if (connector instanceof IConductor)
+					{
+						double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+						if (!this.worldObj.isRemote)
+						{
+							ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
+						}
+						this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
                     } 
                 }
             }
@@ -577,35 +623,32 @@ public class TileEntityAdvBatteryBox extends TileEntityBatteryBox
 	@Override
 	public boolean demandsEnergy()
 	{
-		if(!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0)
-		{
-			return this.joules < getMaxJoules();
-		}
-		
+		if (!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0) { return this.joules < getMaxJoules(); }
+
 		return false;
 	}
 
 	@Override
-	public int injectEnergy(Direction directionFrom, int euAmount) 
+	public int injectEnergy(Direction directionFrom, int euAmount)
 	{
-		if(!this.isDisabled())
+		if (!this.isDisabled())
 		{
-			double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
+			double inputElectricity = euAmount * UniversalElectricity.IC2_RATIO;
 
 			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxJoules() - this.joules), 0);
-		
+
 			this.setJoules(joules + inputElectricity);
-			
-			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
+
+			return (int) (rejectedElectricity * UniversalElectricity.TO_IC2_RATIO);
 		}
-		
+
 		return euAmount;
 	}
-	
+
 	/**
-     * COMPUTERCRAFT FUNCTIONS
-     */
-	
+	 * COMPUTERCRAFT FUNCTIONS
+	 */
+
 	@Override
 	public String getType()
 	{
@@ -615,23 +658,29 @@ public class TileEntityAdvBatteryBox extends TileEntityBatteryBox
 	@Override
 	public String[] getMethodNames()
 	{
-		return new String[] {"getVoltage", "getWattage", "isFull"};
+		return new String[]
+		{ "getVoltage", "getWattage", "isFull" };
 	}
-	
+
 	@Override
-	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception {
-		
+	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception
+	{
+
 		final int getVoltage = 0;
 		final int getWattage = 1;
 		final int isFull = 2;
-		
-		switch(method){
+
+		switch (method)
+		{
 			case getVoltage:
-				return new Object[] { getVoltage() };
+				return new Object[]
+				{ getVoltage() };
 			case getWattage:
-				return new Object[] { ElectricInfo.getWatts(joules) };
+				return new Object[]
+				{ ElectricInfo.getWatts(joules) };
 			case isFull:
-				return new Object[] { isFull };
+				return new Object[]
+				{ isFull };
 			default:
 				throw new Exception("Function unimplemented");
 		}
@@ -644,22 +693,13 @@ public class TileEntityAdvBatteryBox extends TileEntityBatteryBox
 	}
 
 	@Override
-	public void attach(IComputerAccess computer, String computerSide) {}
+	public void attach(IComputerAccess computer, String computerSide)
+	{
+	}
 
 	@Override
-	public void detach(IComputerAccess computer) {}
-	
-	 @Override
-	    public double getVoltage()
-	    {
-	    	if (this.upgradeType == 1) 
-	    	{
-	    		return 960;
-		   	}
-
-	    	else {
-	    		return 120;
-	    	}
-	    }
+	public void detach(IComputerAccess computer)
+	{
 	}
-	
+
+}

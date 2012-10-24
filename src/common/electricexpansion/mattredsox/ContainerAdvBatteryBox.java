@@ -7,7 +7,6 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import universalelectricity.basiccomponents.SlotElectricItem;
 import universalelectricity.implement.IItemElectric;
 
 public class ContainerAdvBatteryBox extends Container
@@ -17,8 +16,8 @@ public class ContainerAdvBatteryBox extends Container
     public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox batteryBox)
     {
         this.tileEntity = batteryBox;
-        this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot
-        this.addSlotToContainer(new SlotElectricItem(batteryBox, 1, 33, 48)); //Bottom slot
+        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot
+        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(batteryBox, 1, 33, 48)); //Bottom slot
         int var3;
 
         for (var3 = 0; var3 < 3; ++var3)
