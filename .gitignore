@@ -16,15 +16,9 @@ LICENSE.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
-!/src/common/electricexpansion/
-!/src/common/buildcraft/
-!/src/common/ic2/
-!/src/common/railcraft/
-!/src/common/dan200/
+/src/common/electricexpansion/
 !/src/minecraft/electricexpansion/
-!/src/minecraft/universalelectricity/
-!/src/common/universalelectricity/
-!/src/common/mcmod.info
+!/mcmod.info
 !/modversion.txt
 !/textures
 !/README
