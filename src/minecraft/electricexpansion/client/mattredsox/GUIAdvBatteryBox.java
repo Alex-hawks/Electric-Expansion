@@ -1,19 +1,15 @@
 package electricexpansion.client.mattredsox;
 
+import org.lwjgl.opengl.GL11;
+
+import basiccomponents.BCLoader;
+import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.StatCollector;
-
-import org.lwjgl.opengl.GL11;
-
-import basiccomponents.BasicComponents;
-
 import electricexpansion.mattredsox.ContainerAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricInfo.ElectricUnit;
-
 
 public class GUIAdvBatteryBox extends GuiContainer
 {
@@ -55,7 +51,7 @@ public class GUIAdvBatteryBox extends GuiContainer
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
-        int var4 = this.mc.renderEngine.getTexture(BasicComponents.FILE_PATH + "BatteryBox.png");
+        int var4 = this.mc.renderEngine.getTexture(BCLoader.FILE_PATH + "BatteryBox.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
         

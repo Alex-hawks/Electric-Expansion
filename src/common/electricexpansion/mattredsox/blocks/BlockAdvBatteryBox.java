@@ -1,14 +1,11 @@
 package electricexpansion.mattredsox.blocks;
 
-//import ic2.api.IEnergyConductor;
-
 import java.util.List;
-import java.util.Random;
 
+import cpw.mods.fml.common.Loader;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -25,6 +22,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.Vector3;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
+
 
 public class BlockAdvBatteryBox extends BlockMachine
 {
@@ -107,7 +105,7 @@ public class BlockAdvBatteryBox extends BlockMachine
 	            case 2: par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 2); break;
 	            case 3: par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 0); break;
 	        }
-	        this.checkForConductors(par1World, x, y, z);
+	      //  this.checkForConductors(par1World, x, y, z);
         }
       
     
@@ -138,7 +136,7 @@ public class BlockAdvBatteryBox extends BlockMachine
     				if(neighborTile != null)
 		    		{
 		            	boolean tossPipe = false;
-		            	/*
+		            	
 		            	if(Loader.isModLoaded("BuildCraft|Transport"))
 		            	{
 		            		try
@@ -152,14 +150,14 @@ public class BlockAdvBatteryBox extends BlockMachine
 		            		{
 		            			System.out.println("Failed to identify Buildcraft class. Contact UE developers to update their API!");
 		            		}
-		            	}*/
-		            	
-		            	//IEnergyConductor
-		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
-		            	{
-			    			this.breakConductor(par1World, position);
 		            	}
-		    		}
+		            	
+/*		            	//IEnergyConductor
+ *		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
+ *		            	{
+ *			    			this.breakConductor(par1World, position);
+ *		            	}
+ */		    		}
     			}  			
     		}
         }

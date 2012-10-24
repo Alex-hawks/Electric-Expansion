@@ -32,4 +32,9 @@ public class TileEntityInsulatedWire extends TileEntityCableHelper
 		default: return 500;
 		}
 	}
+	@Override
+	public void onOverCharge() {
+		// TODO Auto-generated method stub
+		
+	}
 }

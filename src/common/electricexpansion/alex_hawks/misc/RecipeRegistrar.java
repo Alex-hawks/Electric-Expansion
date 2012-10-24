@@ -18,7 +18,7 @@ public class RecipeRegistrar
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	private static final Block blockAdvBox = ElectricExpansion.blockBigBatteryBox;
 	private static final Block blockWireMill = ElectricExpansion.blockWireMill;
-	
+
 	private static final Item itemParts = ElectricExpansion.itemParts;
 
 	public static void crafting()
@@ -28,7 +28,8 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 1), new Object [] {" @ ", " @ ", " @ ", '@', "ingotTin"});
 		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 2), new Object [] {" @ ", " @ ", " @ ", '@', "ingotSilver"});
 		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"});
-		
+
+	
 		//Recipes for supporting other UE add-ons, the slack way...
 		GameRegistry.addShapelessRecipe(new ItemStack(blockCopperWire, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
 		GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(blockCopperWire, 1)});
@@ -82,6 +83,7 @@ public class RecipeRegistrar
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockInsulatedWire, 1, 3), Block.stone, Block.lever});
 		
 		//Switch Wire Block Recipes (From Block.lever, and the corresponding Wire Block)
+
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 0), new Object[]{new ItemStack(blockWireBlock, 1, 0), Block.lever});
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 1), new Object[]{new ItemStack(blockWireBlock, 1, 1), Block.lever});
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever});
@@ -93,9 +95,6 @@ public class RecipeRegistrar
 		
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});
-		
-		//
-		GameRegistry.addRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', BasicComponents.itemBattery.getUncharged(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUncharged(), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2), '#', blockCopperWire});
 	}
 	public static void drawing()
 	{

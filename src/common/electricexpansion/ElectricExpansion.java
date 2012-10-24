@@ -1,5 +1,18 @@
 package electricexpansion;
 
+import java.io.File;
+import java.util.logging.Logger;
+
+import net.minecraft.src.Block;
+import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.Item;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.Configuration;
+import universalelectricity.core.UEConfig;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.prefab.ItemElectric;
+import universalelectricity.prefab.network.ConnectionHandler;
+import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -14,31 +27,29 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-
-import electricexpansion.alex_hawks.blocks.*;
-import electricexpansion.alex_hawks.itemblocks.*;
-import electricexpansion.alex_hawks.items.*;
+import electricexpansion.alex_hawks.blocks.BlockInsulatedWire;
+import electricexpansion.alex_hawks.blocks.BlockRawWire;
+import electricexpansion.alex_hawks.blocks.BlockSwitchWire;
+import electricexpansion.alex_hawks.blocks.BlockSwitchWireBlock;
+import electricexpansion.alex_hawks.blocks.BlockWireBlock;
+import electricexpansion.alex_hawks.blocks.BlockWireMill;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockInsualtedWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockRawWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
+import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
+import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
-import electricexpansion.mattredsox.*;
+import electricexpansion.mattredsox.ItemUpgrade;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
+import electricexpansion.mattredsox.blocks.BlockFuse;
+import electricexpansion.mattredsox.blocks.BlockUPTransformer;
+import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
-import electricexpansion.mattredsox.blocks.*;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.logging.Logger;
-
-import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.Configuration;
-
-import universalelectricity.core.UEConfig;
-import universalelectricity.prefab.ItemElectric;
-
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "required-after:UniversalElectricity@[0.9.2,);after:HawksMachinery", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "required-after:UniversalElectricity@[1.0.0,);after:BasicComponents;after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
@@ -190,6 +201,8 @@ public class ElectricExpansion {
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) 
 	{
+		UniversalElectricity.register(this, 1, 0, 0, false);
+		
 		if(!configLoaded){configLoad(CONFIG);}
 		if(startLogLogged[1] != true){StartLog("preInit");}
 		Item.itemsList[rawWire] = new ItemBlockRawWire(rawWire-256, blockRawWire);

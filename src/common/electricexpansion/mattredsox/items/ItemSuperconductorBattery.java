@@ -1,10 +1,5 @@
 package electricexpansion.mattredsox.items;
 
-import java.util.List;
-
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ItemStack;
-import universalelectricity.BasicComponents;
 import universalelectricity.prefab.ItemElectric;
 
 public class ItemSuperconductorBattery extends ItemElectric
@@ -28,11 +23,11 @@ public class ItemSuperconductorBattery extends ItemElectric
         return true;
     }
 
-    @Override
-    public String getTextureFile()
-    {
-        return BasicComponents.ITEM_TEXTURE_FILE;
-    }
+ //   @Override
+ //   public String getTextureFile()
+ //   {
+ //       return BasicComponents.ITEM_TEXTURE_FILE;
+   // }
 
     @Override
     public double getVoltage()

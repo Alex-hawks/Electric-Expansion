@@ -1,11 +1,13 @@
 package electricexpansion.alex_hawks.machines;
-import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
 
 import java.util.Random;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.alex_hawks.misc.WireMillRecipes;
+
+import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
+import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -20,14 +22,10 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManagerTicker;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-
-import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
 public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IHMRepairable
 {
@@ -59,13 +57,13 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{return this.WATTS_PER_TICK;}
 		else return 0;
 	}
-@Override
+	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
 	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 3);}
 
 
 
-	
+
 	@Override
 	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
 	{
@@ -75,9 +73,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
 	}
 	@Override
-    public boolean canUpdate()
-    {return true;}
-    
+	public boolean canUpdate()
+	{return true;}
+
 	@Override
 	public void updateEntity() 
 	{
@@ -119,7 +117,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 
 		if(!this.worldObj.isRemote)
-			if(ElectricityManagerTicker.inGameTicks % 20 == 0 && this.playersUsing > 0)
+			if(this.ticks % 20 == 0 && this.playersUsing > 0)
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	}
 
@@ -168,10 +166,10 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				String result = (String)(WireMillRecipes.stackSizeToOne(WireMillRecipes.drawing().getDrawingResult(inputSlot)) + "");
 				String output2 = (String)(WireMillRecipes.stackSizeToOne(outputSlot) + "");
 				int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(),inputSlot.getMaxStackSize()) - WireMillRecipes.drawing().getDrawingResult(inputSlot).stackSize;
-				
+
 				if ((result.equals(output2)) && !(outputSlot.stackSize < maxSpaceForSuccess))
 				{canWork = false;}
-				else if ((result.equals(output2)) && (outputSlot.stackSize  < maxSpaceForSuccess))
+				else if ((result.equals(output2)) && (outputSlot.stackSize< maxSpaceForSuccess))
 				{canWork = true;}
 			}
 		}
@@ -249,7 +247,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	{
 		if(side == side.DOWN || side == side.UP)
 			return side.ordinal();
-
 		return 2;
 	}
 
@@ -260,11 +257,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public int getSizeInventory()
 	{return this.inventory.length;}
-	
+
 	@Override
 	public ItemStack getStackInSlot(int par1)
 	{return this.inventory[par1];}
-	
+
 	@Override
 	public ItemStack decrStackSize(int par1, int par2)
 	{
@@ -331,13 +328,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public double getVoltage()
 	{return 120;}
-	
+
 	@Override
 	public boolean canConnect(ForgeDirection side)
-	{
-		return canReceiveFromSide(side);
-	}
-	
+	{return canReceiveFromSide(side);}
+
 	/**
 	 * @return The amount of ticks required to draw this item
 	 */

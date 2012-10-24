@@ -40,4 +40,9 @@ public class TileEntitySwitchWire extends TileEntityCableHelper
 			connect = super.canConnect(side);
 		return connect;
 	}
+	@Override
+	public void onOverCharge() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -1,16 +1,14 @@
 package electricexpansion.alex_hawks.misc;
 
 import ic2.api.IElectricItem;
+import universalelectricity.implement.IItemElectric;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotFurnace;
-import universalelectricity.implement.IItemElectric;
-import universalelectricity.prefab.SlotElectricItem;
 
 public class ContainerWireMill extends Container
 {
@@ -19,7 +17,7 @@ public class ContainerWireMill extends Container
     public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
+        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
         this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); //To be drawn into wire
         this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); //Drawing result
         int var3;

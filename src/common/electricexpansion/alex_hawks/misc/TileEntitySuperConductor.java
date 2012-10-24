@@ -16,4 +16,11 @@ public class TileEntitySuperConductor extends TileEntityCableHelper
 	{
 		return 0;
 	}
+
+	@Override
+	public void onOverCharge() 
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
