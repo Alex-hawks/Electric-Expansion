@@ -1,8 +1,11 @@
 package electricexpansion.alex_hawks.machines;
+import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
+import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
+
 import java.util.Random;
 
-import hawksmachinery.interfaces.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.interfaces.HMRepairInterfaces.IHMSapper;
+import com.google.common.io.ByteArrayDataInput;
+
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -15,16 +18,13 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.Ticker;
-import universalelectricity.basiccomponents.BlockBasicMachine;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManagerTicker;
 import universalelectricity.implement.IItemElectric;
-import universalelectricity.network.IPacketReceiver;
-import universalelectricity.network.PacketManager;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.Vector3;
-
-import com.google.common.io.ByteArrayDataInput;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.misc.WireMillRecipes;
@@ -119,7 +119,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 
 		if(!this.worldObj.isRemote)
-			if(Ticker.inGameTicks % 20 == 0 && this.playersUsing > 0)
+			if(ElectricityManagerTicker.inGameTicks % 20 == 0 && this.playersUsing > 0)
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
 	}
 

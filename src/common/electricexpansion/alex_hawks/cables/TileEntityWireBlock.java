@@ -1,9 +1,6 @@
 package electricexpansion.alex_hawks.cables;
 
-import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
-import net.minecraft.src.Block;
-import net.minecraft.src.World;
 
 public class TileEntityWireBlock extends TileEntityCableHelper 
 {

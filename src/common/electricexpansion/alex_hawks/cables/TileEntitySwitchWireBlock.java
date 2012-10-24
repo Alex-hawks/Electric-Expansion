@@ -1,7 +1,5 @@
 package electricexpansion.alex_hawks.cables;
 
-import net.minecraft.src.Block;
-import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntitySwitchWireBlock extends TileEntityCableHelper 

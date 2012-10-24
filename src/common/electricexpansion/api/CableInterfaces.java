@@ -5,8 +5,6 @@ package electricexpansion.api;
 
 import java.util.ArrayList;
 
-import universalelectricity.BasicComponents;
-
 import net.minecraftforge.common.ForgeDirection;
 
 public class CableInterfaces
@@ -37,7 +35,7 @@ public class CableInterfaces
 	}
 	/**
 	 * 
-	 * @author Alex
+	 * @author Alex_hawks
 	 * Implement this if you want cables to obey selective connective rules, works on machines too.
 	 */
 	public interface ISelectiveConnector

@@ -9,8 +9,8 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotFurnace;
-import universalelectricity.basiccomponents.SlotElectricItem;
 import universalelectricity.implement.IItemElectric;
+import universalelectricity.prefab.SlotElectricItem;
 
 public class ContainerWireMill extends Container
 {

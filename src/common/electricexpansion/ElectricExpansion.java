@@ -35,12 +35,8 @@ import net.minecraft.src.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 
-import universalelectricity.BasicComponents;
-import universalelectricity.UEConfig;
-import universalelectricity.network.ConnectionHandler;
-import universalelectricity.network.PacketManager;
+import universalelectricity.core.UEConfig;
 import universalelectricity.prefab.ItemElectric;
-import universalelectricity.recipe.RecipeManager;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "required-after:UniversalElectricity@[0.9.2,);after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)

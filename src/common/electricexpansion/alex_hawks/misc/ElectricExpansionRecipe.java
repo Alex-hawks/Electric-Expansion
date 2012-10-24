@@ -1,7 +1,6 @@
 package electricexpansion.alex_hawks.misc;
 
 import net.minecraft.src.ItemStack;
-import universalelectricity.recipe.SmeltingRecipe;
 
 public class ElectricExpansionRecipe 
 {

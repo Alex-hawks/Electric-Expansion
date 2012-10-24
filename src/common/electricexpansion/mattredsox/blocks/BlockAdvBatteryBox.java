@@ -1,6 +1,6 @@
 package electricexpansion.mattredsox.blocks;
 
-import ic2.api.IEnergyConductor;
+//import ic2.api.IEnergyConductor;
 
 import java.util.List;
 import java.util.Random;
@@ -21,12 +21,10 @@ import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.BasicComponents;
-import universalelectricity.UniversalElectricity;
-import universalelectricity.basiccomponents.TileEntityCoalGenerator;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.Vector3;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.Vector3;
 
 public class BlockAdvBatteryBox extends BlockMachine
 {

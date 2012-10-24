@@ -1,10 +1,5 @@
 package electricexpansion.alex_hawks.cables;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Packet;
-import universalelectricity.basiccomponents.UELoader;
-import universalelectricity.network.PacketManager;
-import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntityInsulatedWire extends TileEntityCableHelper 

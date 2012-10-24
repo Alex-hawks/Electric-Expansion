@@ -6,10 +6,11 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
+import basiccomponents.BasicComponents;
+
 import electricexpansion.mattredsox.ContainerAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
-import universalelectricity.BasicComponents;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 

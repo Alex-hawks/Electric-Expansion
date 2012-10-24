@@ -6,10 +6,10 @@ import net.minecraftforge.common.ForgeDirection;
 import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 import universalelectricity.implement.IDisableable;
 import universalelectricity.implement.IElectricityProducer;
-import universalelectricity.network.IPacketReceiver;
-import universalelectricity.prefab.AdvancedTile;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.TileEntityAdvanced;
+import universalelectricity.prefab.network.IPacketReceiver;
 
 /**
  * 
@@ -17,7 +17,7 @@ import universalelectricity.prefab.BlockMachine;
  * Extend this to make it easier to make neat and tidy cable connections to your slab-sized, panel-sized, etc UE Machine.
  *
  */
-public abstract class TilePanelMachine extends AdvancedTile implements IPanelElectricMachine, IPacketReceiver, IDisableable
+public abstract class TilePanelMachine extends TileEntityAdvanced implements IPanelElectricMachine, IPacketReceiver, IDisableable
 {
 	public int disableTicks = 0;
 	private int ticksIdling = 0;
