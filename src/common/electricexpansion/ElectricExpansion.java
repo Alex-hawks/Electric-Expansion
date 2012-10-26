@@ -3,17 +3,25 @@ package electricexpansion;
 import java.io.File;
 import java.util.logging.Logger;
 
+
+
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.ore.OreGenBase;
+import universalelectricity.prefab.ore.OreGenReplaceStone;
+import universalelectricity.prefab.ore.OreGenerator;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -42,13 +50,17 @@ import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.mattredsox.ItemUpgrade;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockBCBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockBCOre;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockFuse;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.items.ItemBasic;
+import electricexpansion.mattredsox.items.ItemOre;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "required-after:BasicComponents;after:HawksMachinery", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
@@ -72,6 +84,8 @@ public class ElectricExpansion {
 	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 13;
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
+	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 15;
+	private static final int blockBasicOreID = BLOCK_ID_PREFIX + 16;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
 	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
@@ -79,6 +93,8 @@ public class ElectricExpansion {
 	private static final int toolHammerStoneID = ITEM_ID_PREFIX + 3;
 	private static final int toolHammerIronID = ITEM_ID_PREFIX + 4;
 	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +5;
+	private static final int itemTinIngotID = ITEM_ID_PREFIX +6;
+	private static final int itemCopperIngotID = ITEM_ID_PREFIX +7;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -97,16 +113,20 @@ public class ElectricExpansion {
 	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
+	public static int batBox;
+	public static int BasicOre;
 	//Items
 	public static int Upgrade;
 	public static int SuperBat;
 	public static int ConnectionAlloy;
+	public static int tinIngot;
+	public static int copperIngot;
 	//Other
 	public static double superConductorUpkeep;
 	
 	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
-	
+		
 	//Blocks
 	public static final Block blockRawWire = new BlockRawWire(rawWire, 0);
 	public static final Block blockInsulatedWire = new BlockInsulatedWire(insulatedWire, 0);
@@ -121,12 +141,16 @@ public class ElectricExpansion {
     public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
     public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
     public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
-    
+
+
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
     public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
     
+    public static final Item itemTinIngot = new ItemBasic("Tin Ingot", tinIngot, 1);
+    public static final Item itemCopperIngot = new ItemBasic("Copper Ingot", copperIngot, 1);
+
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 	
@@ -138,6 +162,7 @@ public class ElectricExpansion {
 	
 	public static boolean configLoad(Configuration i)
 	{
+
 		rawWire = UEConfig.getBlockConfigID(i, "Uninsulated_Wire", rawWireID);
 		insulatedWire = UEConfig.getBlockConfigID(i, "Insualted_Wire", insulatedWireID);
 		wireBlock = UEConfig.getBlockConfigID(i, "Wire_Block", wireBlockID);
@@ -152,10 +177,18 @@ public class ElectricExpansion {
 		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
-		
+    	
+		if(!Loader.isModLoaded("BasicCompenents")) {
+	batBox = UEConfig.getBlockConfigID(i, "Battery Box", blockBatBoxID);
+	tinIngot = UEConfig.getItemConfigID(i, "Tin_Ingot", itemTinIngotID);
+	copperIngot = UEConfig.getItemConfigID(i, "Copper_Ingot", itemCopperIngotID);
+	BasicOre = UEConfig.getBlockConfigID(i, "Tin_/_Copper_Ores", blockBasicOreID);
+	}
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
+
+
 		
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
@@ -215,13 +248,41 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
-		
+    
 		instance = this;
 
 		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks1.png");
 		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks.png");
 
-		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
+	NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
+	    
+	if(!Loader.isModLoaded("BasicComponents")) {
+		System.out.println("Basic Components NOT detected ... adding required blocks and items!");
+	   final Block blockBatBox = new BlockBCBatteryBox(batBox, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("batbox");
+	    GameRegistry.registerBlock(blockBatBox);
+	    LanguageRegistry.addName(blockBatBox, "Battery Box");
+	   
+	    final Item itemTinIngot = new ItemBasic("Tin Ingot", tinIngot, 1);
+	    final Item itemCopperIngot = new ItemBasic("Copper Ingot", copperIngot, 1);
+		final Block blockBasicOre = new BlockBCOre(BasicOre);
+
+    	
+	    GameRegistry.registerBlock(blockBasicOre, ItemOre.class);
+    	
+	    OreGenBase copperOreGeneration = new OreGenReplaceStone("Copper Ore", "oreCopper", new ItemStack(blockBasicOre, 1, 0), 0, 50, 45, 5).enable();
+        OreGenBase tinOreGeneration = new OreGenReplaceStone("Tin Ore", "oreTin", new ItemStack(blockBasicOre, 1, 1), 0, 50, 40, 4).enable();
+   
+    	LanguageRegistry.addName(new ItemStack(blockBasicOre, 1, 0), "Copper Ore");
+		LanguageRegistry.addName(new ItemStack(blockBasicOre, 1, 1), "Tin Ore");
+		
+		LanguageRegistry.addName(itemTinIngot, "Tin Ingot");
+		LanguageRegistry.addName(itemCopperIngot, "Copper Ingot");
+	
+		//Register ores so they auto disable when Basic Components is installed
+	    OreDictionary.registerOre("oreCopper", new ItemStack(blockBasicOre, 0));
+	    OreDictionary.registerOre("oreTin", new ItemStack(blockBasicOre, 0));
+	}
+	
 	}
 	
 	@Init
@@ -238,6 +299,8 @@ public class ElectricExpansion {
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		if(startLogLogged[3] != true){StartLog("postInit");}
+		
+
 		
 		//Set the Uninsulated Cable Name(s)
 		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Copper.name", "Uninsulated Copper Wire");
@@ -282,7 +345,7 @@ public class ElectricExpansion {
         LanguageRegistry.addName(blockWireMill, "Wire Mill");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
         LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
-        
+
         LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
 	}
 }

@@ -1,6 +1,7 @@
 package electricexpansion.alex_hawks.misc;
 
 import net.minecraft.src.Block;
+import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import electricexpansion.ElectricExpansion;
@@ -19,6 +20,9 @@ public class RecipeRegistrar
 */
 	public static void crafting()
 	{
+	//	FurnaceRecipes.smelting().addSmelting(ElectricExpansion.blockBasicOre.blockID, 1, new ItemStack(ElectricExpansion.itemTinIngot));
+
+		
 		/*//Uninsulated Wire Recipes
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 0), new Object [] {" @ ", " @ ", " @ ", '@', "ingotCopper"});
 		RecipeManager.addRecipe(new ItemStack(blockRawWire, 7, 1), new Object [] {" @ ", " @ ", " @ ", '@', "ingotTin"});
