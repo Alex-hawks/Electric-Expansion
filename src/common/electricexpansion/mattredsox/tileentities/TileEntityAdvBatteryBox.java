@@ -1,9 +1,5 @@
 package electricexpansion.mattredsox.tileentities;
 
-import ic2.api.ElectricItem;
-import ic2.api.EnergyNet;
-import ic2.api.IElectricItem;
-import ic2.api.IEnergySink;
 import ic2.api.Direction;
 import ic2.api.ElectricItem;
 import ic2.api.EnergyNet;
@@ -32,48 +28,6 @@ import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IItemElectric;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
-import basiccomponents.BCLoader;
-import basiccomponents.block.BlockBasicMachine;
-import buildcraft.api.core.Orientations;
-import buildcraft.api.power.IPowerProvider;
-import buildcraft.api.power.IPowerReceptor;
-import buildcraft.api.power.PowerFramework;
-import buildcraft.api.power.PowerProvider;
-
-import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.IPeripheral;
-
-import ic2.api.IEnergySource;
-import ic2.api.IEnergyStorage;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
-import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IItemElectric;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityConductor;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;

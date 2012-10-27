@@ -8,7 +8,6 @@ import universalelectricity.core.UELoader;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
 import universalelectricity.prefab.TileEntityConductor;
-import basiccomponents.BasicComponents;
 import electricexpansion.ElectricExpansion;
 
 /**
@@ -58,9 +57,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 	public String cableType(int ID, int meta)
 	{
 		String type = "Unknown";
-		if(ID == BasicComponents.blockCopperWire.blockID)
-			type = "Copper";
-		else switch(meta)
+	//	if(ID == BasicComponents.blockCopperWire.blockID)
+		//	type = "Copper";
+		 switch(meta)
 		{
 			case 0: type = "Copper";
 					break;
@@ -76,6 +75,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 					break;
 		}
 		return type;
+		
 	}
 	/*
 	@Override

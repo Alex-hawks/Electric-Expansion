@@ -31,8 +31,6 @@ import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import basiccomponents.BCLoader;
-import basiccomponents.block.BlockBasicMachine;
 import buildcraft.api.core.Orientations;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
@@ -45,6 +43,7 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
+import electricexpansion.mattredsox.blocks.BlockBCBatteryBox;
 
 public class TileEntityBCBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
 {
@@ -75,13 +74,13 @@ public class TileEntityBCBatteryBox extends TileEntityElectricityReceiver implem
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
 	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBCBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite();
 	}
 
 	@Override
 	public boolean canConnect(ForgeDirection side)
 	{
-		return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
+		return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBCBatteryBox.BATTERY_BOX_METADATA + 2);
 	}
 
 	@Override
@@ -199,7 +198,7 @@ public class TileEntityBCBatteryBox extends TileEntityElectricityReceiver implem
 			// Output electricity
 			if (this.joules > 0)
 			{
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBCBatteryBox.BATTERY_BOX_METADATA + 2));
 
 				// Output IC2 energy
 				if (Loader.isModLoaded("IC2"))
@@ -224,12 +223,12 @@ public class TileEntityBCBatteryBox extends TileEntityElectricityReceiver implem
 						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
 						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
-						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
+						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBCBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
 						this.setJoules(this.joules - transferJoules);
 					}
 				}
 
-				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBCBatteryBox.BATTERY_BOX_METADATA + 2));
 
 				if (connector != null)
 				{
@@ -260,7 +259,7 @@ public class TileEntityBCBatteryBox extends TileEntityElectricityReceiver implem
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(BCLoader.CHANNEL, this, this.joules, this.disabledTicks);
+		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);
 	}
 
 	@Override
@@ -546,7 +545,7 @@ public class TileEntityBCBatteryBox extends TileEntityElectricityReceiver implem
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
 	{
-		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
+		return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBCBatteryBox.BATTERY_BOX_METADATA + 2);
 	}
 
 	@Override
