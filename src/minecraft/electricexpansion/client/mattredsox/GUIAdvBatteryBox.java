@@ -53,7 +53,7 @@ public class GUIAdvBatteryBox extends GuiContainer
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
-        int var4 = this.mc.renderEngine.getTexture(BCLoader.FILE_PATH + "BatteryBox.png");
+        int var4 = this.mc.renderEngine.getTexture("/electricexpansion/textures/mattredsox/BatBox.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
         
