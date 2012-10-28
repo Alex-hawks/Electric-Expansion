@@ -10,8 +10,10 @@
 /reobf/*
 /runtime/*
 /temp/*
+/builds/*
 CHANGELOG
 LICENSE.txt
+
 
 /src/minecraft/*
 /src/common/*
