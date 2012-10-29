@@ -1,13 +1,19 @@
 package electricexpansion;
 
 import java.io.File;
+import java.util.Random;
 import java.util.logging.Logger;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
@@ -48,6 +54,7 @@ import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockFuse;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.items.ItemLead;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "", useMetadata = true)
@@ -82,6 +89,7 @@ public class ElectricExpansion {
 	private static final int toolHammerStoneID = ITEM_ID_PREFIX + 3;
 	private static final int toolHammerIronID = ITEM_ID_PREFIX + 4;
 	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +5;
+	private static final int itemLeadID = ITEM_ID_PREFIX +6;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -100,10 +108,12 @@ public class ElectricExpansion {
 	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
-	public static int batBox;	//Items
+	public static int batBox;	
+	//Items
 	public static int Upgrade;
 	public static int SuperBat;
 	public static int ConnectionAlloy;
+	public static int Lead;
 	//Other
 	public static double superConductorUpkeep;
 	
@@ -130,8 +140,7 @@ public class ElectricExpansion {
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
     public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
-    
-
+    public static final Item itemLead = new ItemLead(Lead, 0).setCreativeTab(CreativeTabs.tabDecorations).setItemName("Lead");
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 	
@@ -165,6 +174,7 @@ public class ElectricExpansion {
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
+		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
 
 
 		
@@ -303,7 +313,25 @@ public class ElectricExpansion {
         LanguageRegistry.addName(blockWireMill, "Wire Mill");
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
         LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
+        LanguageRegistry.addName(itemLead, "Lead Ingot");
 
         LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
-	}
+      
+   		MinecraftForge.EVENT_BUS.register(this);
+        }
+    @ForgeSubscribe
+    public void onEntityDeath(LivingDeathEvent event)
+    {
+    	if (event.entity != null)
+    	{
+    	if(event.entity instanceof EntitySkeleton && ((EntitySkeleton)event.entity).func_82202_m() == 1)
+    	{
+    	{
+    		Random dropNumber = new Random();
+    		 int numberOfDrops = dropNumber.nextInt(4);    	
+    		event.entity.dropItem(itemLead.shiftedIndex, numberOfDrops);
+    	}
+    	}
+    }
+    }
 }
