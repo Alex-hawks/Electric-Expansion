@@ -54,21 +54,19 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	public double wattRequest()
 	{
 		if(!this.isDisabled() && this.canDraw())
-		{return this.WATTS_PER_TICK;}
+			return this.WATTS_PER_TICK;
 		else return 0;
 	}
+
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
 	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 3);}
-
-
-
 
 	@Override
 	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
 	{
 		if (voltage > this.getVoltage())
-		{this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);}
+			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
 
 		this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
 	}
@@ -217,6 +215,8 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (var5 >= 0 && var5 < this.inventory.length)
 				this.inventory[var5] = ItemStack.loadItemStackFromNBT(var4);
 		}
+		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
+		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
 	}
 	/**
 	 * Writes a tile entity to NBT.
@@ -227,6 +227,8 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("drawingTicks", this.drawingTicks);
 		NBTTagList var2 = new NBTTagList();
+		if (this.sapper != null)
+			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)
 		{
@@ -238,8 +240,8 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				var2.appendTag(var4);
 			}
 		}
-
 		par1NBTTagCompound.setTag("Items", var2);
+		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
 	}
 
 	@Override
@@ -247,7 +249,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	{
 		if(side == side.DOWN || side == side.UP)
 			return side.ordinal();
-		return 2;
+		else return 2;
 	}
 
 	@Override
@@ -285,8 +287,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				return var3;
 			}
 		}
-		else
-		{return null;}
+		else return null;
 	}
 
 	@Override
@@ -298,8 +299,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			this.inventory[par1] = null;
 			return var2;
 		}
-		else
-		{return null;}
+		else return null;
 	}
 
 	@Override
@@ -308,9 +308,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		this.inventory[par1] = par2ItemStack;
 
 		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-		{
 			par2ItemStack.stackSize = this.getInventoryStackLimit();
-		}
 	}
 
 	@Override
@@ -338,9 +336,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	 */
 	public int getDrawingTime()
 	{
+		int returnValue = 0;
 		if(this.inventory[1] != null)
-			return (int) (WireMillRecipes.drawing().getDrawingWatts(this.inventory[1]) / this.WATTS_PER_TICK);
-		else return 0;
+			if(WireMillRecipes.drawing().getDrawingResult(this.inventory[1]) != null)
+				returnValue = (int) (WireMillRecipes.drawing().getDrawingWatts(this.inventory[1]) / this.WATTS_PER_TICK);
+		return returnValue;
 	}
 
 	public void randomlyDamageSelf()
@@ -349,6 +349,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			--this.machineHP;
 	}
 
+	@Override
 	public boolean attemptToRepair(int repairAmount)
 	{
 		if (this.machineHP != this.getMaxHP() && !this.isBeingSapped())
@@ -356,9 +357,10 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			this.machineHP += repairAmount;
 			return true;
 		}
-		return false;
+		else return false;
 	}
 
+	@Override
 	public boolean setSapper(ItemStack sapper)
 	{
 		if (this.sapper == null)
@@ -366,11 +368,13 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			this.sapper = sapper;
 			return true;
 		}
-		return false;
+		else return false;
 	}
 
+	@Override
 	public boolean attemptToUnSap(EntityPlayer player)
 	{
+		boolean returnValue = false;
 		if (this.isBeingSapped())
 		{
 			int randomDigit = new Random().nextInt(((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player));
@@ -378,12 +382,13 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			{
 				((IHMSapper)this.sapper.getItem()).onRemoved(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 				this.sapper = null;
-				return true;
+				returnValue = true;
 			}
 		}
-		return false;
+		return returnValue;
 	}
-
+	
+	@Override
 	public boolean isBeingSapped()
 	{return this.sapper != null;}
 
