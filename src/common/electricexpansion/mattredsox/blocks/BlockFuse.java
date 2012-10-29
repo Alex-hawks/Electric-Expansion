@@ -28,7 +28,7 @@ public class BlockFuse extends universalelectricity.prefab.BlockMachine
     @Override
     public String getTextureFile()
     {
-        return EECommonProxy.MattBLOCK1_TEXTURE_FILE;
+        return EECommonProxy.MattBLOCK_TEXTURE_FILE;
     }
 
     @Override

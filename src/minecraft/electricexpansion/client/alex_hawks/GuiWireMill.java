@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import basiccomponents.BasicComponents;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
+import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.alex_hawks.misc.ContainerWireMill;
 import net.minecraft.src.GuiContainer;
@@ -60,8 +61,7 @@ public class GuiWireMill extends GuiContainer
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
-        int var4 = this.mc.renderEngine.getTexture(BasicComponents.FILE_PATH + "ElectricFurnace.png");
-        // TODO remove hardcoded dependency on Basic Components...
+        int var4 = this.mc.renderEngine.getTexture(EECommonProxy.ATEXTURES + "/WireMill.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
         containerWidth = (this.width - this.xSize) / 2;

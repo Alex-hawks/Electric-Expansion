@@ -21,7 +21,6 @@ public class EECommonProxy implements IGuiHandler
 	//Mattredsox's Textures
 	public static final String MattFILE_PATH = "/electricexpansion/textures/mattredsox/";
 	public static final String MattBLOCK_TEXTURE_FILE = MattFILE_PATH + "blocks.png";
-	public static final String MattBLOCK1_TEXTURE_FILE = MattFILE_PATH + "blocks1.png";
 	public static final String MattItem_TEXTURE_FILE = MattFILE_PATH + "items.png";
         
 	//Alex_hawks' Textures

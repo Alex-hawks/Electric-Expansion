@@ -66,9 +66,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	public String cableType(int ID, int meta)
 	{
 		String type = "Unknown";
-		if(ID == BasicComponents.blockCopperWire.blockID)
-			type = "Copper";
-		else switch(meta)
+	//	if(ID == BasicComponents.blockCopperWire.blockID)
+		//	type = "Copper";
+		 switch(meta)
 		{
 			case 0: type = "Copper";
 					break;
@@ -84,6 +84,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 					break;
 		}
 		return type;
+		
 	}
 	
 	@Override

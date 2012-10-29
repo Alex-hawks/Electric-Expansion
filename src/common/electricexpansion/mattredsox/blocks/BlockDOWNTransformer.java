@@ -29,7 +29,7 @@ public class BlockDOWNTransformer extends universalelectricity.prefab.BlockMachi
     @Override
     public String getTextureFile()
     {
-        return EECommonProxy.MattBLOCK1_TEXTURE_FILE;
+        return EECommonProxy.MattBLOCK_TEXTURE_FILE;
     }
 
     @Override
@@ -37,22 +37,22 @@ public class BlockDOWNTransformer extends universalelectricity.prefab.BlockMachi
     {
         if (side == 0 || side == 1)
         {
-            return this.blockIndexInTexture + 1;
+            return this.blockIndexInTexture + 17;
         }
         else
         {
             //If it is the front side
             if (side == metadata)
             {
-                return this.blockIndexInTexture + 3;
+                return this.blockIndexInTexture + 19;
             }
             //If it is the back side
             else if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal())
             {
-                return this.blockIndexInTexture + 2;
+                return this.blockIndexInTexture + 18;
             }
 
-            return this.blockIndexInTexture;
+            return this.blockIndexInTexture + 16;
         }
     }
 
