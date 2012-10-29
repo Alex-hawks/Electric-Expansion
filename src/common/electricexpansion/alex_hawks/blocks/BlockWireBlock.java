@@ -23,98 +23,84 @@ import electricexpansion.client.alex_hawks.RenderRawWire;
 public class BlockWireBlock extends BlockConductor
 {
 	public BlockWireBlock(int id, int meta)
-    {
-        super(id, Material.rock);
-        this.setBlockName("HiddenWire");
-        this.setStepSound(soundStoneFootstep);
-        this.setResistance(0.2F);
-        this.setRequiresSelfNotify();
-        this.setHardness(1.5F);
-        this.setResistance(10.0F);
-        this.setCreativeTab(CreativeTabs.tabRedstone);
-    }
-    
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return true;
-    }
-    
-    @Override
-    public int damageDropped(int i)
-    {
-    	return i;
-    }
-    
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return true;
-    }
-    
-    @Override
-    public int getRenderType()
-    {
-        return 0;
-    }
-    
-    public TileEntity createNewTileEntity(World var1)
-    {
-        return new TileEntityWireBlock();
-    }
-    
-    public int getBlockTextureFromSideAndMetadata(int side, int meta)
-    {
-    	int texture = 255;
-    	if(side == 1)
-    	{
-        	if(meta == 0)
-        		texture = 16;
-        	if(meta == 1)
-        		texture = 17;    	
-        	if(meta == 2)
-        		texture = 18;
-        	if(meta == 3)
-        		texture = 19;
-    	}
-    	else if(side == 0)
-    	{
-        	if(meta == 0)
-        		texture = 32;
-        	if(meta == 1)
-        		texture = 33;    	
-        	if(meta == 2)
-        		texture = 34;
-        	if(meta == 3)
-        		texture = 35;
-    	}
-    	else
-    	{
-    		if(meta == 0)
-    			texture = 0;
-    		if(meta == 1)
-    			texture = 1;    	
-    		if(meta == 2)
-    			texture = 2;
-    		if(meta == 3)
-    			texture = 3;
-    	}
-    	if(texture != 255)
-    		texture = texture + 64;
-    	return texture;
-    }
-    
-    public String getTextureFile()
-    {
-        return EECommonProxy.ABLOCK;
-    }
-   
-    @SideOnly(Side.CLIENT)
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < 4; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
-    }
+	{
+		super(id, Material.rock);
+		this.setBlockName("HiddenWire");
+		this.setStepSound(soundStoneFootstep);
+		this.setResistance(0.2F);
+		this.setRequiresSelfNotify();
+		this.setHardness(1.5F);
+		this.setResistance(10.0F);
+		this.setCreativeTab(CreativeTabs.tabRedstone);
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{return true;}
+
+	@Override
+	public int damageDropped(int i)
+	{return i;}
+
+	@Override
+	public boolean renderAsNormalBlock()
+	{return true;}
+
+	@Override
+	public int getRenderType()
+	{return 0;}
+
+	public TileEntity createNewTileEntity(World var1)
+	{return new TileEntityWireBlock();}
+
+	public int getBlockTextureFromSideAndMetadata(int side, int meta)
+	{
+		int texture = 255;
+		if(side == 1)
+		{
+			if(meta == 0)
+				texture = 16;
+			if(meta == 1)
+				texture = 17;	
+			if(meta == 2)
+				texture = 18;
+			if(meta == 3)
+				texture = 19;
+		}
+		else if(side == 0)
+		{
+			if(meta == 0)
+				texture = 32;
+			if(meta == 1)
+				texture = 33;	
+			if(meta == 2)
+				texture = 34;
+			if(meta == 3)
+				texture = 35;
+		}
+		else
+		{
+			if(meta == 0)
+				texture = 0;
+			if(meta == 1)
+				texture = 1;	
+			if(meta == 2)
+				texture = 2;
+			if(meta == 3)
+				texture = 3;
+		}
+		if(texture != 255)
+			texture = texture + 64;
+		return texture;
+	}
+
+	public String getTextureFile()
+	{return EECommonProxy.ABLOCK;}
+
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		for (int var4 = 0; var4 < 4; ++var4)
+			par3List.add(new ItemStack(par1, 1, var4));
+	}
 }

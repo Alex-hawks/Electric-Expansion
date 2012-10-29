@@ -20,7 +20,10 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.TileEntityElectricityReceiver;
@@ -31,6 +34,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
 public class TileEntityWPTDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral
 {
@@ -41,6 +45,29 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 	private static final int maxHP = 20;
 
 	@Override
+	public boolean canUpdate()
+	{return true;}
+
+	@Override
+	public void updateEntity()
+	{
+		TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.blockMetadata));
+
+		if (connector != null)
+		{
+			//Output UE electricity
+			if (connector instanceof IConductor)
+			{
+				double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+				double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.getJoules(), this.getVoltage())), 80), 0);
+				if (!this.worldObj.isRemote)
+					ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
+				this.addJoules(0 - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+			} 
+		}
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
@@ -48,7 +75,7 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
 		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
@@ -59,7 +86,7 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
 
 	}
-	
+
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) 
 	{
@@ -74,7 +101,7 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 			this.addJoules(ElectricInfo.getJoules(amps, voltage, 1));
 		}
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
@@ -127,13 +154,13 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 		{
 			switch (method)
 			{
-				case getWattage:		return new Object[]{ ElectricInfo.getWatts(getJoules((Object)null)) };
-				case isFull:			return new Object[]{ isFull() };
-				case getJoules:			return new Object[]{ getJoules() };
-				case getFrequency:		return new Object[]{ getFrequency() };
-				case setFrequency:		return new Object[]{ setFrequency((short)arg0, true) };
-				case getHP:				return new Object[]{ getHP() };
-				default:				throw new IllegalArgumentException("Function unimplemented");
+			case getWattage:		return new Object[]{ ElectricInfo.getWatts(getJoules((Object)null)) };
+			case isFull:			return new Object[]{ isFull() };
+			case getJoules:			return new Object[]{ getJoules() };
+			case getFrequency:		return new Object[]{ getFrequency() };
+			case setFrequency:		return new Object[]{ setFrequency((short)arg0, true) };
+			case getHP:				return new Object[]{ getHP() };
+			default:				throw new IllegalArgumentException("Function unimplemented");
 			}
 		}
 		else return new Object[] { "Remove the sapper first" };
@@ -177,12 +204,12 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
-        {
+		{
 			this.frequency = dataStream.readShort();
-	        this.disabledTicks = dataStream.readInt();
-        }
-        catch(Exception e)
-        {e.printStackTrace(); }
+			this.disabledTicks = dataStream.readInt();
+		}
+		catch(Exception e)
+		{e.printStackTrace(); }
 	}
 
 	@Override
