@@ -9,6 +9,7 @@ import com.google.common.io.ByteArrayDataInput;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.wpt.oneWayNetworks;
 
 import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
 import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
@@ -45,8 +46,11 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	public short getFrequency() 
 	{return frequency;}
 	
-	public void setFrequency(short frequency) 
-	{this.frequency = frequency;}
+	public void setFrequency(short newFrequency) 
+	{
+		oneWayNetworks.setSenderFreq(this.frequency, newFrequency, this);
+		this.frequency = newFrequency;
+	}
 
 	public void setFrequency(int frequency) 
 	{this.setFrequency((short)frequency);}

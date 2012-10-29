@@ -16,8 +16,10 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 
@@ -27,7 +29,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 
-public class TileEntityWPTReciever extends  implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
+public class TileEntityWPTReciever extends TileEntityDisableable implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
 {
 	private double joules = 0;
 	private int playersUsing = 0;
@@ -87,33 +89,12 @@ public class TileEntityWPTReciever extends  implements IHMRepairable, IPacketRec
 	public Packet getDescriptionPacket()
 	{
 		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP, getJoulesForTexture());
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP, getJoulesForTexture());
+			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP);
+		else return PacketManager.getPacket("ElecEx", this, this.machineHP);
 	}
-	
-	private Object getJoulesForTexture() 
-	{return this.joules / this.maxJoules * 10;}
 
 	public boolean isFull()
 	{return this.joules == this.maxJoules;}
-	
-	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) 
-	{
-		if (voltage > this.getVoltage())
-			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
-
-		if(!this.isDisabled())
-			this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
-	}
-
-	@Override
-	public double wattRequest() 
-	{
-		if (!this.isDisabled())
-			return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules);
-		else return 0;
-	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -135,14 +116,6 @@ public class TileEntityWPTReciever extends  implements IHMRepairable, IPacketRec
 		if (this.sapper != null)
 			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
 
-	}
-
-	@Override
-	public boolean canReceiveFromSide(ForgeDirection side) 
-	{
-		if(side.ordinal() == 0 || side.ordinal() == 1)
-			return false;
-		else return side.ordinal() == this.blockMetadata;
 	}
 
 	@Override
@@ -244,12 +217,11 @@ public class TileEntityWPTReciever extends  implements IHMRepairable, IPacketRec
 
 	@Override
 	public String[] getMethodNames() 
-	{return new String[] { "getVoltage", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
+	{return new String[] { "", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException 
 	{
-		final int getVoltage = 0;
 		final int getWattage = 1;
 		final int isFull = 2;
 		final int getJoules = 3;
@@ -269,7 +241,6 @@ public class TileEntityWPTReciever extends  implements IHMRepairable, IPacketRec
 		{
 			switch (method)
 			{
-				case getVoltage:		return new Object[]{ getVoltage() };
 				case getWattage:		return new Object[]{ ElectricInfo.getWatts(joules) };
 				case isFull:			return new Object[]{ isFull() };
 				case getJoules:			return new Object[]{ getJoules() };
@@ -291,4 +262,5 @@ public class TileEntityWPTReciever extends  implements IHMRepairable, IPacketRec
 
 	@Override
 	public void detach(IComputerAccess computer) {}
+
 }

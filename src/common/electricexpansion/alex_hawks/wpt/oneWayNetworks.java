@@ -5,7 +5,7 @@ import java.util.List;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.machines.TileEntityWPTSender;
 
-public class networks 
+public class oneWayNetworks 
 {
 	private List[] senders = new List[32768];
 	private List[] recievers = new List[32768];
