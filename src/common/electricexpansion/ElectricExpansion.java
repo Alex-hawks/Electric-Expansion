@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
+import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
@@ -56,6 +57,7 @@ import electricexpansion.mattredsox.blocks.BlockFuse;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemLead;
+import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "", useMetadata = true)
@@ -108,6 +110,8 @@ public class ElectricExpansion {
 	public static int wireMill;
 	public static int Fuse;
 	public static int batBox;	
+	public static int IC2up;
+	public static int BCup;
 	//Items
 	public static int Upgrade;
 	public static int SuperBat;
@@ -137,11 +141,13 @@ public class ElectricExpansion {
 
 
 	//Items
+	public static final Item itemParts = new ItemParts(Parts, 0);
+
+	//Items
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
 	public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
-	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
-	public static final Item itemParts = new ItemParts(Parts, 0);
-	public static final Item itemLead = new ItemLead(Lead, 0).setCreativeTab(CreativeTabs.tabDecorations).setItemName("Lead");
+	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(CreativeTabs.tabMisc);
+	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Lead");
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
@@ -178,7 +184,11 @@ public class ElectricExpansion {
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
-		
+		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
+		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
+		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
+		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
+
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
 
@@ -237,7 +247,6 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
-
 		instance = this;
 
 		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks1.png");
@@ -245,13 +254,21 @@ public class ElectricExpansion {
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
-		if(!Loader.isModLoaded("BasicComponents")) {
+		if(!Loader.isModLoaded("BasicComponents")) 
+		{
 			System.out.println("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
 			final Block blockBatBox = new BlockBCBatteryBox(batBox, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("batbox");
 			GameRegistry.registerBlock(blockBatBox);
 			LanguageRegistry.addName(blockBatBox, "Battery Box");	
 		}
 
+		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
+
+		if(!Loader.isModLoaded("BasicComponents")) 
+		{
+			//			RecipeHelper.removeRecipe(recipe)
+			System.out.println("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
+		}
 	}
 
 	@Init
@@ -311,12 +328,17 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
 		LanguageRegistry.addName(blockWireMill, "Wire Mill");
 		LanguageRegistry.addName(blockFuse, "120 Volt Relay");
-		LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
 		LanguageRegistry.addName(itemLead, "Lead Ingot");
 
 		LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
 		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
-		
+
+		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage1.name", "Tier 1 Storage Upgrade");
+		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage2.name", "Tier 2 Storage Upgrade");
+		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage3.name", "Tier 3 Storage Upgrade");
+		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.BC.name", "BC Compatibility Upgrade");
+		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.IC2.name", "IC2 Compatibility Upgrade");
+
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
