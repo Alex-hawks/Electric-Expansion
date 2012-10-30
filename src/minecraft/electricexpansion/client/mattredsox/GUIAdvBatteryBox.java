@@ -2,7 +2,6 @@ package electricexpansion.client.mattredsox;
 
 import org.lwjgl.opengl.GL11;
 
-import basiccomponents.BCLoader;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import net.minecraft.src.GuiContainer;

@@ -18,7 +18,7 @@ public class WireMillRecipes
 
 	private static HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
 	private static HashMap<Integer, ItemStack> recipeToOutput = new HashMap<Integer, ItemStack>();
-	private static HashMap<Integer, Double> recipeToWatts = new HashMap<Integer, Double>();
+	private static HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
 	private static HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
 	//Yes, I know that I can use an Integer[] for the last one, But I won't!!! - Alex_hawks
 	
@@ -32,27 +32,27 @@ public class WireMillRecipes
 	 * Adds a drawing recipe.
 	 * @param input As an ItemStack
 	 * @param output As an ItemStack
-	 * @param watts The Watts required for the recipe, Time to process is directly proportional.
+	 * @param watts The ticks required for the recipe, seconds * 20.
 	 */
-	public static void addDrawing(ItemStack input, ItemStack output, double watts)
+	public static void addDrawing(ItemStack input, ItemStack output, int ticks)
 	{
 		try
 		{
-			if(input != null && output != null && watts > 0)
+			if(input != null && output != null && ticks > 0)
 			{
 				boolean j = true;
 				int nextRecipeID = recipeToOutput.size();
 				inputToRecipe.put(stackSizeToOne(input) + "", nextRecipeID);
 				recipeToOutput.put(nextRecipeID, output);
-				recipeToWatts.put(nextRecipeID, watts);
+				recipeToTicks.put(nextRecipeID, ticks);
 				recipeToInputQTY.put(nextRecipeID, input.stackSize);
 			}
 			else if (input == null) 
 				throw new IOException("Error: Input cannot be null.");
 			else if (output == null)
 				throw new IOException("Error: Output cannot be null.");
-			else if (watts <= 0)
-				throw new IOException("Error: Watts must be greater than 0.");
+			else if (ticks <= 0)
+				throw new IOException("Error: Ticks must be greater than 0.");
 		}
 		catch(IOException e)
 		{e.printStackTrace();}
@@ -64,10 +64,10 @@ public class WireMillRecipes
 	 * @param output
 	 * @param watts
 	 */
-	public static void addDrawing(String input, ItemStack output, double watts)
+	public static void addDrawing(String input, ItemStack output, int ticks)
 	{
 		for ( ItemStack input2 : OreDictionary.getOres(input))
-			addDrawing(input2, output, watts);
+			addDrawing(input2, output, ticks);
 	}
 
 	/**
@@ -104,22 +104,22 @@ public class WireMillRecipes
 	}
 	
 	/**
-	 * Used to get the required watts from a source ItemStack
+	 * Used to get the required ticks for a source ItemStack
 	 * @param item The Source ItemStack
-	 * @return The result ItemStack
+	 * @return The processing time, in ticks
 	 */
-	public double getDrawingWatts(ItemStack input) 
+	public Integer getDrawingTicks(ItemStack input) 
 	{
 			try
 			{
 				int recipeID = 0;
 				recipeID = inputToRecipe.get(stackSizeToOne(input) + "");
 				if(input.stackSize >= recipeToInputQTY.get(recipeID))
-					return (Double)this.recipeToWatts.get(recipeID);
-				else return (Double) null;
+					return (Integer)this.recipeToTicks.get(recipeID);
+				else return (Integer) null;
 			}
 			catch(NullPointerException e) 
-			{return (Double)null;}
+			{return (Integer)null;}
 	}
 
 	/**

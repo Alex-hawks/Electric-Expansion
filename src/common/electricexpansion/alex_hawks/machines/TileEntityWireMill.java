@@ -339,11 +339,14 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	 */
 	public int getDrawingTime()
 	{
-		int returnValue = 0;
 		if(this.inventory[1] != null)
+		{
 			if(WireMillRecipes.drawing().getDrawingResult(this.inventory[1]) != null)
-				returnValue = (int) (WireMillRecipes.drawing().getDrawingWatts(this.inventory[1]) / this.WATTS_PER_TICK);
-		return returnValue;
+			{
+				return (int) WireMillRecipes.drawing().getDrawingTicks(this.inventory[1]);
+			}
+		}
+		return -1;
 	}
 
 	public void randomlyDamageSelf()

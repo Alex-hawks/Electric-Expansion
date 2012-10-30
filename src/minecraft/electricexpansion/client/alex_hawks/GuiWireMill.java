@@ -2,7 +2,6 @@ package electricexpansion.client.alex_hawks;
 
 import org.lwjgl.opengl.GL11;
 
-import basiccomponents.BasicComponents;
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import electricexpansion.EECommonProxy;
