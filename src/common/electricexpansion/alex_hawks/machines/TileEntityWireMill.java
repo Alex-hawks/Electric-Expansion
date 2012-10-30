@@ -29,14 +29,9 @@ import universalelectricity.prefab.network.PacketManager;
 
 public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IHMRepairable
 {
-	//The amount of watts required by the Wire Mill per tick
 	public final double WATTS_PER_TICK = 500;
-
-	//How many ticks has this item been drawing for?
 	public int drawingTicks = 0;
-
 	public double wattsReceived = 0;
-
 	/**
 	 * The ItemStacks that hold the items currently being used in the wire mill;
 	 * 0 = battery;
@@ -44,9 +39,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	 * 2 = output;
 	 */
 	private ItemStack[] inventory = new ItemStack[3];
+	private ItemStack[] upgrades = new ItemStack[2];
 
 	private int playersUsing = 0;
-
 	private ItemStack sapper;
 	private int machineHP;
 
@@ -176,7 +171,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	}
 
 	/**
-	 * Turn one item from the wire mill source stack into the appropriate drawn item in the wire mill result stack
+	 * Turn item(s) from the wire mill source stack into the appropriate drawn item(s) in the wire mill result stack
 	 */
 	public void drawItem()
 	{
@@ -215,8 +210,12 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (var5 >= 0 && var5 < this.inventory.length)
 				this.inventory[var5] = ItemStack.loadItemStackFromNBT(var4);
 		}
+		
+		
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
 		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
+		for(int i = 0; i < this.upgrades.length; i++)
+			this.upgrades[i] = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("upgrade" + i));
 	}
 	/**
 	 * Writes a tile entity to NBT.
@@ -242,6 +241,10 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 		par1NBTTagCompound.setTag("Items", var2);
 		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
+		
+		for(int i = 0; i < this.upgrades.length; i++)
+			if (this.upgrades[i] != null)
+				par1NBTTagCompound.setCompoundTag("upgrade" + i, this.upgrades[i].writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
