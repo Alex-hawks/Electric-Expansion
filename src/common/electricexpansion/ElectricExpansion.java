@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -17,6 +16,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
+import universalelectricity.prefab.RecipeHelper;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
@@ -49,12 +49,11 @@ import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.mattredsox.ItemUpgrade;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
-import electricexpansion.mattredsox.blocks.BlockBCBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockFuse;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
-import electricexpansion.mattredsox.items.ItemLead;
+import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "", useMetadata = true)
@@ -81,7 +80,6 @@ public class ElectricExpansion {
 	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 13;
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
-	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 15;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
 	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
@@ -90,6 +88,8 @@ public class ElectricExpansion {
 	private static final int toolHammerIronID = ITEM_ID_PREFIX + 4;
 	private static final int toolHammerDiamondID = ITEM_ID_PREFIX +5;
 	private static final int itemLeadID = ITEM_ID_PREFIX +6;
+	private static final int itemIC2upID = ITEM_ID_PREFIX +7;
+	private static final int itemBCupID = ITEM_ID_PREFIX +8;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -108,7 +108,8 @@ public class ElectricExpansion {
 	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
-	public static int batBox;	
+	public static int IC2up;
+	public static int BCup;
 	//Items
 	public static int Upgrade;
 	public static int SuperBat;
@@ -139,8 +140,11 @@ public class ElectricExpansion {
 	//Items
     public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
     public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
-    public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0);
-    public static final Item itemLead = new ItemLead(Lead, 0).setCreativeTab(CreativeTabs.tabDecorations).setItemName("Lead");
+    public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(CreativeTabs.tabMisc);
+    public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Lead");
+    public static final Item itemIC2up = new ItemBase(IC2up, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("IC2 Upgrade");
+    public static final Item itemBCup = new ItemBase(BCup, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("BC Upgrade");
+    
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 	
@@ -167,14 +171,12 @@ public class ElectricExpansion {
 		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
-    	
-		if(!Loader.isModLoaded("BasicComponents")) {
-	batBox = UEConfig.getBlockConfigID(i, "Battery Box", blockBatBoxID);
-	}
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
+		IC2up = UEConfig.getItemConfigID(i, "IC2_Upgrade", itemIC2upID);
+		BCup = UEConfig.getItemConfigID(i, "Buildcraft_Upgrade", itemBCupID);
 
 
 		
@@ -245,10 +247,8 @@ public class ElectricExpansion {
 	NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 	    
 	if(!Loader.isModLoaded("BasicComponents")) {
+	//	RecipeHelper.removeRecipe(recipe)
 		System.out.println("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
-	   final Block blockBatBox = new BlockBCBatteryBox(batBox, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("batbox");
-	    GameRegistry.registerBlock(blockBatBox);
-	    LanguageRegistry.addName(blockBatBox, "Battery Box");	
 	}
 	
 	}
@@ -314,8 +314,11 @@ public class ElectricExpansion {
         LanguageRegistry.addName(blockFuse, "120 Volt Relay");
         LanguageRegistry.addName(itemUpgrade, "Superconducting Upgrade");
         LanguageRegistry.addName(itemLead, "Lead Ingot");
-
+        LanguageRegistry.addName(itemBCup, "Buildcraft Power Upgrade");
+        LanguageRegistry.addName(itemIC2up, "IC2 Power Upgrade");
         LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
+        
+        //TODO METADATA ON UPGRADES!!!
       
    		MinecraftForge.EVENT_BUS.register(this);
         }

@@ -1,1 +1,2 @@
 Latest ElectricExpansion_v0.2.3.18.zip
+c ElectricExpansion_v0.2.3.19.jar
