@@ -1,7 +1,6 @@
 package electricexpansion.alex_hawks.helpers;
 
-import basiccomponents.BasicComponents;
-import basiccomponents.tile.TileEntityCopperWire;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.src.Block;
 import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
@@ -59,8 +58,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 			else if(((ISelectiveConnector)TE).cableType(ID, meta) == "Connector")
 				returnValue = true;
 		}
-		else if(TE instanceof TileEntityCopperWire && this.cableType(thisID, thismeta) == "Copper")
-			returnValue = true;
+		else if(Loader.isModLoaded("BasicComponents"))
+			if(TE instanceof basiccomponents.tile.TileEntityCopperWire && this.cableType(thisID, thismeta) == "Copper")
+				returnValue = true;
 		return returnValue;
 	}
 	public String cableType(int ID, int meta)
