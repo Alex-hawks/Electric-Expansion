@@ -1,5 +1,12 @@
 package electricexpansion.mattredsox.tileentities;
 
+import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.EnergyNet;
+import ic2.api.IElectricItem;
+import ic2.api.IEnergySink;
+import ic2.api.IEnergySource;
+import ic2.api.IEnergyStorage;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -13,13 +20,6 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
-import ic2.api.Direction;
-import ic2.api.ElectricItem;
-import ic2.api.EnergyNet;
-import ic2.api.IElectricItem;
-import ic2.api.IEnergySink;
-import ic2.api.IEnergySource;
-import ic2.api.IEnergyStorage;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
@@ -40,7 +40,8 @@ import buildcraft.api.power.PowerProvider;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
-
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IPeripheral;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
 public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral

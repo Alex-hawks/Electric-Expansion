@@ -13,6 +13,8 @@
 /builds/*
 CHANGELOG
 LICENSE.txt
+info.txt
+buildnumber.txt
 
 
 /src/minecraft/*

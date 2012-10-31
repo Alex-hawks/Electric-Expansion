@@ -48,7 +48,7 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	
 	public void setFrequency(short newFrequency) 
 	{
-		oneWayNetworks.setSenderFreq(this.frequency, newFrequency, this);
+		oneWayNetworks.instance.setSenderFreq(this.frequency, newFrequency, this);
 		this.frequency = newFrequency;
 	}
 

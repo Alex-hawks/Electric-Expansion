@@ -42,6 +42,7 @@ public class GUIAdvBatteryBox extends GuiContainer
         this.fontRenderer.drawString(displayMaxWattHours, 83, 40, 4210752);
         this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString("Upgrade Status "+ this.tileEntity.upgradeType, 180, 60, 4210752);
     }
 
     /**

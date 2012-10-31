@@ -2,6 +2,8 @@ package electricexpansion.alex_hawks.wpt;
 
 import java.util.List;
 
+import cpw.mods.fml.common.Mod.Instance;
+
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.machines.TileEntityWPTSender;
 
@@ -57,5 +59,8 @@ public class oneWayNetworks
 			}
 		}
 	}
+	
+	@Instance("oneWayNetworks")
+	public static oneWayNetworks instance;
 
 }

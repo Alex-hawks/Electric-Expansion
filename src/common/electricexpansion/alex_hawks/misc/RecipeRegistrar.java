@@ -1,20 +1,13 @@
 package electricexpansion.alex_hawks.misc;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import basiccomponents.BasicComponents;
 import net.minecraft.src.Block;
-import net.minecraft.src.CraftingManager;
-import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.ElectricExpansion;
 
 public class RecipeRegistrar 
-{
-	private static final Block blockCopperWire = BasicComponents.blockCopperWire;
-	
+{	
 	private static final Block blockRawWire = ElectricExpansion.blockRawWire;
 	private static final Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
 	private static final Block blockWireBlock = ElectricExpansion.blockWireBlock;
@@ -34,8 +27,8 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"});
 
 		//Recipes for supporting other UE add-ons, the slack way...
-		GameRegistry.addShapelessRecipe(new ItemStack(blockCopperWire, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
-		GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(blockCopperWire, 1)});
+		//GameRegistry.addShapelessRecipe(new ItemStack(blockCopperWire, 1), new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
+		GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{"copperWire"});
 
 		//Insulated Wire Recipes (From insulation, and the corresponding Uninsulated Wire)
 		GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{new ItemStack(blockRawWire, 1, 0), Block.cloth});
@@ -92,9 +85,9 @@ public class RecipeRegistrar
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever});
 	
 		//Machines
-		GameRegistry.addRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUncharged()});
+		GameRegistry.addRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', "batteryBox", '?', "battery"});
 //		RecipeManager.addRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', BasicComponents.itemBattery.getUnchargedItemStack(),'@', BasicComponents.batteryBox, '?', BasicComponents.itemBattery.getUnchargedItemStack(), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2), '#', blockCopperWire}));
-		GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', BasicComponents.itemMotor, '#', BasicComponents.itemSteelPlate, '@', BasicComponents.itemBronzePlate, '$', new ItemStack(BasicComponents.itemCircuit, 1, 0), '%', new ItemStack(itemParts, 1, 0)});
+		GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0)});
 		
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
