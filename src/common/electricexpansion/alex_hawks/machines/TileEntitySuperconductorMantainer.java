@@ -1,4 +1,4 @@
-package electricexpansion.alex_hawks.machines;
+/*package electricexpansion.alex_hawks.machines;
 
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.cables.TileEntitySuperConductor;
@@ -41,4 +41,4 @@ public class TileEntitySuperconductorMantainer extends TileEntityElectricityRece
 		return true; //temp...
 	}
 
-}
+}*/
