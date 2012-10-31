@@ -8,6 +8,7 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import universalelectricity.implement.IItemElectric;
+import universalelectricity.prefab.SlotElectricItem;
 
 public class ContainerAdvBatteryBox extends Container
 {

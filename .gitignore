@@ -17,6 +17,7 @@ LICENSE.txt
 
 /src/minecraft/*
 /src/common/*
+/src/resources/*
 !/src/common/electricexpansion/
 !/src/minecraft/electricexpansion/
 !/mcmod.info

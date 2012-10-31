@@ -28,7 +28,6 @@ public class EECommonProxy implements IGuiHandler
 	public static final String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
 	public static final String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
 	
-	
 	public void init()
 	{
 		//Alex_hawks' Tile entity registrations
@@ -49,7 +48,6 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
 	}
 	
-	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
@@ -66,7 +64,6 @@ public class EECommonProxy implements IGuiHandler
 		return null;
 	}
 	
-	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);

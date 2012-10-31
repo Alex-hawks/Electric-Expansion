@@ -32,22 +32,10 @@ public class TileEntitySuperConductor extends TileEntityCableHelper
 		default: return 500;
 		}
 	}
-	//@Override
-	//public void onConductorMelt()
-	//{
-	//	if(!this.worldObj.isRemote)
-	//	{
-	//		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);
-	//	}
-//	}
-	public void setPowered(boolean b) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
 	@Override
-	public void onOverCharge() {
-		// TODO Auto-generated method stub
-		
+	public void onOverCharge() 
+	{
+		if(!this.worldObj.isRemote)
+		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);	
 	}
 }

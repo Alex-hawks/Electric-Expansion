@@ -1,12 +1,11 @@
 package electricexpansion.mattredsox.blocks;
 
 import java.util.List;
-import java.util.Random;
 
+import cpw.mods.fml.common.Loader;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -23,6 +22,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.Vector3;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
+
 
 public class BlockAdvBatteryBox extends BlockMachine
 {
@@ -109,7 +109,7 @@ public class BlockAdvBatteryBox extends BlockMachine
         }
       
     
-   /* @Override
+    @Override
     public void onNeighborBlockChange(World par1World, int x, int y, int z, int par4)
     {
     	this.checkForConductors(par1World, x, y, z);
@@ -152,16 +152,16 @@ public class BlockAdvBatteryBox extends BlockMachine
 		            		}
 		            	}
 		            	
-		            	//IEnergyConductor
-		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
-		            	{
-			    			this.breakConductor(par1World, position);
-		            	}
-		    		}
+/*		            	//IEnergyConductor
+ *		            	if(neighborTile instanceof IEnergyConductor || tossPipe)
+ *		            	{
+ *			    			this.breakConductor(par1World, position);
+ *		            	}
+ */		    		}
     			}  			
     		}
         }
-    }*/
+    }
     
     public void breakConductor(World par1World, Vector3 position)
     {

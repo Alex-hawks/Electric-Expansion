@@ -1,16 +1,14 @@
 package electricexpansion.client.mattredsox;
 
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.StatCollector;
-
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
+import net.minecraft.src.GuiContainer;
+import net.minecraft.src.InventoryPlayer;
+import net.minecraft.src.StatCollector;
 import electricexpansion.mattredsox.ContainerAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-
 
 public class GUIAdvBatteryBox extends GuiContainer
 {

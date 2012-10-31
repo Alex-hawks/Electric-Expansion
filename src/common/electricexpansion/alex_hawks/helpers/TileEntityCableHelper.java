@@ -1,14 +1,16 @@
 package electricexpansion.alex_hawks.helpers;
 
+import basiccomponents.BasicComponents;
+import basiccomponents.tile.TileEntityCopperWire;
 import net.minecraft.src.Block;
 import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.UELoader;
+import electricexpansion.ElectricExpansion;
+import electricexpansion.api.CableInterfaces.ISelectiveConnector;
 import universalelectricity.implement.IConductor;
 import universalelectricity.implement.IConnector;
 import universalelectricity.prefab.TileEntityConductor;
-import electricexpansion.ElectricExpansion;
 
 /**
  * 
@@ -16,7 +18,7 @@ import electricexpansion.ElectricExpansion;
  *	Helper Class used by me to make adding methods to all cables easily...
  */
 
-public abstract class TileEntityCableHelper extends TileEntityConductor
+public abstract class TileEntityCableHelper extends TileEntityConductor implements ISelectiveConnector
 {
 	@Override
     public Packet getDescriptionPacket()
@@ -28,9 +30,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 	{
 		return this.canConnect(side.ordinal());
 	}
-	
 	public boolean canConnect(int side)
 	{
+		boolean returnValue = false;
 		int x=0,y=0,z=0;
 				if	(side == 0){x=0;y=1;z=0;}
 		else 	if	(side == 1){x=0;y=-1;z=0;}
@@ -47,12 +49,19 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 		TileEntity TE 		= this.worldObj.getBlockTileEntity(this.xCoord + x, this.yCoord + y, this.zCoord + z);
 		
 		if((TE instanceof IConnector) && !(TE instanceof IConductor))
-			return true;
-		if(this.cableType(ID, meta) == "Connector")
-			return true;
-		if(this.cableType(thisID, thismeta) == this.cableType(ID, meta))
-			return true;
-		else return false;
+			returnValue = true;
+		else if(TE instanceof ISelectiveConnector)
+		{
+			if(this.cableType(thisID, thismeta) == ((ISelectiveConnector)TE).cableType(ID, meta))
+				returnValue = true;
+			else if(this.cableType(ID, meta) == "Connector")
+				returnValue = true;
+			else if(((ISelectiveConnector)TE).cableType(ID, meta) == "Connector")
+				returnValue = true;
+		}
+		else if(TE instanceof TileEntityCopperWire && this.cableType(thisID, thismeta) == "Copper")
+			returnValue = true;
+		return returnValue;
 	}
 	public String cableType(int ID, int meta)
 	{
@@ -77,9 +86,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 		return type;
 		
 	}
-	/*
+	
 	@Override
-	public void onConductorMelt() 
+	public void onOverCharge() 
 	{
 		if(!this.worldObj.isRemote)
 		{
@@ -99,5 +108,4 @@ public abstract class TileEntityCableHelper extends TileEntityConductor
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, setToID);
 		}
 	}
-*/
 }
