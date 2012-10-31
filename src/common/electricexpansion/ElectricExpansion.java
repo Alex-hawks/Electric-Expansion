@@ -91,8 +91,6 @@ public class ElectricExpansion {
 	public static int wireMill;
 	public static int Fuse;
 	public static int batBox;	
-	public static int IC2up;
-	public static int BCup;
 	//Items
 	public static int Upgrade;
 	public static int SuperBat;

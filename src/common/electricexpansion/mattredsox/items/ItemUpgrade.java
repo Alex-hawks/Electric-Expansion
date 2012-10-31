@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox;
+package electricexpansion.mattredsox.items;
 
 import electricexpansion.EECommonProxy;
 import net.minecraft.src.Item;
