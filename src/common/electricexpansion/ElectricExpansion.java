@@ -4,10 +4,13 @@ import java.io.File;
 import java.util.Random;
 import java.util.logging.Logger;
 
+import basiccomponents.BasicComponents;
+
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -57,21 +60,21 @@ public class ElectricExpansion {
 	private static final int wireBlockID = BLOCK_ID_PREFIX + 2;
 	private static final int switchWireID = BLOCK_ID_PREFIX + 3;
 	private static final int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
-	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 7;
-	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 8;
-	private static final int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 9;
-	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 10;
-	private static final int blockUPTransformerID = BLOCK_ID_PREFIX + 11;
-	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 12;
-	private static final int blockWireMillID = BLOCK_ID_PREFIX + 13;
-	private static final int blockFuseID = BLOCK_ID_PREFIX + 14;
-	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 15;
+	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 5;
+	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
+	private static final int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 7;
+	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 8;
+	private static final int blockUPTransformerID = BLOCK_ID_PREFIX + 9;
+	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 10;
+	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
+	private static final int blockFuseID = BLOCK_ID_PREFIX + 12;
+	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
 	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
-	private static final int itemLeadID = ITEM_ID_PREFIX +6;
+	private static final int itemLeadID = ITEM_ID_PREFIX +4;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -121,7 +124,7 @@ public class ElectricExpansion {
 
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
-	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Upgrade");
+	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
 	public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
 	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(CreativeTabs.tabMisc);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Lead");
@@ -289,11 +292,17 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
 		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
 
-		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage1.name", "Tier 1 Storage Upgrade");
-		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage2.name", "Tier 2 Storage Upgrade");
-		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage3.name", "Tier 3 Storage Upgrade");
-		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.BC.name", "BC Compatibility Upgrade");
-		LanguageRegistry.instance().addStringLocalization("tile.Upgrade.IC2.name", "IC2 Compatibility Upgrade");
+        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");
+        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 1), "Tier 2 Storage Upgrade");
+        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 2), "Tier 3 Storage Upgrade");
+        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 3), "BC Compatibility Upgrade");
+        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 4), "IC2 Compatibility Upgrade");
+
+	//	LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage1.name", "Tier 1 Storage Upgrade");
+		//LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage2.name", "Tier 2 Storage Upgrade");
+		//LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage3.name", "Tier 3 Storage Upgrade");
+	//	LanguageRegistry.instance().addStringLocalization("tile.Upgrade.BC.name", "BC Compatibility Upgrade");
+		//LanguageRegistry.instance().addStringLocalization("tile.Upgrade.IC2.name", "IC2 Compatibility Upgrade");
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}
