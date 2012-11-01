@@ -2,10 +2,6 @@ package electricexpansion.mattredsox.blocks;
 
 import java.util.List;
 
-import cpw.mods.fml.common.Loader;
-import electricexpansion.EECommonProxy;
-import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -22,6 +18,10 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.Vector3;
 import universalelectricity.implement.IRedstoneProvider;
 import universalelectricity.prefab.BlockMachine;
+import cpw.mods.fml.common.Loader;
+import electricexpansion.EECommonProxy;
+import electricexpansion.ElectricExpansion;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
 
 public class BlockAdvBatteryBox extends BlockMachine
@@ -216,27 +216,56 @@ public class BlockAdvBatteryBox extends BlockMachine
         {
             TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
 
-            if(par5EntityPlayer.inventory.getCurrentItem() == null || par5EntityPlayer.inventory.getCurrentItem().itemID != ElectricExpansion.itemUpgrade.shiftedIndex)
+            if(par5EntityPlayer.inventory.getCurrentItem() == null)
         	{
             par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
-            return true;
-        	}
+         return true;
+       	}
             
-            if(par5EntityPlayer.inventory.getCurrentItem().itemID != ElectricExpansion.itemUpgrade.shiftedIndex && tileEntity.isUpgraded == false)
-        	{
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
-            return true;
-        	}
-         
-            if(par5EntityPlayer.inventory.getCurrentItem().itemID == ElectricExpansion.itemUpgrade.shiftedIndex && tileEntity.isUpgraded == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.isUpgraded = true;
-                tileEntity.upgradeType = 1;
-           
+               tileEntity.upgradeType = tileEntity.upgradeType + 2;
+                tileEntity.hasT1Capacity = true;
+           System.out.println("Upgraded + 2");
+                return true;
+                
+            }          
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+               tileEntity.upgradeType = tileEntity.upgradeType + 1;
+                tileEntity.hasT1Capacity = true;
+           System.out.println("Upgraded + 1");
+                return true;
+            }
+            
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT1Capacity == false)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+               tileEntity.upgradeType = tileEntity.upgradeType + 4;
+                tileEntity.hasT1Capacity = true;
+           System.out.println("Upgraded + 4");
                 return true;
             }
 
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasT1Capacity == false)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+               tileEntity.upgradeType = tileEntity.upgradeType + 8;
+                tileEntity.hasT1Capacity = true;
+           System.out.println("Upgraded + 8");
+                return true;
+            }
+            
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasT1Capacity == false)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+               tileEntity.upgradeType = tileEntity.upgradeType + 16;
+                tileEntity.hasT1Capacity = true;
+           System.out.println("Upgraded + 16");
+                return true;
+            }
         }
 
         return true;

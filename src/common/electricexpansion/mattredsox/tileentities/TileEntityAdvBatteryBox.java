@@ -55,10 +55,29 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	private int playersUsing = 0;
 	
 	public IPowerProvider powerProvider;
-	
-	public boolean isUpgraded = false;
-	
+		
 	public int upgradeType = 0;
+	/* 
+	 * Upgrade ints:
+	 * 0 = Normal
+	 * 1 = Capacity Tier 1
+	 * 2 = Capacity Tier 2
+	 * 4 = Capacity Tier 3
+	 * 8 = IC2 Compatibility
+	 * 16 = BC Compatibility
+	 * Add the integers for each upgrade together to get each customized 
+	 */
+	
+	/*
+	 * Upgrade Combinations
+	 * 
+	 */
+	public boolean hasIC2Comp = false;
+	public boolean hasBCComp = false;
+	public boolean hasT1Capacity = false;
+	public boolean hasT2Capacity = false;
+	public boolean hasT3Capacity = false;
+
 	
     public TileEntityAdvBatteryBox()
     {
@@ -108,6 +127,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     public void initiate()
     {
     	if(Loader.isModLoaded("IC2"))
+    		if(this.upgradeType == 8 || this.upgradeType == 9 || this.upgradeType == 10 || this.upgradeType == 12 || this.upgradeType == 24)
 		{
 			try
 			{
