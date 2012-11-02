@@ -225,7 +225,6 @@ public class BlockAdvBatteryBox extends BlockMachine
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-               tileEntity.upgradeType = tileEntity.upgradeType + 2;
                 tileEntity.hasT1Capacity = true;
            System.out.println("Upgraded + 2");
                 return true;
@@ -234,7 +233,6 @@ public class BlockAdvBatteryBox extends BlockMachine
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-               tileEntity.upgradeType = tileEntity.upgradeType + 1;
                 tileEntity.hasT1Capacity = true;
            System.out.println("Upgraded + 1");
                 return true;
@@ -243,7 +241,6 @@ public class BlockAdvBatteryBox extends BlockMachine
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-               tileEntity.upgradeType = tileEntity.upgradeType + 4;
                 tileEntity.hasT1Capacity = true;
            System.out.println("Upgraded + 4");
                 return true;
@@ -252,7 +249,6 @@ public class BlockAdvBatteryBox extends BlockMachine
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-               tileEntity.upgradeType = tileEntity.upgradeType + 8;
                 tileEntity.hasT1Capacity = true;
            System.out.println("Upgraded + 8");
                 return true;
@@ -261,7 +257,6 @@ public class BlockAdvBatteryBox extends BlockMachine
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-               tileEntity.upgradeType = tileEntity.upgradeType + 16;
                 tileEntity.hasT1Capacity = true;
            System.out.println("Upgraded + 16");
                 return true;

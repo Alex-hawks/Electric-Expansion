@@ -55,23 +55,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	private int playersUsing = 0;
 	
 	public IPowerProvider powerProvider;
-		
-	public int upgradeType = 0;
-	/* 
-	 * Upgrade ints:
-	 * 0 = Normal
-	 * 1 = Capacity Tier 1
-	 * 2 = Capacity Tier 2
-	 * 4 = Capacity Tier 3
-	 * 8 = IC2 Compatibility
-	 * 16 = BC Compatibility
-	 * Add the integers for each upgrade together to get each customized 
-	 */
-	
-	/*
-	 * Upgrade Combinations
-	 * 
-	 */
+
 	public boolean hasIC2Comp = false;
 	public boolean hasBCComp = false;
 	public boolean hasT1Capacity = false;
@@ -126,8 +110,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public void initiate()
     {
-    	if(Loader.isModLoaded("IC2"))
-    		if(this.upgradeType == 8 || this.upgradeType == 9 || this.upgradeType == 10 || this.upgradeType == 12 || this.upgradeType == 24)
+    	if(Loader.isModLoaded("IC2") && this.hasIC2Comp == true)
 		{
 			try
 			{
@@ -171,12 +154,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
                     this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
                 }
                 else if(this.containingItems[0].getItem() instanceof IElectricItem)
+                	if(this.hasIC2Comp)
+                	{
                 {
                 	double sent = ElectricItem.charge(containingItems[0], (int) (joules*UniversalElectricity.TO_IC2_RATIO), 3, false, false)*UniversalElectricity.IC2_RATIO;
                 	this.setJoules(joules - sent);
                 }
             }
-
+            }
             //The bottom slot is for decharging. Check if the item is a electric item. If so, decharge it.
             if (this.containingItems[1] != null && this.joules < this.getMaxJoules())
             {
@@ -221,7 +206,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
                 TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
             	
                 //Output IC2 energy
-            	if(Loader.isModLoaded("IC2"))
+            	if(Loader.isModLoaded("IC2") && this.hasIC2Comp == true)
             	{
 	 	            if(this.joules*UniversalElectricity.TO_IC2_RATIO >= 32)
 	 	            {
@@ -230,11 +215,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
             	}
             	
             	//Output BC energy
-            	if(Loader.isModLoaded("BuildCraft|Transport"))
+            	if(Loader.isModLoaded("BuildCraft|Transport") && this.hasBCComp == true)
             	{
 	 	            if(this.isPoweredTile(tileEntity))
 	 	            {
-	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+	 	            	IPowerReceptor 	receptor = (IPowerReceptor) tileEntity;
 	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
 	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.joules), 60000), 0);
 	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
@@ -274,7 +259,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.upgradeType);
+        return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.hasBCComp, this.hasIC2Comp, this.hasT1Capacity, this.hasT2Capacity, this.hasT3Capacity);
     }
     
     @Override
@@ -284,7 +269,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
         {
 			this.joules = dataStream.readDouble();
 	        this.disabledTicks = dataStream.readInt();
-	        this.upgradeType = dataStream.readInt();
+	        this.hasBCComp = dataStream.readBoolean();
+	        this.hasIC2Comp = dataStream.readBoolean();
+	        this.hasT1Capacity = dataStream.readBoolean();
+	        this.hasT2Capacity = dataStream.readBoolean();
+	        this.hasT3Capacity = dataStream.readBoolean();
         }
         catch(Exception e)
         {
@@ -312,7 +301,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     {
         super.readFromNBT(par1NBTTagCompound);
         this.joules = par1NBTTagCompound.getDouble("electricityStored");
-        this.upgradeType = par1NBTTagCompound.getInteger("upgradeType");
+        this.hasBCComp = par1NBTTagCompound.getBoolean("hasBCComp");
+        this.hasIC2Comp = par1NBTTagCompound.getBoolean("hasIC2Comp");
+        this.hasT1Capacity = par1NBTTagCompound.getBoolean("hasT1Capacity");
+        this.hasT2Capacity = par1NBTTagCompound.getBoolean("hasT2Capacity");
+        this.hasT3Capacity = par1NBTTagCompound.getBoolean("hasT3Capacity");
         
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
         this.containingItems = new ItemStack[this.getSizeInventory()];
@@ -336,7 +329,12 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setDouble("electricityStored", this.joules);
-        par1NBTTagCompound.setInteger("upgradeType", this.upgradeType);
+
+       par1NBTTagCompound.setBoolean("hasBCComp", this.hasBCComp);
+       par1NBTTagCompound.setBoolean("hasIC2Comp", this.hasIC2Comp);
+       par1NBTTagCompound.setBoolean("hasT1Capacity", this.hasT1Capacity);
+       par1NBTTagCompound.setBoolean("hasT2Capacity", this.hasT2Capacity);
+       par1NBTTagCompound.setBoolean("hasT3Capacity", this.hasT3Capacity);
         NBTTagList var2 = new NBTTagList();
 
         for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -442,14 +440,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     @Override
     public String getInvName()
     {
-        if(this.upgradeType == 1)
-        {
-    	return "Superconducting Magnet Box";
-        }
-        else
-        {
+   //     if(this.hasBCComp == 1)
+   //     {
+  //  	return "Superconducting Magnet Box";
+ //       }
+       // else
+ //       {
         return "     Advanced Battery Box";
-        }
+ //       }
     }
     
     @Override
@@ -490,14 +488,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public double getMaxJoules()
 	{
-		if (this.upgradeType == 1) 
-		{
-		return 21000000;
-		}
-		else
-		{
+		//if (this.hasBCComp == 1) 
+		//{
+		//return 21000000;
+		//}
+	//	else
+	//	{
 			return 6000000;
-		}
+	//	}
 	}
 	/**
 	 * BUILDCRAFT FUNCTIONS
@@ -508,7 +506,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	 */
 	public boolean isPoweredTile(TileEntity tileEntity)
 	{
-		if(tileEntity instanceof IPowerReceptor) 
+		if(tileEntity instanceof IPowerReceptor && this.hasBCComp == true) 
 		{
 			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 			IPowerProvider provider = receptor.getPowerProvider();
@@ -597,7 +595,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public boolean demandsEnergy()
 	{
-		if (!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0) { return this.joules < getMaxJoules(); }
+		if (!this.isDisabled() && UniversalElectricity.IC2_RATIO > 0 && this.hasBCComp == true) { return this.joules < getMaxJoules(); }
 
 		return false;
 	}
@@ -605,7 +603,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public int injectEnergy(Direction directionFrom, int euAmount)
 	{
-		if (!this.isDisabled())
+		if (!this.isDisabled() && this.hasIC2Comp == true)
 		{
 			double inputElectricity = euAmount * UniversalElectricity.IC2_RATIO;
 
