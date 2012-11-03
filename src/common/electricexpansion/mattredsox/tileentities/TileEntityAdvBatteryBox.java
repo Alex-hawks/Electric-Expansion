@@ -484,12 +484,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
 	}
-	
-	@Override
-	public double getMaxJoules()
-	{
-			return 6000000;
-	}
+
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
@@ -665,6 +660,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public void detach(IComputerAccess computer)
 	{
+	}
+
+	@Override
+	public double getMaxJoules(Object... data) {
+		return 6000000;
 	}
 
 }

@@ -218,13 +218,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	{
 		this.joulesStored = Math.max(Math.min(wattHours, this.getMaxJoules()), 0);
 	}
-	
-	@Override
-	public double getMaxJoules()
-	{
-		return 10;
-	}
-	
+
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
@@ -358,4 +352,9 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
     {
 		return voltin * 2;
     }
+
+	@Override
+	public double getMaxJoules(Object... data) {
+		return 10;
+	}
 }

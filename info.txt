@@ -4,3 +4,4 @@ c ElectricExpansion_v0.2.3.20.jar
 test ElectricExpansion_v0.2.3.21.jar
 c ElectricExpansion_v0.2.3.22.jar
 c ElectricExpansion_v0.2.3.23.jar
+latest ElectricExpansion_v0.2.3.24.jar

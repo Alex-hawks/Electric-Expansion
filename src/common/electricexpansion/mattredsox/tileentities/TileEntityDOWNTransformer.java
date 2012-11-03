@@ -215,12 +215,6 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 		this.Joulestored = Math.max(Math.min(Joules, this.getMaxJoules()), 0);
 	}
 	
-	@Override
-	public double getMaxJoules()
-	{
-		return 10;
-	}
-	
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
@@ -354,4 +348,9 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
     {
 		return voltin / 2;
     }
+
+	@Override
+	public double getMaxJoules(Object... data) {
+		return 10;
+	}
 }

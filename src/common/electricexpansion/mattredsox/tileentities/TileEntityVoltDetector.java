@@ -461,12 +461,6 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
 	}
 	
-	@Override
-	public double getMaxJoules()
-	{
-		return 3000000;
-	}
-	
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
@@ -640,6 +634,11 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 
 	@Override
 	public void detach(IComputerAccess computer) {}
+
+	@Override
+	public double getMaxJoules(Object... data) {
+		return 10;
+	}
 
 	}
 

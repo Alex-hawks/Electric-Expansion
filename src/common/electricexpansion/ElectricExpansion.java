@@ -312,7 +312,7 @@ public class ElectricExpansion {
 	{
 		if (event.entity != null)
 		{
-			if(event.entity instanceof EntitySkeleton && ((EntitySkeleton)event.entity).func_82202_m() == 1)
+			if(event.entity instanceof EntitySkeleton && ((EntitySkeleton)event.entity).getSkeletonType() == 1)
 			{
 				{
 					Random dropNumber = new Random();

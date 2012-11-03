@@ -223,13 +223,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 	{
 		this.Joulestored = Math.max(Math.min(Joules, this.getMaxJoules()), 0);
 	}
-	
-	@Override
-	public double getMaxJoules()
-	{
-		return 10;
-	}
-	
+
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
@@ -363,4 +357,9 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
     {
 		return voltin;
     }
+
+	@Override
+	public double getMaxJoules(Object... data) {
+		return 10;
+	}
 }

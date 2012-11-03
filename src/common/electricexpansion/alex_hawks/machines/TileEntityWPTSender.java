@@ -242,7 +242,7 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	{this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);}
 
 	@Override
-	public double getMaxJoules() 
+	public double getMaxJoules(Object... data) 
 	{return maxJoules;}
 
 	@Override

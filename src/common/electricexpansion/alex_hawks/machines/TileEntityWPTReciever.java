@@ -208,7 +208,7 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 	{this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);}
 
 	@Override
-	public double getMaxJoules() 
+	public double getMaxJoules(Object... data) 
 	{return maxJoules;}
 
 	@Override

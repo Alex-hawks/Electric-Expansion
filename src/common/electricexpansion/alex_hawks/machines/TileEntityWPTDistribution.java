@@ -221,7 +221,7 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 	{distributionNetworks.setJoules(this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));}
 
 	@Override
-	public double getMaxJoules() 
+	public double getMaxJoules(Object... data) 
 	{return distributionNetworks.getMaxJoules();}
 
 	@Override
