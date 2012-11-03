@@ -114,11 +114,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	
 	@Override
 	public Packet getDescriptionPacket()
-	{
-		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP);
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP);
-	}
+	{return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.machineHP);}
 
 	public boolean isFull()
 	{return this.joules == this.maxJoules;}
@@ -127,10 +123,11 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
-		this.joules = par1NBTTagCompound.getInteger("joules");
+		this.joules = par1NBTTagCompound.getDouble("joules");
 		this.frequency = par1NBTTagCompound.getShort("frequency");
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
-		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
+		try{this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));}
+		catch(Exception e){this.sapper = null;}
 	}
 	
 	@Override
@@ -142,7 +139,6 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
 		if (this.sapper != null)
 			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
-
 	}
 
 	@Override
@@ -152,6 +148,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
         {
 			this.joules = dataStream.readDouble();
 	        this.disabledTicks = dataStream.readInt();
+	        this.machineHP = dataStream.readInt();
         }
         catch(Exception e)
         {e.printStackTrace(); }

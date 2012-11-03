@@ -4,6 +4,9 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import electricexpansion.alex_hawks.cables.*;
+import electricexpansion.alex_hawks.machines.TileEntityDistribution;
+import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
+import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.alex_hawks.misc.ContainerWireMill;
 import electricexpansion.client.alex_hawks.GuiWireMill;
@@ -46,6 +49,9 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
+		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 	}
 	
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)

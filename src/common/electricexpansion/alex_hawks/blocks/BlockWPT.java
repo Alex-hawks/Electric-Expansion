@@ -47,7 +47,37 @@ public class BlockWPT extends BlockContainer
 
 	@Override
 	public int damageDropped(int i)
-	{return i;}
+	{
+		byte dropped = 0;
+		switch(i)
+		{
+		case 0:		dropped = 0;
+					break;
+		case 1:		dropped = 0;
+					break;
+		case 2:		dropped = 0;
+					break;
+		case 3:		dropped = 0;
+					break;
+		case 4:		dropped = 4;
+					break;
+		case 5:		dropped = 4;
+					break;
+		case 6:		dropped = 4;
+					break;
+		case 7:		dropped = 4;
+					break;
+		case 8:		dropped = 8;
+					break;
+		case 9:		dropped = 8;
+					break;
+		case 10:	dropped = 8;
+					break;
+		case 11:	dropped = 8;
+					break;
+		}
+		return (int)dropped;
+	}
 
 	@Override
 	public boolean renderAsNormalBlock()

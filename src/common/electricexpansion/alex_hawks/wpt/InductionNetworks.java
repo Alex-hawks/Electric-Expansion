@@ -9,10 +9,10 @@ import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 
 public class InductionNetworks 
 {
-	private List[] senders = new List[32768];
-	private List[] recievers = new List[32768];
+	private static List[] senders = new List[32768];
+	private static List[] recievers = new List[32768];
 	
-	public void setSenderFreq(short oldFreq, short newFreq, TileEntityInductionSender sender)
+	public static void setSenderFreq(short oldFreq, short newFreq, TileEntityInductionSender sender)
 	{
 		try
 		{
@@ -63,10 +63,6 @@ public class InductionNetworks
 	public List getSenders(short freq)
 	{return senders[freq];}	
 	
-	public List getRecievers(short freq)
+	public static List getRecievers(short freq)
 	{return recievers[freq];}
-	
-	@Instance("oneWayNetworks")
-	public static InductionNetworks instance;
-
 }

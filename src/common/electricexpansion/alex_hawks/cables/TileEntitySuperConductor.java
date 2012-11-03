@@ -38,4 +38,9 @@ public class TileEntitySuperConductor extends TileEntityCableHelper
 		if(!this.worldObj.isRemote)
 		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);	
 	}
+	public void setPowered(boolean powered) 
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

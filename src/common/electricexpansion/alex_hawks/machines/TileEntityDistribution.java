@@ -73,7 +73,8 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		super.readFromNBT(par1NBTTagCompound);
 		this.frequency = par1NBTTagCompound.getShort("frequency");
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
-		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
+		try{this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));}
+		catch(Exception e){this.sapper = null;}
 	}
 
 	@Override
@@ -106,8 +107,8 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	public Packet getDescriptionPacket()
 	{
 		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.getJoules((Object)null), this.machineHP);
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP);
+			return PacketManager.getPacket("ElecEx", this, this.frequency, this.machineHP, this.getJoules());
+		else return PacketManager.getPacket("ElecEx", this, this.frequency, this.machineHP);
 	}
 
 	private void addJoules(double joules) 

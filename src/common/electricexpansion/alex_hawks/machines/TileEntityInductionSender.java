@@ -43,13 +43,14 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	private final int maxMachineHP = 20;
 	private byte orientation;
 	private boolean isOpen = false;
+	private static InductionNetworks network;
 
 	public short getFrequency() 
 	{return frequency;}
 
 	public void setFrequency(short newFrequency) 
 	{
-		InductionNetworks.instance.setSenderFreq(this.frequency, newFrequency, this);
+		InductionNetworks.setSenderFreq(this.frequency, newFrequency, this);
 		this.frequency = newFrequency;
 	}
 
@@ -87,10 +88,10 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		if (this.orientation != this.blockMetadata)
 			this.orientation = (byte)ForgeDirection.getOrientation(this.blockMetadata).ordinal();
 
-		if(!(InductionNetworks.instance.getRecievers(this.frequency).isEmpty()))
+		if(InductionNetworks.getRecievers(this.frequency) != null && !(InductionNetworks.getRecievers(this.frequency).isEmpty()))
 		{
 			TileEntityInductionReciever TE2;
-			for(Object TE : InductionNetworks.instance.getRecievers(this.frequency))
+			for(Object TE : InductionNetworks.getRecievers(this.frequency))
 			{
 				if(TE instanceof TileEntityInductionReciever)
 				{
@@ -167,7 +168,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	{
 		if(side.ordinal() == 0 || side.ordinal() == 1)
 			return false;
-		else return side.ordinal() == this.blockMetadata;
+		else return side.ordinal() == this.blockMetadata + 2;
 	}
 
 	@Override
@@ -315,7 +316,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	@Override
 	public boolean canAttachToSide(int side) 
-	{return side != this.blockMetadata;}
+	{return side != this.blockMetadata + 2;}
 
 	@Override
 	public void attach(IComputerAccess computer, String computerSide) {}

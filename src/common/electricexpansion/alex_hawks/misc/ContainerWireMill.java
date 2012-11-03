@@ -20,6 +20,7 @@ public class ContainerWireMill extends Container
 		this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
 		this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); //To be drawn into wire
 		this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); //Drawing result
+		
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3)

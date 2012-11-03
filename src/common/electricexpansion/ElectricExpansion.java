@@ -14,6 +14,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -33,6 +34,7 @@ import electricexpansion.alex_hawks.blocks.*;
 import electricexpansion.alex_hawks.itemblocks.*;
 import electricexpansion.alex_hawks.items.*;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
+import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.mattredsox.*;
 import electricexpansion.mattredsox.blocks.*;
 import electricexpansion.mattredsox.items.*;
@@ -223,8 +225,6 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
 
-		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks1.png");
-		MinecraftForgeClient.preloadTexture("/electricexpansion/textures/mattredsox/blocks.png");
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -280,9 +280,9 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
 		LanguageRegistry.addName(blockWireMill, "Wire Mill");
 		LanguageRegistry.addName(blockFuse, "120 Volt Relay");
-		LanguageRegistry.instance().addStringLocalization("tile.WPT.Distribution.name", "Quantum Battery Box");
-		LanguageRegistry.instance().addStringLocalization("tile.WPT.InductionSender.name", "Induction Power Sender");
-		LanguageRegistry.instance().addStringLocalization("tile.WPT.InductionReciever.name", "Induction Power Reciever");
+		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 0), "Quantum Battery Box");
+		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 4), "Induction Power Sender");
+		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 8), "Induction Power Reciever");
 
 		//Upgrades
 		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");
@@ -312,5 +312,17 @@ public class ElectricExpansion {
 				}
 			}
 		}
+	}
+	
+	@ForgeSubscribe
+	public void onWorldSave(WorldEvent.Save event)
+	{
+		distributionNetworks.onWorldSave();
+	}
+	
+	@ForgeSubscribe
+	public void onWorldLoad(WorldEvent.Load event)
+	{
+		distributionNetworks.onWorldLoad();
 	}
 }

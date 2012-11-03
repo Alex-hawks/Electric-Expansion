@@ -12,6 +12,9 @@ import electricexpansion.alex_hawks.cables.TileEntityRedstoneWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
 import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
+import electricexpansion.alex_hawks.machines.TileEntityDistribution;
+import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
+import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.client.alex_hawks.RenderInsulatedWire;
 import electricexpansion.client.alex_hawks.RenderRawWire;
@@ -29,6 +32,9 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 	{
 		MinecraftForgeClient.preloadTexture(AITEMS);
 		MinecraftForgeClient.preloadTexture(ABLOCK);
+		
+		MinecraftForgeClient.preloadTexture(MattBLOCK_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);
 	}
 	
 	@Override
@@ -49,6 +55,9 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 			GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
 			GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 			GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+			GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+			GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
+			GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 	}
 
 }
