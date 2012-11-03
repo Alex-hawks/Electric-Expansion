@@ -11,10 +11,10 @@
 /runtime/*
 /temp/*
 /builds/*
-CHANGELOG
-LICENSE.txt
-info.txt
-buildnumber.txt
+/CHANGELOG
+/LICENSE.txt
+/info.txt
+/buildnumber.txt
 
 
 /src/minecraft/*
@@ -27,6 +27,7 @@ buildnumber.txt
 !/textures
 !/README
 !/misc, not for compilation or distribution/
+!ELECTRICEXPANSIONBUILDER.bat
 
 
 *.bat

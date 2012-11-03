@@ -1,5 +1,6 @@
 package electricexpansion.alex_hawks.misc;
 
+import universalelectricity.prefab.RecipeHelper;
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
 import net.minecraft.src.Item;
@@ -90,13 +91,15 @@ public class RecipeRegistrar
 				CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 2), new Object[]{new ItemStack(blockWireBlock, 1, 2), Block.lever}));
 				CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever}));
 
-		//Machines
+				//Machines
 				CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', "batteryBox", '?', "battery"}));
-	CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', "battery",'@', "batteryBox", '?', "battery", '$', "eliteCircuit", '#', blockWireBlock}));
-	//	GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0)});
+				CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', "battery",'@', "batteryBox", '?', "battery", '$', "eliteCircuit", '#', blockWireBlock}));
+				//	GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0)});
 		
-		//Parts
-		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
+				//Parts
+				GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
+				
+			//	RecipeHelper.removeRecipe(recipe)
 	}
 	public static void drawing()
 	{
