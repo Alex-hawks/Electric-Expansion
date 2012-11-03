@@ -222,43 +222,39 @@ public class BlockAdvBatteryBox extends BlockMachine
          return true;
        	}
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT1Capacity == false)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 2");
-                return true;
-                
-            }          
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                 tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 1");
                 return true;
             }
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT1Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 4");
+                tileEntity.hasT2Capacity = true;
+                return true;
+                
+            } 
+            
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                tileEntity.hasT3Capacity = true;
                 return true;
             }
 
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasT1Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 8");
+                tileEntity.hasBCComp = true;
                 return true;
             }
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasT1Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 16");
+                tileEntity.hasIC2Comp = true;
                 return true;
             }
         }

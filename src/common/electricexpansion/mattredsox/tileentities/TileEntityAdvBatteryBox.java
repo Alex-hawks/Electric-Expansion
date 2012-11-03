@@ -488,14 +488,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public double getMaxJoules()
 	{
-		//if (this.hasBCComp == 1) 
-		//{
-		//return 21000000;
-		//}
-	//	else
-	//	{
 			return 6000000;
-	//	}
 	}
 	/**
 	 * BUILDCRAFT FUNCTIONS
