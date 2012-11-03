@@ -1,56 +1,55 @@
 package electricexpansion.alex_hawks.machines;
 
-import java.util.Random;
-
-import buildcraft.api.power.IPowerProvider;
-
-import com.google.common.io.ByteArrayDataInput;
-
-import dan200.computer.api.IComputerAccess;
-import dan200.computer.api.IPeripheral;
-import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.wpt.oneWayNetworks;
-
 import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
 import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
+
+import java.util.Random;
+
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.Vector3;
 import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
+import universalelectricity.implement.IElectricityProducer;
 import universalelectricity.implement.IJouleStorage;
 import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.prefab.TileEntityDisableable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 
-public class TileEntityWPTSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
+import com.google.common.io.ByteArrayDataInput;
+
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.IPeripheral;
+import electricexpansion.ElectricExpansion;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+
+public class TileEntityInductionReciever extends TileEntityDisableable implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
 {
 	private double joules = 0;
 	private int playersUsing = 0;
 	private ItemStack sapper;
 	private int machineHP;
 	private short frequency;
-	private static final double maxJoules = 500000; //To eventually go in config #Eventually™
+	private static final double maxJoules = 500000; //To eventually go in config #Eventually
 	private final int maxMachineHP = 20;
 	private byte orientation;
 	private boolean isOpen = false;
+	private double outputVoltage = 120;
 	
 	public short getFrequency() 
 	{return frequency;}
 	
-	public void setFrequency(short newFrequency) 
-	{
-		oneWayNetworks.instance.setSenderFreq(this.frequency, newFrequency, this);
-		this.frequency = newFrequency;
-	}
+	public void setFrequency(short frequency) 
+	{this.frequency = frequency;}
 
 	public void setFrequency(int frequency) 
 	{this.setFrequency((short)frequency);}
@@ -63,6 +62,12 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 		this.frequency = frequency;
 		return this.frequency;
 	}
+	
+	public boolean canWirelessRecieve(double input)
+	{return (this.joules + input <= this.maxJoules);}
+	
+	public void wirelessRecieve(double input)
+	{this.addJoules(input);}
 	
 	@Override
 	public boolean canUpdate()
@@ -85,8 +90,25 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 			((IHMSapper)this.sapper.getItem()).sapperTick(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 		if (this.orientation != this.blockMetadata)
 			this.orientation = (byte)ForgeDirection.getOrientation(this.blockMetadata).ordinal();
+		
+		if(this.joules > 0)
+		{
+            TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
+            
+            if (connector != null)
+            {
+            	if (connector instanceof IConductor)
+				{
+					double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+					double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.outputVoltage), ElectricInfo.getAmps(this.joules, this.outputVoltage)), 80), 0);
+					if (!this.worldObj.isRemote)
+						ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.outputVoltage);
+					this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.outputVoltage));
+                } 
+            }
+		}
 	}
-	
+
 	private void sendPacket()
 	{PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, Vector3.get(this), 8);}
 	
@@ -94,33 +116,12 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	public Packet getDescriptionPacket()
 	{
 		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP, getJoulesForTexture());
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP, getJoulesForTexture());
+			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP);
+		else return PacketManager.getPacket("ElecEx", this, this.machineHP);
 	}
-	
-	private Object getJoulesForTexture() 
-	{return this.joules / this.maxJoules * 10;}
 
 	public boolean isFull()
 	{return this.joules == this.maxJoules;}
-	
-	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) 
-	{
-		if (voltage > this.getVoltage())
-			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
-
-		if(!this.isDisabled())
-			this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
-	}
-
-	@Override
-	public double wattRequest() 
-	{
-		if (!this.isDisabled())
-			return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules);
-		else return 0;
-	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -142,14 +143,6 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 		if (this.sapper != null)
 			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
 
-	}
-
-	@Override
-	public boolean canReceiveFromSide(ForgeDirection side) 
-	{
-		if(side.ordinal() == 0 || side.ordinal() == 1)
-			return false;
-		else return side.ordinal() == this.blockMetadata;
 	}
 
 	@Override
@@ -240,6 +233,9 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	@Override
 	public void setJoules(double wattHours, Object... data) 
 	{this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);}
+	
+	public void addJoules(double extraJoules)
+	{this.joules = this.joules + extraJoules;}
 
 	@Override
 	public double getMaxJoules() 
@@ -251,12 +247,11 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 
 	@Override
 	public String[] getMethodNames() 
-	{return new String[] { "getVoltage", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
+	{return new String[] { "", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException 
 	{
-		final int getVoltage = 0;
 		final int getWattage = 1;
 		final int isFull = 2;
 		final int getJoules = 3;
@@ -276,7 +271,6 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 		{
 			switch (method)
 			{
-				case getVoltage:		return new Object[]{ getVoltage() };
 				case getWattage:		return new Object[]{ ElectricInfo.getWatts(joules) };
 				case isFull:			return new Object[]{ isFull() };
 				case getJoules:			return new Object[]{ getJoules() };
@@ -298,4 +292,5 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 
 	@Override
 	public void detach(IComputerAccess computer) {}
+
 }

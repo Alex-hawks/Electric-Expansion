@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import basiccomponents.BasicComponents;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntitySkeleton;
@@ -69,6 +67,7 @@ public class ElectricExpansion {
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
+	private static final int blockWPTID = BLOCK_ID_PREFIX + 14;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
 	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
@@ -93,7 +92,8 @@ public class ElectricExpansion {
 	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
-	public static int batBox;	
+	public static int batBox;
+	public static int WPT;
 	//Items
 	public static int Upgrade;
 	public static int SuperBat;
@@ -120,7 +120,7 @@ public class ElectricExpansion {
 	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
 	public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
-
+	public static final Block blockWPT = new BlockWPT(WPT, 0);
 
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
@@ -155,6 +155,7 @@ public class ElectricExpansion {
 		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
+		WPT = UEConfig.getBlockConfigID(i, "Wireless_Transfer_Machines", blockWPTID);
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
@@ -213,6 +214,7 @@ public class ElectricExpansion {
 		Item.itemsList[wireBlock] = new ItemBlockWireBlock(wireBlock-256, blockWireBlock);
 		Item.itemsList[SwitchWire] = new ItemBlockSwitchWire(SwitchWire-256, blockSwitchWire);
 		Item.itemsList[SwitchWireBlock] = new ItemBlockSwitchWireBlock(SwitchWireBlock-256, blockSwitchWireBlock);
+		Item.itemsList[WPT] = new ItemBlockSwitchWireBlock(WPT-256, blockWPT);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		GameRegistry.registerBlock(blockBigBatteryBox);
@@ -270,39 +272,28 @@ public class ElectricExpansion {
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Tin.name", "Hidden Tin Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Silver.name", "Hidden Silver Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.HV.name", "Hidden HV Switch Wire");
-		//Set the Switch Cable (Off) Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.Copper.name", "Copper Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.Tin.name", "Tin Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.Silver.name", "Silver Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireOff.HV.name", "HV Switch Wire");
-		//Set the Switch Cable Block (Off) Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Copper.name", "Hidden Copper Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Tin.name", "Hidden Tin Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.Silver.name", "Hidden Silver Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlockOff.HV.name", "Hidden HV Switch Wire");
 
+		//Machines
 		LanguageRegistry.addName(blockUPTransformer, "Up Transformer");
 		LanguageRegistry.addName(blockBigBatteryBox, "Advanced Battery Box");
 		LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
 		LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
 		LanguageRegistry.addName(blockWireMill, "Wire Mill");
 		LanguageRegistry.addName(blockFuse, "120 Volt Relay");
+		LanguageRegistry.instance().addStringLocalization("tile.WPT.Distribution.name", "Quantum Battery Box");
+		LanguageRegistry.instance().addStringLocalization("tile.WPT.InductionSender.name", "Induction Power Sender");
+		LanguageRegistry.instance().addStringLocalization("tile.WPT.InductionReciever.name", "Induction Power Reciever");
+
+		//Upgrades
+		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");
+		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 1), "Tier 2 Storage Upgrade");
+		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 2), "Tier 3 Storage Upgrade");
+		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 3), "BC Compatibility Upgrade");
+		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 4), "IC2 Compatibility Upgrade");
+		
+		//Resources
 		LanguageRegistry.addName(itemLead, "Lead Ingot");
-
-		LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
 		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
-
-        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");
-        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 1), "Tier 2 Storage Upgrade");
-        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 2), "Tier 3 Storage Upgrade");
-        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 3), "BC Compatibility Upgrade");
-        LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 4), "IC2 Compatibility Upgrade");
-
-	//	LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage1.name", "Tier 1 Storage Upgrade");
-		//LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage2.name", "Tier 2 Storage Upgrade");
-		//LanguageRegistry.instance().addStringLocalization("tile.Upgrade.Storage3.name", "Tier 3 Storage Upgrade");
-	//	LanguageRegistry.instance().addStringLocalization("tile.Upgrade.BC.name", "BC Compatibility Upgrade");
-		//LanguageRegistry.instance().addStringLocalization("tile.Upgrade.IC2.name", "IC2 Compatibility Upgrade");
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}

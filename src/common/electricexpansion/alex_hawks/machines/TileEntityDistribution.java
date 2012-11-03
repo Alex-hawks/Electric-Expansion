@@ -36,7 +36,7 @@ import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
-public class TileEntityWPTDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral
+public class TileEntityDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral
 {
 	private short frequency;
 	private ItemStack sapper;

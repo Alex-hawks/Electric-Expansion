@@ -1,68 +1,74 @@
 package electricexpansion.alex_hawks.machines;
 
-import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
-
 import java.util.Random;
-
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.implement.IElectricityProducer;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityDisableable;
-import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.wpt.InductionNetworks;
+import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
+import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.INetworkManager;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagList;
+import net.minecraft.src.Packet;
+import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.Vector3;
+import universalelectricity.electricity.ElectricInfo;
+import universalelectricity.electricity.ElectricityManager;
+import universalelectricity.implement.IConductor;
+import universalelectricity.implement.IJouleStorage;
+import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 
-public class TileEntityWPTReciever extends TileEntityDisableable implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
+public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
 {
 	private double joules = 0;
 	private int playersUsing = 0;
 	private ItemStack sapper;
 	private int machineHP;
 	private short frequency;
-	private static final double maxJoules = 500000; //To eventually go in config #Eventually
+	private static final double maxJoules = 50000; //To eventually go in config #Eventually™
 	private final int maxMachineHP = 20;
 	private byte orientation;
 	private boolean isOpen = false;
-	
+
 	public short getFrequency() 
 	{return frequency;}
-	
-	public void setFrequency(short frequency) 
-	{this.frequency = frequency;}
+
+	public void setFrequency(short newFrequency) 
+	{
+		InductionNetworks.instance.setSenderFreq(this.frequency, newFrequency, this);
+		this.frequency = newFrequency;
+	}
 
 	public void setFrequency(int frequency) 
 	{this.setFrequency((short)frequency);}
 
 	private int setFrequency(int frequency, boolean b) 
 	{return this.setFrequency((short)frequency, b);}
-	
+
 	private int setFrequency(short frequency, boolean b) 
 	{
 		this.frequency = frequency;
 		return this.frequency;
 	}
-	
+
 	@Override
 	public boolean canUpdate()
 	{return true;}
-	
+
 	@Override
 	public void updateEntity()
 	{
@@ -80,22 +86,60 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 			((IHMSapper)this.sapper.getItem()).sapperTick(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 		if (this.orientation != this.blockMetadata)
 			this.orientation = (byte)ForgeDirection.getOrientation(this.blockMetadata).ordinal();
+
+		if(!(InductionNetworks.instance.getRecievers(this.frequency).isEmpty()))
+		{
+			TileEntityInductionReciever TE2;
+			for(Object TE : InductionNetworks.instance.getRecievers(this.frequency))
+			{
+				if(TE instanceof TileEntityInductionReciever)
+				{
+					TE2 = (TileEntityInductionReciever)TE;
+					if((TE2.canWirelessRecieve(Math.min(this.joules, 500))) && this.joules >= 500)
+					{
+						TE2.wirelessRecieve(500);
+						this.removeJoules(500);
+					}
+				}
+			}
+		}
 	}
-	
+
 	private void sendPacket()
 	{PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, Vector3.get(this), 8);}
-	
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
 		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP);
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP);
+			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP, getJoulesForTexture());
+		else return PacketManager.getPacket("ElecEx", this, this.machineHP, getJoulesForTexture());
 	}
+
+	private Object getJoulesForTexture() 
+	{return this.joules / this.maxJoules * 10;}
 
 	public boolean isFull()
 	{return this.joules == this.maxJoules;}
-	
+
+	@Override
+	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) 
+	{
+		if (voltage > this.getVoltage())
+			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
+
+		if(!this.isDisabled())
+			this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
+	}
+
+	@Override
+	public double wattRequest() 
+	{
+		if (!this.isDisabled())
+			return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules);
+		else return 0;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
@@ -105,7 +149,7 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
 		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
 	}
-	
+
 	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
@@ -119,15 +163,23 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 	}
 
 	@Override
+	public boolean canReceiveFromSide(ForgeDirection side) 
+	{
+		if(side.ordinal() == 0 || side.ordinal() == 1)
+			return false;
+		else return side.ordinal() == this.blockMetadata;
+	}
+
+	@Override
 	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
 	{
 		try
-        {
+		{
 			this.joules = dataStream.readDouble();
-	        this.disabledTicks = dataStream.readInt();
-        }
-        catch(Exception e)
-        {e.printStackTrace(); }
+			this.disabledTicks = dataStream.readInt();
+		}
+		catch(Exception e)
+		{e.printStackTrace(); }
 	}
 
 	@Override
@@ -206,6 +258,12 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 	@Override
 	public void setJoules(double wattHours, Object... data) 
 	{this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);}
+	
+	public void addJoules(double input)
+	{this.joules = this.joules + input;}	
+	
+	public void removeJoules(double input)
+	{this.joules = this.joules - input;}
 
 	@Override
 	public double getMaxJoules() 
@@ -217,11 +275,12 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 
 	@Override
 	public String[] getMethodNames() 
-	{return new String[] { "", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
+	{return new String[] { "getVoltage", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException 
 	{
+		final int getVoltage = 0;
 		final int getWattage = 1;
 		final int isFull = 2;
 		final int getJoules = 3;
@@ -241,13 +300,14 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 		{
 			switch (method)
 			{
-				case getWattage:		return new Object[]{ ElectricInfo.getWatts(joules) };
-				case isFull:			return new Object[]{ isFull() };
-				case getJoules:			return new Object[]{ getJoules() };
-				case getFrequency:		return new Object[]{ getFrequency() };
-				case setFrequency:		return new Object[]{ setFrequency(arg0, true) };
-				case getHP:				return new Object[]{ getHP() };
-				default:				throw new IllegalArgumentException("Function unimplemented");
+			case getVoltage:		return new Object[]{ getVoltage() };
+			case getWattage:		return new Object[]{ ElectricInfo.getWatts(joules) };
+			case isFull:			return new Object[]{ isFull() };
+			case getJoules:			return new Object[]{ getJoules() };
+			case getFrequency:		return new Object[]{ getFrequency() };
+			case setFrequency:		return new Object[]{ setFrequency(arg0, true) };
+			case getHP:				return new Object[]{ getHP() };
+			default:				throw new IllegalArgumentException("Function unimplemented");
 			}
 		}
 		else return new Object[] { "Remove the sapper first" };
@@ -262,5 +322,4 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 
 	@Override
 	public void detach(IComputerAccess computer) {}
-
 }

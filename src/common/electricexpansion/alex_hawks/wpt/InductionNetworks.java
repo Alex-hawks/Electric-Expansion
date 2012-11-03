@@ -5,14 +5,14 @@ import java.util.List;
 import cpw.mods.fml.common.Mod.Instance;
 
 import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.machines.TileEntityWPTSender;
+import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 
-public class oneWayNetworks 
+public class InductionNetworks 
 {
 	private List[] senders = new List[32768];
 	private List[] recievers = new List[32768];
 	
-	public void setSenderFreq(short oldFreq, short newFreq, TileEntityWPTSender sender)
+	public void setSenderFreq(short oldFreq, short newFreq, TileEntityInductionSender sender)
 	{
 		try
 		{
@@ -36,7 +36,7 @@ public class oneWayNetworks
 		}
 	}
 	
-	public void setRecieverFreq(short oldFreq, short newFreq, TileEntityWPTSender sender)
+	public void setRecieverFreq(short oldFreq, short newFreq, TileEntityInductionSender sender)
 	{
 		try
 		{
@@ -60,7 +60,13 @@ public class oneWayNetworks
 		}
 	}
 	
+	public List getSenders(short freq)
+	{return senders[freq];}	
+	
+	public List getRecievers(short freq)
+	{return recievers[freq];}
+	
 	@Instance("oneWayNetworks")
-	public static oneWayNetworks instance;
+	public static InductionNetworks instance;
 
 }
