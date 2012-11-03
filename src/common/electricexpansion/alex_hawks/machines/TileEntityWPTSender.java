@@ -38,7 +38,7 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	private ItemStack sapper;
 	private int machineHP;
 	private short frequency;
-	private static final double maxJoules = 500000; //To eventually go in config #Eventually™
+	private static final double maxJoules = 500000; //To eventually go in config #Eventually
 	private final int maxMachineHP = 20;
 	private byte orientation;
 	private boolean isOpen = false;
