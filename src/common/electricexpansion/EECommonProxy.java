@@ -4,12 +4,12 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 import electricexpansion.alex_hawks.cables.*;
+import electricexpansion.alex_hawks.containers.ContainerWireMill;
 import electricexpansion.alex_hawks.machines.TileEntityDistribution;
 import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
-import electricexpansion.alex_hawks.misc.ContainerWireMill;
-import electricexpansion.client.alex_hawks.GuiWireMill;
+import electricexpansion.client.alex_hawks.gui.GuiWireMill;
 import electricexpansion.client.mattredsox.*;
 import electricexpansion.mattredsox.*;
 import electricexpansion.mattredsox.tileentities.*;

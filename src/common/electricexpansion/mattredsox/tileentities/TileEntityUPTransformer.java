@@ -220,7 +220,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	}
 	
 	@Override
-	public double getMaxJoules()
+	public double getMaxJoules(Object... data)
 	{
 		return 10;
 	}

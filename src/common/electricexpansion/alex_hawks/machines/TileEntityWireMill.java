@@ -352,12 +352,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		return -1;
 	}
 
-	public void randomlyDamageSelf()
-	{
-		if (new Random().nextInt(10) == 6)
-			--this.machineHP;
-	}
-
 	@Override
 	public boolean attemptToRepair(int repairAmount)
 	{

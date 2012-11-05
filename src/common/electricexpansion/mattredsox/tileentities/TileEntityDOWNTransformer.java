@@ -216,7 +216,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 	}
 	
 	@Override
-	public double getMaxJoules()
+	public double getMaxJoules(Object... data)
 	{
 		return 10;
 	}

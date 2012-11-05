@@ -9,11 +9,13 @@ import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.InductionNetworks;
 import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
+import electricexpansion.api.WirelessPowerMachine;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
 import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
@@ -32,7 +34,7 @@ import universalelectricity.prefab.TileEntityElectricityReceiver;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 
-public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
+public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
 {
 	private double joules = 0;
 	private int playersUsing = 0;
@@ -45,9 +47,11 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	private boolean isOpen = false;
 	private static InductionNetworks network;
 
+	@Override
 	public short getFrequency() 
 	{return frequency;}
 
+	@Override
 	public void setFrequency(short newFrequency) 
 	{
 		InductionNetworks.setSenderFreq(this.frequency, newFrequency, this);
@@ -62,7 +66,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	private int setFrequency(short frequency, boolean b) 
 	{
-		this.frequency = frequency;
+		this.setFrequency(frequency);
 		return this.frequency;
 	}
 
@@ -111,14 +115,50 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	@Override
 	public Packet getDescriptionPacket()
-	{
-		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP, getJoulesForTexture());
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP, getJoulesForTexture());
-	}
+	{return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP);}
+	
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	{return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;}
 
-	private Object getJoulesForTexture() 
-	{return this.joules / this.maxJoules * 10;}
+	@Override
+	public void openChest()
+	{
+		if(!this.worldObj.isRemote)
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+		this.playersUsing++;
+	}
+	
+	@Override
+	public void closeChest()
+	{this.playersUsing--;}
+	
+	@Override
+	public int getSizeInventory() 
+	{return 0;}
+
+	@Override
+	public ItemStack getStackInSlot(int var1) 
+	{return null;}
+
+	@Override
+	public ItemStack decrStackSize(int var1, int var2) 
+	{return null;}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1)
+	{return null;}
+
+	@Override
+	public void setInventorySlotContents(int var1, ItemStack var2){}
+
+	@Override
+	public String getInvName()
+	{return "Induction Power Sender";}
+
+	@Override
+	public int getInventoryStackLimit() 
+	{return 0;}
 
 	public boolean isFull()
 	{return this.joules == this.maxJoules;}
@@ -130,7 +170,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
 
 		if(!this.isDisabled())
-			this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
+			this.addJoules(ElectricInfo.getJoules(amps, voltage));
 	}
 
 	@Override
@@ -160,7 +200,6 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
 		if (this.sapper != null)
 			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
-
 	}
 
 	@Override
@@ -267,7 +306,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	{this.joules = this.joules - input;}
 
 	@Override
-	public double getMaxJoules() 
+	public double getMaxJoules(Object... data)
 	{return maxJoules;}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
@@ -30,9 +31,11 @@ import com.google.common.io.ByteArrayDataInput;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.wpt.InductionNetworks;
+import electricexpansion.api.WirelessPowerMachine;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
-public class TileEntityInductionReciever extends TileEntityDisableable implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
+public class TileEntityInductionReciever extends TileEntityDisableable implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
 {
 	private double joules = 0;
 	private int playersUsing = 0;
@@ -45,11 +48,16 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	private boolean isOpen = false;
 	private double outputVoltage = 120;
 	
+	@Override
 	public short getFrequency() 
 	{return frequency;}
 	
-	public void setFrequency(short frequency) 
-	{this.frequency = frequency;}
+	@Override
+	public void setFrequency(short newFrequency) 
+	{
+		InductionNetworks.setRecieverFreq(this.frequency, newFrequency, this);
+		this.frequency = newFrequency;
+	}
 
 	public void setFrequency(int frequency) 
 	{this.setFrequency((short)frequency);}
@@ -59,7 +67,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	
 	private int setFrequency(short frequency, boolean b) 
 	{
-		this.frequency = frequency;
+		this.setFrequency(frequency);
 		return this.frequency;
 	}
 	
@@ -115,6 +123,48 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	@Override
 	public Packet getDescriptionPacket()
 	{return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.machineHP);}
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	{return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;}
+
+	@Override
+	public void openChest()
+	{
+		if(!this.worldObj.isRemote)
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+		this.playersUsing++;
+	}
+	
+	@Override
+	public void closeChest()
+	{this.playersUsing--;}
+	
+	@Override
+	public int getSizeInventory() 
+	{return 0;}
+
+	@Override
+	public ItemStack getStackInSlot(int var1) 
+	{return null;}
+
+	@Override
+	public ItemStack decrStackSize(int var1, int var2) 
+	{return null;}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1)
+	{return null;}
+
+	@Override
+	public void setInventorySlotContents(int var1, ItemStack var2){}
+
+	@Override
+	public String getInvName()
+	{return "Induction Power Sender";}
+
+	@Override
+	public int getInventoryStackLimit() 
+	{return 0;}
 
 	public boolean isFull()
 	{return this.joules == this.maxJoules;}
@@ -235,7 +285,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	{this.joules = this.joules + extraJoules;}
 
 	@Override
-	public double getMaxJoules() 
+	public double getMaxJoules(Object... data)
 	{return maxJoules;}
 
 	@Override

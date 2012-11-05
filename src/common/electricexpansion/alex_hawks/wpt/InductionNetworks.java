@@ -5,6 +5,7 @@ import java.util.List;
 import cpw.mods.fml.common.Mod.Instance;
 
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 
 public class InductionNetworks 
@@ -36,14 +37,14 @@ public class InductionNetworks
 		}
 	}
 	
-	public void setRecieverFreq(short oldFreq, short newFreq, TileEntityInductionSender sender)
+	public static void setRecieverFreq(short oldFreq, short newFreq, TileEntityInductionReciever reciever)
 	{
 		try
 		{
-			if(recievers[oldFreq].contains(sender))
-				recievers[oldFreq].remove(sender);
-			if(!(recievers[newFreq].contains(sender)))
-				recievers[newFreq].add(sender);
+			if(recievers[oldFreq].contains(reciever))
+				recievers[oldFreq].remove(reciever);
+			if(!(recievers[newFreq].contains(reciever)))
+				recievers[newFreq].add(reciever);
 		}
 		catch(NullPointerException e)
 		{
@@ -52,7 +53,7 @@ public class InductionNetworks
 				ElectricExpansion.EELogger.severe("Must provide new frequency");
 				e.printStackTrace();
 			}
-			if(sender == null)
+			if(reciever == null)
 			{
 				ElectricExpansion.EELogger.severe("Must provide the reciever in question");
 				e.printStackTrace();

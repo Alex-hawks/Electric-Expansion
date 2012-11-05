@@ -33,15 +33,18 @@ import buildcraft.api.power.IPowerReceptor;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.wpt.InductionNetworks;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
+import electricexpansion.api.WirelessPowerMachine;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
-public class TileEntityDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral
+public class TileEntityDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral, IInventory, WirelessPowerMachine
 {
 	private short frequency;
 	private ItemStack sapper;
 	private int machineHP;
 	private boolean isOpen;
+	private int playersUsing;
 	private static final int maxHP = 20;
 
 	@Override
@@ -66,6 +69,48 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			} 
 		}
 	}
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	{return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;}
+
+	@Override
+	public void openChest()
+	{
+		if(!this.worldObj.isRemote)
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+		this.playersUsing++;
+	}
+	
+	@Override
+	public void closeChest()
+	{this.playersUsing--;}
+	
+	@Override
+	public int getSizeInventory() 
+	{return 0;}
+
+	@Override
+	public ItemStack getStackInSlot(int var1) 
+	{return null;}
+
+	@Override
+	public ItemStack decrStackSize(int var1, int var2) 
+	{return null;}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1)
+	{return null;}
+
+	@Override
+	public void setInventorySlotContents(int var1, ItemStack var2){}
+
+	@Override
+	public String getInvName()
+	{return "Induction Power Sender";}
+
+	@Override
+	public int getInventoryStackLimit() 
+	{return 0;}
 
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -167,18 +212,25 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		else return new Object[] { "Remove the sapper first" };
 	}
 
-	private Object setFrequency(short newFreq, boolean b) 
-	{
-		if(this.frequency != newFreq)
-		{
-			this.frequency = newFreq;
-			return true;
-		}
-		else return false;
-	}
+	@Override
+	public short getFrequency() 
+	{return frequency;}
+	
+	@Override
+	public void setFrequency(short newFrequency) 
+	{this.frequency = newFrequency;}
 
-	private short getFrequency() 
-	{return this.frequency;}
+	public void setFrequency(int frequency) 
+	{this.setFrequency((short)frequency);}
+
+	private int setFrequency(int frequency, boolean b) 
+	{return this.setFrequency((short)frequency, b);}
+	
+	private int setFrequency(short frequency, boolean b) 
+	{
+		this.setFrequency(frequency);
+		return this.frequency;
+	}
 
 	private boolean isFull() 
 	{return this.getJoules((Object)null) == this.getMaxJoules();}
@@ -222,7 +274,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	{distributionNetworks.setJoules(this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));}
 
 	@Override
-	public double getMaxJoules() 
+	public double getMaxJoules(Object... data) 
 	{return distributionNetworks.getMaxJoules();}
 
 	@Override

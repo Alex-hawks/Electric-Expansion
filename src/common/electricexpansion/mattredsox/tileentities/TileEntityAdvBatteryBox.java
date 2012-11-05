@@ -486,7 +486,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	}
 	
 	@Override
-	public double getMaxJoules()
+	public double getMaxJoules(Object... data)
 	{
 		//if (this.hasBCComp == 1) 
 		//{

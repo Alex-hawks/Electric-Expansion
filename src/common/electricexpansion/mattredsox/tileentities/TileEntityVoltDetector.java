@@ -462,7 +462,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	}
 	
 	@Override
-	public double getMaxJoules()
+	public double getMaxJoules(Object... data)
 	{
 		return 3000000;
 	}

@@ -1,12 +1,12 @@
-package electricexpansion.client.alex_hawks;
+package electricexpansion.client.alex_hawks.gui;
 
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.electricity.ElectricInfo;
 import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.containers.ContainerWireMill;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
-import electricexpansion.alex_hawks.misc.ContainerWireMill;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.StatCollector;

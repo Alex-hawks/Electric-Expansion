@@ -225,7 +225,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 	}
 	
 	@Override
-	public double getMaxJoules()
+	public double getMaxJoules(Object... data)
 	{
 		return 10;
 	}
