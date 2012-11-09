@@ -53,23 +53,8 @@ public class GuiWPT extends GuiContainer
 	{
 		this.fontRenderer.drawString(((IInventory)this.tileEntity).getInvName(), 60, 6, 4210752);
 		this.fontRenderer.drawString("Current Frequency: " + ((WirelessPowerMachine)tileEntity).getFrequency(), 10, 28, 4210752);
-		this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
 		String displayText = "";
-
-/*		else if (this.tileEntity.drawingTicks > 0)
-		{
-			displayText = "Working";
-		}
-		else
-		{
-			displayText = "Idle";
-		}
-
-		this.fontRenderer.drawString("Status: " + displayText, 82, 45, 4210752);
-		this.fontRenderer.drawString("Voltage: " + ElectricInfo.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 4210752);
-		this.fontRenderer.drawString("Require: " + ElectricInfo.getDisplayShort(this.tileEntity.WATTS_PER_TICK*20, ElectricUnit.WATT), 82, 68, 4210752);
-		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
-*/	}
+	}
 
 	/**
 	 * Draw the background layer for the GuiContainer (everything behind the items)

@@ -316,13 +316,9 @@ public class ElectricExpansion {
 	
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
-	{
-		distributionNetworks.onWorldSave();
-	}
+	{distributionNetworks.onWorldSave();}
 	
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load event)
-	{
-		distributionNetworks.onWorldLoad();
-	}
+	{distributionNetworks.onWorldLoad();}
 }
