@@ -15,9 +15,9 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.Vector3;
-import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import cpw.mods.fml.common.Loader;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
@@ -261,37 +261,34 @@ public class BlockAdvBatteryBox extends BlockMachine
 
         return true;
     }
-    /**
-     * Is this block powering the block on the specified side
-     */
-    @Override
-    public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if(tileEntity instanceof IRedstoneProvider)
-        {
-        	 return ((IRedstoneProvider)tileEntity).isPoweringTo((byte)side);
-        }
-        
-       return false;
-    }
+	/**
+	 * Is this block powering the block on the
+	 * specified side
+	 */
+	@Override
+	public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
-    /**
-     * Is this block indirectly powering the block on the specified side
-     */
-    @Override
-    public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-    	TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if(tileEntity instanceof IRedstoneProvider)
-        {
-        	 return ((IRedstoneProvider)tileEntity).isIndirectlyPoweringTo((byte)side);
-        }
-        
-       return false;
-    }
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
+	/**
+	 * Is this block indirectly powering the block
+	 * on the specified side
+	 */
+	@Override
+	public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
 
     @Override
     public boolean isOpaqueCube()

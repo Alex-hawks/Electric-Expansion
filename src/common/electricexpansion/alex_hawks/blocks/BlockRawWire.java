@@ -2,17 +2,16 @@ package electricexpansion.alex_hawks.blocks;
 
 import java.util.List;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.DamageSource;
 import net.minecraft.src.Entity;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import universalelectricity.implement.UEDamageSource;
 import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.UEDamageSource;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 

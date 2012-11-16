@@ -1,20 +1,27 @@
 package electricexpansion;
 
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-
-import electricexpansion.alex_hawks.cables.*;
+import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
+import electricexpansion.alex_hawks.cables.TileEntityRawWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
+import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.alex_hawks.misc.ContainerWireMill;
 import electricexpansion.client.alex_hawks.GuiWireMill;
-import electricexpansion.client.mattredsox.*;
-import electricexpansion.mattredsox.*;
-import electricexpansion.mattredsox.tileentities.*;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.RenderBlocks;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import electricexpansion.client.mattredsox.GUIAdvBatteryBox;
+import electricexpansion.client.mattredsox.GuiVoltDetector;
+import electricexpansion.mattredsox.ContainerAdvBatteryBox;
+import electricexpansion.mattredsox.ContainerVoltDetector;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
+import electricexpansion.mattredsox.tileentities.TileEntityFuse;
+import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
+import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 public class EECommonProxy implements IGuiHandler
 {

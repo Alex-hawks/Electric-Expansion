@@ -21,17 +21,17 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IItemElectric;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityManager;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IItemElectric;
+import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import buildcraft.api.core.Orientations;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import basiccomponents.block.BlockBasicMachine;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -217,14 +217,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
             	//Output BC energy
             	if(Loader.isModLoaded("BuildCraft|Transport") && this.hasBCComp == true)
             	{
-	 	            if(this.isPoweredTile(tileEntity))
-	 	            {
-	 	            	IPowerReceptor 	receptor = (IPowerReceptor) tileEntity;
-	 	            	double wattHoursNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-	 	            	float transferWattHours = (float) Math.max(Math.min(Math.min(wattHoursNeeded, this.joules), 60000), 0);
-	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferWattHours*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite().ordinal()]);
-	 	            	this.setJoules(this.joules - transferWattHours);
-	 	            }
+               	if (this.isPoweredTile(tileEntity))
+            		{
+            		IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+            		double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
+            		float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
+            		receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
+            		this.setJoules(this.joules - transferJoules);
+            			}
             	}
             	
                 TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
@@ -462,13 +462,13 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
     }
     
     @Override
-    public boolean isPoweringTo(byte side)
+    public boolean isPoweringTo(ForgeDirection side)
     {
         return this.isFull;
     }
 
     @Override
-    public boolean isIndirectlyPoweringTo(byte side)
+    public boolean isIndirectlyPoweringTo(ForgeDirection side)
     {
         return isPoweringTo(side);
     }

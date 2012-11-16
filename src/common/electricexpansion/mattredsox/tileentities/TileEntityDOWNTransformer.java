@@ -9,22 +9,18 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityConductor;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
-import buildcraft.api.core.Orientations;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityManager;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import basiccomponents.block.BlockBasicMachine;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
 import buildcraft.api.power.PowerProvider;
-
-import com.google.common.base.Ticker;
-
 import cpw.mods.fml.common.Loader;
 
 public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IRedstoneProvider {
@@ -143,14 +139,14 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
             	//Output BC energy
             	if(Loader.isModLoaded("BuildCraft|Transport"))
             	{
-	 	            if(this.isPoweredTile(tileEntity))
-	 	            {
-	 	            	IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-	 	            	double JoulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived())*UniversalElectricity.BC3_RATIO;
-	 	            	float transferJoules = (float) Math.max(Math.min(Math.min(JoulesNeeded, this.Joulestored), 54000), 0);
-	 	            	receptor.getPowerProvider().receiveEnergy((float)(transferJoules*UniversalElectricity.TO_BC_RATIO), Orientations.dirs()[ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite().ordinal()]);
-	 	            	this.setJoules(this.Joulestored - transferJoules);
-	 	            }
+            		if (this.isPoweredTile(tileEntity))
+					{
+						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
+						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.Joulestored), 80000), 0);
+						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
+						this.setJoules(this.Joulestored - transferJoules);
+					}
             	}
             	
                 TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
@@ -192,13 +188,13 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 
   
     @Override
-    public boolean isPoweringTo(byte side)
+    public boolean isPoweringTo(ForgeDirection side)
     {
         return this.isFull;
     }
 
     @Override
-    public boolean isIndirectlyPoweringTo(byte side)
+    public boolean isIndirectlyPoweringTo(ForgeDirection side)
     {
         return isPoweringTo(side);
     }

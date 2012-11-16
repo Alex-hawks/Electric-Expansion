@@ -5,23 +5,20 @@ import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
 
 import java.util.Random;
 
-import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.implement.IElectricityProducer;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityDisableable;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityDisableable;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -182,7 +179,7 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 	{return machineHP;}
 
 	@Override
-	public boolean isPoweringTo(byte side) 
+	public boolean isPoweringTo(ForgeDirection side) 
 	{
 		boolean returnValue = false;
 		if(this.joules == (double)this.maxJoules)
@@ -191,7 +188,7 @@ public class TileEntityWPTReciever extends TileEntityDisableable implements IHMR
 	}
 
 	@Override
-	public boolean isIndirectlyPoweringTo(byte side) 
+	public boolean isIndirectlyPoweringTo(ForgeDirection side) 
 	{
 		boolean returnValue = false;
 		if(this.joules == (double)this.maxJoules)

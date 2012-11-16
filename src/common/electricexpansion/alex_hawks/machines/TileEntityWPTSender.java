@@ -1,8 +1,26 @@
 package electricexpansion.alex_hawks.machines;
 
+import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
+import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
+
 import java.util.Random;
 
-import buildcraft.api.power.IPowerProvider;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.INetworkManager;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.Packet;
+import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -10,26 +28,6 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.oneWayNetworks;
-
-import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
 
 public class TileEntityWPTSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider
 {
@@ -216,7 +214,7 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	{return machineHP;}
 
 	@Override
-	public boolean isPoweringTo(byte side) 
+	public boolean isPoweringTo(ForgeDirection side) 
 	{
 		boolean returnValue = false;
 		if(this.joules == (double)this.maxJoules)
@@ -225,7 +223,7 @@ public class TileEntityWPTSender extends TileEntityElectricityReceiver implement
 	}
 
 	@Override
-	public boolean isIndirectlyPoweringTo(byte side) 
+	public boolean isIndirectlyPoweringTo(ForgeDirection side) 
 	{
 		boolean returnValue = false;
 		if(this.joules == (double)this.maxJoules)

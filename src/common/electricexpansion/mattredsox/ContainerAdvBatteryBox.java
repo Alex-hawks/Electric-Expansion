@@ -1,14 +1,13 @@
 package electricexpansion.mattredsox;
 
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import universalelectricity.implement.IItemElectric;
-import universalelectricity.prefab.SlotElectricItem;
+import universalelectricity.core.implement.IItemElectric;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
 public class ContainerAdvBatteryBox extends Container
 {

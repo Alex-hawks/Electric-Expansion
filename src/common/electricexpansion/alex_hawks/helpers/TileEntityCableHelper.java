@@ -1,17 +1,16 @@
 package electricexpansion.alex_hawks.helpers;
 
-import basiccomponents.BasicComponents;
-import cpw.mods.fml.common.Loader;
 import net.minecraft.src.Block;
 import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IConnector;
-import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IConnector;
+import universalelectricity.prefab.tile.TileEntityConductor;
+import basiccomponents.BasicComponents;
+import cpw.mods.fml.common.Loader;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.api.CableInterfaces.ISelectiveConnector;
-import basiccomponents.BasicComponents;
 
 
 /**
