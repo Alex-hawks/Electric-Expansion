@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Random;
 import java.util.logging.Logger;
 
-import basiccomponents.BasicComponents;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntitySkeleton;
@@ -16,6 +14,12 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import universalelectricity.core.UEConfig;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.prefab.ItemElectric;
+import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.network.ConnectionHandler;
+import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -31,18 +35,28 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import electricexpansion.alex_hawks.blocks.*;
-import electricexpansion.alex_hawks.itemblocks.*;
-import electricexpansion.alex_hawks.items.*;
+import electricexpansion.alex_hawks.blocks.BlockInsulatedWire;
+import electricexpansion.alex_hawks.blocks.BlockRawWire;
+import electricexpansion.alex_hawks.blocks.BlockSwitchWire;
+import electricexpansion.alex_hawks.blocks.BlockSwitchWireBlock;
+import electricexpansion.alex_hawks.blocks.BlockWireBlock;
+import electricexpansion.alex_hawks.blocks.BlockWireMill;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockInsualtedWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockRawWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
+import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
+import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
-import electricexpansion.mattredsox.*;
-import electricexpansion.mattredsox.blocks.*;
-import electricexpansion.mattredsox.items.*;
-import universalelectricity.core.UEConfig;
-import universalelectricity.core.UniversalElectricity;
-import universalelectricity.prefab.ItemElectric;
-import universalelectricity.prefab.network.ConnectionHandler;
-import universalelectricity.prefab.network.PacketManager;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
+import electricexpansion.mattredsox.blocks.BlockFuse;
+import electricexpansion.mattredsox.blocks.BlockUPTransformer;
+import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.items.ItemBase;
+import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
+import electricexpansion.mattredsox.items.ItemUpgrade;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
@@ -114,20 +128,20 @@ public class ElectricExpansion {
 	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(SwitchWireBlock, 0);
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
-	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("AdvBatBox");
-	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("VoltDet");
-	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
-	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
-	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
-	public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
+	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("AdvBatBox");
+	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("VoltDet");
+	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE);
+	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE);
+	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(UETab.INSTANCE).setBlockName("blockEtcher");
+	public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 
 
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
 	public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
-	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(CreativeTabs.tabMisc);
-	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(CreativeTabs.tabMisc).setItemName("Lead");
+	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(UETab.INSTANCE);
+	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("Lead");
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};

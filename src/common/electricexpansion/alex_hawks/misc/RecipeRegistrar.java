@@ -1,5 +1,6 @@
 package electricexpansion.alex_hawks.misc;
 
+import basiccomponents.BasicComponents;
 import universalelectricity.prefab.RecipeHelper;
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
@@ -7,6 +8,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.ElectricExpansion;
 
@@ -99,7 +101,12 @@ public class RecipeRegistrar
 				//Parts
 				GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
 				
-			//	RecipeHelper.removeRecipe(recipe)
+				if(Loader.isModLoaded("BasicComponents")) 
+				{
+						RecipeHelper.removeRecipe((new ShapedOreRecipe(BasicComponents.batteryBox, new Object[]
+								{ "?!?", "###", "?!?", '#', BasicComponents.blockCopperWire, '!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUncharged() })));
+	
+				}
 	}
 	public static void drawing()
 	{
