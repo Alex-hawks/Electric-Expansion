@@ -1,0 +1,11 @@
+This mod falls under the IMS (It's My Stuff) license. In particular, the revision of the 
+license created by Alex_hawks (henceforth known as Alex).
+
+Under the license, there exist the following conditions:
+1:	All distributions (eg. Modpacks) must either retain the license, or provide a direct link to it, either on the same page as the download (spoilers work), or in the downlaod itself. Linking to the mod's thread, site, etc is also fine.
+2:	You do not need permission for any use of this mod, except making money, in which case permission can be made public, but only requires a mutually trusted third party to be informed.
+3:	You MUST NOT say you helped, when you didn't help at all. You can say you didn't help, when you did actually help.
+4:	For modpacks (just in case); you MUST be legally alowed to include all other mods. For the purposes of mods that also include this condition, such as Quidity Enderstorage, you have permission, so as to avoid an infinite loop.
+5:	If you do include this mod in your modpack, you must only include Recomended Builds, or Official Releases.
+6:	Do NOT decompile the mod. You do not need to. Just visit the Github repo of the mod.
+7:	If not explicitly stated above, refer to the Universal Electricity license.

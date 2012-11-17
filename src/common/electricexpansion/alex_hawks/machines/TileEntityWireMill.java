@@ -211,12 +211,15 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (var5 >= 0 && var5 < this.inventory.length)
 				this.inventory[var5] = ItemStack.loadItemStackFromNBT(var4);
 		}
-		
-		
+
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
-		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
+		try{this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));}
+		catch(NullPointerException e) {this.sapper = null;}
 		for(int i = 0; i < this.upgrades.length; i++)
-			this.upgrades[i] = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("upgrade" + i));
+		{
+			try{this.upgrades[i] = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("upgrade" + i));}
+			catch(Exception e) {this.upgrades[i] = null;}
+		}
 	}
 	/**
 	 * Writes a tile entity to NBT.
@@ -242,7 +245,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 		par1NBTTagCompound.setTag("Items", var2);
 		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
-		
+
 		for(int i = 0; i < this.upgrades.length; i++)
 			if (this.upgrades[i] != null)
 				par1NBTTagCompound.setCompoundTag("upgrade" + i, this.upgrades[i].writeToNBT(new NBTTagCompound()));
@@ -350,12 +353,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		return -1;
 	}
 
-	public void randomlyDamageSelf()
-	{
-		if (new Random().nextInt(10) == 6)
-			--this.machineHP;
-	}
-
 	@Override
 	public boolean attemptToRepair(int repairAmount)
 	{
@@ -394,7 +391,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 		return returnValue;
 	}
-	
+
 	@Override
 	public boolean isBeingSapped()
 	{return this.sapper != null;}

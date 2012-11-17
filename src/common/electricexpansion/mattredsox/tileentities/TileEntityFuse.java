@@ -103,7 +103,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
         	
         		if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
-        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+        			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
         		}
         	}
         	
@@ -217,7 +217,13 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 	{
 		this.Joulestored = Math.max(Math.min(Joules, this.getMaxJoules()), 0);
 	}
-
+	
+	@Override
+	public double getMaxJoules(Object... data)
+	{
+		return 10;
+	}
+	
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
@@ -337,7 +343,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 			
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
-				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		
 			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
@@ -351,9 +357,4 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
     {
 		return voltin;
     }
-
-	@Override
-	public double getMaxJoules(Object... data) {
-		return 10;
-	}
 }

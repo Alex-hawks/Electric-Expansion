@@ -10,9 +10,12 @@ import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
 import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
+import electricexpansion.alex_hawks.containers.ContainerWireMill;
+import electricexpansion.alex_hawks.machines.TileEntityDistribution;
+import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
+import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
-import electricexpansion.alex_hawks.misc.ContainerWireMill;
-import electricexpansion.client.alex_hawks.GuiWireMill;
+import electricexpansion.client.alex_hawks.gui.GuiWireMill;
 import electricexpansion.client.mattredsox.GUIAdvBatteryBox;
 import electricexpansion.client.mattredsox.GuiVoltDetector;
 import electricexpansion.mattredsox.ContainerAdvBatteryBox;
@@ -53,6 +56,9 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
+		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 	}
 	
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)

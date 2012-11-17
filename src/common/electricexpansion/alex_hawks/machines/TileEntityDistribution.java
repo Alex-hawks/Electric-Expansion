@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
@@ -29,14 +30,18 @@ import com.google.common.io.ByteArrayDataInput;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.wpt.InductionNetworks;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
+import electricexpansion.api.WirelessPowerMachine;
+import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
-public class TileEntityWPTDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral
+public class TileEntityDistribution extends TileEntityElectricityReceiver implements IHMRepairable, IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral, IInventory, WirelessPowerMachine
 {
 	private short frequency;
 	private ItemStack sapper;
 	private int machineHP;
 	private boolean isOpen;
+	private int playersUsing;
 	private static final int maxHP = 20;
 
 	@Override
@@ -61,6 +66,48 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 			} 
 		}
 	}
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	{return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;}
+
+	@Override
+	public void openChest()
+	{
+		if(!this.worldObj.isRemote)
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+		this.playersUsing++;
+	}
+	
+	@Override
+	public void closeChest()
+	{this.playersUsing--;}
+	
+	@Override
+	public int getSizeInventory() 
+	{return 0;}
+
+	@Override
+	public ItemStack getStackInSlot(int var1) 
+	{return null;}
+
+	@Override
+	public ItemStack decrStackSize(int var1, int var2) 
+	{return null;}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1)
+	{return null;}
+
+	@Override
+	public void setInventorySlotContents(int var1, ItemStack var2){}
+
+	@Override
+	public String getInvName()
+	{return "Induction Power Sender";}
+
+	@Override
+	public int getInventoryStackLimit() 
+	{return 0;}
 
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
@@ -68,7 +115,8 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 		super.readFromNBT(par1NBTTagCompound);
 		this.frequency = par1NBTTagCompound.getShort("frequency");
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
-		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
+		try{this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));}
+		catch(Exception e){this.sapper = null;}
 	}
 
 	@Override
@@ -101,8 +149,8 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 	public Packet getDescriptionPacket()
 	{
 		if (this.isOpen)
-			return PacketManager.getPacket("ElecEx", this, this.getJoules((Object)null), this.machineHP);
-		else return PacketManager.getPacket("ElecEx", this, this.machineHP);
+			return PacketManager.getPacket("ElecEx", this, this.frequency, this.machineHP, this.getJoules());
+		else return PacketManager.getPacket("ElecEx", this, this.frequency, this.machineHP);
 	}
 
 	private void addJoules(double joules) 
@@ -161,18 +209,25 @@ public class TileEntityWPTDistribution extends TileEntityElectricityReceiver imp
 		else return new Object[] { "Remove the sapper first" };
 	}
 
-	private Object setFrequency(short newFreq, boolean b) 
-	{
-		if(this.frequency != newFreq)
-		{
-			this.frequency = newFreq;
-			return true;
-		}
-		else return false;
-	}
+	@Override
+	public short getFrequency() 
+	{return frequency;}
+	
+	@Override
+	public void setFrequency(short newFrequency) 
+	{this.frequency = newFrequency;}
 
-	private short getFrequency() 
-	{return this.frequency;}
+	public void setFrequency(int frequency) 
+	{this.setFrequency((short)frequency);}
+
+	private int setFrequency(int frequency, boolean b) 
+	{return this.setFrequency((short)frequency, b);}
+	
+	private int setFrequency(short frequency, boolean b) 
+	{
+		this.setFrequency(frequency);
+		return this.frequency;
+	}
 
 	private boolean isFull() 
 	{return this.getJoules((Object)null) == this.getMaxJoules();}

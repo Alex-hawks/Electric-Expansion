@@ -12,6 +12,12 @@ public class ItemSuperconductorBattery extends ItemElectric
     }
 
     @Override
+    public double getMaxJoules(Object... data)
+    {
+        return 3000000;
+    }
+
+    @Override
     public boolean canProduceElectricity()
     {
         return true;
@@ -28,9 +34,4 @@ public class ItemSuperconductorBattery extends ItemElectric
     {
         return 50;
     }
-
-	@Override
-	public double getMaxJoules(Object... data) {
-		return 3000000;
-	}
 }

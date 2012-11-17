@@ -5,14 +5,15 @@ import java.util.List;
 import cpw.mods.fml.common.Mod.Instance;
 
 import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.machines.TileEntityWPTSender;
+import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
+import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 
-public class oneWayNetworks 
+public class InductionNetworks 
 {
-	private List[] senders = new List[32768];
-	private List[] recievers = new List[32768];
+	private static List[] senders = new List[32768];
+	private static List[] recievers = new List[32768];
 	
-	public void setSenderFreq(short oldFreq, short newFreq, TileEntityWPTSender sender)
+	public static void setSenderFreq(short oldFreq, short newFreq, TileEntityInductionSender sender)
 	{
 		try
 		{
@@ -36,14 +37,14 @@ public class oneWayNetworks
 		}
 	}
 	
-	public void setRecieverFreq(short oldFreq, short newFreq, TileEntityWPTSender sender)
+	public static void setRecieverFreq(short oldFreq, short newFreq, TileEntityInductionReciever reciever)
 	{
 		try
 		{
-			if(recievers[oldFreq].contains(sender))
-				recievers[oldFreq].remove(sender);
-			if(!(recievers[newFreq].contains(sender)))
-				recievers[newFreq].add(sender);
+			if(recievers[oldFreq].contains(reciever))
+				recievers[oldFreq].remove(reciever);
+			if(!(recievers[newFreq].contains(reciever)))
+				recievers[newFreq].add(reciever);
 		}
 		catch(NullPointerException e)
 		{
@@ -52,7 +53,7 @@ public class oneWayNetworks
 				ElectricExpansion.EELogger.severe("Must provide new frequency");
 				e.printStackTrace();
 			}
-			if(sender == null)
+			if(reciever == null)
 			{
 				ElectricExpansion.EELogger.severe("Must provide the reciever in question");
 				e.printStackTrace();
@@ -60,7 +61,9 @@ public class oneWayNetworks
 		}
 	}
 	
-	@Instance("oneWayNetworks")
-	public static oneWayNetworks instance;
-
+	public List getSenders(short freq)
+	{return senders[freq];}	
+	
+	public static List getRecievers(short freq)
+	{return recievers[freq];}
 }

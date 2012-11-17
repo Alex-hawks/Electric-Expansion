@@ -1,4 +1,4 @@
-package electricexpansion.client.alex_hawks;
+package electricexpansion.client.alex_hawks.gui;
 
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
@@ -9,8 +9,8 @@ import org.lwjgl.opengl.GL11;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.containers.ContainerWireMill;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
-import electricexpansion.alex_hawks.misc.ContainerWireMill;
 
 public class GuiWireMill extends GuiContainer
 {

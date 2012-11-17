@@ -4,6 +4,9 @@ import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntitySuperConductor extends TileEntityCableHelper 
 {
+	/**
+	 * this class is currently USELESS!!!
+	 */
 	@Override
 	public double getResistance() 
 	//Values will NOT be actual values or precise relative values. But if x is meant to be greater than y, it will be. 
@@ -35,7 +38,8 @@ public class TileEntitySuperConductor extends TileEntityCableHelper
 	@Override
 	public void onOverCharge() 
 	{
+		super.onOverCharge();
 		if(!this.worldObj.isRemote)
-		this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, 0);	
+			this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2F, false);
 	}
 }

@@ -251,7 +251,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	        if(this.ticks % 2 == 0 && this.playersUsing > 0)
 	        {
 	        	//PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-	        	this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+	        	this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	        }
         }
     }
@@ -484,7 +484,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
 	}
-
+	
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */

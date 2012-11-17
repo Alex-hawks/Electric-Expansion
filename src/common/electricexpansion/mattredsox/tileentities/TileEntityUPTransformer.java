@@ -103,7 +103,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
         	
         		if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
-        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+        			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
         		}
         	}
         	
@@ -211,6 +211,12 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	public void setJoules(double wattHours, Object... data)
 	{
 		this.joulesStored = Math.max(Math.min(wattHours, this.getMaxJoules()), 0);
+	}
+	
+	@Override
+	public double getMaxJoules(Object... data)
+	{
+		return 10;
 	}
 
 	/**
@@ -332,7 +338,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 			
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
-				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		
 			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
@@ -346,9 +352,4 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
     {
 		return voltin * 2;
     }
-
-	@Override
-	public double getMaxJoules(Object... data) {
-		return 10;
-	}
 }
