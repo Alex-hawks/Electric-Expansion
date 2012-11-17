@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox.blocks;
+/*package electricexpansion.mattredsox.blocks;
 
 import electricexpansion.EECommonProxy;
 import electricexpansion.mattredsox.tileentities.TileEntityFuse;
@@ -55,9 +55,9 @@ public class BlockFuse extends universalelectricity.prefab.BlockMachine
         }
     }
 
-    /**
+    *//**
      * Called when the block is placed in the world.
-     */
+     *//*
     @Override
     public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
     {
@@ -113,7 +113,7 @@ public class BlockFuse extends universalelectricity.prefab.BlockMachine
 	{
 		return new TileEntityFuse();
 	}
-/**
+*//**
     @Override
     public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
     {
@@ -125,5 +125,6 @@ public class BlockFuse extends universalelectricity.prefab.BlockMachine
 
         return true;
     }
-    **/
+    **//*
 }
+*/

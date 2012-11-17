@@ -16,6 +16,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
@@ -52,10 +53,10 @@ import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
-import electricexpansion.mattredsox.blocks.BlockFuse;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemBase;
+import electricexpansion.mattredsox.items.ItemLeadTearBattery;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:BasicComponents", useMetadata = true)
@@ -86,7 +87,7 @@ public class ElectricExpansion {
 	private static final int blockWPTID = BLOCK_ID_PREFIX + 14;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
-	//private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
+	private static final int itemLeadTearBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
 	private static final int itemLeadID = ITEM_ID_PREFIX +4;
@@ -112,7 +113,7 @@ public class ElectricExpansion {
 	public static int WPT;
 	//Items
 	public static int Upgrade;
-	//public static int SuperBat;
+	public static int LeadTearBat;
 	public static int ConnectionAlloy;
 	public static int Parts;
 	public static int Lead;
@@ -136,13 +137,13 @@ public class ElectricExpansion {
 	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
 	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
-	public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
+	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
-	//public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
+	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat, 0);
 	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(UETab.INSTANCE);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("Lead");
 
@@ -175,7 +176,7 @@ public class ElectricExpansion {
 		WPT = UEConfig.getBlockConfigID(i, "Wireless_Transfer_Machines", blockWPTID);
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-//		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
+	LeadTearBat = UEConfig.getItemConfigID(i, "Lead_Tear_Battery", itemLeadTearBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
@@ -294,7 +295,7 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
 		LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
 		LanguageRegistry.addName(blockWireMill, "Wire Mill");
-		LanguageRegistry.addName(blockFuse, "120 Volt Relay");
+		//LanguageRegistry.addName(blockFuse, "120 Volt Relay");
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 0), "Quantum Battery Box");
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 4), "Induction Power Sender");
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 8), "Induction Power Reciever");
@@ -308,7 +309,7 @@ public class ElectricExpansion {
 		
 		//Resources
 		LanguageRegistry.addName(itemLead, "Lead Ingot");
-//		LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
+	LanguageRegistry.addName(itemLeadTearBat, "Lead-Tear Battery");
 		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
 
 		MinecraftForge.EVENT_BUS.register(this);

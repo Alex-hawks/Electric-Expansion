@@ -1,20 +1,22 @@
 package electricexpansion.mattredsox.items;
 
 import universalelectricity.prefab.ItemElectric;
+import universalelectricity.prefab.UETab;
 
-public class ItemSuperconductorBattery extends ItemElectric
+public class ItemLeadTearBattery extends ItemElectric
 {
-    public ItemSuperconductorBattery(int par1, int par2)
+    public ItemLeadTearBattery(int par1, int par2)
     {
         super(par1);
         this.iconIndex = par2;
-        this.setItemName("Superconductor Battery");
+        this.setItemName("Lead Tear Battery");
+        this.setCreativeTab(UETab.INSTANCE);
     }
 
     @Override
     public double getMaxJoules(Object... data)
     {
-        return 3000000;
+        return 750000;
     }
 
     @Override

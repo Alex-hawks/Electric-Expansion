@@ -19,7 +19,7 @@ import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 
 public class BlockUPTransformer extends BlockMachine
 {
-	public static final int DOWN_TRANS_METADATA = 0;
+	public static final int UP_TRANS_METADATA = 0;
 
 
 	public BlockUPTransformer(int id, int textureIndex)
@@ -44,9 +44,9 @@ public class BlockUPTransformer extends BlockMachine
         {
     		  return this.blockIndexInTexture + 17;        
     	}
-    	if(metadata >= DOWN_TRANS_METADATA)
+    	if(metadata >= UP_TRANS_METADATA)
     	{
-    		metadata -= DOWN_TRANS_METADATA;
+    		metadata -= UP_TRANS_METADATA;
     		
     		//If it is the front side
             if (side == metadata+2)
@@ -59,8 +59,9 @@ public class BlockUPTransformer extends BlockMachine
                 return this.blockIndexInTexture + 18;
             }
 
-            return this.blockIndexInTexture + 16;
-       }
+            return this.blockIndexInTexture + 20;
+            }
+    	
 		return metadata;
     }
 
@@ -76,21 +77,21 @@ public class BlockUPTransformer extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 		
-	 if (metadata >= DOWN_TRANS_METADATA)
+	 if (metadata >= UP_TRANS_METADATA)
 		{
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 3);
+					par1World.setBlockMetadataWithNotify(x, y, z, UP_TRANS_METADATA + 3);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 1);
+					par1World.setBlockMetadataWithNotify(x, y, z, UP_TRANS_METADATA + 1);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 2);
+					par1World.setBlockMetadataWithNotify(x, y, z, UP_TRANS_METADATA + 2);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 0);
+					par1World.setBlockMetadataWithNotify(x, y, z, UP_TRANS_METADATA + 0);
 					break;
 			}
 		}
@@ -109,9 +110,9 @@ public class BlockUPTransformer extends BlockMachine
 
 		int change = 0;
 
-		 if (metadata >= DOWN_TRANS_METADATA)
+		 if (metadata >= UP_TRANS_METADATA)
 		{
-			original -= DOWN_TRANS_METADATA;
+			original -= UP_TRANS_METADATA;
 		}
 
 		// Reorient the block
@@ -131,9 +132,9 @@ public class BlockUPTransformer extends BlockMachine
 				break;
 		}
 
-		 if (metadata >= DOWN_TRANS_METADATA)
+		 if (metadata >= UP_TRANS_METADATA)
 		{
-			change += DOWN_TRANS_METADATA;
+			change += UP_TRANS_METADATA;
 		}
 
 		par1World.setBlockMetadataWithNotify(x, y, z, change);
