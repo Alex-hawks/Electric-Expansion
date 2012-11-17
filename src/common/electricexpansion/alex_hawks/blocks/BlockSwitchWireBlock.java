@@ -30,33 +30,23 @@ public class BlockSwitchWireBlock extends BlockConductor
 
 	@Override
 	public boolean isOpaqueCube()
-	{
-		return true;
-	}
+	{return true;}
 
 	@Override
 	public boolean renderAsNormalBlock()
-	{
-		return true;
-	}
+	{return true;}
 
 	@Override
 	public int damageDropped(int i)
-	{
-		return i;
-	}
+	{return i;}
 
 	@Override
 	public int getRenderType()
-	{
-		return 0;
-	}
+	{return 0;}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1)
-	{
-		return new TileEntitySwitchWireBlock();
-	}
+	{return new TileEntitySwitchWireBlock();}
 
 	public int getBlockTextureFromSideAndMetadata(int side, int meta)
 	{
@@ -101,22 +91,16 @@ public class BlockSwitchWireBlock extends BlockConductor
 
 	@Override
 	public String getTextureFile()
-	{
-		return EECommonProxy.ABLOCK;
-	}
+	{return EECommonProxy.ABLOCK;}
 
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int var4 = 0; var4 < 4; ++var4)
-		{
+		for (int var4 = 0; var4 < 5; ++var4)
 			par3List.add(new ItemStack(par1, 1, var4));
-		}
 	}
 
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
-	{
-		return true;
-	}
+	{return true;}
 }
