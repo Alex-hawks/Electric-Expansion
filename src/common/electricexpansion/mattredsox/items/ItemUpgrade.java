@@ -14,6 +14,7 @@ public class ItemUpgrade extends Item
     {
         super(id);
         this.setMaxDamage(0);
+        this.setMaxStackSize(1);
         this.setHasSubtypes(true);
         this.setCreativeTab(CreativeTabs.tabMaterials);
     }

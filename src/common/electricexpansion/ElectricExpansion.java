@@ -58,7 +58,7 @@ import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemSuperconductorBattery;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:BasicComponents", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 

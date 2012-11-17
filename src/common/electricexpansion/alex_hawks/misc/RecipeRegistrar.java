@@ -103,9 +103,7 @@ public class RecipeRegistrar
 				
 				if(Loader.isModLoaded("BasicComponents")) 
 				{
-						RecipeHelper.removeRecipe((new ShapedOreRecipe(BasicComponents.batteryBox, new Object[]
-								{ "?!?", "###", "?!?", '#', BasicComponents.blockCopperWire, '!', BasicComponents.itemSteelPlate, '?', BasicComponents.itemBattery.getUncharged() })));
-	
+					RecipeHelper.removeRecipe(BasicComponents.batteryBox);
 				}
 	}
 	public static void drawing()

@@ -216,7 +216,7 @@ public class BlockAdvBatteryBox extends BlockMachine
         {
             TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
 
-            if(par5EntityPlayer.inventory.getCurrentItem() == null)
+            if(par5EntityPlayer.inventory.getCurrentItem() == null || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)))
         	{
             par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
          return true;
@@ -229,7 +229,7 @@ public class BlockAdvBatteryBox extends BlockMachine
                 return true;
             }
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false && tileEntity.hasT1Capacity == true)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                 tileEntity.hasT2Capacity = true;
@@ -237,7 +237,7 @@ public class BlockAdvBatteryBox extends BlockMachine
                 
             } 
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false && tileEntity.hasT2Capacity == true)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                 tileEntity.hasT3Capacity = true;
