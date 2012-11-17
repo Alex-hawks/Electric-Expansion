@@ -35,8 +35,8 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	{
 		boolean returnValue = false;
 		int x=0,y=0,z=0;
-		if	(side == 0){x=0;y=1;z=0;}
-		else 	if	(side == 1){x=0;y=-1;z=0;}
+		if	(side == 0){x=0;y=-1;z=0;}
+		else 	if	(side == 1){x=0;y=1;z=0;}
 		else 	if	(side == 2){x=0;y=0;z=-1;}
 		else 	if	(side == 3){x=0;y=0;z=1;}
 		else 	if	(side == 4){x=-1;y=0;z=0;}
