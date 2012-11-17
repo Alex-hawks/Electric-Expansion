@@ -25,6 +25,7 @@ public class RecipeRegistrar
 	private static final Block blockSwitchWireOff = ElectricExpansion.blockRawWire;
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	private static final Item itemParts = ElectricExpansion.itemParts;
+	//private static final Item 
 	
 	public static void crafting()
 	{
@@ -99,6 +100,8 @@ public class RecipeRegistrar
 		
 				//Parts
 				GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
+				
+		//LEAD GHAST TEAR BATTERY		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(itemLeadAdidBattery, 7, 3), new Object [] {"!@!", "#$#", "!@!", '!', "plateSteel", '@', "copperWire", '#', "ingotLead", '$', Item.ghastTear}));
 				
 				if(Loader.isModLoaded("BasicComponents")) 
 				{
