@@ -1,128 +1,201 @@
 package electricexpansion.mattredsox.blocks;
 
-import electricexpansion.EECommonProxy;
-import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.Material;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
+import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.UniversalElectricity;
+import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.implement.IRedstoneProvider;
+import electricexpansion.EECommonProxy;
+import electricexpansion.ElectricExpansion;
+import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 
-public class BlockUPTransformer extends universalelectricity.prefab.BlockMachine
+public class BlockUPTransformer extends BlockMachine
 {
-	public TileEntityUPTransformer transformer;
+	public static final int DOWN_TRANS_METADATA = 0;
+
+
+	public BlockUPTransformer(int id, int textureIndex)
+	{
+		super("UP Transformer", id, UniversalElectricity.machine, UETab.INSTANCE);
+		this.blockIndexInTexture = textureIndex;
+		this.setStepSound(soundMetalFootstep);
+		this.setRequiresSelfNotify();
+	}
+
+	@Override
+	public String getTextureFile()
+	{
+		return EECommonProxy.MattBLOCK_TEXTURE_FILE;
+	}
+
 	
-    public BlockUPTransformer(int id, int textureIndex)
-    {
-        super("UPTransformer", id, Material.wood);
-        this.blockIndexInTexture = textureIndex;
-        this.setStepSound(soundMetalFootstep);
-        this.setRequiresSelfNotify();
-    }
-
-    @Override
-    public String getTextureFile()
-    {
-        return EECommonProxy.MattBLOCK_TEXTURE_FILE;
-    }
-
-    @Override
+	@Override
     public int getBlockTextureFromSideAndMetadata(int side, int metadata)
     {
-        if (side == 0 || side == 1)
+    	if (side == 0 || side == 1)
         {
-            return this.blockIndexInTexture + 17;
-        }
-        else
-        {
-            //If it is the front side
-            if (side == metadata)
+    		  return this.blockIndexInTexture + 17;        
+    	}
+    	if(metadata >= DOWN_TRANS_METADATA)
+    	{
+    		metadata -= DOWN_TRANS_METADATA;
+    		
+    		//If it is the front side
+            if (side == metadata+2)
             {
-                return this.blockIndexInTexture + 19;
+                return this.blockIndexInTexture + 19;      
             }
             //If it is the back side
-            else if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal())
+            else if (side == ForgeDirection.getOrientation(metadata+2).getOpposite().ordinal())
             {
                 return this.blockIndexInTexture + 18;
             }
 
-            return this.blockIndexInTexture + 20;
-        }
+            return this.blockIndexInTexture + 16;
+       }
+		return metadata;
     }
 
-    /**
-     * Called when the block is placed in the world.
-     */
-    @Override
-    public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
-    {
-        int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-        int change = 3;
+	/**
+	 * Called when the block is placed in the
+	 * world.
+	 */
+	@Override
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+	{
+		int metadata = par1World.getBlockMetadata(x, y, z);
 
-        switch (angle)
-        {
-            case 0: par1World.setBlockMetadataWithNotify(x, y, z, 5); break;
-            case 1: par1World.setBlockMetadataWithNotify(x, y, z, 3); break;
-            case 2: par1World.setBlockMetadataWithNotify(x, y, z, 4); break;
-            case 3: par1World.setBlockMetadataWithNotify(x, y, z, 2); break;
-        }
+		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int change = 3;
+		
+	 if (metadata >= DOWN_TRANS_METADATA)
+		{
+			switch (angle)
+			{
+				case 0:
+					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 3);
+					break;
+				case 1:
+					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 1);
+					break;
+				case 2:
+					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 2);
+					break;
+				case 3:
+					par1World.setBlockMetadataWithNotify(x, y, z, DOWN_TRANS_METADATA + 0);
+					break;
+			}
+		}
+		
+			
+		}
 
-       
-    }
-
-    @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
-    {
-        //Reorient the block
-        switch (par1World.getBlockMetadata(x, y, z))
-        {
-            case 2: par1World.setBlockMetadataWithNotify(x, y, z, 5); break;
-            case 5: par1World.setBlockMetadataWithNotify(x, y, z, 3); break;
-            case 3: par1World.setBlockMetadataWithNotify(x, y, z, 4); break;
-            case 4: par1World.setBlockMetadataWithNotify(x, y, z, 2); break;
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean canProvidePower()
-    {
-        return true;
-    }
+		
+	
 
 	@Override
-	public TileEntity createNewTileEntity(World var1)
+	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
 	{
-		return new TileEntityUPTransformer();
-	}
-/**
-    @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
-    {
-        if (!par1World.isRemote)
-        {
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 1, par1World, x, y, z);
-            return true;
-        }
+		int metadata = par1World.getBlockMetadata(x, y, z);
+		int original = metadata;
 
-        return true;
-    }
-    **/
+		int change = 0;
+
+		 if (metadata >= DOWN_TRANS_METADATA)
+		{
+			original -= DOWN_TRANS_METADATA;
+		}
+
+		// Reorient the block
+		switch (original)
+		{
+			case 0:
+				change = 3;
+				break;
+			case 3:
+				change = 1;
+				break;
+			case 1:
+				change = 2;
+				break;
+			case 2:
+				change = 0;
+				break;
+		}
+
+		 if (metadata >= DOWN_TRANS_METADATA)
+		{
+			change += DOWN_TRANS_METADATA;
+		}
+
+		par1World.setBlockMetadataWithNotify(x, y, z, change);
+
+		return true;
+	}
+
+	/**
+	 * Is this block powering the block on the
+	 * specified side
+	 */
+	@Override
+	public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
+	/**
+	 * Is this block indirectly powering the block
+	 * on the specified side
+	 */
+	@Override
+	public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean canProvidePower()
+	{
+		return true;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int metadata)
+	{
+			return new TileEntityUPTransformer();
+	}
+
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+	{
+		return new ItemStack(ElectricExpansion.blockUPTransformer);
+	}
 }

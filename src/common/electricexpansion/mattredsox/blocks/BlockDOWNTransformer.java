@@ -1,8 +1,5 @@
 package electricexpansion.mattredsox.blocks;
 
-import java.util.List;
-
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
@@ -16,12 +13,8 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
-import basiccomponents.tile.TileEntityBatteryBox;
-
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.items.ItemUpgrade;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
 
 public class BlockDOWNTransformer extends BlockMachine
