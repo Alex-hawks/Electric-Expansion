@@ -1,14 +1,14 @@
 package electricexpansion.alex_hawks.containers;
 
 import ic2.api.IElectricItem;
-import universalelectricity.implement.IItemElectric;
-import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.SlotFurnace;
+import universalelectricity.core.implement.IItemElectric;
+import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 
 public class ContainerWireMill extends Container
 {

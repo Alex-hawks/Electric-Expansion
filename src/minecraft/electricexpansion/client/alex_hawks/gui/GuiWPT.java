@@ -1,9 +1,11 @@
 package electricexpansion.client.alex_hawks.gui;
 
+import net.minecraft.src.GuiContainer;
+import net.minecraft.src.IInventory;
+import net.minecraft.src.InventoryPlayer;
+
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricInfo.ElectricUnit;
 import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.containers.ContainerDistribution;
 import electricexpansion.alex_hawks.containers.ContainerInductionReciever;
@@ -12,11 +14,6 @@ import electricexpansion.alex_hawks.machines.TileEntityDistribution;
 import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.api.WirelessPowerMachine;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.StatCollector;
-import net.minecraft.src.TileEntity;
 
 public class GuiWPT extends GuiContainer
 {
