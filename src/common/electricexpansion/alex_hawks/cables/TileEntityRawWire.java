@@ -16,6 +16,7 @@ public class TileEntityRawWire extends TileEntityCableHelper
     	case 1: return 0.08;
     	case 2: return 0.04;
     	case 3: return 0.40;
+    	case 5: return 0.01;
     	default: return 0.10;
     	}
 	}
@@ -29,12 +30,8 @@ public class TileEntityRawWire extends TileEntityCableHelper
 		case 1: return 60; //Bit less than a basic Coal-Generator. #Cruel
 		case 2: return 200;
 		case 3: return 2500; //HV
+		case 5: return 1000;
 		default: return 500;
 		}
-	}
-	@Override
-	public void onOverCharge() {
-		// TODO Auto-generated method stub
-		
 	}
 }

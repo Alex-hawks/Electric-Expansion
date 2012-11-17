@@ -21,6 +21,36 @@ import electricexpansion.api.CableInterfaces.ISelectiveConnector;
 
 public abstract class TileEntityCableHelper extends TileEntityConductor implements ISelectiveConnector
 {
+    @Override
+	public double getResistance() 
+    //Values will NOT be actual values or precise relative values. But if x is meant to be greater than y, it will be. 
+    //Maybe by 10^10 or 10^-10. But the one meant to be greater, will be.
+	{
+		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+    	switch(meta)
+    	{
+    	case 0: return 0.05; 
+    	case 1: return 0.04;
+    	case 2: return 0.02;
+    	case 3: return 0.2;
+    	case 5: return 0.005;
+    	default: return 0.05;
+    	}
+	}
+	@Override
+	public double getMaxAmps()
+	{
+		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		switch(meta)
+		{
+		case 0: return 500;
+		case 1: return 60; //Bit less than a basic Coal-Generator. #Cruel
+		case 2: return 200;
+		case 3: return 2500; //HV
+		case 5: return 1000;
+		default: return 500;
+		}
+	}
 	@Override
 	public Packet getDescriptionPacket()
 	{
