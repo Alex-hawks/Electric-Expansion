@@ -1,6 +1,27 @@
 package electricexpansion.alex_hawks.machines;
 
+import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
+import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
+
 import java.util.Random;
+
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IInventory;
+import net.minecraft.src.INetworkManager;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.Packet;
+import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -8,31 +29,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.InductionNetworks;
-import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.api.WirelessPowerMachine;
-import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
-import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
-import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
 
 public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
 {
@@ -41,7 +38,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	private ItemStack sapper;
 	private int machineHP;
 	private short frequency;
-	private static final double maxJoules = 50000; //To eventually go in config #Eventually™
+	private static final double maxJoules = 500000; //To eventually go in config #Eventually
 	private final int maxMachineHP = 20;
 	private byte orientation;
 	private boolean isOpen = false;
@@ -274,7 +271,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	{return machineHP;}
 
 	@Override
-	public boolean isPoweringTo(byte side) 
+	public boolean isPoweringTo(ForgeDirection side) 
 	{
 		boolean returnValue = false;
 		if(this.joules == (double)this.maxJoules)
@@ -283,7 +280,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	}
 
 	@Override
-	public boolean isIndirectlyPoweringTo(byte side) 
+	public boolean isIndirectlyPoweringTo(ForgeDirection side) 
 	{
 		boolean returnValue = false;
 		if(this.joules == (double)this.maxJoules)
@@ -306,7 +303,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	{this.joules = this.joules - input;}
 
 	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules(Object... data) 
 	{return maxJoules;}
 
 	@Override

@@ -1,15 +1,17 @@
 package electricexpansion.alex_hawks.helpers;
 
-import cpw.mods.fml.common.Loader;
 import net.minecraft.src.Block;
 import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IConnector;
-import universalelectricity.prefab.TileEntityConductor;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IConnector;
+import universalelectricity.prefab.tile.TileEntityConductor;
+import basiccomponents.BasicComponents;
+import cpw.mods.fml.common.Loader;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.api.CableInterfaces.ISelectiveConnector;
+
 
 /**
  * 
@@ -66,7 +68,12 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	public String cableType(int ID, int meta)
 	{
 		String type = "Unknown";
-		switch(meta)
+		if(Loader.isModLoaded("BasicComponents"))
+		{
+		if(ID == BasicComponents.blockCopperWire.blockID)
+		type = "Copper";
+		}
+		 switch(meta)
 		{
 		case 0: type = "Copper";
 		break;

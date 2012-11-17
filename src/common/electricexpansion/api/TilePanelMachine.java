@@ -1,15 +1,10 @@
 package electricexpansion.api;
 
-import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Material;
 import net.minecraftforge.common.ForgeDirection;
-import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
-import universalelectricity.implement.IDisableable;
-import universalelectricity.implement.IElectricityProducer;
-import universalelectricity.prefab.BlockConductor;
-import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.TileEntityAdvanced;
+import universalelectricity.core.implement.IDisableable;
 import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
+import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 
 /**
  * 

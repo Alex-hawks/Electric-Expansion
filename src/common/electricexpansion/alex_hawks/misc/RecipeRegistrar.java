@@ -1,11 +1,14 @@
 package electricexpansion.alex_hawks.misc;
 
+import basiccomponents.BasicComponents;
+import universalelectricity.prefab.RecipeHelper;
 import net.minecraft.src.Block;
 import net.minecraft.src.CraftingManager;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.ElectricExpansion;
 
@@ -91,12 +94,15 @@ public class RecipeRegistrar
 		CraftingManager.getInstance().getRecipeList().add(new ShapelessOreRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 3), new Object[]{new ItemStack(blockWireBlock, 1, 3), Block.lever}));
 
 		//Machines
-		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', "batteryBox", '?', "battery"}));
+//		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', "batteryBox", '?', "battery"}));
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', "battery",'@', "batteryBox", '?', "battery", '$', "eliteCircuit", '#', blockWireBlock}));
 //		GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0)});
-
+		
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
+				
+		if(Loader.isModLoaded("BasicComponents")) 
+			RecipeHelper.removeRecipe(BasicComponents.batteryBox);
 	}
 	public static void drawing()
 	{

@@ -2,10 +2,6 @@ package electricexpansion.alex_hawks.blocks;
 
 import java.util.List;
 
-import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.ItemStack;
@@ -13,6 +9,10 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.prefab.BlockConductor;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 
 public class BlockSwitchWire extends BlockConductor 
 {

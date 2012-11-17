@@ -1,14 +1,10 @@
 package electricexpansion.alex_hawks.machines;
 
-import java.util.Random;
-
-import com.google.common.io.ByteArrayDataInput;
-
 import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
 import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
-import ic2.api.IEnergySink;
-import ic2.api.IEnergySource;
-import ic2.api.IEnergyStorage;
+
+import java.util.Random;
+
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -19,17 +15,18 @@ import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.Vector3;
-import universalelectricity.electricity.ElectricInfo;
-import universalelectricity.electricity.ElectricityManager;
-import universalelectricity.implement.IConductor;
-import universalelectricity.implement.IJouleStorage;
-import universalelectricity.implement.IRedstoneProvider;
-import universalelectricity.prefab.TileEntityElectricityReceiver;
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityManager;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.implement.IJouleStorage;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import buildcraft.api.power.IPowerReceptor;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+
+import com.google.common.io.ByteArrayDataInput;
+
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
@@ -246,11 +243,11 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	public void detach(IComputerAccess computer) {}
 
 	@Override
-	public boolean isPoweringTo(byte side) 
+	public boolean isPoweringTo(ForgeDirection side) 
 	{return distributionNetworks.getJoules(this.frequency) == distributionNetworks.getMaxJoules();}
 
 	@Override
-	public boolean isIndirectlyPoweringTo(byte side) 
+	public boolean isIndirectlyPoweringTo(ForgeDirection side) 
 	{return distributionNetworks.getJoules(this.frequency) == distributionNetworks.getMaxJoules();}
 
 	@Override

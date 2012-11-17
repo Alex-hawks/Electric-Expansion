@@ -15,9 +15,9 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.Vector3;
-import universalelectricity.implement.IRedstoneProvider;
+import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import cpw.mods.fml.common.Loader;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
@@ -216,86 +216,81 @@ public class BlockAdvBatteryBox extends BlockMachine
         {
             TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
 
+            // NEED WAY OF DETERMINING IF THE ITEM HELD WHEN RIGHT CLICKING IS NOT AN INSTANCE OF THE ITEMUPGRADE.CLASS
+            
             if(par5EntityPlayer.inventory.getCurrentItem() == null)
         	{
             par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
          return true;
        	}
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT1Capacity == false)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 2");
-                return true;
-                
-            }          
             if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                 tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 1");
                 return true;
             }
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT1Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false && tileEntity.hasT1Capacity == true)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 4");
+                tileEntity.hasT2Capacity = true;
+                return true;
+                
+            } 
+            
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false && tileEntity.hasT2Capacity == true)
+            {
+                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                tileEntity.hasT3Capacity = true;
                 return true;
             }
 
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasT1Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 8");
+                tileEntity.hasBCComp = true;
                 return true;
             }
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasT1Capacity == false)
+            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
             {
                 par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-           System.out.println("Upgraded + 16");
+                tileEntity.hasIC2Comp = true;
                 return true;
             }
         }
 
         return true;
     }
-    /**
-     * Is this block powering the block on the specified side
-     */
-    @Override
-    public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if(tileEntity instanceof IRedstoneProvider)
-        {
-        	 return ((IRedstoneProvider)tileEntity).isPoweringTo((byte)side);
-        }
-        
-       return false;
-    }
+	/**
+	 * Is this block powering the block on the
+	 * specified side
+	 */
+	@Override
+	public boolean isPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
-    /**
-     * Is this block indirectly powering the block on the specified side
-     */
-    @Override
-    public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-    	TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if(tileEntity instanceof IRedstoneProvider)
-        {
-        	 return ((IRedstoneProvider)tileEntity).isIndirectlyPoweringTo((byte)side);
-        }
-        
-       return false;
-    }
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
+	/**
+	 * Is this block indirectly powering the block
+	 * on the specified side
+	 */
+	@Override
+	public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
 
     @Override
     public boolean isOpaqueCube()

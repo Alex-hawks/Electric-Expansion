@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox;
+package electricexpansion.alex_hawks.misc;
 
 import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
@@ -6,18 +6,20 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import net.minecraft.src.SlotFurnace;
 import universalelectricity.core.implement.IItemElectric;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 
-public class ContainerAdvBatteryBox extends Container
+public class ContainerWireMill extends Container
 {
-    private TileEntityAdvBatteryBox tileEntity;
+    private TileEntityWireMill tileEntity;
 
-    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox batteryBox)
+    public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
     {
-        this.tileEntity = batteryBox;
-        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(batteryBox, 0, 33, 24)); //Top slot
-        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(batteryBox, 1, 33, 48)); //Bottom slot
+        this.tileEntity = tileEntity;
+        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); //To be drawn into wire
+        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); //Drawing result
         int var3;
 
         for (var3 = 0; var3 < 3; ++var3)
@@ -126,4 +128,5 @@ public class ContainerAdvBatteryBox extends Container
 
         return var2;
     }
+    
 }

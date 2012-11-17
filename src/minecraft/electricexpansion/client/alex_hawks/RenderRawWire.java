@@ -1,16 +1,13 @@
 package electricexpansion.client.alex_hawks;
 
-import net.minecraft.src.Block;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
-import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 
 import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.cables.TileEntityRawWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 
 

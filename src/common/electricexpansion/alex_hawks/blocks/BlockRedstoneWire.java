@@ -7,11 +7,11 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.cables.TileEntityRedstoneWire;
+import universalelectricity.prefab.BlockConductor;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import universalelectricity.prefab.BlockConductor;
+import electricexpansion.EECommonProxy;
+import electricexpansion.alex_hawks.cables.TileEntityRedstoneWire;
 
 public class BlockRedstoneWire extends BlockConductor 
 {
