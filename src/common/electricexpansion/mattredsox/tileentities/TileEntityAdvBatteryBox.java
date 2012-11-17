@@ -664,7 +664,27 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 
 	@Override
 	public double getMaxJoules(Object... data) {
-		return 6000000;
+	if(this.hasT1Capacity == true) 
+	{
+		if(this.hasT2Capacity == true)
+		{
+			if(this.hasT3Capacity == true)
+			{
+				return 12000000;
+			}
+			else
+			{
+					return 9000000;
+			}
+		}
+		else
+		{
+			return 6000000;
+		}
+			}
+	else
+	{
+		return 3000000;
 	}
-
+	}
 }

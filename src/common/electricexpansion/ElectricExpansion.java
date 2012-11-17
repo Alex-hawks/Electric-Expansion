@@ -85,7 +85,7 @@ public class ElectricExpansion {
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
-	private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
+	//private static final int itemSuperBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
 	private static final int itemLeadID = ITEM_ID_PREFIX +4;
@@ -110,7 +110,7 @@ public class ElectricExpansion {
 	public static int batBox;	
 	//Items
 	public static int Upgrade;
-	public static int SuperBat;
+	//public static int SuperBat;
 	public static int ConnectionAlloy;
 	public static int Parts;
 	public static int Lead;
@@ -139,7 +139,7 @@ public class ElectricExpansion {
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
-	public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
+	//public static final ItemElectric itemSuperConduct = new ItemSuperconductorBattery(SuperBat, 0);
 	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(UETab.INSTANCE);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("Lead");
 
@@ -171,7 +171,7 @@ public class ElectricExpansion {
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
+//		SuperBat = UEConfig.getItemConfigID(i, "SuperConductor_Battery", itemSuperBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
@@ -303,7 +303,7 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(blockFuse, "120 Volt Relay");
 		LanguageRegistry.addName(itemLead, "Lead Ingot");
 
-		LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
+		//LanguageRegistry.addName(itemSuperConduct, "Superconductor Magnet Battery");
 		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
 
         LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");

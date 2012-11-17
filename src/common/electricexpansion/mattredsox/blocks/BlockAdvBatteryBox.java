@@ -216,7 +216,9 @@ public class BlockAdvBatteryBox extends BlockMachine
         {
             TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
 
-            if(par5EntityPlayer.inventory.getCurrentItem() == null || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) || par5EntityPlayer.inventory.getCurrentItem() != (new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)))
+            // NEED WAY OF DETERMINING IF THE ITEM HELD WHEN RIGHT CLICKING IS NOT AN INSTANCE OF THE ITEMUPGRADE.CLASS
+            
+            if(par5EntityPlayer.inventory.getCurrentItem() == null)
         	{
             par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
          return true;
