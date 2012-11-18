@@ -25,6 +25,7 @@ public class RecipeRegistrar
 	private static final Block blockSwitchWireBlockOff = ElectricExpansion.blockRawWire;
 	private static final Item itemParts = ElectricExpansion.itemParts;
 	private static final Item itemLeadTearBat = ElectricExpansion.itemLeadTearBat;
+	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
 	
 	public static void crafting()
 	{
@@ -100,13 +101,17 @@ public class RecipeRegistrar
 		
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
-				
-	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', "plateSteel", '@', "copperWire", '#', "ingotLead", '$', Item.ghastTear}));
-				
-				if(Loader.isModLoaded("BasicComponents")) 
-				{
-					RecipeHelper.removeRecipe(BasicComponents.batteryBox);
-				}
+		
+		//Lead-Tear Battery				
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', "plateSteel", '@', "copperWire", '#', "ingotLead", '$', Item.ghastTear}));
+		
+		//Tier 1 Upgrade
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat, '@', "copperWire", '#', "basicCircuit", '$', "plateSteel"}));
+
+		
+		//Tier 2 Upgrade
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat, '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
+
 		if(Loader.isModLoaded("BasicComponents")) 
 			RecipeHelper.removeRecipe(BasicComponents.batteryBox);
 	}

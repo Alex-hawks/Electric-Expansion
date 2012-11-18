@@ -101,12 +101,8 @@ public class BlockAdvBatteryBox extends BlockMachine
 					break;
 			}
 		}
-		
 			
 		}
-
-		
-	
 
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
@@ -157,57 +153,59 @@ public class BlockAdvBatteryBox extends BlockMachine
         if (!par1World.isRemote)
         {
             TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
-
-            // NEED WAY OF DETERMINING IF THE ITEM HELD WHEN RIGHT CLICKING IS NOT AN INSTANCE OF THE ITEMUPGRADE.CLASS
-          
-			if(!(par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemUpgrade))
- 			{
-	            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
-	            return true;
- 			}
-
             
-            if(par5EntityPlayer.inventory.getCurrentItem() == null)
+            if(par5EntityPlayer.inventory.getCurrentItem() !=null)
+            {
+    			if(!(par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemUpgrade))
+     			{
+    	            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
+    	            return true;
+     			}
+    			
+    			if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
+                {
+                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                    tileEntity.hasT1Capacity = true;
+                    return true;
+                }
+                
+                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false && tileEntity.hasT1Capacity == true)
+                {
+                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                    tileEntity.hasT2Capacity = true;
+                    return true;
+                    
+                } 
+                
+                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false && tileEntity.hasT2Capacity == true)
+                {
+                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                    tileEntity.hasT3Capacity = true;
+                    return true;
+                }
+
+                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
+                {
+                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                    tileEntity.hasBCComp = true;
+                    return true;
+                }
+                
+                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
+                {
+                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
+                    tileEntity.hasIC2Comp = true;
+                    return true;
+                }
+            }
+       
+            else if(par5EntityPlayer.inventory.getCurrentItem() == null)
         	{
             par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
             return true;
        	}
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT1Capacity = true;
-                return true;
-            }
             
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false && tileEntity.hasT1Capacity == true)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT2Capacity = true;
-                return true;
-                
-            } 
-            
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false && tileEntity.hasT2Capacity == true)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasT3Capacity = true;
-                return true;
-            }
-
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasBCComp = true;
-                return true;
-            }
-            
-            if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
-            {
-                par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                tileEntity.hasIC2Comp = true;
-                return true;
-            }
         }
 
         return true;

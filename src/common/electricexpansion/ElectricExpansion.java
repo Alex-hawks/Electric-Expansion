@@ -9,6 +9,7 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -132,12 +133,12 @@ public class ElectricExpansion {
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
-	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("AdvBatBox");
-	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("VoltDet");
-	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
-	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(CreativeTabs.tabDecorations);
-	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockEtcher");
-	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(CreativeTabs.tabDecorations).setBlockName("blockFuse");
+	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("AdvBatBox");
+	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("VoltDet");
+	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE);
+	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE);
+	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(UETab.INSTANCE).setBlockName("blockEtcher");
+	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	
 	//Items
@@ -313,6 +314,13 @@ public class ElectricExpansion {
 		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
 
 		MinecraftForge.EVENT_BUS.register(this);
+		
+		MinecraftForgeClient.preloadTexture(EECommonProxy.MattBLOCK_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(EECommonProxy.MattItem_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(EECommonProxy.AITEMS);
+		MinecraftForgeClient.preloadTexture(EECommonProxy.ABLOCK);
+
+
 	}
 
 	@ForgeSubscribe
