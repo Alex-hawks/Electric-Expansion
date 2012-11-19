@@ -38,6 +38,8 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					textureToUse = EECommonProxy.ATEXTURES + "InsulatedSilverWire.png";
 				else if(meta == 3)
 					textureToUse = EECommonProxy.ATEXTURES + "InsulatedHVWire.png";
+				else if(meta == 4)
+					textureToUse = EECommonProxy.ATEXTURES + "InsulatedEndiumWire.png";
 			}
 			else if(ID == ElectricExpansion.SwitchWire && tileEntity.getWorldObj().isBlockGettingPowered(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord))
 			{
@@ -49,6 +51,8 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					textureToUse = EECommonProxy.ATEXTURES + "SilverSwitchWireOn.png";
 				else if(meta == 3)
 					textureToUse = EECommonProxy.ATEXTURES + "HVSwitchWireOn.png";
+				else if(meta == 3)
+					textureToUse = EECommonProxy.ATEXTURES + "EndiumSwitchWireOn.png";
 			}	
 			else if(ID == ElectricExpansion.SwitchWire && !(tileEntity.getWorldObj().isBlockGettingPowered(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord)))
 			{
@@ -60,6 +64,8 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					textureToUse = EECommonProxy.ATEXTURES + "SilverSwitchWireOff.png";
 				else if(meta == 3)
 					textureToUse = EECommonProxy.ATEXTURES + "HVSwitchWireOff.png";
+				else if(meta == 3)
+					textureToUse = EECommonProxy.ATEXTURES + "EndiumSwitchWireOff.png";
 			}	
 		}
 

@@ -105,7 +105,7 @@ public class RecipeRegistrar
 		//Machines
 //		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', "batteryBox", '?', "battery"}));
 		CraftingManager.getInstance().getRecipeList().add(new ShapedOreRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', "battery",'@', "batteryBox", '?', "battery", '$', "eliteCircuit", '#', blockWireBlock}));
-		GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0)});
+//		GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0)});
 		
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" ! ", "! !", " ! ", '!', Item.ingotIron});	
