@@ -16,7 +16,6 @@ import electricexpansion.client.alex_hawks.RenderInsulatedWire;
 import electricexpansion.client.alex_hawks.RenderRawWire;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
-import electricexpansion.mattredsox.tileentities.TileEntityFuse;
 import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
@@ -36,23 +35,23 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 	@Override
 	public void init()
 	{
-			//Alex's Tile Entity Renderer registrations
-			ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
-			ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());
-			ClientRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
-			GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
-			GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
-			GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
-			GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
-			GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
-			GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
-			
-			//Mattredsox's Tile entity registrations
-			GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
-			GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TileEntityUpTrans");
-			GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
-			GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
-			GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+		//Alex's Tile Entity Renderer registrations
+		ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
+		ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());
+		ClientRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
+		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
+		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
+		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
+		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
+		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
+		
+		//Mattredsox's Tile entity registrations
+		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
+		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TileEntityUpTrans");
+		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
+		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
+//		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
 	}
 
 }

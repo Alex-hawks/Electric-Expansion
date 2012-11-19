@@ -78,11 +78,11 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.BATTERY_BOX_METADATA + 2).getOpposite();}
+	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2).getOpposite();}
 
 	@Override
 	public boolean canConnect(ForgeDirection side)
-	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.BATTERY_BOX_METADATA + 2);}
+	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2);}
 
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
@@ -196,7 +196,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 			//Output electricity
 			if (this.joules > 0)
 			{
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.BATTERY_BOX_METADATA + 2));
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2));
 
 				//Output IC2 energy
 				if(Loader.isModLoaded("IC2"))
@@ -226,7 +226,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 					}
 				}
 
-				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.BATTERY_BOX_METADATA + 2));
+				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2));
 
 				// Output UE electricity
 				if (connector instanceof IConductor)
@@ -498,7 +498,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 
 	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
-	{return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.BATTERY_BOX_METADATA + 2);}
+	{return direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2);}
 
 	@Override
 	public int getCapacity() 

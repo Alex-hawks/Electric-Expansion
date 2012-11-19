@@ -27,168 +27,168 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	private double joulesStored = 0;
 
 
-    private boolean isFull = false;
-    
+	private boolean isFull = false;
+
 	private int playersUsing = 0;
-	
+
 	public IPowerProvider powerProvider;
-	
+
 	public boolean initialized = false;
 
 	private boolean sendUpdate = true;
-	
+
 	public double voltin;
-	
-    public TileEntityUPTransformer()
-    {
-    	super();
-    	this.setPowerProvider(null);
-    }
-    
-    @Override
-    public double wattRequest()
-    {
-        if (!this.isDisabled())
-        {
-            return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joulesStored);
-        }
 
-        return 0;
-    }
+	public TileEntityUPTransformer()
+	{
+		super();
+		this.setPowerProvider(null);
+	}
 
-    @Override
-    public boolean canReceiveFromSide(ForgeDirection side)
-    {
-        return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
-    }
+	@Override
+	public double wattRequest()
+	{
+		if (!this.isDisabled())
+		{
+			return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joulesStored);
+		}
 
-    @Override
-    public boolean canConnect(ForgeDirection side)
-    {
-        return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();    }
+		return 0;
+	}
 
-    @Override
-    public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
-    {        
-    	voltin = voltage;
+	@Override
+	public boolean canReceiveFromSide(ForgeDirection side)
+	{
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+	}
 
-        
-        if(!this.isDisabled())
-        {
-        	this.setJoules(this.joulesStored+ElectricInfo.getWattHours(amps, voltage));
-        }
-    }
-    
-    @Override
-    public void updateEntity() 
-    {
-    	super.updateEntity();
-    	
-    	if(!this.initialized)
-    	{
-    		if(Loader.isModLoaded("IC2"))
-    		{
-    			EnergyNet.getForWorld(worldObj).addTileEntity(this);
-    		}
-    		
-    		this.initialized = true;
-    	}
-    	
-        if(!this.isDisabled())
-        {
-        	if(this.powerProvider != null)
-        	{
-        		double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
-        		this.setJoules(this.joulesStored + receivedElectricity);
-        	
-        		if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
-        		{
-        			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
-        		}
-        	}
-        	
-                }
+	@Override
+	public boolean canConnect(ForgeDirection side)
+	{
+		return canReceiveFromSide(side) || side.ordinal() == this.getBlockMetadata();}
 
-            //Power redstone if the battery box is full
-            boolean isFullThisCheck = false;
+	@Override
+	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+	{
+		voltin = voltage;
 
-            if (this.joulesStored >= this.getMaxJoules())
-            {
-                isFullThisCheck = true;
-            }
 
-            if (this.isFull != isFullThisCheck)
-            {
-                this.isFull = isFullThisCheck;
-                this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
-            }
-            
-            //Output electricity
-            if (this.joulesStored > 0)
-            {
-                TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
-            	
-                //Output IC2 energy
-            	if(Loader.isModLoaded("IC2"))
-            	{
-	 	            if(this.joulesStored*UniversalElectricity.TO_IC2_RATIO >= 32)
-	 	            {
-	 	            	this.setJoules(this.joulesStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
-	 	            }
-            	}
-            	
-            	//Output BC energy
-            	if(Loader.isModLoaded("BuildCraft|Transport"))
-            	{
-            		if (this.isPoweredTile(tileEntity))
-					{
-						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
-						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
-						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joulesStored), 80000), 0);
-						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
-						this.setJoules(this.joulesStored - transferJoules);
-					}
-            	}
-            	
-                TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
-                
-				// Output UE electricity
-				if (connector instanceof IConductor)
+		if(!this.isDisabled())
+		{
+			this.setJoules(this.joulesStored+ElectricInfo.getWattHours(amps, voltage));
+		}
+	}
+
+	@Override
+	public void updateEntity() 
+	{
+		super.updateEntity();
+
+		if(!this.initialized)
+		{
+			if(Loader.isModLoaded("IC2"))
+			{
+				EnergyNet.getForWorld(worldObj).addTileEntity(this);
+			}
+
+			this.initialized = true;
+		}
+
+		if(!this.isDisabled())
+		{
+			if(this.powerProvider != null)
+			{
+				double receivedElectricity = this.powerProvider.useEnergy(25, 25, true)*UniversalElectricity.BC3_RATIO;
+				this.setJoules(this.joulesStored + receivedElectricity);
+
+				if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
 				{
-					double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
-					double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joulesStored, this.getVoltage())), 80), 0);
-					if (!this.worldObj.isRemote)
-					{
-						ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
-					}
-					this.setJoules(this.joulesStored - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 				}
 			}
-		}
-	
-    
-   
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
-    {
-        super.readFromNBT(par1NBTTagCompound);
-        this.joulesStored = par1NBTTagCompound.getDouble("electricityStored");
-        
-    }
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
-    {
-        super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setDouble("electricityStored", this.joulesStored);
-        }
-    
+		}
+
+		//Power redstone if the battery box is full
+		boolean isFullThisCheck = false;
+
+		if (this.joulesStored >= this.getMaxJoules())
+		{
+			isFullThisCheck = true;
+		}
+
+		if (this.isFull != isFullThisCheck)
+		{
+			this.isFull = isFullThisCheck;
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+		}
+
+		//Output electricity
+		if (this.joulesStored > 0)
+		{
+			TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite());
+
+			//Output IC2 energy
+			if(Loader.isModLoaded("IC2"))
+			{
+				if(this.joulesStored*UniversalElectricity.TO_IC2_RATIO >= 32)
+				{
+					this.setJoules(this.joulesStored - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32))*UniversalElectricity.IC2_RATIO);
+				}
+			}
+
+			//Output BC energy
+			if(Loader.isModLoaded("BuildCraft|Transport"))
+			{
+				if (this.isPoweredTile(tileEntity))
+				{
+					IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+					double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
+					float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joulesStored), 80000), 0);
+					receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite());
+					this.setJoules(this.joulesStored - transferJoules);
+				}
+			}
+
+			TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata()));
+
+			// Output UE electricity
+			if (connector instanceof IConductor)
+			{
+				double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
+				double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joulesStored, this.getVoltage())), 80), 0);
+				if (!this.worldObj.isRemote)
+				{
+					ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.getVoltage());
+				}
+				this.setJoules(this.joulesStored - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
+			}
+		}
+	}
+
+
+
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+	{
+		super.readFromNBT(par1NBTTagCompound);
+		this.joulesStored = par1NBTTagCompound.getDouble("electricityStored");
+
+	}
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+	{
+		super.writeToNBT(par1NBTTagCompound);
+		par1NBTTagCompound.setDouble("electricityStored", this.joulesStored);
+	}
+
 	@Override
 	public boolean isPoweringTo(ForgeDirection side)
 	{
@@ -200,19 +200,19 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	{
 		return isPoweringTo(side);
 	}
-    
-    @Override
-    public double getJoules(Object... data)
-    {
-    	return this.joulesStored;
-    }
+
+	@Override
+	public double getJoules(Object... data)
+	{
+		return this.joulesStored;
+	}
 
 	@Override
 	public void setJoules(double wattHours, Object... data)
 	{
 		this.joulesStored = Math.max(Math.min(wattHours, this.getMaxJoules()), 0);
 	}
-	
+
 	@Override
 	public double getMaxJoules(Object... data)
 	{
@@ -222,7 +222,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
-	
+
 	/**
 	 * Is this tile entity a BC tile?
 	 */
@@ -240,14 +240,14 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 
 	@Override
 	public void setPowerProvider(IPowerProvider provider)
-    {
+	{
 		if(provider == null)
 		{
 			if(PowerFramework.currentFramework != null)
-	    	{
-		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
+			{
+				powerProvider = PowerFramework.currentFramework.createPowerProvider();
 				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxJoules()*UniversalElectricity.BC3_RATIO));
-	    	}
+			}
 		}
 		else
 		{
@@ -277,7 +277,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 	{
 		return (int) (this.joulesStored*UniversalElectricity.IC2_RATIO);
 	}
-	
+
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
@@ -321,7 +321,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 		{
 			return this.joulesStored < getMaxJoules();
 		}
-		
+
 		return false;
 	}
 
@@ -333,23 +333,23 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 			double inputElectricity = euAmount*UniversalElectricity.IC2_RATIO;
 
 			double rejectedElectricity = Math.max(inputElectricity - (this.getMaxJoules() - this.joulesStored), 0);
-		
+
 			this.setJoules(joulesStored + inputElectricity);
-			
+
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
 				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
-		
+
 			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
 		}
-		
+
 		return euAmount;
 	}
-	
-    @Override
-    public double getVoltage()
-    {
+
+	@Override
+	public double getVoltage()
+	{
 		return voltin * 2;
-    }
+	}
 }

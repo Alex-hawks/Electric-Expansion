@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox.tileentities;
+/*package electricexpansion.mattredsox.tileentities;
 
 import ic2.api.Direction;
 import ic2.api.EnergyNet;
@@ -103,7 +103,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
         	
         		if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
-        			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
         		}
         	}
         	
@@ -174,9 +174,9 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 		
 	
    
-    /**
+    *//**
      * Reads a tile entity from NBT.
-     */
+     *//*
     @Override
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
@@ -184,9 +184,9 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
         this.Joulestored = par1NBTTagCompound.getDouble("electricityStored");
         
     }
-    /**
+    *//**
      * Writes a tile entity to NBT.
-     */
+     *//*
     @Override
     public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
@@ -224,13 +224,13 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 		return 10;
 	}
 	
-	/**
+	*//**
 	 * BUILDCRAFT FUNCTIONS
-	 */
+	 *//*
 	
-	/**
+	*//**
 	 * Is this tile entity a BC tile?
-	 */
+	 *//*
 	public boolean isPoweredTile(TileEntity tileEntity)
 	{
 		if(tileEntity instanceof IPowerReceptor) 
@@ -275,9 +275,9 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 		return (int) Math.ceil((this.getMaxJoules() - this.Joulestored)*UniversalElectricity.BC3_RATIO);
 	}
 
-	/**
+	*//**
 	 * INDUSTRIALCRAFT FUNCTIONS
-	 */
+	 *//*
 	public int getStored() 
 	{
 		return (int) (this.Joulestored*UniversalElectricity.IC2_RATIO);
@@ -343,7 +343,7 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 			
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		
 			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
@@ -358,3 +358,4 @@ public class TileEntityFuse extends TileEntityElectricityReceiver implements IEn
 		return voltin;
     }
 }
+*/
