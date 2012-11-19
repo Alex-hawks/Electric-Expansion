@@ -5,7 +5,6 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
 import electricexpansion.alex_hawks.cables.TileEntityRawWire;
-import electricexpansion.alex_hawks.cables.TileEntityRedstoneWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
 import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
@@ -40,11 +39,13 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 			//Alex's Tile Entity Renderer registrations
 			ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
 			ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());
-			ClientRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire", new RenderInsulatedWire());
 			ClientRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
 			GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 			GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
 			GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
+			GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+			GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
+			GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 			
 			//Mattredsox's Tile entity registrations
 			GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
@@ -52,9 +53,6 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 			GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
 			GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 			GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
-			GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
-			GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
-			GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 	}
 
 }

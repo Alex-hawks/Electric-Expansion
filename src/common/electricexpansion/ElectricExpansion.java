@@ -58,7 +58,7 @@ import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:BasicComponents", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.2.3", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
@@ -267,26 +267,31 @@ public class ElectricExpansion {
 		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Tin.name", "Uninsulated Tin Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Silver.name", "Uninsulated Silver Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.RawWire.HV.name", "Uninsulated HV Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Endium.name", "Uninsulated Endium Wire");
 		//Set the Insulated Cable Name(s)
 		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Copper.name", "Insulated Copper Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Tin.name", "Insulated Tin Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Silver.name", "Insulated Silver Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.HV.name", "Insulated HV Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Endium.name", "Insulated Endium Wire");
 		//Set the Hidden Cable Name(s)
 		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Copper.name", "Hidden Copper Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Tin.name", "Hidden Tin Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Silver.name", "Hidden Silver Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.HV.name", "Hidden HV Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Endium.name", "Hidden Endium Wire");
 		//Set the Switch Cable (On/Crafted) Name(s)
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Copper.name", "Copper Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Tin.name", "Tin Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Silver.name", "Silver Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.HV.name", "HV Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Endium.name", "Endium Switch Wire");
 		//Set the Switch Cable Block (On/Crafted) Name(s)
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Copper.name", "Hidden Copper Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Tin.name", "Hidden Tin Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Silver.name", "Hidden Silver Switch Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.HV.name", "Hidden HV Switch Wire");
+		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Endium.name", "Hidden Endium Switch Wire");
 
 		//Machines
 		LanguageRegistry.addName(blockUPTransformer, "Up Transformer");
