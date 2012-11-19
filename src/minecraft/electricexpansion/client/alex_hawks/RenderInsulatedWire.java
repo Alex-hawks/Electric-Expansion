@@ -31,7 +31,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			if(ID == ElectricExpansion.insulatedWire)
 			{
 				if(meta == 0)
-					textureToUse = EECommonProxy.ATEXTURES + "CopperWire.png";
+					textureToUse = EECommonProxy.ATEXTURES + "InsulatedCopperWire.png";
 				else if(meta == 1)
 					textureToUse = EECommonProxy.ATEXTURES + "InsulatedTinWire.png";
 				else if(meta == 2)
