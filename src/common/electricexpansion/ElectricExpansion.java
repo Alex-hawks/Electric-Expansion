@@ -257,6 +257,8 @@ public class ElectricExpansion {
 
 		RecipeRegistrar.crafting();
 		RecipeRegistrar.drawing();
+		UETab.setItemStack(new ItemStack(this.blockBigBatteryBox));
+
 	}
 
 	@PostInit
