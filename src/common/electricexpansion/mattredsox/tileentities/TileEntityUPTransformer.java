@@ -103,7 +103,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 
 				if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
 				{
-					this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+					this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 				}
 			}
 
@@ -338,7 +338,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 
 			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);

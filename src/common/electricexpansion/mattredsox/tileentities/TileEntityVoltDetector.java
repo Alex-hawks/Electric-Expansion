@@ -247,7 +247,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
 				//PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		}
 	}

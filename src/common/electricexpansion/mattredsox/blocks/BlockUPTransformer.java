@@ -147,7 +147,7 @@ public class BlockUPTransformer extends BlockMachine
 	 * specified side
 	 */
 	@Override
-	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	public boolean isProvidingDirectPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
 	{
 		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
@@ -161,7 +161,7 @@ public class BlockUPTransformer extends BlockMachine
 	 * on the specified side
 	 */
 	@Override
-	public boolean isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	public boolean isIndirectlyPoweringTo(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
 	{
 		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
