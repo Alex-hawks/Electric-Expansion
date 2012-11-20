@@ -7,5 +7,3 @@ c ElectricExpansion_v0.2.3.23.jar
 latest ElectricExpansion_v0.2.3.24.jar
  ElectricExpansion_v0.2.3.25.jar
  ElectricExpansion_v0.2.3.26.jar
- ElectricExpansion_v0.2.3.27.jar
- ElectricExpansion_v0.2.3.28.jar

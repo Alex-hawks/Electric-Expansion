@@ -102,7 +102,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
         	
         		if(this.ticks % 2 == 0 && this.playersUsing > 0 && receivedElectricity > 0)
         		{
-        			this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+        			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
         		}
         	}
         	
@@ -336,7 +336,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 			
 			if(this.ticks % 2 == 0 && this.playersUsing > 0)
 			{
-				this.worldObj.markBlockNeedsUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 		
 			return (int) (rejectedElectricity*UniversalElectricity.TO_IC2_RATIO);
