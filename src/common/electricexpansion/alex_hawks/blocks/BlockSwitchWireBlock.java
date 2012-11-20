@@ -61,6 +61,8 @@ public class BlockSwitchWireBlock extends BlockConductor
 				texture = 18;
 			if(meta == 3)
 				texture = 19;
+			if(meta == 4)
+				texture = 20;
 		}
 		else if(side == 0)
 		{
@@ -72,6 +74,8 @@ public class BlockSwitchWireBlock extends BlockConductor
 				texture = 34;
 			if(meta == 3)
 				texture = 35;
+			if(meta == 4)
+				texture = 36;
 		}
 		else
 		{
@@ -83,6 +87,8 @@ public class BlockSwitchWireBlock extends BlockConductor
 				texture = 2;
 			if(meta == 3)
 				texture = 3;
+			if(meta == 4)
+				texture = 4;
 		}
 		if(texture != 255)
 			texture = texture + 16;
