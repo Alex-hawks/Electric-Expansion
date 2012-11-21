@@ -11,6 +11,7 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.BlockMachine;
 import electricexpansion.EECommonProxy;
+import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 
 public class BlockWireMill extends BlockMachine
@@ -19,21 +20,20 @@ public class BlockWireMill extends BlockMachine
 		{
 			super("WireMill", par1, Material.iron);
 			this.setTextureFile(EECommonProxy.MattBLOCK_TEXTURE_FILE);
-		}
-		
+		}	
 
-	/*@Override
-	public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player)
-	{
-		if (!world.isRemote && !super.onMachineActivated(world, x, y, z, player))
+		@Override
+		public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
 		{
-			player.openGui(BASEMOD.instance(), 0, world, x, y, z);
+			if (!par1World.isRemote)
+			{
+				par5EntityPlayer.openGui(ElectricExpansion.instance, 2, par1World, x, y, z);
+				return true;
+			}
+
+			return true;
 		}
 
-		return true;
-
-	}
-*/
 	@Override
 	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player)
 	{
@@ -48,22 +48,33 @@ public class BlockWireMill extends BlockMachine
 		return true;
 	}
 
+	/**
+	 * Called when the block is placed in the
+	 * world.
+	 */
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entity)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
 	{
-		int direction = MathHelper.floor_double((entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int newMetadata = 3;
+		int metadata = par1World.getBlockMetadata(x, y, z);
 
-		switch (direction)
-		{
-			case 0: newMetadata = 2; break;
-			case 1: newMetadata = 5; break;
-			case 2: newMetadata = 3; break;
-			case 3: newMetadata = 4; break;
-		}
-
-		world.setBlockMetadataWithNotify(x, y, z, newMetadata);
-
+		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int change = 3;
+		
+			switch (angle)
+			{
+				case 0:
+					par1World.setBlockMetadataWithNotify(x, y, z, 3);
+					break;
+				case 1:
+					par1World.setBlockMetadataWithNotify(x, y, z, 1);
+					break;
+				case 2:
+					par1World.setBlockMetadataWithNotify(x, y, z, 2);
+					break;
+				case 3:
+					par1World.setBlockMetadataWithNotify(x, y, z, 0);
+					break;
+			}
 	}
 
 	@Override
@@ -87,7 +98,7 @@ public class BlockWireMill extends BlockMachine
 	@Override
 	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
 	{
-		return false;
+		return true;
 	}
 
 	@Override
