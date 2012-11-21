@@ -14,6 +14,7 @@ import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.client.alex_hawks.RenderInsulatedWire;
 import electricexpansion.client.alex_hawks.RenderRawWire;
+import electricexpansion.client.alex_hawks.RenderWireMill;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
@@ -36,12 +37,12 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 	public void init()
 	{
 		//Alex's Tile Entity Renderer registrations
+		ClientRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill", new RenderWireMill());
 		ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
 		ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());
 		ClientRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
-		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
 		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
 		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
