@@ -1,9 +1,8 @@
-/**
- * 
- */
 package electricexpansion.api;
 
 import java.util.ArrayList;
+
+import universalelectricity.core.implement.IConductor;
 
 import net.minecraftforge.common.ForgeDirection;
 
@@ -16,14 +15,7 @@ public class CableInterfaces
 	 *	
 	 */
 	public interface IPanelElectricMachine 
-	{
-		/** 
-		 * @param meta
-		 * @return the side on which your block exists
-		 * f.e. Atrain99's Solar Panels would be bottom.
-		 */
-		public ForgeDirection sideMountedTo(int meta, ForgeDirection side);
-		
+	{	
 		/**
 		 * @param meta
 		 * @param side

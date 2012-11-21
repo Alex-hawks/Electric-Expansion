@@ -18,10 +18,6 @@ public abstract class TilePanelMachine extends TileEntityAdvanced implements IPa
 	private int ticksIdling = 0;
 
 	@Override
-	public ForgeDirection sideMountedTo(int meta, ForgeDirection side) 
-	{return ForgeDirection.DOWN;}
-
-	@Override
 	public boolean canConnectToBase(int meta, ForgeDirection side) 
 	{return true;}
 
