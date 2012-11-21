@@ -1,14 +1,15 @@
 package electricexpansion.mattredsox.items;
 
+import electricexpansion.EECommonProxy;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 
 public class ItemLeadTearBattery extends ItemElectric
 {
-    public ItemLeadTearBattery(int par1, int par2)
+    public ItemLeadTearBattery(int par1)
     {
         super(par1);
-        this.iconIndex = par2;
+        this.iconIndex = 1;
         this.setItemName("Lead Tear Battery");
         this.setCreativeTab(UETab.INSTANCE);
     }
@@ -25,11 +26,11 @@ public class ItemLeadTearBattery extends ItemElectric
         return true;
     }
 
- //   @Override
- //   public String getTextureFile()
- //   {
- //       return BasicComponents.ITEM_TEXTURE_FILE;
-   // }
+  @Override
+    public String getTextureFile()
+    {
+        return EECommonProxy.MattItem_TEXTURE_FILE;
+    }
 
     @Override
     public double getVoltage()
