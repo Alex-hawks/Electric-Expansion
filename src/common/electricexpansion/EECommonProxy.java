@@ -84,7 +84,7 @@ public class EECommonProxy implements IGuiHandler
 			switch(ID)
 			{
 				case 0: return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvBatteryBox)tileEntity));
-				case 1: return new ContainerVoltDetector();
+				case 1: return new ContainerVoltDetector(((TileEntityVoltDetector)tileEntity));
 				case 2: return new ContainerWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 			}
         }
