@@ -58,17 +58,16 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.DOWN_TRANS_METADATA + 2).getOpposite();}
+	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();}
 
 	@Override
 	public boolean canConnect(ForgeDirection side)
-	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.DOWN_TRANS_METADATA + 2);}
+	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2);}
 
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
 	{ 
 		voltin = voltage;
-		System.out.println(voltin);
 		if(!this.isDisabled())
 		{
 			this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage, 1));
@@ -97,9 +96,9 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 			//Output electricity
 			if (this.joules > 0)
 			{
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.DOWN_TRANS_METADATA + 2));
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
 
-				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.DOWN_TRANS_METADATA + 2));
+				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
 
                 {
                 	//Output UE electricity

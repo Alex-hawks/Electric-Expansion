@@ -144,7 +144,7 @@ public class ElectricExpansion {
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
-	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat, 0);
+	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat);
 	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(UETab.INSTANCE);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("Lead");
 
@@ -178,7 +178,7 @@ public class ElectricExpansion {
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		LeadTearBat = UEConfig.getItemConfigID(i, "Lead_Tear_Battery", itemLeadTearBatID);
-		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", itemUpgradeID);
+		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", connectorAlloyID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
 
@@ -319,6 +319,8 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(itemLead, "Lead Ingot");
 		LanguageRegistry.addName(itemLeadTearBat, "Lead-Tear Battery");
 		LanguageRegistry.addName(new ItemStack(itemParts, 1, 0), "Draw Plates");
+		
+		LanguageRegistry.addName(itemConnectorAlloy, "Connector Alloy");
 
 		MinecraftForge.EVENT_BUS.register(this);
 		

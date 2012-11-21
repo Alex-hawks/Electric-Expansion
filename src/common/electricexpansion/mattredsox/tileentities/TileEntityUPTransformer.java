@@ -58,11 +58,11 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockUPTransformer.UP_TRANS_METADATA + 2).getOpposite();}
+	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();}
 
 	@Override
 	public boolean canConnect(ForgeDirection side)
-	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockUPTransformer.UP_TRANS_METADATA + 2);}
+	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2);}
 
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
@@ -97,9 +97,9 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 			//Output electricity
 			if (this.joules > 0)
 			{
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockUPTransformer.UP_TRANS_METADATA + 2));
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
 
-				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockUPTransformer.UP_TRANS_METADATA + 2));
+				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
 
                 {
                 	//Output UE electricity
@@ -138,9 +138,6 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 		par1NBTTagCompound.setDouble("voltIn", this.voltin);
 	}
 
-	public String getInvName()
-	{return "Voltage Detector";}
-	
 	@Override
 	public boolean isPoweringTo(ForgeDirection side)
 	{return this.isFull;}
