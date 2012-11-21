@@ -49,8 +49,10 @@ public class BlockWireMill extends BlockMachine
 	public int getBlockTextureFromSide(int side)
 	{
 		if(side == 1)
-			return 253;
-		return 254;	
+			return 6;
+		if(side == orientation + 2)
+			return 8;
+		return 7;	
 	}
 
 }
