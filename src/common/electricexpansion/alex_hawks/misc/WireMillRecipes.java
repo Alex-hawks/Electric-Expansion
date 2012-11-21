@@ -32,7 +32,7 @@ public class WireMillRecipes
 	 * Adds a drawing recipe.
 	 * @param input As an ItemStack
 	 * @param output As an ItemStack
-	 * @param watts The ticks required for the recipe, seconds * 20.
+	 * @param ticks The ticks required for the recipe, seconds * 20.
 	 */
 	public static void addDrawing(ItemStack input, ItemStack output, int ticks)
 	{
@@ -59,10 +59,10 @@ public class WireMillRecipes
 	}
 
 	/**
-	 * This one supports Forge Ore-Dictionary.
-	 * @param input
-	 * @param output
-	 * @param watts
+	 * Adds a drawing recipe.
+	 * @param input As Forge Ore-Dict. ID
+	 * @param output As an ItemStack
+	 * @param ticks The ticks required for the recipe, seconds * 20.
 	 */
 	public static void addDrawing(String input, ItemStack output, int ticks)
 	{

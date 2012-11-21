@@ -40,11 +40,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	 * 2 = output;
 	 */
 	private ItemStack[] inventory = new ItemStack[3];
-	private ItemStack[] upgrades = new ItemStack[2];
 
 	private int playersUsing = 0;
 	private ItemStack sapper;
 	private int machineHP;
+	public int orientation;
 
 	@Override
 	public double wattRequest()
@@ -215,11 +215,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
 		try{this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));}
 		catch(NullPointerException e) {this.sapper = null;}
-		for(int i = 0; i < this.upgrades.length; i++)
-		{
-			try{this.upgrades[i] = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("upgrade" + i));}
-			catch(Exception e) {this.upgrades[i] = null;}
-		}
 	}
 	/**
 	 * Writes a tile entity to NBT.
@@ -245,10 +240,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 		par1NBTTagCompound.setTag("Items", var2);
 		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
-
-		for(int i = 0; i < this.upgrades.length; i++)
-			if (this.upgrades[i] != null)
-				par1NBTTagCompound.setCompoundTag("upgrade" + i, this.upgrades[i].writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override

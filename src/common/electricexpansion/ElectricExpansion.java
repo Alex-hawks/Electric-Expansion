@@ -317,8 +317,8 @@ public class ElectricExpansion {
 		
 		//Resources
 		LanguageRegistry.addName(itemLead, "Lead Ingot");
-	LanguageRegistry.addName(itemLeadTearBat, "Lead-Tear Battery");
-		LanguageRegistry.instance().addStringLocalization("tile.Parts.DrawPlates.name", "Draw Plates");
+		LanguageRegistry.addName(itemLeadTearBat, "Lead-Tear Battery");
+		LanguageRegistry.addName(new ItemStack(itemParts, 1, 0), "Draw Plates");
 
 		MinecraftForge.EVENT_BUS.register(this);
 		

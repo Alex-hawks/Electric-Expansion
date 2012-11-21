@@ -1,5 +1,10 @@
 package electricexpansion.alex_hawks.items;
 
+import java.util.List;
+
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+import electricexpansion.EECommonProxy;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -13,6 +18,8 @@ public class ItemParts extends Item
 		this.setItemName("Parts");
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 		this.setMaxStackSize(32);
+		this.setIconIndex(240);
+		this.setTextureFile(EECommonProxy.AITEMS);
 	}
 	@Override
     public int getIconFromDamage(int meta)
@@ -35,5 +42,10 @@ public class ItemParts extends Item
 		}
 		return i.getItem().getItemName() + name;
     }
-
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		for (int var4 = 0; var4 < 1; ++var4)
+			par3List.add(new ItemStack(par1, 1, var4));
+	}
 }
