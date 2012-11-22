@@ -43,7 +43,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	private int playersUsing = 0;
 	private ItemStack sapper;
-	private int machineHP;
+	private int machineHP = 20;
 	public int orientation;
 
 	@Override

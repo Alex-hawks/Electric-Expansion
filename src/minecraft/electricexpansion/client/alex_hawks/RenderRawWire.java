@@ -33,6 +33,8 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 				textureToUse = EECommonProxy.ATEXTURES + "RawSilverWire";
 			else if(meta == 3)
 				textureToUse = EECommonProxy.ATEXTURES + "RawHVWire";
+			else if(meta == 3)
+				textureToUse = EECommonProxy.ATEXTURES + "RawEndiumWire";
 		}
 
 		//Texture file
