@@ -27,7 +27,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 	    	GL11.glTranslatef(0.5F, .8F, 0.5F);
 			//GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
-			GL11.glScalef(1.5F, -1F, -1F);
+			GL11.glScalef(1F, -1F, -1F);
 			wireMill.render(null, 0, 0, 0, 0, 0, 0.0625F);
 			GL11.glPopMatrix();	
 	    }
