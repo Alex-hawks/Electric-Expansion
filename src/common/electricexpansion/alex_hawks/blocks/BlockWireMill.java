@@ -34,19 +34,35 @@ public class BlockWireMill extends BlockMachine
 			return true;
 		}
 
-	@Override
-	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player)
-	{
-		switch (world.getBlockMetadata(x, y, z))
+		@Override
+		public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
 		{
-			case 2: world.setBlockMetadataWithNotify(x, y, z, 4); break;
-			case 5: world.setBlockMetadataWithNotify(x, y, z, 2); break;
-			case 3: world.setBlockMetadataWithNotify(x, y, z, 5); break;
-			case 4: world.setBlockMetadataWithNotify(x, y, z, 3); break;
-		}
+			int metadata = par1World.getBlockMetadata(x, y, z);
+			int original = metadata;
 
-		return true;
-	}
+			int change = 0;
+
+			// Reorient the block
+			switch (original)
+			{
+				case 0:
+					change = 3;
+					break;
+				case 3:
+					change = 1;
+					break;
+				case 1:
+					change = 2;
+					break;
+				case 2:
+					change = 0;
+					break;
+			}
+			par1World.markBlockForRenderUpdate(x, y, z);
+			par1World.setBlockMetadataWithNotify(x, y, z, change);
+
+			return true;
+		}
 
 	/**
 	 * Called when the block is placed in the

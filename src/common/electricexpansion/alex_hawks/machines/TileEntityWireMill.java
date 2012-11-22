@@ -56,7 +56,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 5);}
+	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 5) ;}
 
 	@Override
 	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
