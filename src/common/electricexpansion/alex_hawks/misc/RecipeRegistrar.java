@@ -1,5 +1,6 @@
 package electricexpansion.alex_hawks.misc;
 
+import ic2.api.Items;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -25,6 +26,10 @@ public class RecipeRegistrar
 	private static final Item itemParts = ElectricExpansion.itemParts;
 	private static final Item itemLeadTearBat = ElectricExpansion.itemLeadTearBat;
 	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
+	private static final Item itemLeadGear = ElectricExpansion.itemLeadGear;
+	private static Item itemGoldenGear;
+	private static Item pipePowerGold;
+	private static Item itemIronGear;
 	
 	public static void crafting()
 	{
@@ -35,6 +40,9 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 12, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotEndium"}));
 
+	
+		
+		
 		//Recipes for supporting other UE add-ons, the slack way...
 		if(Loader.isModLoaded("BasicComponents"))
 		{
@@ -118,14 +126,45 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', "plateSteel", '@', "copperWire", '#', "ingotLead", '$', Item.ghastTear}));
 		
 		//Tier 1 Upgrade
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat, '@', "copperWire", '#', "basicCircuit", '$', "plateSteel"}));
+		//GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat, '@', "copperWire", '#', "basicCircuit", '$', "plateSteel"}));
 		
 		//Tier 2 Upgrade
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat, '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
+	//	GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat, '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
-		if(Loader.isModLoaded("BasicComponents")) 
-			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);
+		if(Loader.isModLoaded("BasicComponents")) {
+			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	}
+		
+		//IC2 Upgrade
+		if(Loader.isModLoaded("IC2")) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 4), new Object [] {"$#$", "@!@", "$#$", '!', Items.getItem("mvTransformer"), '@', Items.getItem("transformerUpgrade"), '$', Items.getItem("advancedAlloy"), '#', Items.getItem("carbonPlate")}));
+		}
+		
+		//Buildcraft upgrade
+    	if(Loader.isModLoaded("BuildCraft")) {
+    		//Reflection to get Buildcraft Gears
+    		try {
+    			itemGoldenGear = (Item)Class.forName("buildcraft.BuildcraftCore").getField("ironGearItem").get(Item.class);
+    			pipePowerGold = (Item)Class.forName("buildcraft.BuildcraftTransport").getField("pipePowerGold").get(Block.class); 
+    			itemGoldenGear = (Item)Class.forName("buildcraft.BuildcraftCore").getField("goldGearItem").get(Item.class);
+    		} catch (ClassNotFoundException e) {
+    			e.printStackTrace();
+    		} catch (IllegalArgumentException e) {
+    			e.printStackTrace();
+    		} catch (IllegalAccessException e) {
+    			e.printStackTrace();
+    		} catch (NoSuchFieldException e) {
+    			e.printStackTrace();
+    		} catch (SecurityException e) {
+    			e.printStackTrace();
+    		}	
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemLeadGear), new Object [] {" ! ", "!@!", " ! ", '!', ElectricExpansion.itemLead, '@', itemGoldenGear}));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 3), new Object [] {"$#$", "#!#", "$#$", '!', pipePowerGold, '$', itemLeadGear, '#', itemIronGear}));
+
+    	}
 	}
+	
+	
+	
 	public static void drawing()
 	{
 		WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 60);
