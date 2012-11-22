@@ -21,6 +21,7 @@ import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -28,7 +29,9 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -52,6 +55,7 @@ import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
 import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
+import electricexpansion.client.alex_hawks.RenderHandler;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
@@ -158,6 +162,9 @@ public class ElectricExpansion {
 	@Instance("ElectricExpansion")
 	public static ElectricExpansion instance;
 
+	@SideOnly(Side.CLIENT)
+	public static int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	
 	@SidedProxy(clientSide="electricexpansion.client.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
 	public static EECommonProxy proxy;
 
@@ -260,7 +267,7 @@ public class ElectricExpansion {
 	{
 		if(startLogLogged[2] != true){StartLog("Init");}
 		proxy.init();
-
+		RenderingRegistry.registerBlockHandler(new RenderHandler());
 		RecipeRegistrar.crafting();
 		RecipeRegistrar.drawing();
 		UETab.setItemStack(new ItemStack(this.blockBigBatteryBox));

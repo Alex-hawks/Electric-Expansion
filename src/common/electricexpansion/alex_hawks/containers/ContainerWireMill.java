@@ -32,7 +32,11 @@ public class ContainerWireMill extends Container
 	}
 
 	public void onCraftGuiClosed(EntityPlayer entityplayer)
-	{tileEntity.closeChest();}
+	{
+		super.onCraftGuiClosed(entityplayer);
+		tileEntity.closeChest();
+	}
+
 
 	@Override
 	public boolean canInteractWith(EntityPlayer par1EntityPlayer)

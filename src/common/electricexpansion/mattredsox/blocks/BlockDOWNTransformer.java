@@ -19,6 +19,7 @@ import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
 
 public class BlockDOWNTransformer extends BlockMachine
 {
+	public static final int meta = 0;
 
 	public BlockDOWNTransformer(int id, int textureIndex)
 	{
@@ -57,10 +58,6 @@ public class BlockDOWNTransformer extends BlockMachine
        }
 
 
-	/**
-	 * Called when the block is placed in the
-	 * world.
-	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
 	{
@@ -69,28 +66,27 @@ public class BlockDOWNTransformer extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 		
+	 if (metadata >= meta)
+		{
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, 3);
+					par1World.setBlockMetadataWithNotify(x, y, z, meta + 3);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, 1);
+					par1World.setBlockMetadataWithNotify(x, y, z, meta + 1);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, 2);
+					par1World.setBlockMetadataWithNotify(x, y, z, meta + 2);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, 0);
+					par1World.setBlockMetadataWithNotify(x, y, z, meta + 0);
 					break;
 			}
-	}
-		
+		}
 			
+		}
 		
-
-		
-	
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
 	{
@@ -98,6 +94,11 @@ public class BlockDOWNTransformer extends BlockMachine
 		int original = metadata;
 
 		int change = 0;
+
+		 if (metadata >= meta)
+		{
+			original -= meta;
+		}
 
 		// Reorient the block
 		switch (original)
@@ -116,11 +117,16 @@ public class BlockDOWNTransformer extends BlockMachine
 				break;
 		}
 
+		 if (metadata >= meta)
+		{
+			change += meta;
+		}
+
 		par1World.setBlockMetadataWithNotify(x, y, z, change);
 
 		return true;
 	}
-
+	
 	/**
 	 * Is this block powering the block on the
 	 * specified side

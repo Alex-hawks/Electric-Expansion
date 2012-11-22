@@ -1,33 +1,15 @@
 package electricexpansion.mattredsox.tileentities;
 
-import net.minecraft.src.Entity;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.INetworkManager;
-import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.Packet;
-import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRedstoneProvider;
-import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-
-import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 
 public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver implements IJouleStorage, IRedstoneProvider
@@ -58,11 +40,15 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();}
+	{
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.meta + 2).getOpposite();
+	}
 
 	@Override
 	public boolean canConnect(ForgeDirection side)
-	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() + 2);}
+	{
+		return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.meta + 2);
+	}
 
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
@@ -95,10 +81,9 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 
 			//Output electricity
 			if (this.joules > 0)
-			{
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
+			{ TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.meta + 2));
 
-				TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
+			TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDOWNTransformer.meta + 2));
 
                 {
                 	//Output UE electricity

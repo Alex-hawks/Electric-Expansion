@@ -16,6 +16,8 @@ import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 
 public class BlockWireMill extends BlockMachine
 {
+	public static final int meta = 0;
+	
 		public BlockWireMill(int par1)
 		{
 			super("WireMill", par1, Material.iron);
@@ -42,6 +44,11 @@ public class BlockWireMill extends BlockMachine
 
 			int change = 0;
 
+			 if (metadata >= meta)
+			{
+				original -= meta;
+			}
+
 			// Reorient the block
 			switch (original)
 			{
@@ -58,40 +65,49 @@ public class BlockWireMill extends BlockMachine
 					change = 0;
 					break;
 			}
-			par1World.markBlockForRenderUpdate(x, y, z);
+
+			if (metadata >= meta)
+			{
+				change += meta;
+			}
+
+			par1World.markBlockForRenderUpdate(x, y, y);
 			par1World.setBlockMetadataWithNotify(x, y, z, change);
 
 			return true;
 		}
 
-	/**
-	 * Called when the block is placed in the
-	 * world.
-	 */
-	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
-	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
+		/**
+		 * Called when the block is placed in the world.
+		 */
+		@Override
+		public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+		{
+			int metadata = par1World.getBlockMetadata(x, y, z);
 
-		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 3;
-		
-			switch (angle)
+			int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int change = 3;
+
+			if (metadata >= meta)
 			{
-				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, 3);
-					break;
-				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, 1);
-					break;
-				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, 2);
-					break;
-				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, 0);
-					break;
+				switch (angle)
+				{
+					case 0:
+						par1World.setBlockMetadataWithNotify(x, y, z, meta + 1);
+						break;
+					case 1:
+						par1World.setBlockMetadataWithNotify(x, y, z, meta + 2);
+						break;
+					case 2:
+						par1World.setBlockMetadataWithNotify(x, y, z, meta + 0);
+						break;
+					case 3:
+						par1World.setBlockMetadataWithNotify(x, y, z, meta + 3);
+						break;
+				}
 			}
-	}
+			
+		}
 
 	@Override
 	public boolean hasTileEntity(int metadata)
@@ -120,7 +136,7 @@ public class BlockWireMill extends BlockMachine
 	@Override
 	public int getRenderType()
 	{
-		return -1;
+		return ElectricExpansion.RENDER_ID;
 	}
 
 }

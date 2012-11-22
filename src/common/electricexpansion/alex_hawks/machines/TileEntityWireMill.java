@@ -24,8 +24,11 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
+import basiccomponents.block.BlockBasicMachine;
+
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.alex_hawks.blocks.BlockWireMill;
 import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
 public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IHMRepairable
@@ -56,7 +59,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side)
-	{return side == ForgeDirection.getOrientation(this.getBlockMetadata() + 5) ;}
+	{
+	return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.meta + 2);
+}
 
 	@Override
 	public void onReceive(TileEntity entity, double amps, double voltage, ForgeDirection side)
