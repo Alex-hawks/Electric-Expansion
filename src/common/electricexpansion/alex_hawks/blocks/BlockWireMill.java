@@ -72,7 +72,7 @@ public class BlockWireMill extends BlockMachine
 			}
 
 			par1World.markBlockForRenderUpdate(x, y, y);
-			par1World.setBlockMetadataWithNotify(x, y, z, change);
+			par1World.setBlockMetadata(x, y, z, change);
 
 			return true;
 		}

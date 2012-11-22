@@ -9,12 +9,14 @@ import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.Material;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
@@ -90,6 +92,7 @@ public class ElectricExpansion {
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
 	private static final int blockWPTID = BLOCK_ID_PREFIX + 14;
+	private static final int blockLeadID = BLOCK_ID_PREFIX + 15;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
 	private static final int itemLeadTearBatID = ITEM_ID_PREFIX + 1;
@@ -117,6 +120,7 @@ public class ElectricExpansion {
 	public static int Fuse;
 	public static int batBox;
 	public static int WPT;
+	public static int LeadBlock;
 	//Items
 	public static int Upgrade;
 	public static int LeadTearBat;
@@ -146,6 +150,7 @@ public class ElectricExpansion {
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(UETab.INSTANCE).setBlockName("blockEtcher");
 	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
+	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("Lead Block").setTextureFile(EECommonProxy.ABLOCK);
 	
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
@@ -186,6 +191,7 @@ public class ElectricExpansion {
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 		WPT = UEConfig.getBlockConfigID(i, "Wireless_Transfer_Machines", blockWPTID);
+		LeadBlock = UEConfig.getBlockConfigID(i, "Lead_Block", blockLeadID);
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
 		LeadTearBat = UEConfig.getItemConfigID(i, "Lead_Tear_Battery", itemLeadTearBatID);
@@ -254,6 +260,7 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
+		GameRegistry.registerBlock(blockLead);
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -278,7 +285,9 @@ public class ElectricExpansion {
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		if(startLogLogged[3] != true){StartLog("postInit");}
-
+		OreDictionary.registerOre("leadIngot", this.itemLead);
+		OreDictionary.registerOre("leadBlock", this.blockLead);
+		
 		//Set the Uninsulated Cable Name(s)
 		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Copper.name", "Uninsulated Copper Wire");
 		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Tin.name", "Uninsulated Tin Wire");
@@ -321,6 +330,7 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 4), "Induction Power Sender");
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 8), "Induction Power Reciever");
 		LanguageRegistry.addName(itemLeadGear, "Lead Gear");
+		LanguageRegistry.addName(blockLead, "Lead Block");
 		
 		//Upgrades
 		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");

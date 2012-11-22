@@ -119,8 +119,11 @@ public class RecipeRegistrar
 		if(Loader.isModLoaded("BasicComponents")) 
 			GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', basiccomponents.BasicComponents.itemMotor, '#', basiccomponents.BasicComponents.itemSteelPlate, '@', basiccomponents.BasicComponents.itemBronzePlate, '$', new ItemStack(basiccomponents.BasicComponents.itemCircuit, 1, 0), '%', new ItemStack(itemParts, 1, 0)});
 		
+		//Lead Block
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.blockLead), new Object [] {"!!!", "!!!", "!!!", '!', "leadIngot"}));	
+
 		//Parts
-		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond});	
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond}));	
 		
 		//Lead-Tear Battery				
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', "plateSteel", '@', "copperWire", '#', "ingotLead", '$', Item.ghastTear}));
@@ -131,10 +134,9 @@ public class RecipeRegistrar
 		//Tier 2 Upgrade
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
-		//Tier 3 Upgrade		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
-
-		
-		
+		//Tier 3 Upgrade		
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object [] {"#!#", "%@%", "#!#", '!', "leadBlock", '@', "copperWire", '#', "eliteCircuit", '$', "plateSteel", '%', ElectricExpansion.itemLeadTearBat.getUncharged()}));
+				
 		if(Loader.isModLoaded("BasicComponents")) {
 			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	}
 		
@@ -150,20 +152,12 @@ public class RecipeRegistrar
     			itemGoldenGear = (Item)Class.forName("buildcraft.BuildcraftCore").getField("ironGearItem").get(Item.class);
     			pipePowerGold = (Item)Class.forName("buildcraft.BuildcraftTransport").getField("pipePowerGold").get(Block.class); 
     			itemGoldenGear = (Item)Class.forName("buildcraft.BuildcraftCore").getField("goldGearItem").get(Item.class);
-    		} catch (ClassNotFoundException e) {
+    		} catch (Exception e) {
     			e.printStackTrace();
-    		} catch (IllegalArgumentException e) {
-    			e.printStackTrace();
-    		} catch (IllegalAccessException e) {
-    			e.printStackTrace();
-    		} catch (NoSuchFieldException e) {
-    			e.printStackTrace();
-    		} catch (SecurityException e) {
-    			e.printStackTrace();
+
     		}	
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemLeadGear), new Object [] {" ! ", "!@!", " ! ", '!', ElectricExpansion.itemLead, '@', itemGoldenGear}));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 3), new Object [] {"$#$", "#!#", "$#$", '!', pipePowerGold, '$', itemLeadGear, '#', itemIronGear}));
-
     	}
 	}
 	
@@ -176,7 +170,7 @@ public class RecipeRegistrar
 		WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 60);
 		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 60);
 		WireMillRecipes.addDrawing("ingotEndium", new ItemStack(blockRawWire, 6, 4), 60);
-
+		
 		WireMillRecipes.addDrawing(new ItemStack(Block.cloth), new ItemStack(Item.silk, 3), 40);
 	}
 }
