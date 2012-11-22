@@ -37,7 +37,6 @@ public class BlockWireMill extends BlockMachine
 		@Override
 		public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
 		{
-			System.out.println("WRENCH!");
 			int metadata = par1World.getBlockMetadata(x, y, z);
 			int original = metadata;
 
@@ -59,11 +58,12 @@ public class BlockWireMill extends BlockMachine
 					change = 0;
 					break;
 			}
-
+			par1World.markBlockForRenderUpdate(x, y, z);
 			par1World.setBlockMetadataWithNotify(x, y, z, change);
 
 			return true;
 		}
+
 	/**
 	 * Called when the block is placed in the
 	 * world.
