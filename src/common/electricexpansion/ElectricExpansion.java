@@ -91,7 +91,8 @@ public class ElectricExpansion {
 	private static final int itemLeadTearBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
-	private static final int itemLeadID = ITEM_ID_PREFIX +4;
+	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
+	private static final int itemLeadGearID = ITEM_ID_PREFIX + 5;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -118,6 +119,7 @@ public class ElectricExpansion {
 	public static int ConnectionAlloy;
 	public static int Parts;
 	public static int Lead;
+	public static int LeadGear;
 	//Other
 	public static double superConductorUpkeep;
 
@@ -147,7 +149,9 @@ public class ElectricExpansion {
 	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat);
 	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(UETab.INSTANCE);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("Lead");
+	public static final Item itemLeadGear = new ItemBase(LeadGear, 3).setCreativeTab(UETab.INSTANCE).setItemName("Lead Gear");
 
+	
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = {false, false, false, false};
 
@@ -181,6 +185,8 @@ public class ElectricExpansion {
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", connectorAlloyID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
+		LeadGear = UEConfig.getItemConfigID(i, "Lead_Gear", itemLeadGearID);
+		
 
 		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
 		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
@@ -242,9 +248,9 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
 
-
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
+		
 		if(!Loader.isModLoaded("BasicComponents")) 
 			System.out.println("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
 	}
@@ -307,7 +313,8 @@ public class ElectricExpansion {
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 0), "Quantum Battery Box");
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 4), "Induction Power Sender");
 		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 8), "Induction Power Reciever");
-
+		LanguageRegistry.addName(itemLeadGear, "Lead Gear");
+		
 		//Upgrades
 		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");
 		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 1), "Tier 2 Storage Upgrade");
