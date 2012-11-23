@@ -147,7 +147,7 @@ public class ElectricExpansion {
 	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("VoltDet");
 	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE);
 	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE);
-	public static final Block blockWireMill = new BlockWireMill(wireMill).setCreativeTab(UETab.INSTANCE).setBlockName("blockEtcher");
+	public static final Block blockWireMill = new BlockWireMill(wireMill);
 	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("Lead Block").setTextureFile(EECommonProxy.ABLOCK);

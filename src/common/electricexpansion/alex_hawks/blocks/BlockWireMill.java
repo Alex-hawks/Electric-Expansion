@@ -10,6 +10,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.UETab;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
@@ -20,8 +21,9 @@ public class BlockWireMill extends BlockMachine
 	
 		public BlockWireMill(int par1)
 		{
-			super("WireMill", par1, Material.iron);
+			super("blockEtcher", par1, Material.iron);
 			this.setTextureFile(EECommonProxy.MattBLOCK_TEXTURE_FILE);
+			this.setCreativeTab(UETab.INSTANCE);
 		}	
 
 		@Override

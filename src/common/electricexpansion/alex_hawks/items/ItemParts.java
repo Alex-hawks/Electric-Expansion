@@ -2,6 +2,8 @@ package electricexpansion.alex_hawks.items;
 
 import java.util.List;
 
+import universalelectricity.prefab.UETab;
+
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.EECommonProxy;
@@ -16,7 +18,7 @@ public class ItemParts extends Item
 		super(par1);
 		this.setHasSubtypes(true);
 		this.setItemName("Parts");
-		this.setCreativeTab(CreativeTabs.tabMaterials);
+		this.setCreativeTab(UETab.INSTANCE);
 		this.setMaxStackSize(32);
 		this.setIconIndex(240);
 		this.setTextureFile(EECommonProxy.AITEMS);

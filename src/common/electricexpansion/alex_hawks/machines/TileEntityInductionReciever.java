@@ -93,7 +93,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 		if (!this.worldObj.isRemote)
 			this.sendPacket();
 		if (this.isBeingSapped())
-			((IHMSapper)this.sapper.getItem()).sapperTick(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+			((IHMSapper)this.sapper.getItem()).sapperTick(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.sapper);
 		if (this.orientation != this.blockMetadata)
 			this.orientation = (byte)ForgeDirection.getOrientation(this.blockMetadata).ordinal();
 		
