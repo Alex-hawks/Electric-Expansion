@@ -8,6 +8,7 @@ import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.EECommonProxy;
@@ -24,7 +25,7 @@ public class BlockWireBlock extends BlockConductor
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		this.setCreativeTab(CreativeTabs.tabRedstone);
+		this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override

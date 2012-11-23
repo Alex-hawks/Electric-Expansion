@@ -2,6 +2,8 @@ package electricexpansion.alex_hawks.blocks;
 
 import java.util.List;
 
+import universalelectricity.prefab.UETab;
+
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.BlockContainer;
@@ -26,7 +28,7 @@ public class BlockWPT extends BlockContainer
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		this.setCreativeTab(CreativeTabs.tabDecorations);
+		this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override

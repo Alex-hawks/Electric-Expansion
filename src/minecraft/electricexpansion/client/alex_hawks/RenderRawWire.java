@@ -28,13 +28,13 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 			if(meta == 0)
 				textureToUse = EECommonProxy.ATEXTURES + "RawCopperWire.png";
 			else if(meta == 1)
-				textureToUse = EECommonProxy.ATEXTURES + "RawTinWire";
+				textureToUse = EECommonProxy.ATEXTURES + "RawTinWire.png";
 			else if(meta == 2)
-				textureToUse = EECommonProxy.ATEXTURES + "RawSilverWire";
+				textureToUse = EECommonProxy.ATEXTURES + "RawSilverWire.png";
 			else if(meta == 3)
-				textureToUse = EECommonProxy.ATEXTURES + "RawHVWire";
-			else if(meta == 3)
-				textureToUse = EECommonProxy.ATEXTURES + "RawEndiumWire";
+				textureToUse = EECommonProxy.ATEXTURES + "RawHVWire.png";
+			else if(meta == 4)
+				textureToUse = EECommonProxy.ATEXTURES + "RawEndiumWire.png";
 		}
 
 		//Texture file

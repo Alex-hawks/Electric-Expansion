@@ -39,9 +39,6 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 2), new Object [] {" @ ", " @ ", " @ ", '@', "ingotSilver"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 12, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotEndium"}));
-
-	
-		
 		
 		//Recipes for supporting other UE add-ons, the slack way...
 		if(Loader.isModLoaded("BasicComponents"))
@@ -131,7 +128,8 @@ public class RecipeRegistrar
 		//Tier 2 Upgrade
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
-		//Tier 3 Upgrade		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
+		//Tier 3 Upgrade		
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
 		
 		
@@ -166,8 +164,6 @@ public class RecipeRegistrar
 
     	}
 	}
-	
-	
 	
 	public static void drawing()
 	{
