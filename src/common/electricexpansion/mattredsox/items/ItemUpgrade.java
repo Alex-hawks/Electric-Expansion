@@ -34,7 +34,17 @@ public class ItemUpgrade extends Item
     @Override
     public int getIconFromDamage(int i)
     {
-        return this.iconIndex + i;
+if(i == 0)
+
+	{return 5;}
+if(i == 1)
+	{return 4;}
+if(i == 2)
+	{return 8;}
+if(i == 3)
+	{ return 7;}
+	return 6;
+	
     }
 
     @Override
