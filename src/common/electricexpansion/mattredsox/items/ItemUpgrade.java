@@ -2,6 +2,10 @@ package electricexpansion.mattredsox.items;
 
 import java.util.List;
 
+import electricexpansion.EECommonProxy;
+
+import universalelectricity.prefab.UETab;
+
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -16,7 +20,7 @@ public class ItemUpgrade extends Item
         this.setMaxDamage(0);
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
-        this.setCreativeTab(CreativeTabs.tabMaterials);
+        this.setCreativeTab(UETab.INSTANCE);
     }
 
     @Override
@@ -46,6 +50,10 @@ if(i == 3)
 	return 6;
 	
     }
+    
+	@Override
+	public String getTextureFile()
+	{return EECommonProxy.MattItem_TEXTURE_FILE;}
 
     @Override
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
