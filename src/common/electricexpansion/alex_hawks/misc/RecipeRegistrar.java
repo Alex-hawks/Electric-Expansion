@@ -128,11 +128,12 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
 		//Tier 3 Upgrade		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
 		//Lead Block
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', "ingotLead"}));
 		GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
+		
 		if(Loader.isModLoaded("BasicComponents")) {
 			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	}
 		
