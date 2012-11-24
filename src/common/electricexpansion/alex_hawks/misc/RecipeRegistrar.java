@@ -1,5 +1,7 @@
 package electricexpansion.alex_hawks.misc;
 
+import buildcraft.BuildCraftCore;
+import buildcraft.BuildCraftTransport;
 import ic2.api.Items;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -27,10 +29,7 @@ public class RecipeRegistrar
 	private static final Item itemLeadTearBat = ElectricExpansion.itemLeadTearBat;
 	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
 	private static final Item itemLeadGear = ElectricExpansion.itemLeadGear;
-	private static Item itemGoldenGear;
-	private static Item pipePowerGold;
-	private static Item itemIronGear;
-	
+
 	public static void crafting()
 	{
 		//Uninsulated Wire Recipes
@@ -131,8 +130,9 @@ public class RecipeRegistrar
 		//Tier 3 Upgrade		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
-		
-		
+		//Lead Block
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', "ingotLead"}));
+
 		if(Loader.isModLoaded("BasicComponents")) {
 			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	}
 		
@@ -142,27 +142,13 @@ public class RecipeRegistrar
 		}
 		
 		//Buildcraft upgrade
-    	if(Loader.isModLoaded("BuildCraft")) {
-    		//Reflection to get Buildcraft Gears
-    		try {
-    			itemGoldenGear = (Item)Class.forName("buildcraft.BuildcraftCore").getField("ironGearItem").get(Item.class);
-    			pipePowerGold = (Item)Class.forName("buildcraft.BuildcraftTransport").getField("pipePowerGold").get(Block.class); 
-    			itemGoldenGear = (Item)Class.forName("buildcraft.BuildcraftCore").getField("goldGearItem").get(Item.class);
-    		} catch (ClassNotFoundException e) {
-    			e.printStackTrace();
-    		} catch (IllegalArgumentException e) {
-    			e.printStackTrace();
-    		} catch (IllegalAccessException e) {
-    			e.printStackTrace();
-    		} catch (NoSuchFieldException e) {
-    			e.printStackTrace();
-    		} catch (SecurityException e) {
-    			e.printStackTrace();
-    		}	
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemLeadGear), new Object [] {" ! ", "!@!", " ! ", '!', ElectricExpansion.itemLead, '@', itemGoldenGear}));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 3), new Object [] {"$#$", "#!#", "$#$", '!', pipePowerGold, '$', itemLeadGear, '#', itemIronGear}));
+    	if(Loader.isModLoaded("BuildCraft|Transport")) {
+			GameRegistry.addRecipe(new ItemStack(ElectricExpansion.itemLeadGear), new Object [] {" ! ", "!@!", " ! ", '!', ElectricExpansion.itemLead, '@', BuildCraftCore.goldGearItem});
+			GameRegistry.addRecipe(new ItemStack(itemUpgrade, 1, 3), new Object [] {"$#$", "#!#", "$#$", '!', BuildCraftTransport.pipePowerGold, '$', itemLeadGear, '#', BuildCraftCore.ironGearItem});
 
     	}
+    	
+    	
 	}
 	
 	public static void drawing()

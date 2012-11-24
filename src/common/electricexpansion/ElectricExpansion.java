@@ -285,7 +285,7 @@ public class ElectricExpansion {
 	public void postInit(FMLPostInitializationEvent event) 
 	{
 		if(startLogLogged[3] != true){StartLog("postInit");}
-		OreDictionary.registerOre("leadIngot", this.itemLead);
+		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("leadBlock", this.blockLead);
 		
 		//Set the Uninsulated Cable Name(s)
