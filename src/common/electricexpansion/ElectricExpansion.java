@@ -58,6 +58,8 @@ import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.client.alex_hawks.RenderHandler;
+import electricexpansion.languages.LanguageHelper;
+import electricexpansion.languages.en_us;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
@@ -287,67 +289,9 @@ public class ElectricExpansion {
 		if(startLogLogged[3] != true){StartLog("postInit");}
 		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("leadBlock", this.blockLead);
-		
-		//Set the Uninsulated Cable Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Copper.name", "Uninsulated Copper Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Tin.name", "Uninsulated Tin Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Silver.name", "Uninsulated Silver Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.RawWire.HV.name", "Uninsulated HV Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.RawWire.Endium.name", "Uninsulated Endium Wire");
-		//Set the Insulated Cable Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Copper.name", "Insulated Copper Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Tin.name", "Insulated Tin Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Silver.name", "Insulated Silver Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.HV.name", "Insulated HV Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.InsulatedWire.Endium.name", "Insulated Endium Wire");
-		//Set the Hidden Cable Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Copper.name", "Hidden Copper Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Tin.name", "Hidden Tin Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Silver.name", "Hidden Silver Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.HV.name", "Hidden HV Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.HiddenWire.Endium.name", "Hidden Endium Wire");
-		//Set the Switch Cable (On/Crafted) Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Copper.name", "Copper Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Tin.name", "Tin Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Silver.name", "Silver Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.HV.name", "HV Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWire.Endium.name", "Endium Switch Wire");
-		//Set the Switch Cable Block (On/Crafted) Name(s)
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Copper.name", "Hidden Copper Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Tin.name", "Hidden Tin Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Silver.name", "Hidden Silver Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.HV.name", "Hidden HV Switch Wire");
-		LanguageRegistry.instance().addStringLocalization("tile.SwitchWireBlock.Endium.name", "Hidden Endium Switch Wire");
-
-		//Machines
-		LanguageRegistry.addName(blockUPTransformer, "Up Transformer");
-		LanguageRegistry.addName(blockBigBatteryBox, "Advanced Battery Box");
-		LanguageRegistry.addName(blockDOWNTransformer, "Down Transformer");
-		LanguageRegistry.addName(blockVoltDet, "Voltage Detector");
-		LanguageRegistry.addName(blockWireMill, "Wire Mill");
-		//LanguageRegistry.addName(blockFuse, "120 Volt Relay");
-		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 0), "Quantum Battery Box");
-		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 4), "Induction Power Sender");
-		LanguageRegistry.addName(new ItemStack(blockWPT, 1, 8), "Induction Power Reciever");
-		LanguageRegistry.addName(itemLeadGear, "Lead Gear");
-		LanguageRegistry.addName(blockLead, "Lead Block");
-		
-		//Upgrades
-		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 0), "Tier 1 Storage Upgrade");
-		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 1), "Tier 2 Storage Upgrade");
-		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 2), "Tier 3 Storage Upgrade");
-		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 3), "BC Compatibility Upgrade");
-		LanguageRegistry.addName(new ItemStack(itemUpgrade, 1, 4), "IC2 Compatibility Upgrade");
-		
-		//Resources
-		LanguageRegistry.addName(itemLead, "Lead Ingot");
-		LanguageRegistry.addName(itemLeadTearBat, "Lead-Tear Battery");
-		LanguageRegistry.addName(new ItemStack(itemParts, 1, 0), "Draw Plates");
-		
-		LanguageRegistry.addName(itemConnectorAlloy, "Connector Alloy");
-
 		MinecraftForge.EVENT_BUS.register(this);
 		
+		LanguageHelper.registerLanguages();
 	}
 
 	@ForgeSubscribe
