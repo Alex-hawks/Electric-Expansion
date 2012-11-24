@@ -195,15 +195,16 @@ public class BlockAdvBatteryBox extends BlockMachine
                 {
                     par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                     tileEntity.hasIC2Comp = true;
+                    tileEntity.initiate();
                     return true;
                 }
             }
        
             else if(par5EntityPlayer.inventory.getCurrentItem() == null)
         	{
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
-            return true;
-       	}
+            	par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
+            	return true;
+        	}
             
             
         }
