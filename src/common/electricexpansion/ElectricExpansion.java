@@ -58,6 +58,7 @@ import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.client.alex_hawks.RenderHandler;
+import electricexpansion.languages.LanguageHelper;
 import electricexpansion.languages.en_us;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
@@ -290,7 +291,7 @@ public class ElectricExpansion {
 		OreDictionary.registerOre("leadBlock", this.blockLead);
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		en_us.registerLanguageTerms();
+		LanguageHelper.registerLanguages();
 	}
 
 	@ForgeSubscribe
