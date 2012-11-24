@@ -26,11 +26,11 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 	//@Override
 	public static void registerRenderers() 
 	{
-		MinecraftForgeClient.preloadTexture(AITEMS);
+/*		MinecraftForgeClient.preloadTexture(AITEMS);
 		MinecraftForgeClient.preloadTexture(ABLOCK);
 		
 		MinecraftForgeClient.preloadTexture(MattBLOCK_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);*/
 	}
 	
 	@Override
@@ -53,6 +53,12 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 //		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
+		
+		MinecraftForgeClient.preloadTexture(AITEMS);
+		MinecraftForgeClient.preloadTexture(ABLOCK);
+		
+		MinecraftForgeClient.preloadTexture(MattBLOCK_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);
 	}
 
 }

@@ -348,12 +348,6 @@ public class ElectricExpansion {
 
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		MinecraftForgeClient.preloadTexture(EECommonProxy.MattBLOCK_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(EECommonProxy.MattItem_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(EECommonProxy.AITEMS);
-		MinecraftForgeClient.preloadTexture(EECommonProxy.ABLOCK);
-
-
 	}
 
 	@ForgeSubscribe
