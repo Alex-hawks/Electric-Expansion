@@ -31,7 +31,6 @@ import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-import basiccomponents.block.BlockBasicMachine;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -160,8 +159,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				}
 				else if (this.containingItems[0].getItem() instanceof IElectricItem)
 				{
+					if(this.hasIC2Comp)
+					{
 					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
 					this.setJoules(joules - sent);
+					}
 				}
 			}
 
@@ -182,11 +184,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				}
 				else if (containingItems[1].getItem() instanceof IElectricItem)
 				{
+					if(this.hasIC2Comp)
+					{
 					IElectricItem item = (IElectricItem) containingItems[1].getItem();
 					if (item.canProvideEnergy())
 					{
 						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - joules) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
 						this.setJoules(joules + gain);
+					}
 					}
 				}
 			}
@@ -209,7 +214,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 			// Output electricity
 						if (this.joules > 0)
 						{
-							TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2));
+							TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
 
 							// Output IC2 energy
 							if (Loader.isModLoaded("IC2"))
@@ -220,10 +225,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 									{
 										if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
 										{
-											while(this.hasIC2Comp)
+											if(this.hasIC2Comp)
 											{
-												System.out.println("IC2 Output!");
-
 											this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
 											}
 										}
@@ -234,11 +237,10 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				// Output BC energy
 				if (Loader.isModLoaded("BuildCraft|Transport"))
 				{
-					while(this.hasBCComp)
+					if(this.hasBCComp)
 					{
 					if (this.isPoweredTile(tileEntity))
 					{
-						System.out.println("BC Output!");
 						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
 						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
@@ -556,21 +558,21 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	/**
 	 * INDUSTRIALCRAFT FUNCTIONS
 	 */
-	public int getStored() 
+	public int getStored()
 	{
-		return (int) (this.joules*UniversalElectricity.IC2_RATIO);
+		return (int) (this.joules * UniversalElectricity.IC2_RATIO);
 	}
-	
+
 	@Override
 	public boolean isAddedToEnergyNet()
 	{
-		return this.ticks == 0;
+		return this.ticks > 0;
 	}
 
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
 	{
-		return canReceiveFromSide(direction.toForgeDirection());		
+		return canReceiveFromSide(direction.toForgeDirection());
 	}
 
 	@Override
@@ -580,13 +582,13 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	}
 
 	@Override
-	public int getCapacity() 
+	public int getCapacity()
 	{
-		return (int)(this.getMaxJoules()/UniversalElectricity.IC2_RATIO);
+		return (int) (this.getMaxJoules() / UniversalElectricity.IC2_RATIO);
 	}
 
 	@Override
-	public int getOutput() 
+	public int getOutput()
 	{
 		return 32;
 	}
