@@ -169,10 +169,7 @@ public class ElectricExpansion {
 	public static boolean[] startLogLogged = {false, false, false, false};
 
 	@Instance("ElectricExpansion")
-	public static ElectricExpansion instance;
-
-	@SideOnly(Side.CLIENT)
-	public static int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	public static ElectricExpansion instance;	
 	
 	@SidedProxy(clientSide="electricexpansion.client.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
 	public static EECommonProxy proxy;
@@ -278,7 +275,6 @@ public class ElectricExpansion {
 	{
 		if(startLogLogged[2] != true){StartLog("Init");}
 		proxy.init();
-		RenderingRegistry.registerBlockHandler(new RenderHandler());
 		RecipeRegistrar.crafting();
 		RecipeRegistrar.drawing();
 		UETab.setItemStack(new ItemStack(this.blockBigBatteryBox));

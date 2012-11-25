@@ -14,6 +14,7 @@ import universalelectricity.prefab.UETab;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
+import electricexpansion.client.EEClientProxy;
 
 public class BlockWireMill extends BlockMachine
 {
@@ -138,7 +139,7 @@ public class BlockWireMill extends BlockMachine
 	@Override
 	public int getRenderType()
 	{
-		return ElectricExpansion.RENDER_ID;
+		return EEClientProxy.RENDER_ID;
 	}
 
 }

@@ -10,6 +10,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.client.EEClientProxy;
 
 public class RenderHandler implements ISimpleBlockRenderingHandler
 {
@@ -49,7 +50,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public int getRenderId() 
 	{
-		return ElectricExpansion.RENDER_ID;
+		return EEClientProxy.RENDER_ID;
 	}
 
 }

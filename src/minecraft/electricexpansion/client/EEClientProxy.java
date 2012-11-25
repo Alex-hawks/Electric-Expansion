@@ -2,6 +2,7 @@ package electricexpansion.client;
 
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
 import electricexpansion.alex_hawks.cables.TileEntityRawWire;
@@ -12,6 +13,7 @@ import electricexpansion.alex_hawks.machines.TileEntityDistribution;
 import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
+import electricexpansion.client.alex_hawks.RenderHandler;
 import electricexpansion.client.alex_hawks.RenderInsulatedWire;
 import electricexpansion.client.alex_hawks.RenderRawWire;
 import electricexpansion.client.alex_hawks.RenderWireMill;
@@ -32,10 +34,15 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 		MinecraftForgeClient.preloadTexture(MattBLOCK_TEXTURE_FILE);
 		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);*/
 	}
+
+	public static int RENDER_ID;
 	
 	@Override
 	public void init()
 	{
+		 RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+			RenderingRegistry.registerBlockHandler(new RenderHandler());
+
 		//Alex's Tile Entity Renderer registrations
 		ClientRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill", new RenderWireMill());
 		ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
