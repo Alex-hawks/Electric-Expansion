@@ -45,16 +45,14 @@ import dan200.computer.api.IPeripheral;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
 
 public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver implements IEnergySink, IEnergySource, IEnergyStorage, IPowerReceptor, IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
-{	
+{
 	private double joules = 0;
 
-    private ItemStack[] containingItems = new ItemStack[2];
+	private ItemStack[] containingItems = new ItemStack[2];
 
-    private boolean isFull = false;
-    
+	private boolean isFull = false;
+
 	private int playersUsing = 0;
-	
-	public IPowerProvider powerProvider;
 
 	public boolean hasIC2Comp = false;
 	public boolean hasBCComp = false;
@@ -63,76 +61,74 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	public boolean hasT3Capacity = false;
 
 	
-    public TileEntityAdvBatteryBox()
-    {
-    	super();
-    	this.setPowerProvider(null);
-    }
-    
-    @Override
-    public double wattRequest()
-    {
-        if (!this.isDisabled())
-        {
-            return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules);
-        }
+	public IPowerProvider powerProvider;
 
-        return 0;
-    }
+	public TileEntityAdvBatteryBox()
+	{
+		super();
+		this.setPowerProvider(null);
+	}
 
-    @Override
-    public boolean canReceiveFromSide(ForgeDirection side)
-    {
-        return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite();
-    }
+	@Override
+	public double wattRequest()
+	{
+		if (!this.isDisabled()) { return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules); }
 
-    @Override
-    public boolean canConnect(ForgeDirection side)
-    {
-        return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2);
-    }
+		return 0;
+	}
 
-    @Override
-    public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
-    {        
-        if (voltage > this.getVoltage())
-        {
-            this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
-            return;
-        }
-        
-        if(!this.isDisabled())
-        {
-        	this.setJoules(this.joules+ElectricInfo.getJoules(amps, voltage));
-        }
-    }
-    
-    @Override
-    public void initiate()
-    {
-    	if(Loader.isModLoaded("IC2"))
+	@Override
+	public boolean canReceiveFromSide(ForgeDirection side)
+	{
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite();
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection side)
+	{
+		return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2);
+	}
+
+	@Override
+	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+	{
+		if (!this.isDisabled())
+		{
+			if (voltage > this.getVoltage())
+			{
+				this.worldObj.createExplosion((Entity) null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
+				return;
+			}
+
+			this.setJoules(this.joules + ElectricInfo.getJoules(amps, voltage, 1));
+		}
+	}
+
+	@Override
+	public void initiate()
+	{
+		if (Loader.isModLoaded("IC2"))
 		{
 			try
 			{
-				if(Class.forName("ic2.common.EnergyNet").getMethod("getForWorld", World.class) != null)
+				if (Class.forName("ic2.common.EnergyNet").getMethod("getForWorld", World.class) != null)
 				{
 					EnergyNet.getForWorld(worldObj).addTileEntity(this);
-					FMLLog.fine("Added adv battery box to IC2 energy net.");
-
+					FMLLog.fine("Added advanced battery box to IC2 energy net.");
 				}
 				else
 				{
-    				System.err.println("Failed to register battery box to IC2 energy net.");
+					FMLLog.severe("Failed to register battery box to IC2 energy net.");
 				}
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
-				System.err.println("Failed to register battery box to IC2 energy net.");
+				FMLLog.severe("Failed to register battery box to IC2 energy net.");
 			}
 		}
-    }
-    
-    @Override
+	}
+
+	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
@@ -159,7 +155,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				}
 				else if (this.containingItems[0].getItem() instanceof IElectricItem)
 				{
-					if(this.hasIC2Comp)
+					if(this.hasIC2Comp == true)
 					{
 					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
 					this.setJoules(joules - sent);
@@ -184,13 +180,13 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				}
 				else if (containingItems[1].getItem() instanceof IElectricItem)
 				{
-					if(this.hasIC2Comp)
+					if(this.hasIC2Comp == true)
 					{
 					IElectricItem item = (IElectricItem) containingItems[1].getItem();
 					if (item.canProvideEnergy())
 					{
 						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - joules) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-						this.setJoules(joules + gain);
+						this.setJoules(joules + gain);	
 					}
 					}
 				}
@@ -212,41 +208,41 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 			}
 
 			// Output electricity
-						if (this.joules > 0)
-						{
-							TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
+			if (this.joules > 0)
+			{
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
 
-							// Output IC2 energy
-							if (Loader.isModLoaded("IC2"))
+				// Output IC2 energy
+				if (Loader.isModLoaded("IC2"))
+				{
+					if (tileEntity != null)
+					{
+						if (tileEntity instanceof IConductor)
+						{
+							if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
 							{
-								if (tileEntity != null)
+								if(this.hasIC2Comp == true)
 								{
-									if (tileEntity instanceof IConductor)
-									{
-										if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
-										{
-											if(this.hasIC2Comp)
-											{
-											this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
-											}
-										}
-									}
+								this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
 								}
 							}
+						}
+					}
+				}
 
 				// Output BC energy
 				if (Loader.isModLoaded("BuildCraft|Transport"))
 				{
-					if(this.hasBCComp)
-					{
 					if (this.isPoweredTile(tileEntity))
 					{
+						if(this.hasBCComp == true)
+						{
 						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
 						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
 						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite());
 						this.setJoules(this.joules - transferJoules);
-					}
+						}
 					}
 				}
 
@@ -281,239 +277,264 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 			}
 		}
 	}
-    
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.hasBCComp, this.hasIC2Comp, this.hasT1Capacity, this.hasT2Capacity, this.hasT3Capacity);
-    }
-    
-    @Override
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		  return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.hasBCComp, this.hasIC2Comp, this.hasT1Capacity, this.hasT2Capacity, this.hasT3Capacity);	}
+
+	@Override
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		try
-        {
+		{
 			this.joules = dataStream.readDouble();
-	        this.disabledTicks = dataStream.readInt();
+			this.disabledTicks = dataStream.readInt();
 	        this.hasBCComp = dataStream.readBoolean();
 	        this.hasIC2Comp = dataStream.readBoolean();
 	        this.hasT1Capacity = dataStream.readBoolean();
 	        this.hasT2Capacity = dataStream.readBoolean();
 	        this.hasT3Capacity = dataStream.readBoolean();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
-    
-    @Override
-    public void openChest()
-    {
-    	this.playersUsing  ++;
-    }
-    
-    @Override
-    public void closeChest()
-    {
-    	this.playersUsing --;
-    }
 
-    /**
-     * Reads a tile entity from NBT.
-     */
-    @Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
-    {
-        super.readFromNBT(par1NBTTagCompound);
-        this.joules = par1NBTTagCompound.getDouble("electricityStored");
-        this.hasBCComp = par1NBTTagCompound.getBoolean("hasBCComp");
+	@Override
+	public void openChest()
+	{
+		this.playersUsing++;
+	}
+
+	@Override
+	public void closeChest()
+	{
+		this.playersUsing--;
+	}
+
+	/**
+	 * Reads a tile entity from NBT.
+	 */
+	@Override
+	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+	{
+		super.readFromNBT(par1NBTTagCompound);
+		this.joules = par1NBTTagCompound.getDouble("electricityStored");
+		this.hasBCComp = par1NBTTagCompound.getBoolean("hasBCComp");
         this.hasIC2Comp = par1NBTTagCompound.getBoolean("hasIC2Comp");
         this.hasT1Capacity = par1NBTTagCompound.getBoolean("hasT1Capacity");
         this.hasT2Capacity = par1NBTTagCompound.getBoolean("hasT2Capacity");
         this.hasT3Capacity = par1NBTTagCompound.getBoolean("hasT3Capacity");
         
-        NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
-        this.containingItems = new ItemStack[this.getSizeInventory()];
+		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
+		this.containingItems = new ItemStack[this.getSizeInventory()];
 
-        for (int var3 = 0; var3 < var2.tagCount(); ++var3)
-        {
-            NBTTagCompound var4 = (NBTTagCompound)var2.tagAt(var3);
-            byte var5 = var4.getByte("Slot");
+		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
+		{
+			NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
+			byte var5 = var4.getByte("Slot");
 
-            if (var5 >= 0 && var5 < this.containingItems.length)
-            {
-                this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
-            }
-        }
-    }
-    /**
-     * Writes a tile entity to NBT.
-     */
-    @Override
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
-    {
-        super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setDouble("electricityStored", this.joules);
+			if (var5 >= 0 && var5 < this.containingItems.length)
+			{
+				this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
+			}
+		}
+	}
 
-       par1NBTTagCompound.setBoolean("hasBCComp", this.hasBCComp);
-       par1NBTTagCompound.setBoolean("hasIC2Comp", this.hasIC2Comp);
-       par1NBTTagCompound.setBoolean("hasT1Capacity", this.hasT1Capacity);
-       par1NBTTagCompound.setBoolean("hasT2Capacity", this.hasT2Capacity);
-       par1NBTTagCompound.setBoolean("hasT3Capacity", this.hasT3Capacity);
-        NBTTagList var2 = new NBTTagList();
+	/**
+	 * Writes a tile entity to NBT.
+	 */
+	@Override
+	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+	{
+		super.writeToNBT(par1NBTTagCompound);
+		par1NBTTagCompound.setDouble("electricityStored", this.joules);
+	    par1NBTTagCompound.setBoolean("hasBCComp", this.hasBCComp);
+	    par1NBTTagCompound.setBoolean("hasIC2Comp", this.hasIC2Comp);
+	    par1NBTTagCompound.setBoolean("hasT1Capacity", this.hasT1Capacity);
+	    par1NBTTagCompound.setBoolean("hasT2Capacity", this.hasT2Capacity);
+	    par1NBTTagCompound.setBoolean("hasT3Capacity", this.hasT3Capacity);
+		
+	    NBTTagList var2 = new NBTTagList();
 
-        for (int var3 = 0; var3 < this.containingItems.length; ++var3)
-        {
-            if (this.containingItems[var3] != null)
-            {
-                NBTTagCompound var4 = new NBTTagCompound();
-                var4.setByte("Slot", (byte)var3);
-                this.containingItems[var3].writeToNBT(var4);
-                var2.appendTag(var4);
-            }
-        }
+		for (int var3 = 0; var3 < this.containingItems.length; ++var3)
+		{
+			if (this.containingItems[var3] != null)
+			{
+				NBTTagCompound var4 = new NBTTagCompound();
+				var4.setByte("Slot", (byte) var3);
+				this.containingItems[var3].writeToNBT(var4);
+				var2.appendTag(var4);
+			}
+		}
 
-        par1NBTTagCompound.setTag("Items", var2);
-    }
+		par1NBTTagCompound.setTag("Items", var2);
+	}
 
-    @Override
-    public int getStartInventorySide(ForgeDirection side)
-    {
-        if(side == side.DOWN)
-        {
-            return 1;
-        }
+	@Override
+	public int getStartInventorySide(ForgeDirection side)
+	{
+		if (side == side.DOWN) { return 1; }
 
-        if(side == side.UP)
-        {
-            return 1;
-        }
+		if (side == side.UP) { return 1; }
 
-        return 0;
-    }
+		return 0;
+	}
 
-    @Override
-    public int getSizeInventorySide(ForgeDirection side)
-    {
-        return 1;
-    }
-    
-    @Override
-    public int getSizeInventory()
-    {
-        return this.containingItems.length;
-    }
-    @Override
-    public ItemStack getStackInSlot(int par1)
-    {
-        return this.containingItems[par1];
-    }
-    @Override
-    public ItemStack decrStackSize(int par1, int par2)
-    {
-        if (this.containingItems[par1] != null)
-        {
-            ItemStack var3;
+	@Override
+	public int getSizeInventorySide(ForgeDirection side)
+	{
+		return 1;
+	}
 
-            if (this.containingItems[par1].stackSize <= par2)
-            {
-                var3 = this.containingItems[par1];
-                this.containingItems[par1] = null;
-                return var3;
-            }
-            else
-            {
-                var3 = this.containingItems[par1].splitStack(par2);
+	@Override
+	public int getSizeInventory()
+	{
+		return this.containingItems.length;
+	}
 
-                if (this.containingItems[par1].stackSize == 0)
-                {
-                    this.containingItems[par1] = null;
-                }
+	@Override
+	public ItemStack getStackInSlot(int par1)
+	{
+		return this.containingItems[par1];
+	}
 
-                return var3;
-            }
-        }
-        else
-        {
-            return null;
-        }
-    }
-    @Override
-    public ItemStack getStackInSlotOnClosing(int par1)
-    {
-        if (this.containingItems[par1] != null)
-        {
-            ItemStack var2 = this.containingItems[par1];
-            this.containingItems[par1] = null;
-            return var2;
-        }
-        else
-        {
-            return null;
-        }
-    }
-    @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-        this.containingItems[par1] = par2ItemStack;
+	@Override
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (this.containingItems[par1] != null)
+		{
+			ItemStack var3;
 
-        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
-        {
-            par2ItemStack.stackSize = this.getInventoryStackLimit();
-        }
-    }
-    @Override
-    public String getInvName()
-    {
-        return "     Advanced Battery Box";
-    }
-    
-    @Override
-    public int getInventoryStackLimit()
-    {
-        return 1;
-    }
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-    {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
-    }
-    
-    @Override
-    public boolean isPoweringTo(ForgeDirection side)
-    {
-        return this.isFull;
-    }
+			if (this.containingItems[par1].stackSize <= par2)
+			{
+				var3 = this.containingItems[par1];
+				this.containingItems[par1] = null;
+				return var3;
+			}
+			else
+			{
+				var3 = this.containingItems[par1].splitStack(par2);
 
-    @Override
-    public boolean isIndirectlyPoweringTo(ForgeDirection side)
-    {
-        return isPoweringTo(side);
-    }
-    
-    @Override
-    public double getJoules(Object... data)
-    {
-    	return this.joules;
-    }
+				if (this.containingItems[par1].stackSize == 0)
+				{
+					this.containingItems[par1] = null;
+				}
+
+				return var3;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (this.containingItems[par1] != null)
+		{
+			ItemStack var2 = this.containingItems[par1];
+			this.containingItems[par1] = null;
+			return var2;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		this.containingItems[par1] = par2ItemStack;
+
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
+
+	@Override
+	public String getInvName()
+	{
+        return "     Advanced Battery Box";	}
+
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 1;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	{
+		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+	}
+
+	@Override
+	public boolean isPoweringTo(ForgeDirection side)
+	{
+		return this.isFull;
+	}
+
+	@Override
+	public boolean isIndirectlyPoweringTo(ForgeDirection side)
+	{
+		return isPoweringTo(side);
+	}
+
+	@Override
+	public double getJoules(Object... data)
+	{
+		return this.joules;
+	}
 
 	@Override
 	public void setJoules(double joules, Object... data)
 	{
 		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
 	}
-	
+
+	@Override
+	public double getMaxJoules(Object... data) {
+	if(this.hasT1Capacity == true) 
+	{
+		if(this.hasT2Capacity == true)
+		{
+			if(this.hasT3Capacity == true)
+			{
+				return 12000000;
+			}
+			else
+			{
+					return 9000000;
+			}
+		}
+		else
+		{
+			return 6000000;
+		}
+			}
+	else
+	{
+		return 3000000;
+	}
+	}
+
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */
-	
+
 	/**
 	 * Is this tile entity a BC tile?
 	 */
 	public boolean isPoweredTile(TileEntity tileEntity)
 	{
-		if(tileEntity instanceof IPowerReceptor) 
+		if (tileEntity instanceof IPowerReceptor)
 		{
 			IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 			IPowerProvider provider = receptor.getPowerProvider();
@@ -525,14 +546,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 
 	@Override
 	public void setPowerProvider(IPowerProvider provider)
-    {
-		if(provider == null)
+	{
+		if (provider == null)
 		{
-			if(PowerFramework.currentFramework != null)
-	    	{
-		    	powerProvider = PowerFramework.currentFramework.createPowerProvider();
-				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxJoules()*UniversalElectricity.BC3_RATIO));
-	    	}
+			if (PowerFramework.currentFramework != null)
+			{
+				powerProvider = PowerFramework.currentFramework.createPowerProvider();
+				powerProvider.configure(20, 25, 25, 25, (int) (this.getMaxJoules() * UniversalElectricity.BC3_RATIO));
+			}
 		}
 		else
 		{
@@ -547,12 +568,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	}
 
 	@Override
-	public void doWork() { }
+	public void doWork()
+	{
+	}
 
 	@Override
 	public int powerRequest()
 	{
-		return (int) Math.ceil((this.getMaxJoules() - this.joules)*UniversalElectricity.BC3_RATIO);
+		return (int) Math.ceil((this.getMaxJoules() - this.joules) * UniversalElectricity.BC3_RATIO);
 	}
 
 	/**
@@ -631,7 +654,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public String getType()
 	{
-		return "BatteryBox";
+		return "AdvancedBatteryBox";
 	}
 
 	@Override
@@ -681,29 +704,4 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 	}
 
-	@Override
-	public double getMaxJoules(Object... data) {
-	if(this.hasT1Capacity == true) 
-	{
-		if(this.hasT2Capacity == true)
-		{
-			if(this.hasT3Capacity == true)
-			{
-				return 12000000;
-			}
-			else
-			{
-					return 9000000;
-			}
-		}
-		else
-		{
-			return 6000000;
-		}
-			}
-	else
-	{
-		return 3000000;
-	}
-	}
 }
