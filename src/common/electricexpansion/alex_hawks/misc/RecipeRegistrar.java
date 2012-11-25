@@ -1,5 +1,6 @@
 package electricexpansion.alex_hawks.misc;
 
+import basiccomponents.BasicComponents;
 import buildcraft.BuildCraftCore;
 import buildcraft.BuildCraftTransport;
 import ic2.api.Items;
@@ -110,32 +111,36 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockSwitchWireBlockOff, 1, 4), new Object[]{new ItemStack(blockWireBlock, 1, 4), Block.lever}));
 
 		//Machines
-//		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockAdvBox), new Object [] {"!!!", "!@!", "#$#", '!', ElectricExpansion.itemSuperConduct.getUncharged(),'@', "batteryBox", '?', "battery"}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(blockAdvBox, new Object [] {"!!!", "!@!", "#$#", '!', "battery",'@', "batteryBox", '?', "battery", '$', "eliteCircuit", '#', blockWireBlock}));
 		if(Loader.isModLoaded("BasicComponents")) 
+		{
 			GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', basiccomponents.BasicComponents.itemMotor, '#', basiccomponents.BasicComponents.itemSteelPlate, '@', basiccomponents.BasicComponents.itemBronzePlate, '$', new ItemStack(basiccomponents.BasicComponents.itemCircuit, 1, 0), '%', new ItemStack(itemParts, 1, 0)});
-		
+			GameRegistry.addRecipe(new ShapedOreRecipe(blockAdvBox, new Object [] {"!!!", "@@@", "!$!", '!', BasicComponents.itemBattery.getUncharged(), '@', "copperWire", '$', "eliteCircuit"}));
+
+		}
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond});	
 		
 		//Lead-Tear Battery				
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', "plateSteel", '@', "copperWire", '#', "ingotLead", '$', Item.ghastTear}));
 		
+		if(Loader.isModLoaded("BasicComponents"))
+		{
 		//Tier 1 Upgrade
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', "battery", '@', "copperWire", '#', "basicCircuit", '$', "plateBronze"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', BasicComponents.itemBattery.getUncharged(), '@', "copperWire", '#', "basicCircuit", '$', "plateBronze"}));
 		
 		//Tier 2 Upgrade
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
 
 		//Tier 3 Upgrade		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object [] {"$!$", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "advancedCircuit", '$', "plateSteel"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object [] {"#!#", "!@!", "#!#", '!', ElectricExpansion.itemLeadTearBat.getUncharged(), '@', "copperWire", '#', "eliteCircuit"}));
 
 		//Lead Block
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', "ingotLead"}));
 		GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
 		
-		if(Loader.isModLoaded("BasicComponents")) {
-			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	}
+		RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	
+		
+		}
 		
 /*		//IC2 Upgrade
 		if(Loader.isModLoaded("IC2")) {

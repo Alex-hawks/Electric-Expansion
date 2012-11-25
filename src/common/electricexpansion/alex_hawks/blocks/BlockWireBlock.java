@@ -49,7 +49,7 @@ public class BlockWireBlock extends BlockConductor
 
 	public int getBlockTextureFromSideAndMetadata(int side, int meta)
 	{
-		int texture = 255;
+		int texture = 0;
 		texture = meta + 0;
 		return texture;
 	}
