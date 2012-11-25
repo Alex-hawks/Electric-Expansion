@@ -184,20 +184,19 @@ public class BlockAdvBatteryBox extends BlockMachine
                     return true;
                 }
 
-                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
+          /*      if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
                 {
                     par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                     tileEntity.hasBCComp = true;
                     return true;
-                }
+                }*/
                 
-                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
+         /*       if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
                 {
                     par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
                     tileEntity.hasIC2Comp = true;
-                    tileEntity.initiate();
                     return true;
-                }
+                }*/
             }
        
             else if(par5EntityPlayer.inventory.getCurrentItem() == null)

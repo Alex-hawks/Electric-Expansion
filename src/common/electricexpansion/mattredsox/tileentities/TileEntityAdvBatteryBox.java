@@ -54,8 +54,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 
 	private int playersUsing = 0;
 
-	public boolean hasIC2Comp = false;
-	public boolean hasBCComp = false;
+	//public boolean hasIC2Comp = false;
+//	public boolean hasBCComp = false;
 	public boolean hasT1Capacity = false;
 	public boolean hasT2Capacity = false;
 	public boolean hasT3Capacity = false;
@@ -155,11 +155,11 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				}
 				else if (this.containingItems[0].getItem() instanceof IElectricItem)
 				{
-					if(this.hasIC2Comp == true)
-					{
+				//	if(this.hasIC2Comp == true)
+					//{
 					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
 					this.setJoules(joules - sent);
-					}
+				//	}
 				}
 			}
 
@@ -180,15 +180,15 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				}
 				else if (containingItems[1].getItem() instanceof IElectricItem)
 				{
-					if(this.hasIC2Comp == true)
-					{
+				//	if(this.hasIC2Comp == true)
+					//{
 					IElectricItem item = (IElectricItem) containingItems[1].getItem();
 					if (item.canProvideEnergy())
 					{
 						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - joules) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
 						this.setJoules(joules + gain);	
 					}
-					}
+					//}
 				}
 			}
 
@@ -221,10 +221,10 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 						{
 							if (this.joules * UniversalElectricity.TO_IC2_RATIO >= 32)
 							{
-								if(this.hasIC2Comp == true)
-								{
+								//if(this.hasIC2Comp == true)
+								//{
 								this.setJoules(this.joules - (32 - EnergyNet.getForWorld(worldObj).emitEnergyFrom(this, 32)) * UniversalElectricity.IC2_RATIO);
-								}
+								//}
 							}
 						}
 					}
@@ -235,14 +235,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 				{
 					if (this.isPoweredTile(tileEntity))
 					{
-						if(this.hasBCComp == true)
-						{
+						//if(this.hasBCComp == true)
+						//{
 						IPowerReceptor receptor = (IPowerReceptor) tileEntity;
 						double joulesNeeded = Math.min(receptor.getPowerProvider().getMinEnergyReceived(), receptor.getPowerProvider().getMaxEnergyReceived()) * UniversalElectricity.BC3_RATIO;
 						float transferJoules = (float) Math.max(Math.min(Math.min(joulesNeeded, this.joules), 80000), 0);
 						receptor.getPowerProvider().receiveEnergy((float) (transferJoules * UniversalElectricity.TO_BC_RATIO), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite());
 						this.setJoules(this.joules - transferJoules);
-						}
+					//	}
 					}
 				}
 
@@ -281,7 +281,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		  return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.hasBCComp, this.hasIC2Comp, this.hasT1Capacity, this.hasT2Capacity, this.hasT3Capacity);	}
+		  return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.hasT1Capacity, this.hasT2Capacity, this.hasT3Capacity);	}
 
 	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
@@ -290,8 +290,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 		{
 			this.joules = dataStream.readDouble();
 			this.disabledTicks = dataStream.readInt();
-	        this.hasBCComp = dataStream.readBoolean();
-	        this.hasIC2Comp = dataStream.readBoolean();
+	      //  this.hasBCComp = dataStream.readBoolean();
+	      //  this.hasIC2Comp = dataStream.readBoolean();
 	        this.hasT1Capacity = dataStream.readBoolean();
 	        this.hasT2Capacity = dataStream.readBoolean();
 	        this.hasT3Capacity = dataStream.readBoolean();
@@ -322,8 +322,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.joules = par1NBTTagCompound.getDouble("electricityStored");
-		this.hasBCComp = par1NBTTagCompound.getBoolean("hasBCComp");
-        this.hasIC2Comp = par1NBTTagCompound.getBoolean("hasIC2Comp");
+		//this.hasBCComp = par1NBTTagCompound.getBoolean("hasBCComp");
+        //this.hasIC2Comp = par1NBTTagCompound.getBoolean("hasIC2Comp");
         this.hasT1Capacity = par1NBTTagCompound.getBoolean("hasT1Capacity");
         this.hasT2Capacity = par1NBTTagCompound.getBoolean("hasT2Capacity");
         this.hasT3Capacity = par1NBTTagCompound.getBoolean("hasT3Capacity");
@@ -351,8 +351,8 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setDouble("electricityStored", this.joules);
-	    par1NBTTagCompound.setBoolean("hasBCComp", this.hasBCComp);
-	    par1NBTTagCompound.setBoolean("hasIC2Comp", this.hasIC2Comp);
+	 //   par1NBTTagCompound.setBoolean("hasBCComp", this.hasBCComp);
+	  //  par1NBTTagCompound.setBoolean("hasIC2Comp", this.hasIC2Comp);
 	    par1NBTTagCompound.setBoolean("hasT1Capacity", this.hasT1Capacity);
 	    par1NBTTagCompound.setBoolean("hasT2Capacity", this.hasT2Capacity);
 	    par1NBTTagCompound.setBoolean("hasT3Capacity", this.hasT3Capacity);

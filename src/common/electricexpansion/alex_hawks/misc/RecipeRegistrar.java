@@ -137,7 +137,7 @@ public class RecipeRegistrar
 		if(Loader.isModLoaded("BasicComponents")) {
 			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	}
 		
-		//IC2 Upgrade
+/*		//IC2 Upgrade
 		if(Loader.isModLoaded("IC2")) {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 4), new Object [] {"$#$", "@!@", "$#$", '!', Items.getItem("mvTransformer"), '@', Items.getItem("transformerUpgrade"), '$', Items.getItem("advancedAlloy"), '#', Items.getItem("carbonPlate")}));
 		}
@@ -147,7 +147,7 @@ public class RecipeRegistrar
 			GameRegistry.addRecipe(new ItemStack(ElectricExpansion.itemLeadGear), new Object [] {" ! ", "!@!", " ! ", '!', ElectricExpansion.itemLead, '@', BuildCraftCore.goldGearItem});
 			GameRegistry.addRecipe(new ItemStack(itemUpgrade, 1, 3), new Object [] {"$#$", "#!#", "$#$", '!', BuildCraftTransport.pipePowerGold, '$', itemLeadGear, '#', BuildCraftCore.ironGearItem});
 
-    	}
+    	}*/
     	
     	
 	}
