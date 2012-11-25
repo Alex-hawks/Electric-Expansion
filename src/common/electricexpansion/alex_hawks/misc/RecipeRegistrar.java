@@ -138,7 +138,7 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', "ingotLead"}));
 		GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
 		
-		RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	
+		//RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	
 		
 		}
 		
