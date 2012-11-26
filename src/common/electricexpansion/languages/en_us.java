@@ -41,7 +41,7 @@ public class en_us
 
 		//Machines
 		LanguageRegistry.instance().addNameForObject(ElectricExpansion.blockUPTransformer, "en_us", "Up Transformer");
-		LanguageRegistry.instance().addNameForObject(ElectricExpansion.blockBigBatteryBox, "en_us", "Advanced Battery Box");
+		LanguageRegistry.instance().addNameForObject(ElectricExpansion.blockBatteryBox, "en_us", "Battery Box");
 		LanguageRegistry.instance().addNameForObject(ElectricExpansion.blockDOWNTransformer, "en_us", "Down Transformer");
 		LanguageRegistry.instance().addNameForObject(ElectricExpansion.blockVoltDet, "en_us", "Voltage Detector");
 		LanguageRegistry.instance().addNameForObject(ElectricExpansion.blockWireMill, "en_us", "Wire Mill");

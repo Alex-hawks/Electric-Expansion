@@ -16,11 +16,11 @@ import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 import electricexpansion.client.alex_hawks.gui.GuiWireMill;
-import electricexpansion.client.mattredsox.GUIAdvBatteryBox;
+import electricexpansion.client.mattredsox.GUIBatteryBox;
 import electricexpansion.client.mattredsox.GuiVoltDetector;
-import electricexpansion.mattredsox.ContainerAdvBatteryBox;
+import electricexpansion.mattredsox.ContainerBatteryBox;
 import electricexpansion.mattredsox.ContainerVoltDetector;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
@@ -50,7 +50,7 @@ public class EECommonProxy implements IGuiHandler
 		//GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
 		
 		//Mattredsox's Tile entity registrations
-		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
+		GameRegistry.registerTileEntity(TileEntityBatteryBox.class, "TileEntityAdvBox");
 		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TileEntityUpTrans");
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
 		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
@@ -67,7 +67,7 @@ public class EECommonProxy implements IGuiHandler
         {
 			switch(ID)
 			{
-				case 0: return new GUIAdvBatteryBox(player.inventory, (TileEntityAdvBatteryBox)tileEntity);
+				case 0: return new GUIBatteryBox(player.inventory, (TileEntityBatteryBox)tileEntity);
 				case 1: return new GuiVoltDetector(player.inventory, (TileEntityVoltDetector)tileEntity);
 				case 2: return new GuiWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 
@@ -83,7 +83,7 @@ public class EECommonProxy implements IGuiHandler
         {
 			switch(ID)
 			{
-				case 0: return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvBatteryBox)tileEntity));
+				case 0: return new ContainerBatteryBox(player.inventory, ((TileEntityBatteryBox)tileEntity));
 				case 1: return new ContainerVoltDetector(((TileEntityVoltDetector)tileEntity));
 				case 2: return new ContainerWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 			}

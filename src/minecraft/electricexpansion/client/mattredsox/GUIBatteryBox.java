@@ -8,19 +8,19 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-import electricexpansion.mattredsox.ContainerAdvBatteryBox;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.ContainerBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityBatteryBox;
 
-public class GUIAdvBatteryBox extends GuiContainer
+public class GUIBatteryBox extends GuiContainer
 {
-    private TileEntityAdvBatteryBox tileEntity;
+    private TileEntityBatteryBox tileEntity;
 
     private int containerWidth;
     private int containerHeight;
     
-    public GUIAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox batteryBox)
+    public GUIBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
     {
-        super(new ContainerAdvBatteryBox(par1InventoryPlayer, batteryBox));
+        super(new ContainerBatteryBox(par1InventoryPlayer, batteryBox));
         this.tileEntity = batteryBox;
     }
 
@@ -39,15 +39,15 @@ public class GUIAdvBatteryBox extends GuiContainer
             displayMaxWattHours = "Disabled";
         }
 
-        this.fontRenderer.drawString(displayWattHours + " of", 98 - displayWattHours.length(), 30, 4210752);
-        this.fontRenderer.drawString(displayMaxWattHours, 83, 40, 4210752);
-        this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 90, 60, 4210752);
+        this.fontRenderer.drawString(displayWattHours + " of", 73 - displayWattHours.length(), 30, 4210752);
+        this.fontRenderer.drawString(displayMaxWattHours, 58, 40, 4210752);
+        this.fontRenderer.drawString("Voltage: " + (int)this.tileEntity.getVoltage(), 65, 60, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
   //this.fontRenderer.drawString("Buildcraft Upgrade Status: "+ this.tileEntity.hasBCComp, 180, 60, 0xffffff);
   //this.fontRenderer.drawString("IC2 Upgrade Status: "+ this.tileEntity.hasIC2Comp, 180, 70, 0xffffff);
-  this.fontRenderer.drawString("T1 Upgrade Status: "+ this.tileEntity.hasT1Capacity, 180, 80, 0xffffff);
-  this.fontRenderer.drawString("T2 Upgrade Status: "+ this.tileEntity.hasT2Capacity, 180, 90, 0xffffff);
-  this.fontRenderer.drawString("T3 Upgrade Status: "+ this.tileEntity.hasT3Capacity, 180, 100, 0xffffff);
+  //this.fontRenderer.drawString("T1 Upgrade Status: "+ this.tileEntity.hasT1Capacity, 180, 80, 0xffffff);
+ // this.fontRenderer.drawString("T2 Upgrade Status: "+ this.tileEntity.hasT2Capacity, 180, 90, 0xffffff);
+ // this.fontRenderer.drawString("T3 Upgrade Status: "+ this.tileEntity.hasT3Capacity, 180, 100, 0xffffff);
     }
 
     /**
@@ -64,6 +64,6 @@ public class GUIAdvBatteryBox extends GuiContainer
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
         int scale = (int)(((double)this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
-        this.drawTexturedModalRect(containerWidth + 87, containerHeight + 51, 176, 0, scale, 20);
+        this.drawTexturedModalRect(containerWidth + 64, containerHeight + 51, 176, 0, scale, 20);
     }
 }

@@ -7,7 +7,6 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import universalelectricity.core.implement.IItemElectric;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 public class ContainerVoltDetector extends Container

@@ -182,7 +182,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
-		this.joules = par1NBTTagCompound.getInteger("joules");
+		this.joules = par1NBTTagCompound.getDouble("joules");
 		this.frequency = par1NBTTagCompound.getShort("frequency");
 		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
 		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));

@@ -1,8 +1,5 @@
 package electricexpansion.mattredsox.blocks;
 
-import java.util.List;
-
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
@@ -16,21 +13,19 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
-import basiccomponents.tile.TileEntityBatteryBox;
-
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.mattredsox.items.ItemUpgrade;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityBatteryBox;
 
-public class BlockAdvBatteryBox extends BlockMachine
+public class BlockBatteryBox extends BlockMachine
 {
 	public static final int BATTERY_BOX_METADATA = 0;
 
 
-	public BlockAdvBatteryBox(int id, int textureIndex)
+	public BlockBatteryBox(int id, int textureIndex)
 	{
-		super("Adv Bat Box", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("Bat Box", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
@@ -152,63 +147,16 @@ public class BlockAdvBatteryBox extends BlockMachine
     {
         if (!par1World.isRemote)
         {
-            TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
+            TileEntityBatteryBox tileEntity = (TileEntityBatteryBox)par1World.getBlockTileEntity(x, y, z);
             
             if(par5EntityPlayer.inventory.getCurrentItem() !=null)
-            {
-    			if(!(par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemUpgrade))
-     			{
-    	            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
-    	            return true;
-     			}
-    			
-    			if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) && tileEntity.hasT1Capacity == false)
-                {
-                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                    tileEntity.hasT1Capacity = true;
-                    return true;
-                }
-                
-                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) && tileEntity.hasT2Capacity == false && tileEntity.hasT1Capacity == true)
-                {
-                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                    tileEntity.hasT2Capacity = true;
-                    return true;
-                    
-                } 
-                
-                if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) && tileEntity.hasT3Capacity == false && tileEntity.hasT2Capacity == true)
-                {
-                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                    tileEntity.hasT3Capacity = true;
-                    return true;
-                }
-
-          /*      if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 3)) && tileEntity.hasBCComp == false)
-                {
-                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                    tileEntity.hasBCComp = true;
-                    return true;
-                }*/
-                
-         /*       if(par5EntityPlayer.inventory.getCurrentItem().isItemEqual(new ItemStack(ElectricExpansion.itemUpgrade, 1, 4)) && tileEntity.hasIC2Comp == false)
-                {
-                    par5EntityPlayer.inventory.setInventorySlotContents(par5EntityPlayer.inventory.currentItem, null);
-                    tileEntity.hasIC2Comp = true;
-                    return true;
-                }*/
-            }
-       
-            else if(par5EntityPlayer.inventory.getCurrentItem() == null)
-        	{
-            	par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
+            {		
+             	par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
             	return true;
         	}
-            
-            
+     
         }
-
-        return true;
+		return true;
     }
 
 	/**
@@ -260,12 +208,12 @@ public class BlockAdvBatteryBox extends BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
-			return new TileEntityAdvBatteryBox();
+			return new TileEntityBatteryBox();
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(ElectricExpansion.blockBigBatteryBox);
+		return new ItemStack(ElectricExpansion.blockBatteryBox);
 	}
 }

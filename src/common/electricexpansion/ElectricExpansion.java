@@ -1,18 +1,14 @@
 package electricexpansion;
 
-import ic2.api.EnergyNet;
-
 import java.io.File;
 import java.util.Random;
 import java.util.logging.Logger;
 
 import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -25,7 +21,6 @@ import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -33,16 +28,13 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import electricexpansion.alex_hawks.blocks.BlockInsulatedWire;
 import electricexpansion.alex_hawks.blocks.BlockRawWire;
 import electricexpansion.alex_hawks.blocks.BlockSwitchWire;
@@ -59,10 +51,8 @@ import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
 import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
-import electricexpansion.client.alex_hawks.RenderHandler;
 import electricexpansion.languages.LanguageHelper;
-import electricexpansion.languages.en_us;
-import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
@@ -88,7 +78,7 @@ public class ElectricExpansion {
 	private static final int switchWireBlockID = BLOCK_ID_PREFIX + 4; 
 	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 5;
 	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
-	private static final int blockBigBatteryBoxID = BLOCK_ID_PREFIX + 7;
+	private static final int blockBatteryBoxID = BLOCK_ID_PREFIX + 7;
 	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 8;
 	private static final int blockUPTransformerID = BLOCK_ID_PREFIX + 9;
 	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 10;
@@ -116,7 +106,7 @@ public class ElectricExpansion {
 	public static int SwitchWireBlock;
 	//public static int redstoneWire;
 	//public static int redstoneWireBlock;
-	public static int BigBatteryBox;
+	public static int BatteryBox;
 	public static int VoltDet;
 	public static int UPTransformer;
 	public static int DOWNTransformer;
@@ -147,7 +137,7 @@ public class ElectricExpansion {
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
-	public static final Block blockBigBatteryBox = new BlockAdvBatteryBox(BigBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("AdvBatBox");
+	public static final Block blockBatteryBox = new BlockBatteryBox(BatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("BatBox");
 	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("VoltDet");
 	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE);
 	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE);
@@ -185,7 +175,7 @@ public class ElectricExpansion {
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 
-		BigBatteryBox = UEConfig.getBlockConfigID(i, "Advanced_Bat_Box", blockBigBatteryBoxID);
+		BatteryBox = UEConfig.getBlockConfigID(i, "Battery_Box", blockBatteryBoxID);
 		VoltDet = UEConfig.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
 		UPTransformer = UEConfig.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
 		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
@@ -256,7 +246,7 @@ public class ElectricExpansion {
 		Item.itemsList[WPT] = new ItemBlockSwitchWireBlock(WPT-256, blockWPT);
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
-		GameRegistry.registerBlock(blockBigBatteryBox);
+		GameRegistry.registerBlock(blockBatteryBox);
 		GameRegistry.registerBlock(blockDOWNTransformer);
 		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockWireMill);
@@ -277,7 +267,7 @@ public class ElectricExpansion {
 		proxy.init();
 		RecipeRegistrar.crafting();
 		RecipeRegistrar.drawing();
-		UETab.setItemStack(new ItemStack(this.blockBigBatteryBox));
+		UETab.setItemStack(new ItemStack(this.blockBatteryBox));
 
 	}
 

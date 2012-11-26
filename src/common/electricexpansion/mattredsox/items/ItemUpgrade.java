@@ -5,12 +5,13 @@ import java.util.List;
 import electricexpansion.EECommonProxy;
 
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.modifier.IModifier;
 
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
-public class ItemUpgrade extends Item
+public class ItemUpgrade extends Item implements IModifier
 {
     private String[] names = new String[] {"Tier 1 Storage Upgrade", "Tier 2 Storage Upgrade", "Tier 3 Storage Upgrade", "BC Compatibility Upgrade", "IC2 Compatibility Upgrade"};
 
@@ -63,4 +64,27 @@ if(i == 3)
     		par3List.add(new ItemStack(this, 1, i));
         }
     }
+
+	@Override
+	public String getName(ItemStack itemstack) {
+	if(itemstack.getItemDamage() == 0) {
+		return "Capacity"; }
+	if(itemstack.getItemDamage() == 1) {
+		return "Capacity";	}
+	if(itemstack.getItemDamage() == 2) {
+			return "Capacity"; }
+	
+	return null;
+	}
+
+	@Override
+	public int getEffectiveness(ItemStack itemstack) {
+	if(itemstack.getItemDamage() == 0) {
+			return 6000000; }
+		if(itemstack.getItemDamage() == 1) {
+			return 9000000;	}
+		if(itemstack.getItemDamage() == 2) {
+				return 12000000; }
+		
+		return 0;	}
 }
