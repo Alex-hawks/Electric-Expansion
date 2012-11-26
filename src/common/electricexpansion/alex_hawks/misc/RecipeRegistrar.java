@@ -34,16 +34,16 @@ public class RecipeRegistrar
 	public static void crafting()
 	{
 		//Uninsulated Wire Recipes
-		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 0), new Object [] {" @ ", " @ ", " @ ", '@', "ingotCopper"});
-		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 1), new Object [] {" @ ", " @ ", " @ ", '@', "ingotTin"});
-		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 2), new Object [] {" @ ", " @ ", " @ ", '@', "ingotSilver"});
-		GameRegistry.addRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"});
-		GameRegistry.addRecipe(new ItemStack(blockRawWire, 12, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotEndium"});
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 0), new Object [] {" @ ", " @ ", " @ ", '@', "ingotCopper"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 1), new Object [] {" @ ", " @ ", " @ ", '@', "ingotTin"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 2), new Object [] {" @ ", " @ ", " @ ", '@', "ingotSilver"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 7, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotAluminium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 12, 3), new Object [] {" @ ", " @ ", " @ ", '@', "ingotEndium"}));
 			
 		//Recipes for supporting other UE add-ons, the slack way...
 		if(Loader.isModLoaded("BasicComponents"))
 		{
-			GameRegistry.addRecipe(new ItemStack(basiccomponents.BasicComponents.blockCopperWire) , new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
+			GameRegistry.addRecipe(new ItemStack(basiccomponents.BasicComponents.blockCopperWire, 1) , new Object[]{new ItemStack(blockInsulatedWire, 1, 0)});
 			GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[]{"copperWire"});
 		}
 
@@ -55,11 +55,11 @@ public class RecipeRegistrar
 		GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 1, 4), new Object[]{new ItemStack(blockRawWire, 1, 4), Block.cloth});
 
 		//Insulated Wire Recipes (From insulation, and the corresponding OreDictionary Ingots)
-		GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 7, 0), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotCopper"});
-		GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 7, 1), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotTin"});
-		GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 7, 2), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotSilver"});
-		GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 7, 3), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotAluminium"});
-		GameRegistry.addRecipe(new ItemStack(blockInsulatedWire, 12, 4), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotEndium"});
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 7, 0), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotCopper"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 7, 1), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotTin"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 7, 2), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotSilver"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 7, 3), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotAluminium"}));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 12, 4), new Object [] {"#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotEndium"}));
 
 		//Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
 		GameRegistry.addRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[]{new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.stone});
