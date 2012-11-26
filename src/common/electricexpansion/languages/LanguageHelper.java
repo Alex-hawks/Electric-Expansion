@@ -8,6 +8,6 @@ public class LanguageHelper
 {
 	public static void registerLanguages()
 	{
-		en_us.registerLanguageTerms();
+		en_US.registerLanguageTerms();
 	}
 }

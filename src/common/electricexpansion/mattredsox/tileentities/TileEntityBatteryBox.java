@@ -55,7 +55,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	private boolean isFull = false;
 
 	private int playersUsing = 0;
-	
+
 	public IPowerProvider powerProvider;
 
 	public TileEntityBatteryBox()
@@ -150,11 +150,11 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 				}
 				else if (this.containingItems[0].getItem() instanceof IElectricItem)
 				{
-				//	if(this.hasIC2Comp == true)
+					//	if(this.hasIC2Comp == true)
 					//{
 					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
 					this.setJoules(joules - sent);
-				//	}
+					//	}
 				}
 			}
 
@@ -266,7 +266,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		  return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);	}
+		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);	}
 
 	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
@@ -303,7 +303,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.joules = par1NBTTagCompound.getDouble("electricityStored");
-        
+
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -327,8 +327,8 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setDouble("electricityStored", this.joules);
-		
-	    NBTTagList var2 = new NBTTagList();
+
+		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.containingItems.length; ++var3)
 		{
@@ -432,7 +432,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public String getInvName()
 	{
-        return "          Battery Box";	}
+		return "          Battery Box";	}
 
 	@Override
 	public int getInventoryStackLimit()
@@ -473,10 +473,16 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxJoules(Object... data) 
 	{	
-	if(this.containingItems[2].getItem() != null)
-	if(this.containingItems[2].getItem() instanceof IModifier)
+		int slot1 = 0, slot2 = 0, slot3 = 0;
 		
-		//Use the getEffectivness() int in the Item class for the value to return :)
+		if(this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier && ((IModifier)this.containingItems[2].getItem()).getName(this.containingItems[2]) == "Capacity")
+			slot1 = ((IModifier)this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
+		if(this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier)this.containingItems[3].getItem()).getName(this.containingItems[3]) == "Capacity")
+			slot2 = ((IModifier)this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
+		if(this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier)this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Capacity")
+			slot3 = ((IModifier)this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
+	
+		return 3000000 + slot1 + slot2 + slot3;
 	}
 
 	/**
@@ -615,7 +621,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public String[] getMethodNames()
 	{
 		return new String[]
-		{ "getVoltage", "getWattage", "isFull" };
+				{ "getVoltage", "getWattage", "isFull" };
 	}
 
 	@Override
@@ -628,17 +634,17 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 
 		switch (method)
 		{
-			case getVoltage:
-				return new Object[]
-				{ getVoltage() };
-			case getWattage:
-				return new Object[]
-				{ ElectricInfo.getWatts(joules) };
-			case isFull:
-				return new Object[]
-				{ isFull };
-			default:
-				throw new Exception("Function unimplemented");
+		case getVoltage:
+			return new Object[]
+					{ getVoltage() };
+		case getWattage:
+			return new Object[]
+					{ ElectricInfo.getWatts(joules) };
+		case isFull:
+			return new Object[]
+					{ isFull };
+		default:
+			throw new Exception("Function unimplemented");
 		}
 	}
 
