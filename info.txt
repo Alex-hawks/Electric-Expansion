@@ -18,3 +18,4 @@ X ElectricExpansion_v0.3.6(1.4.5).jar
 * ElectricExpansion_v0.3.7(1.4.5).jar
 @ ElectricExpansion_v0.3.8(1.4.5).jar
 * ElectricExpansion_v0.3.9(1.4.5).jar
+* ElectricExpansion_v0.3.10(1.4.5).jar
