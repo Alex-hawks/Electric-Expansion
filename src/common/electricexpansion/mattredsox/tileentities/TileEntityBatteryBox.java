@@ -31,6 +31,7 @@ import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import universalelectricity.prefab.modifier.IModifier;
 import buildcraft.api.power.IPowerProvider;
 import buildcraft.api.power.IPowerReceptor;
 import buildcraft.api.power.PowerFramework;
@@ -285,7 +286,7 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	public void openChest()
 	{
 		this.playersUsing++;
-		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+		System.out.println(this.getMaxJoules());
 	}
 
 	@Override
@@ -472,22 +473,10 @@ public class TileEntityBatteryBox extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxJoules(Object... data) 
 	{	
-	if(this.containingItems[2] == new ItemStack(ElectricExpansion.itemUpgrade, 1, 0)) 
-		{
-		return 6000000;
-		}
-	if(this.containingItems[2] == new ItemStack(ElectricExpansion.itemUpgrade, 1, 1)) 
-		{
-			return 9000000;
-		}
-	if(this.containingItems[2] == new ItemStack(ElectricExpansion.itemUpgrade, 1, 2)) 
-		{
-			return 12000000;
-		}
-	else
-		{
-			return 3000000;
-		}
+	if(this.containingItems[2].getItem() != null)
+	if(this.containingItems[2].getItem() instanceof IModifier)
+		
+		//Use the getEffectivness() int in the Item class for the value to return :)
 	}
 
 	/**
