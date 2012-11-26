@@ -66,7 +66,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	{return canReceiveFromSide(side) || side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2);}
 
 	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+	public void onReceive(Object sender, double amps, double voltage, ForgeDirection side)
 	{ 
 		voltin = voltage;
 		System.out.println(voltin);

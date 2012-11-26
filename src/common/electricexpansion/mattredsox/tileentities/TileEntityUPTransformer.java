@@ -49,7 +49,7 @@ public class TileEntityUPTransformer extends TileEntityElectricityReceiver imple
 }
 
 	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+	public void onReceive(Object sender, double amps, double voltage, ForgeDirection side)
 	{ 
 		voltin = voltage;
 		System.out.println(voltin);

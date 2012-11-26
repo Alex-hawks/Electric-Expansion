@@ -135,7 +135,7 @@ public class ElectricExpansion {
 	//Other
 	public static double superConductorUpkeep;
 
-	public static final Configuration CONFIG = new Configuration(new File("config/UniversalElectricity/ElectricExpansion.cfg"));
+	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
 
 	//Blocks

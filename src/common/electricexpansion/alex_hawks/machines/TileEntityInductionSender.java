@@ -161,7 +161,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	{return this.joules == this.maxJoules;}
 
 	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) 
+	public void onReceive(Object sender, double amps, double voltage, ForgeDirection side) 
 	{
 		if (voltage > this.getVoltage())
 			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);

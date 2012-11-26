@@ -51,7 +51,7 @@ public class TileEntityDOWNTransformer extends TileEntityElectricityReceiver imp
 	}
 
 	@Override
-	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side)
+	public void onReceive(Object sender, double amps, double voltage, ForgeDirection side)
 	{ 
 		voltin = voltage;
 		if(!this.isDisabled())
