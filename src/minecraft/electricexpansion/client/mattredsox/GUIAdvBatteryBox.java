@@ -8,20 +8,20 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-import electricexpansion.mattredsox.ContainerBatteryBox;
-import electricexpansion.mattredsox.tileentities.TileEntityBatteryBox;
+import electricexpansion.mattredsox.ContainerAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
-public class GUIBatteryBox extends GuiContainer
+public class GUIAdvBatteryBox extends GuiContainer
 {
-    private TileEntityBatteryBox tileEntity;
+    private TileEntityAdvBatteryBox tileEntity;
 
     private int containerWidth;
     private int containerHeight;
     
-    public GUIBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
+    public GUIAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox AdvBatteryBox)
     {
-        super(new ContainerBatteryBox(par1InventoryPlayer, batteryBox));
-        this.tileEntity = batteryBox;
+        super(new ContainerAdvBatteryBox(par1InventoryPlayer, AdvBatteryBox));
+        this.tileEntity = AdvBatteryBox;
     }
 
     /**
