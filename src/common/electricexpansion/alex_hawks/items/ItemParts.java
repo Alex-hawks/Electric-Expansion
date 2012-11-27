@@ -33,7 +33,8 @@ public class ItemParts extends Item
     {
         return meta;
     }
-    public String getItemNameIs(ItemStack i)
+    @Override
+    public String getItemNameIS(ItemStack i)
     {
 		String name = "Unknown";
 		int j = i.getItemDamage();

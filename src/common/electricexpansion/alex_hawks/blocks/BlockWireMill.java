@@ -184,9 +184,9 @@ public class BlockWireMill extends BlockMachine
 	@Override
 	public int getRenderType()
 	{
-		if(this.isWireMill){
-		return EEClientProxy.RENDER_ID; }
-		return 0;
+		if(this.isSuperMaker){
+			return 0; }
+	return EEClientProxy.RENDER_ID;
 	}
 
 	@Override

@@ -111,15 +111,15 @@ public class RecipeRegistrar
 		//Machines
 		if(Loader.isModLoaded("BasicComponents")) 
 		{
+			//Lead-Tear Battery				
+			GameRegistry.addRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', BasicComponents.itemSteelPlate, '@', new ItemStack(blockInsulatedWire, 1, 0), '#', ElectricExpansion.itemLead, '$', Item.ghastTear});
+			
 			GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', BasicComponents.itemMotor, '#', BasicComponents.itemSteelPlate, '@', basiccomponents.BasicComponents.itemBronzePlate, '$', new ItemStack(BasicComponents.itemCircuit, 1, 0), '%', new ItemStack(itemParts, 1, 0)});
 			GameRegistry.addRecipe(new ItemStack(blockBatBox), new Object [] {"!!!", "@@@", "!$!", '!', BasicComponents.itemBattery.getUncharged(), '@', new ItemStack(BasicComponents.blockCopperWire, 1), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2)});
 
 		}
 		//Parts
 		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond});	
-
-		//Lead-Tear Battery				
-		GameRegistry.addRecipe(new ItemStack(itemLeadTearBat), new Object [] {"!@!", "#$#", "!@!", '!', BasicComponents.itemSteelPlate, '@', new ItemStack(blockInsulatedWire, 1, 0), '#', ElectricExpansion.itemLead, '$', Item.ghastTear});
 
 		if(Loader.isModLoaded("BasicComponents"))
 		{
