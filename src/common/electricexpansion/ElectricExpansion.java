@@ -126,8 +126,6 @@ public class ElectricExpansion {
 	public static int Parts;
 	public static int Lead;
 	public static int LeadGear;
-	//Other
-	public static double superConductorUpkeep;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -195,10 +193,6 @@ public class ElectricExpansion {
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
 		LeadGear = UEConfig.getItemConfigID(i, "Lead_Gear", itemLeadGearID);
 		
-
-		superConductorUpkeep = (double)((UEConfig.getItemConfigID(i, "Super_Conductor_Upkeep", superConductorUpkeepDefault))/10);
-		i.get(Configuration.CATEGORY_GENERAL, "Super_Conductor_Upkeep", superConductorUpkeepDefault).comment = "Divide by 10 to get the Watt upkeep cost, per second, for EACH Super-Conductor Cable's super-conducting function.";
-
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
 	}
