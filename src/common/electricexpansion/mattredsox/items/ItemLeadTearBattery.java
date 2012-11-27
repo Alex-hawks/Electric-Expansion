@@ -10,7 +10,7 @@ public class ItemLeadTearBattery extends ItemElectric
     {
         super(par1);
         this.iconIndex = 1;
-        this.setItemName("Lead Tear Battery");
+        this.setItemName("LeadTearBattery");
         this.setCreativeTab(UETab.INSTANCE);
     }
 

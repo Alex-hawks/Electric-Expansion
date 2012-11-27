@@ -70,8 +70,8 @@ public class ElectricExpansion {
 	private static final int ITEM_ID_PREFIX = 15970;
 
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
-/*	private static final String[] LANGUAGE_SUPPORTED = new String[]
-	{ "en_US", "zh_CN" };*/
+	private static final String[] LANGUAGE_SUPPORTED = new String[]
+	{ "en_US" };
 	
 	//private, these are the default options.
 	//Blocks
@@ -146,15 +146,14 @@ public class ElectricExpansion {
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
-	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("Lead Block").setTextureFile(EECommonProxy.ABLOCK);
+	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(EECommonProxy.ABLOCK);
 	
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
 	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat);
-	public static final Item itemConnectorAlloy = new ItemConnectorAlloy(ConnectionAlloy, 0).setCreativeTab(UETab.INSTANCE);
-	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("Lead");
-	public static final Item itemLeadGear = new ItemBase(LeadGear, 3).setCreativeTab(UETab.INSTANCE).setItemName("Lead Gear");
+	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
+	public static final Item itemLeadGear = new ItemBase(LeadGear, 3).setCreativeTab(UETab.INSTANCE).setItemName("LeadGear");
 
 	
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
@@ -267,10 +266,8 @@ public class ElectricExpansion {
 		RecipeRegistrar.drawing();
 		UETab.setItemStack(new ItemStack(this.blockAdvBatteryBox));
 
-		//for (String language : LANGUAGE_SUPPORTED)
-		//{
-			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + "en_US.properties", "en_US", false);
-		//}
+		for (String language : LANGUAGE_SUPPORTED)
+			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
 
 	}
 
