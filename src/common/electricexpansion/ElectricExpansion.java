@@ -35,6 +35,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import electricexpansion.alex_hawks.blocks.BlockInsulatedWire;
 import electricexpansion.alex_hawks.blocks.BlockRawWire;
 import electricexpansion.alex_hawks.blocks.BlockSwitchWire;
@@ -51,7 +52,6 @@ import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
 import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
-import electricexpansion.languages.LanguageHelper;
 import electricexpansion.mattredsox.blocks.BlockBatteryBox;
 import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
@@ -69,6 +69,10 @@ public class ElectricExpansion {
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
 
+	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
+/*	private static final String[] LANGUAGE_SUPPORTED = new String[]
+	{ "en_US", "zh_CN" };*/
+	
 	//private, these are the default options.
 	//Blocks
 	private static final int rawWireID = BLOCK_ID_PREFIX;
@@ -137,11 +141,11 @@ public class ElectricExpansion {
 	//public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
-	public static final Block blockBatteryBox = new BlockBatteryBox(BatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("BatBox");
-	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("VoltDet");
-	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE);
-	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE);
-	public static final Block blockWireMill = new BlockWireMill(wireMill);
+	public static final Block blockBatteryBox = new BlockBatteryBox(BatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
+	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("voltdet");
+	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("uptrans");
+	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("downtrans");
+	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("Lead Block").setTextureFile(EECommonProxy.ABLOCK);
@@ -269,6 +273,11 @@ public class ElectricExpansion {
 		RecipeRegistrar.drawing();
 		UETab.setItemStack(new ItemStack(this.blockBatteryBox));
 
+		//for (String language : LANGUAGE_SUPPORTED)
+		//{
+			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + "en_US.properties", "en_US", false);
+		//}
+
 	}
 
 	@PostInit
@@ -279,7 +288,6 @@ public class ElectricExpansion {
 		OreDictionary.registerOre("leadBlock", this.blockLead);
 		MinecraftForge.EVENT_BUS.register(this);
 		
-		LanguageHelper.registerLanguages();
 	}
 
 	@ForgeSubscribe
