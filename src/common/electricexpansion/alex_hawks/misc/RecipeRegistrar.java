@@ -19,7 +19,7 @@ public class RecipeRegistrar
 
 	private static final Block blockSwitchWire = ElectricExpansion.blockSwitchWire;
 	private static final Block blockSwitchWireBlock = ElectricExpansion.blockSwitchWireBlock;
-	private static final Block blockBatBox = ElectricExpansion.blockBatteryBox;
+	private static final Block blockBatBox = ElectricExpansion.blockAdvBatteryBox;
 	private static final Block blockWireMill = ElectricExpansion.blockWireMill;
 	private static final Block blockRawWire = ElectricExpansion.blockRawWire;
 	private static final Block blockInsulatedWire = ElectricExpansion.blockInsulatedWire;
@@ -137,8 +137,6 @@ public class RecipeRegistrar
 			//Lead Block
 			GameRegistry.addRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', ElectricExpansion.itemLead});
 			GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
-
-			RecipeHelper.removeRecipe(basiccomponents.BasicComponents.batteryBox);	
 		}
 
 		//IC2 Upgrade

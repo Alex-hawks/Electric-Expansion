@@ -10,21 +10,21 @@ import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.prefab.SlotElectricItem;
 import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.modifier.SlotModifier;
-import electricexpansion.mattredsox.tileentities.TileEntityBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
-public class ContainerBatteryBox extends Container
+public class ContainerAdvBatteryBox extends Container
 {
-    private TileEntityBatteryBox tileEntity;
+    private TileEntityAdvBatteryBox tileEntity;
 
-    public ContainerBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityBatteryBox batteryBox)
+    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox AdvBatteryBox)
     {
-        this.tileEntity = batteryBox;
-        this.addSlotToContainer(new SlotElectricItem(batteryBox, 0, 11, 24)); //Top slot
-        this.addSlotToContainer(new SlotElectricItem(batteryBox, 1, 11, 48)); //Bottom slot
+        this.tileEntity = AdvBatteryBox;
+        this.addSlotToContainer(new SlotElectricItem(AdvBatteryBox, 0, 11, 24)); //Top slot
+        this.addSlotToContainer(new SlotElectricItem(AdvBatteryBox, 1, 11, 48)); //Bottom slot
         
-        this.addSlotToContainer(new SlotModifier(batteryBox, 2, 149, 7)); //1st Upgrade slot
-        this.addSlotToContainer(new SlotModifier(batteryBox, 3, 149, 31)); //2nd Upgrade slot
-        this.addSlotToContainer(new SlotModifier(batteryBox, 4, 149, 55)); //3rd Upgrade slot
+        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 2, 149, 7)); //1st Upgrade slot
+        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 3, 149, 31)); //2nd Upgrade slot
+        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 4, 149, 55)); //3rd Upgrade slot
 
         int var3;
 

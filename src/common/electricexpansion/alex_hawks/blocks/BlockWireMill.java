@@ -2,10 +2,17 @@ package electricexpansion.alex_hawks.blocks;
 
 import java.util.Random;
 
+import basiccomponents.tile.TileEntityBatteryBox;
+import basiccomponents.tile.TileEntityCoalGenerator;
+import basiccomponents.tile.TileEntityElectricFurnace;
+
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
+import net.minecraft.src.MovingObjectPosition;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -18,8 +25,12 @@ import electricexpansion.client.EEClientProxy;
 
 public class BlockWireMill extends BlockMachine
 {
-	public static final int meta = 0;
+	public static final int metaWireMill = 0;
+	public static final int metaSuper = 4;
 	
+	public boolean isWireMill = false;
+	public boolean isSuperMaker = false;
+
 		public BlockWireMill(int par1)
 		{
 			super("blockEtcher", par1, Material.iron);
@@ -47,9 +58,9 @@ public class BlockWireMill extends BlockMachine
 
 			int change = 0;
 
-			 if (metadata >= meta)
+			 if (metadata >= metaWireMill)
 			{
-				original -= meta;
+				original -= metaWireMill;
 			}
 
 			// Reorient the block
@@ -69,9 +80,9 @@ public class BlockWireMill extends BlockMachine
 					break;
 			}
 
-			if (metadata >= meta)
+			if (metadata >= metaWireMill)
 			{
-				change += meta;
+				change += metaWireMill;
 			}
 
 			par1World.markBlockForRenderUpdate(x, y, y);
@@ -91,25 +102,49 @@ public class BlockWireMill extends BlockMachine
 			int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			int change = 3;
 
-			if (metadata >= meta)
+			if (metadata >= metaWireMill)
 			{
+				this.isWireMill = true;
+				//Unnecessary but just in case something weird happens
+				this.isSuperMaker = false;
 				switch (angle)
 				{
 					case 0:
-						par1World.setBlockMetadataWithNotify(x, y, z, meta + 1);
+						par1World.setBlockMetadataWithNotify(x, y, z, metaWireMill + 1);
 						break;
 					case 1:
-						par1World.setBlockMetadataWithNotify(x, y, z, meta + 2);
+						par1World.setBlockMetadataWithNotify(x, y, z, metaWireMill + 2);
 						break;
 					case 2:
-						par1World.setBlockMetadataWithNotify(x, y, z, meta + 0);
+						par1World.setBlockMetadataWithNotify(x, y, z, metaWireMill + 0);
 						break;
 					case 3:
-						par1World.setBlockMetadataWithNotify(x, y, z, meta + 3);
+						par1World.setBlockMetadataWithNotify(x, y, z, metaWireMill + 3);
 						break;
 				}
 			}
-			
+			//Super Conductor Machine Meta
+			else 
+			{
+				this.isSuperMaker = true;
+				//Unnecessary but just in case something weird happens
+				this.isWireMill = false;
+				switch (angle)
+				{
+					case 0:
+						par1World.setBlockMetadataWithNotify(x, y, z, metaSuper + 1);
+						break;
+					case 1:
+						par1World.setBlockMetadataWithNotify(x, y, z, metaSuper + 2);
+						break;
+					case 2:
+						par1World.setBlockMetadataWithNotify(x, y, z, metaSuper + 0);
+						break;
+					case 3:
+						par1World.setBlockMetadataWithNotify(x, y, z, metaSuper + 3);
+						break;
+				}
+			}
 		}
 
 	@Override
@@ -119,11 +154,21 @@ public class BlockWireMill extends BlockMachine
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world)
+	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
-		return new TileEntityWireMill();
-	}
+	//	if (metadata >= metaWireMill)
+	//	{
+			return new TileEntityWireMill();
+	//	}
+	//	else
+	//	{
+	//		return new TileEntitySuperMaker();
+	//	}
 
+	}
+	
+	
+	
 	@Override
 	public boolean isOpaqueCube()
 	{
@@ -139,7 +184,32 @@ public class BlockWireMill extends BlockMachine
 	@Override
 	public int getRenderType()
 	{
-		return EEClientProxy.RENDER_ID;
+		if(this.isWireMill){
+		return EEClientProxy.RENDER_ID; }
+		return 0;
 	}
 
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+	{
+		int id = idPicked(world, x, y, z);
+
+		if (id == 0) { return null; }
+
+		Item item = Item.itemsList[id];
+		if (item == null) { return null; }
+
+		int metadata = getDamageValue(world, x, y, z);
+
+		if (metadata >= metaWireMill)
+		{
+			metadata = metaWireMill;
+		}
+		else
+		{
+			metadata = metaSuper;
+		}
+
+		return new ItemStack(id, 1, metadata);
+	}
 }

@@ -16,14 +16,14 @@ import universalelectricity.prefab.implement.IRedstoneProvider;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.mattredsox.items.ItemUpgrade;
-import electricexpansion.mattredsox.tileentities.TileEntityBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
-public class BlockBatteryBox extends BlockMachine
+public class BlockAdvBatteryBox extends BlockMachine
 {
 	public static final int BATTERY_BOX_METADATA = 0;
 
 
-	public BlockBatteryBox(int id, int textureIndex)
+	public BlockAdvBatteryBox(int id, int textureIndex)
 	{
 		super("Bat Box", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
@@ -147,7 +147,7 @@ public class BlockBatteryBox extends BlockMachine
     {
         if (!par1World.isRemote)
         {
-            TileEntityBatteryBox tileEntity = (TileEntityBatteryBox)par1World.getBlockTileEntity(x, y, z);
+            TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)par1World.getBlockTileEntity(x, y, z);
             
             if(par5EntityPlayer.inventory.getCurrentItem() !=null)
             {		
@@ -208,12 +208,12 @@ public class BlockBatteryBox extends BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
-			return new TileEntityBatteryBox();
+			return new TileEntityAdvBatteryBox();
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(ElectricExpansion.blockBatteryBox);
+		return new ItemStack(ElectricExpansion.blockAdvBatteryBox);
 	}
 }
