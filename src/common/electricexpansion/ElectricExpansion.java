@@ -60,11 +60,11 @@ import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemLeadTearBattery;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.3.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	private static int[] versionArray = {0, 3, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	private static int[] versionArray = {0, 4, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private static String version;
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
