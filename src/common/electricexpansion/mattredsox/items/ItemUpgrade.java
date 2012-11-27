@@ -13,7 +13,7 @@ import net.minecraft.src.ItemStack;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-	private String[] names = new String[] {"Tier 1 Storage Upgrade", "Tier 2 Storage Upgrade", "Tier 3 Storage Upgrade", "BC Compatibility Upgrade", "IC2 Compatibility Upgrade"};
+	private String[] names = new String[] {"Storage1", "Storage2", "Storage3", "CompatBC", "CompatIC2"};
 
 	public ItemUpgrade(int id, int texture)
 	{
@@ -33,7 +33,7 @@ public class ItemUpgrade extends Item implements IModifier
 	@Override
 	public String getItemNameIS(ItemStack itemstack)
 	{
-		return names[itemstack.getItemDamage()];
+		return getItemName() + "." + names[itemstack.getItemDamage()];
 	}
 
 	@Override

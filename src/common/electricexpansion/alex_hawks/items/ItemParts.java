@@ -42,7 +42,7 @@ public class ItemParts extends Item
 			case 0:	name = "DrawPlates";
 					break;
 		}
-		return i.getItem().getItemName() + name;
+		return i.getItem().getItemName() + "." + name;
     }
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
