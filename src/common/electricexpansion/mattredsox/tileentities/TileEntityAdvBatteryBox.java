@@ -286,7 +286,6 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	public void openChest()
 	{
 		this.playersUsing++;
-		System.out.println(this.getMaxJoules());
 	}
 
 	@Override
@@ -432,7 +431,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public String getInvName()
 	{
-		return "          Battery Box";	}
+		return "   Advanced Battery Box";	}
 
 	@Override
 	public int getInventoryStackLimit()
