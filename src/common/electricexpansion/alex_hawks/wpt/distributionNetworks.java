@@ -47,7 +47,7 @@ public class distributionNetworks
 		
 		try
 		{
-			File file = new File(folder + File.separator + "ElectricExpansion");
+			File file = new File(Minecraft.getMinecraftDir(), folder + File.separator + "ElectricExpansion");
 			if(!file.exists())	{file.mkdirs();}
 			
 			File var3 = new File(file, "QuantumStorage_tmp_.dat");
@@ -80,7 +80,7 @@ public class distributionNetworks
 		
 		try
 		{
-			File var2 = new File(folder+File.separator+"ElectricExpansion", "QuantumStorage.dat");
+			File var2 = new File(Minecraft.getMinecraftDir(), folder+File.separator+"ElectricExpansion", "QuantumStorage.dat");
 
 			if (var2.exists())
 			{
