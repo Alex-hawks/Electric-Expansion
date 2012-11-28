@@ -21,6 +21,9 @@ import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
 public class BlockTransformer extends BlockMachine {
 	
+	public static final int meta = 0;
+
+	
 	public BlockTransformer(int id) {
 		super("Transformer", id, Material.wood);
 		this.setStepSound(soundMetalFootstep);
@@ -53,15 +56,15 @@ public class BlockTransformer extends BlockMachine {
 	{
 			return new TileEntityTransformer();
 	}
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z) {
+/*	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int x, int y, int z) {
 		float var9 = 0.375F;
 		float var10 = 0.625F;
 		if (UniversalElectricity.getOrientationFromSide(((TileEntityTransformer)getBlockEntity()).facingDirection, (byte) 2) == 3 || UniversalElectricity.getOrientationFromSide(((TileEntityTransformer)getBlockEntity()).facingDirection, (byte) 2) == 2) {
-			return AxisAlignedBB.getBoundingBoxFromPool((double) ((float) x + var9), (double) y, (double) z, (double) ((float) x + var10), (double) ((float) y + 0.9F), (double) ((float) z + 1.0F));
+			return AxisAlignedBB.getBoundingBox((double) ((float) x + var9), (double) y, (double) z, (double) ((float) x + var10), (double) ((float) y + 0.9F), (double) ((float) z + 1.0F));
 		}else{
-			return AxisAlignedBB.getBoundingBoxFromPool((double) x, (double) y, (double) ((float) z + var9), (double) ((float) x + 1.0F), (double) ((float) y + 0.9F), (double) ((float) z + var9));
+			return AxisAlignedBB.getBoundingBox((double) x, (double) y, (double) ((float) z + var9), (double) ((float) x + 1.0F), (double) ((float) y + 0.9F), (double) ((float) z + var9));
 		}
-	}
+	}*/
 
 	@Override
 	public int getRenderType() {
