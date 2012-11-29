@@ -606,6 +606,24 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 		return euAmount;
 	}
 
+	public double getVoltage()
+	{
+		if(this.getMaxJoules() == 3000000)
+		return 240;
+		
+		if(this.getMaxJoules() == 6000000)
+		return 240;
+		
+		if(this.getMaxJoules() == 9000000)
+		return 480;
+		
+		if(this.getMaxJoules() == 1200000)
+		return 480;
+		
+		return 120;
+		
+	}
+	
 	/**
 	 * COMPUTERCRAFT FUNCTIONS
 	 */
@@ -613,7 +631,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public String getType()
 	{
-		return "Advanced BatteryBox";
+		return "Advanced Battery Box";
 	}
 
 	@Override
