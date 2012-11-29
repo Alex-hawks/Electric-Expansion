@@ -21,7 +21,6 @@ import electricexpansion.client.mattredsox.GuiVoltDetector;
 import electricexpansion.mattredsox.ContainerAdvBatteryBox;
 import electricexpansion.mattredsox.ContainerVoltDetector;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
@@ -53,7 +52,7 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
 		GameRegistry.registerTileEntity(TileEntityUPTransformer.class, "TileEntityUpTrans");
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
-		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
+//		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 //		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
 		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
 		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");

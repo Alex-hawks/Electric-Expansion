@@ -8,7 +8,7 @@ public class TileEntitySwitchWire extends TileEntityCableHelper
 	public boolean canConnect(int side)
 	{
 		boolean connect = false;
-		if(this.getWorld().isBlockGettingPowered(this.xCoord, this.yCoord, this.zCoord))
+		if(this.getWorld().isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord))
 			connect = super.canConnect(side);
 		return connect;
 	}
