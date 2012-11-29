@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import com.google.common.io.Files;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.CompressedStreamTools;
@@ -45,7 +47,7 @@ public class distributionNetworks
 	{
 		String folder = "";
 		if (server.isDedicatedServer()) {folder = server.getFolderName();}
-		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + server.getFolderName();}
+		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName();}
 
 		if(!world.isRemote)
 		{
@@ -66,11 +68,11 @@ public class distributionNetworks
 						CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(var3));
 					}
 				}
-
+				if (var5.exists()){var5.delete();}
 				if (var4.exists()){var4.renameTo(var5);}
 				var3.renameTo(var4);
 			}
-			catch(IOException e)
+			catch(Exception e)
 			{
 				ElectricExpansion.EELogger.severe("Failed to save the Quantum Battery Box Electricity Storage Data!");
 			}
@@ -81,8 +83,19 @@ public class distributionNetworks
 	{
 		String folder = "";
 		if (!world.isRemote && server.isDedicatedServer()) {folder = server.getFolderName();}
-		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + server.getFolderName();}
+		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName();}
 
+		File oldFile = null;
+		if(!world.isRemote && !server.isDedicatedServer()) {oldFile = new File(Minecraft.getMinecraftDir() + File.separator + server.getFolderName() + File.separator + "ElectricExpansion", "QuantumStorage.dat");}
+		try
+		{
+			if(oldFile != null && oldFile.exists())
+				Files.move(oldFile, new File(folder + File.separator + "ElectricExpansion", "QuantumStorage.dat"));
+		}
+		catch(Exception e)
+		{ElectricExpansion.EELogger.fine("Old Quantum Battery Box save data doesn't exist. This is not something to worry about.");}
+		
+		
 		if(!world.isRemote)
 		{
 			try
