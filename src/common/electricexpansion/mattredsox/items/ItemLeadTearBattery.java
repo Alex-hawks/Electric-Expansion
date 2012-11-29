@@ -4,13 +4,13 @@ import electricexpansion.EECommonProxy;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 
-public class ItemAdvancedBattery extends ItemElectric
+public class ItemLeadTearBattery extends ItemElectric
 {
-    public ItemAdvancedBattery(int par1)
+    public ItemLeadTearBattery(int par1)
     {
         super(par1);
         this.iconIndex = 1;
-        this.setItemName("AdvancedBattery");
+        this.setItemName("LeadTearBattery");
         this.setCreativeTab(UETab.INSTANCE);
     }
 
