@@ -9,6 +9,7 @@ import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
+import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -299,9 +300,9 @@ public class ElectricExpansion {
 	
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
-	{distributionNetworks.onWorldSave();}
+	{distributionNetworks.onWorldSave(event.world);}
 	
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load event)
-	{distributionNetworks.onWorldLoad();}
+	{distributionNetworks.onWorldLoad(event.world);}
 }

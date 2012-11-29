@@ -27,6 +27,7 @@
 !/textures
 !/README
 !/misc, not for compilation or distribution/
+/src/common/electricexpansion/languages
 
 
 *.bat
