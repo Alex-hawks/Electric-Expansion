@@ -58,7 +58,8 @@ import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
 import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemBase;
-import electricexpansion.mattredsox.items.ItemLeadTearBattery;
+import electricexpansion.mattredsox.items.ItemEliteBattery;
+import electricexpansion.mattredsox.items.ItemEliteBattery;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
@@ -94,7 +95,7 @@ public class ElectricExpansion {
 	private static final int blockLeadID = BLOCK_ID_PREFIX + 15;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
-	private static final int itemLeadTearBatID = ITEM_ID_PREFIX + 1;
+	private static final int itemEliteBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
 	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
@@ -122,7 +123,7 @@ public class ElectricExpansion {
 	public static int LeadBlock;
 	//Items
 	public static int Upgrade;
-	public static int LeadTearBat;
+	public static int EliteBat;
 	public static int ConnectionAlloy;
 	public static int Parts;
 	public static int Lead;
@@ -152,7 +153,7 @@ public class ElectricExpansion {
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
-	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat);
+	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
 	public static final Item itemLeadGear = new ItemBase(LeadGear, 3).setCreativeTab(UETab.INSTANCE).setItemName("LeadGear");
 
@@ -187,7 +188,7 @@ public class ElectricExpansion {
 		LeadBlock = UEConfig.getBlockConfigID(i, "Lead_Block", blockLeadID);
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-		LeadTearBat = UEConfig.getItemConfigID(i, "Lead_Tear_Battery", itemLeadTearBatID);
+		EliteBat = UEConfig.getItemConfigID(i, "Lead_Tear_Battery", itemEliteBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", connectorAlloyID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
