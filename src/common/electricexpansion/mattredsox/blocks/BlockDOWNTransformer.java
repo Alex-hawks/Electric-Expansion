@@ -15,15 +15,15 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
+import electricexpansion.mattredsox.tileentities.TileEntityDOWNTransformer;
 
-public class BlockTransformer extends BlockMachine
+public class BlockDOWNTransformer extends BlockMachine
 {
 	public static final int meta = 0;
 
-	public BlockTransformer(int id, int textureIndex)
+	public BlockDOWNTransformer(int id, int textureIndex)
 	{
-		super("Transformer", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("Down Transformer", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
@@ -42,26 +42,22 @@ public class BlockTransformer extends BlockMachine
     	if (side == 0 || side == 1)
         {
     		  return this.blockIndexInTexture + 17;        
-    	}
-    		
-    //If it is the front side
-        if (side == metadata+2)
-        {
-        	   return this.blockIndexInTexture + 19;      
-        }
+    	}    		
+    		//If it is the front side
+            if (side == metadata+2)
+            {
+                return this.blockIndexInTexture + 19;      
+            }
             //If it is the back side
-        else if (side == ForgeDirection.getOrientation(metadata+2).getOpposite().ordinal())
-        {
-               return this.blockIndexInTexture + 18;
-        }
+            else if (side == ForgeDirection.getOrientation(metadata+2).getOpposite().ordinal())
+            {
+                return this.blockIndexInTexture + 18;
+            }
 
-            return this.blockIndexInTexture + 20;
+            return this.blockIndexInTexture + 16;
        }
-    	    
-	/**
-	 * Called when the block is placed in the
-	 * world.
-	 */
+
+
 	@Override
 	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
 	{
@@ -90,7 +86,7 @@ public class BlockTransformer extends BlockMachine
 		}
 			
 		}
-
+		
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
 	{
@@ -130,6 +126,34 @@ public class BlockTransformer extends BlockMachine
 
 		return true;
 	}
+	
+	/**
+	 * Is this block powering the block on the
+	 * specified side
+	 */
+	@Override
+	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
+	/**
+	 * Is this block indirectly powering the block
+	 * on the specified side
+	 */
+	@Override
+	public boolean isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
 
 	@Override
 	public boolean isOpaqueCube()
@@ -152,7 +176,12 @@ public class BlockTransformer extends BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
-			return new TileEntityUPTransformer();
+			return new TileEntityDOWNTransformer();
 	}
 
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+	{
+		return new ItemStack(ElectricExpansion.blockDOWNTransformer);
+	}
 }
