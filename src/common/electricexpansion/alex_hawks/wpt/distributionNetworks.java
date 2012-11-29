@@ -25,13 +25,13 @@ public class distributionNetworks
 
 	public static double getJoules(short frequency) 
 	{return joules[frequency];}
-	
+
 	public static double setJoules(short frequency, double newJoules)
 	{
 		joules[frequency] = newJoules;
 		return joules[frequency];
 	}
-	
+
 	public static double addJoules(short frequency, double addedJoules)
 	{
 		joules[frequency] = joules[frequency] + addedJoules;
@@ -46,14 +46,14 @@ public class distributionNetworks
 		String folder = "";
 		if (server.isDedicatedServer()) {folder = server.getFolderName();}
 		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + server.getFolderName();}
-		
+
 		if(!world.isRemote)
 		{
 			try
 			{
 				File file = new File(folder + File.separator + "ElectricExpansion");
 				if(!file.exists())	{file.mkdirs();}
-			
+
 				File var3 = new File(file + File.separator + "QuantumStorage_tmp_.dat");
 				File var4 = new File(file + File.separator + "QuantumStorage.dat");
 				File var5 = new File(file + File.separator + "QuantumStorageBackup.dat");
@@ -66,7 +66,7 @@ public class distributionNetworks
 						CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(var3));
 					}
 				}
-			
+
 				if (var4.exists()){var4.renameTo(var5);}
 				var3.renameTo(var4);
 			}
@@ -76,13 +76,13 @@ public class distributionNetworks
 			}
 		}
 	}
-	
+
 	public static void onWorldLoad(World world)
 	{
 		String folder = "";
 		if (!world.isRemote && server.isDedicatedServer()) {folder = server.getFolderName();}
 		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + server.getFolderName();}
-		
+
 		if(!world.isRemote)
 		{
 			try

@@ -13,7 +13,7 @@ import net.minecraft.src.ItemStack;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-	private String[] names = new String[] {"Storage1", "Storage2", "Storage3", "CompatBC", "CompatIC2"};
+	private String[] names = new String[] {"Storage1", "Storage2", "Storage3"};
 
 	public ItemUpgrade(int id, int texture)
 	{

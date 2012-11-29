@@ -9,7 +9,6 @@ import net.minecraft.src.EntitySkeleton;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
-import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -49,16 +48,14 @@ import electricexpansion.alex_hawks.itemblocks.ItemBlockRawWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
-import electricexpansion.alex_hawks.items.ItemConnectorAlloy;
 import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
-import electricexpansion.mattredsox.blocks.BlockDOWNTransformer;
-import electricexpansion.mattredsox.blocks.BlockUPTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.items.ItemAdvancedBattery;
 import electricexpansion.mattredsox.items.ItemBase;
-import electricexpansion.mattredsox.items.ItemLeadTearBattery;
+import electricexpansion.mattredsox.items.ItemEliteBattery;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
@@ -85,8 +82,6 @@ public class ElectricExpansion {
 	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
 	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
 	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 8;
-	private static final int blockUPTransformerID = BLOCK_ID_PREFIX + 9;
-	private static final int blockDOWNTransformerID = BLOCK_ID_PREFIX + 10;
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
 	private static final int blockFuseID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
@@ -94,15 +89,12 @@ public class ElectricExpansion {
 	private static final int blockLeadID = BLOCK_ID_PREFIX + 15;
 	//Items
 	private static final int itemUpgradeID = ITEM_ID_PREFIX;
-	private static final int itemLeadTearBatID = ITEM_ID_PREFIX + 1;
+	private static final int itemEliteBatID = ITEM_ID_PREFIX + 1;
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
 	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
-<<<<<<< HEAD
+	private static final int itemAdvBatID = ITEM_ID_PREFIX + 5;
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
-=======
-	private static final int itemLeadGearID = ITEM_ID_PREFIX + 5;
->>>>>>> parent of a52a6f2... Last changes for the night
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -117,8 +109,6 @@ public class ElectricExpansion {
 	//public static int redstoneWireBlock;
 	public static int AdvBatteryBox;
 	public static int VoltDet;
-	public static int UPTransformer;
-	public static int DOWNTransformer;
 	public static int wireMill;
 	public static int Fuse;
 	public static int batBox;
@@ -126,15 +116,11 @@ public class ElectricExpansion {
 	public static int LeadBlock;
 	//Items
 	public static int Upgrade;
-	public static int LeadTearBat;
+	public static int EliteBat;
 	public static int ConnectionAlloy;
 	public static int Parts;
 	public static int Lead;
-<<<<<<< HEAD
 	public static int AdvBat;
-=======
-	public static int LeadGear;
->>>>>>> parent of a52a6f2... Last changes for the night
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -150,8 +136,6 @@ public class ElectricExpansion {
 
 	public static final Block blockAdvBatteryBox = new BlockAdvBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
 	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("voltdet");
-	public static final Block blockUPTransformer = new BlockUPTransformer(UPTransformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("uptrans");
-	public static final Block blockDOWNTransformer = new BlockDOWNTransformer(DOWNTransformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("downtrans");
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
@@ -160,13 +144,10 @@ public class ElectricExpansion {
 	//Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
-	public static final ItemElectric itemLeadTearBat = new ItemLeadTearBattery(LeadTearBat);
-	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
-<<<<<<< HEAD
+	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
-=======
-	public static final Item itemLeadGear = new ItemBase(LeadGear, 3).setCreativeTab(UETab.INSTANCE).setItemName("LeadGear");
->>>>>>> parent of a52a6f2... Last changes for the night
+	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
+//	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 
 	
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
@@ -191,20 +172,18 @@ public class ElectricExpansion {
 
 		AdvBatteryBox = UEConfig.getBlockConfigID(i, "Advanced_Battery_Box", blockAdvBatteryBoxID);
 		VoltDet = UEConfig.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
-		UPTransformer = UEConfig.getBlockConfigID(i, "Up_Transformer", blockUPTransformerID);
-		DOWNTransformer = UEConfig.getBlockConfigID(i, "Down_Transformer", blockDOWNTransformerID);
 		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
 		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
 		WPT = UEConfig.getBlockConfigID(i, "Wireless_Transfer_Machines", blockWPTID);
 		LeadBlock = UEConfig.getBlockConfigID(i, "Lead_Block", blockLeadID);
 
 		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-		LeadTearBat = UEConfig.getItemConfigID(i, "Lead_Tear_Battery", itemLeadTearBatID);
+		EliteBat = UEConfig.getItemConfigID(i, "Elite_Battery", itemEliteBatID);
 		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", connectorAlloyID);
 		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
 		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
-		LeadGear = UEConfig.getItemConfigID(i, "Lead_Gear", itemLeadGearID);
-		
+		AdvBat = UEConfig.getItemConfigID(i, "Advanced_Battery", itemAdvBatID);
+
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
 	}
@@ -257,8 +236,6 @@ public class ElectricExpansion {
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		GameRegistry.registerBlock(blockAdvBatteryBox);
-		GameRegistry.registerBlock(blockDOWNTransformer);
-		GameRegistry.registerBlock(blockUPTransformer);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
 		GameRegistry.registerBlock(blockLead);

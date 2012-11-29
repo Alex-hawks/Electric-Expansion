@@ -4,20 +4,20 @@ import electricexpansion.EECommonProxy;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
 
-public class ItemLeadTearBattery extends ItemElectric
+public class ItemAdvancedBattery extends ItemElectric
 {
-    public ItemLeadTearBattery(int par1)
+    public ItemAdvancedBattery(int par1)
     {
         super(par1);
-        this.iconIndex = 1;
-        this.setItemName("LeadTearBattery");
+        this.iconIndex = 9;
+        this.setItemName("AdvancedBattery");
         this.setCreativeTab(UETab.INSTANCE);
     }
 
     @Override
     public double getMaxJoules(Object... data)
     {
-        return 750000;
+        return 100000;
     }
 
     @Override
@@ -35,6 +35,6 @@ public class ItemLeadTearBattery extends ItemElectric
     @Override
     public double getVoltage()
     {
-        return 50;
+        return 40;
     }
 }

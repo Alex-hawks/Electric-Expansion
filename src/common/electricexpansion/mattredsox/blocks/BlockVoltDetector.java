@@ -15,7 +15,6 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.tileentities.TileEntityUPTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 public class BlockVoltDetector extends BlockMachine
