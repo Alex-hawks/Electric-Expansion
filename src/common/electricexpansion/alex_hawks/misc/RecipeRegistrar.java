@@ -1,15 +1,10 @@
 package electricexpansion.alex_hawks.misc;
 
-import basiccomponents.BasicComponents;
-import buildcraft.BuildCraftCore;
-import buildcraft.BuildCraftTransport;
-import ic2.api.Items;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-import universalelectricity.prefab.RecipeHelper;
+import basiccomponents.BasicComponents;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.ElectricExpansion;
@@ -27,7 +22,6 @@ public class RecipeRegistrar
 	private static final Item itemParts = ElectricExpansion.itemParts;
 	private static final Item itemEliteBatBat = ElectricExpansion.itemEliteBat;
 	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
-	private static final Item itemLeadGear = ElectricExpansion.itemLeadGear;
 
 	public static void crafting()
 	{
@@ -137,18 +131,6 @@ public class RecipeRegistrar
 			GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
 		}
 
-		//IC2 Upgrade
-		if(Loader.isModLoaded("IC2")) 
-		{
-			GameRegistry.addRecipe(new ItemStack(itemUpgrade, 1, 4), new Object [] {"$#$", "@!@", "$#$", '!', Items.getItem("mvTransformer"), '@', Items.getItem("transformerUpgrade"), '$', Items.getItem("advancedAlloy"), '#', Items.getItem("carbonPlate")});
-		}
-
-		//Buildcraft upgrade
-		if(Loader.isModLoaded("BuildCraft|Transport")) 
-		{
-			GameRegistry.addRecipe(new ItemStack(ElectricExpansion.itemLeadGear), new Object [] {" ! ", "!@!", " ! ", '!', ElectricExpansion.itemLead, '@', BuildCraftCore.goldGearItem});
-			GameRegistry.addRecipe(new ItemStack(itemUpgrade, 1, 3), new Object [] {"$#$", "#!#", "$#$", '!', BuildCraftTransport.pipePowerGold, '$', itemLeadGear, '#', BuildCraftCore.ironGearItem});
-		}
 	}
 
 	public static void drawing()

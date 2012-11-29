@@ -98,7 +98,6 @@ public class ElectricExpansion {
 	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
 	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
 	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
-	private static final int item = ITEM_ID_PREFIX + 5;
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
@@ -126,7 +125,6 @@ public class ElectricExpansion {
 	public static int ConnectionAlloy;
 	public static int Parts;
 	public static int Lead;
-	public static int LeadGear;
 	public static int AdvBat;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
@@ -153,7 +151,6 @@ public class ElectricExpansion {
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
 	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
-	public static final Item itemLeadGear = new ItemBase(LeadGear, 3).setCreativeTab(UETab.INSTANCE).setItemName("LeadGear");
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 
 	
