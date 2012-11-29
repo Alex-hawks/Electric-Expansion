@@ -45,18 +45,18 @@ public class distributionNetworks
 	{
 		String folder = "";
 		if (server.isDedicatedServer()) {folder = server.getFolderName();}
-		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.pathSeparator + server.getFolderName();}
+		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + server.getFolderName();}
 		
 		if(!world.isRemote)
 		{
 			try
 			{
-				File file = new File(folder + File.pathSeparator + "ElectricExpansion");
+				File file = new File(folder + File.separator + "ElectricExpansion");
 				if(!file.exists())	{file.mkdirs();}
 			
-				File var3 = new File(file, "QuantumStorage_tmp_.dat");
-				File var4 = new File(file, "QuantumStorage.dat");
-				File var5 = new File(file, "QuantumStorageBackup.dat");
+				File var3 = new File(file + File.separator + "QuantumStorage_tmp_.dat");
+				File var4 = new File(file + File.separator + "QuantumStorage.dat");
+				File var5 = new File(file + File.separator + "QuantumStorageBackup.dat");
 				NBTTagCompound nbt = new NBTTagCompound();
 				for(int i = 0; i < joules.length; i++)
 				{
@@ -81,13 +81,13 @@ public class distributionNetworks
 	{
 		String folder = "";
 		if (!world.isRemote && server.isDedicatedServer()) {folder = server.getFolderName();}
-		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.pathSeparator + server.getFolderName();}
+		else if(!world.isRemote) {folder = Minecraft.getMinecraftDir() + File.separator + server.getFolderName();}
 		
 		if(!world.isRemote)
 		{
 			try
 			{
-				File var2 = new File(folder + File.pathSeparator + "ElectricExpansion", "QuantumStorage.dat");
+				File var2 = new File(folder + File.separator + "ElectricExpansion", "QuantumStorage.dat");
 
 				if (var2.exists())
 				{
