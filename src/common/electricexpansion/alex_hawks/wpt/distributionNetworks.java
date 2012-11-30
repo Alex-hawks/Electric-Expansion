@@ -90,9 +90,9 @@ public class distributionNetworks
 		try
 		{
 			if(oldFile != null && oldFile.exists())
-				Files.move(oldFile, new File(folder + File.separator + "ElectricExpansion", "QuantumStorage.dat"));
+				Files.move(oldFile, new File(folder + File.separator + "ElectricExpansion" + File.separator + "QuantumStorage.dat"));
 		}
-		catch(Exception e)
+		catch(Exception e1)
 		{ElectricExpansion.EELogger.fine("Old Quantum Battery Box save data doesn't exist. This is not something to worry about.");}
 		
 		

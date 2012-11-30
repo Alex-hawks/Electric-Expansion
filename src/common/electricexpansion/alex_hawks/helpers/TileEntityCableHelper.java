@@ -56,21 +56,16 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	{
 		return universalelectricity.prefab.network.PacketManager.getPacket("ElecEx", this);
 	}
-	@Override
 	public boolean canConnect(ForgeDirection side)
-	{
-		return this.canConnect(side.ordinal());
-	}
-	public boolean canConnect(int side)
 	{
 		boolean returnValue = false;
 		int x=0,y=0,z=0;
-		if	(side == 0){x=0;y=-1;z=0;}
-		else 	if	(side == 1){x=0;y=1;z=0;}
-		else 	if	(side == 2){x=0;y=0;z=-1;}
-		else 	if	(side == 3){x=0;y=0;z=1;}
-		else 	if	(side == 4){x=-1;y=0;z=0;}
-		else 	if	(side == 5){x=1;y=0;z=0;}
+				if	(side == ForgeDirection.DOWN){x=0;y=-1;z=0;}
+		else 	if	(side == ForgeDirection.UP){x=0;y=1;z=0;}
+		else 	if	(side == ForgeDirection.NORTH){x=0;y=0;z=-1;}
+		else 	if	(side == ForgeDirection.SOUTH){x=0;y=0;z=1;}
+		else 	if	(side == ForgeDirection.WEST){x=-1;y=0;z=0;}
+		else 	if	(side == ForgeDirection.EAST){x=1;y=0;z=0;}
 
 		int thisID 			= this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord);
 		int thismeta 		= this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
@@ -100,8 +95,8 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 		String type = "Unknown";
 		if(Loader.isModLoaded("BasicComponents"))
 		{
-		if(ID == BasicComponents.blockCopperWire.blockID)
-		type = "Copper";
+			if(ID == BasicComponents.blockCopperWire.blockID)
+				type = "Copper";
 		}
 		 switch(meta)
 		{

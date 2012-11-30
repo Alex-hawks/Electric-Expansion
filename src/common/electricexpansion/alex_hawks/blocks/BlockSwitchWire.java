@@ -54,11 +54,7 @@ public class BlockSwitchWire extends BlockConductor
 
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
-	{
-		if(side == -1)
-			return false;
-		else return true;
-	}
+	{return true;}
 
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)

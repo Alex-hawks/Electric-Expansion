@@ -10,8 +10,6 @@ public class CableInterfaces
 {
 	/**
 	 *	@author Alex_hawks
-	 *	Implement this if you want your electric machine in UE to be able to render cables connected to the side properly.
-	 *	Every @return is 0 indexed, not 1 indexed.
 	 *	
 	 */
 	public interface IPanelElectricMachine 

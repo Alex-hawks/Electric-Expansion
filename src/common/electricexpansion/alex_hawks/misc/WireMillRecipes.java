@@ -20,7 +20,6 @@ public class WireMillRecipes
 	private static HashMap<Integer, ItemStack> recipeToOutput = new HashMap<Integer, ItemStack>();
 	private static HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
 	private static HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
-	//Yes, I know that I can use an Integer[] for the last one, But I won't!!! - Alex_hawks
 	
 	/**
 	 * Used to call methods addDrawing and getDrawingResult.
