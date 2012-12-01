@@ -15,7 +15,6 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
-import universalelectricity.core.UEConfig;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
@@ -66,7 +65,7 @@ public class ElectricExpansion {
 	private static String version;
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
-
+	
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
 	private static final String[] LANGUAGE_SUPPORTED = new String[]
 	{ "en_US" };
@@ -159,30 +158,31 @@ public class ElectricExpansion {
 	@SidedProxy(clientSide="electricexpansion.client.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
 	public static EECommonProxy proxy;
 
-	public static boolean configLoad(Configuration i)
+	public static boolean configLoad(Configuration CONFIG)
 	{
-
-		rawWire = UEConfig.getBlockConfigID(i, "Uninsulated_Wire", rawWireID);
-		insulatedWire = UEConfig.getBlockConfigID(i, "Insualted_Wire", insulatedWireID);
-		wireBlock = UEConfig.getBlockConfigID(i, "Wire_Block", wireBlockID);
-		SwitchWire = UEConfig.getBlockConfigID(i, "Switch_Wire", switchWireID);
-		SwitchWireBlock = UEConfig.getBlockConfigID(i, "Switch_Wire_Block", switchWireBlockID);
+		CONFIG.load();
+		rawWire = CONFIG.getBlock("Uninsulated_Wire", rawWireID).getInt();
+		insulatedWire = CONFIG.getBlock("Insualted_Wire", insulatedWireID).getInt();
+		wireBlock = CONFIG.getBlock("Wire_Block", wireBlockID).getInt();
+		SwitchWire = CONFIG.getBlock("Switch_Wire", switchWireID).getInt();
+		SwitchWireBlock = CONFIG.getBlock("Switch_Wire_Block", switchWireBlockID).getInt();
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 
-		AdvBatteryBox = UEConfig.getBlockConfigID(i, "Advanced_Battery_Box", blockAdvBatteryBoxID);
-		VoltDet = UEConfig.getBlockConfigID(i, "Voltage_Detector", blockVoltDetID);
-		wireMill = UEConfig.getBlockConfigID(i, "Wire_Mill", blockWireMillID);
-		Fuse = UEConfig.getBlockConfigID(i, "Relay", blockFuseID);
-		WPT = UEConfig.getBlockConfigID(i, "Wireless_Transfer_Machines", blockWPTID);
-		LeadBlock = UEConfig.getBlockConfigID(i, "Lead_Block", blockLeadID);
+		AdvBatteryBox = CONFIG.getBlock("Advanced_Battery_Box", blockAdvBatteryBoxID).getInt();
+		VoltDet = CONFIG.getBlock("Voltage_Detector", blockVoltDetID).getInt();
+		wireMill = CONFIG.getBlock("Wire_Mill", blockWireMillID).getInt();
+		Fuse = CONFIG.getBlock("Relay", blockFuseID).getInt();
+		WPT = CONFIG.getBlock("Wireless_Transfer_Machines", blockWPTID).getInt();
+		LeadBlock = CONFIG.getBlock("Lead_Block", blockLeadID).getInt();
 
-		Upgrade = UEConfig.getItemConfigID(i, "Advanced_Bat_Box_Upgrade", itemUpgradeID);
-		EliteBat = UEConfig.getItemConfigID(i, "Elite_Battery", itemEliteBatID);
-		ConnectionAlloy = UEConfig.getItemConfigID(i, "Connection_Alloy", connectorAlloyID);
-		Parts = UEConfig.getItemConfigID(i, "Parts", itemPartsID);
-		Lead = UEConfig.getItemConfigID(i, "Lead_Ingot", itemLeadID);
-		AdvBat = UEConfig.getItemConfigID(i, "Advanced_Battery", itemAdvBatID);
+		Upgrade = CONFIG.getItem("Advanced_Bat_Box_Upgrade", itemUpgradeID).getInt();
+		EliteBat = CONFIG.getItem("Elite_Battery", itemEliteBatID).getInt();
+		ConnectionAlloy = CONFIG.getItem("Connection_Alloy", connectorAlloyID).getInt();
+		Parts = CONFIG.getItem("Parts", itemPartsID).getInt();
+		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
+		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt(); 
+		CONFIG.save();
 
 		configLoaded = true;
 		return true; //returns true to configLoaded VAR
