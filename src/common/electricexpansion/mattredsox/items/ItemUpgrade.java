@@ -43,9 +43,9 @@ public class ItemUpgrade extends Item implements IModifier
 
 		{return 5;}
 		if(i == 1)
-		{return 4;}
-		if(i == 2)
 		{return 8;}
+		if(i == 2)
+		{return 4;}
 		if(i == 3)
 		{ return 7;}
 		return 6;
