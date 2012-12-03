@@ -6,15 +6,19 @@ import net.minecraft.src.ItemStack;
 
 public class ItemBlockCableHelper extends ItemBlock 
 {
-	public ItemBlockCableHelper(int par1, Block mainBlock) 
+	public ItemBlockCableHelper(int id) 
 	{
-		super(par1);
+		super(id);
 		this.setHasSubtypes(true);
+		this.setMaxDamage(0);
 	}
-	public int getMetadata(int par1)
-    {
-        return par1;
-    }
+	
+	@Override
+	public int getMetadata(int damage)
+	{
+		return damage;
+	}
+	
 	public String getItemNameIS(ItemStack i) 
 	{
 		String name = null;

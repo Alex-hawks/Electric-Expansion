@@ -7,8 +7,8 @@ import net.minecraft.src.Block;
 
 public class ItemBlockInsulatedWire extends ItemBlockCableHelper 
 {
-	public ItemBlockInsulatedWire(int par1, Block mainBlock)
-	{super(par1, mainBlock); }
+	public ItemBlockInsulatedWire(int id)
+	{super(id); }
 	
 	public int getIconFromDamage(int i)
 	{return i + 16;}

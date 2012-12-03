@@ -58,13 +58,15 @@ import electricexpansion.mattredsox.items.ItemEliteBattery;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
-@NetworkMod(channels = { "ElecEx" }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
+@NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
 	private static int[] versionArray = {0, 4, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private static String version;
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
+	
+	public static final String CHANNEL = "ElecEx";
 	
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
 	private static final String[] LANGUAGE_SUPPORTED = new String[]
@@ -227,14 +229,6 @@ public class ElectricExpansion {
 
 		if(!configLoaded){configLoad(CONFIG);}
 		if(startLogLogged[1] != true){StartLog("preInit");}
-/*	Item.itemsList[rawWire] = new ItemBlockRawWire(rawWire-256, blockRawWire);
-		Item.itemsList[insulatedWire] = new ItemBlockInsulatedWire(insulatedWire-256, blockInsulatedWire);
-		Item.itemsList[wireBlock] = new ItemBlockWireBlock(wireBlock-256, blockWireBlock);
-		Item.itemsList[SwitchWire] = new ItemBlockSwitchWire(SwitchWire-256, blockSwitchWire);
-		Item.itemsList[SwitchWireBlock] = new ItemBlockSwitchWireBlock(SwitchWireBlock-256, blockSwitchWireBlock);
-		Item.itemsList[WPT] = new ItemBlockSwitchWireBlock(WPT-256, blockWPT);*/
-		//Redstone'd Insulated Cable
-		//Redstone'd Cable Blocks
 		GameRegistry.registerBlock(blockAdvBatteryBox);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
@@ -264,7 +258,9 @@ public class ElectricExpansion {
 		UETab.setItemStack(new ItemStack(this.blockAdvBatteryBox));
 
 		for (String language : LANGUAGE_SUPPORTED)
+		{
 			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
+		}
 
 	}
 

@@ -7,6 +7,6 @@ import net.minecraft.src.Block;
 
 public class ItemBlockSwitchWireBlock extends ItemBlockCableHelper 
 {
-	public ItemBlockSwitchWireBlock(int par1, Block mainBlock)
-	{super(par1, mainBlock);}
+	public ItemBlockSwitchWireBlock(int id)
+	{super(id);}
 }
