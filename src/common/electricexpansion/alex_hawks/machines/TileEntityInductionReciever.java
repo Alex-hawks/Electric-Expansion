@@ -15,7 +15,6 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.electricity.ElectricityManager;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -23,6 +22,8 @@ import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityDisableable;
+import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -30,8 +31,9 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.InductionNetworks;
+import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.api.WirelessPowerMachine;
-import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+
 
 public class TileEntityInductionReciever extends TileEntityDisableable implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
 {
@@ -78,10 +80,17 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	@Override
 	public boolean canUpdate()
 	{return true;}
-	
+
+	public TileEntityInductionReciever()
+	{
+		super();
+	}
+
+
 	@Override
 	public void updateEntity()
 	{
+		super.updateEntity();
 		if (this.joules < 0)
 			this.joules = 0;
 		if (this.joules > this.maxJoules)
@@ -96,23 +105,33 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 			((IHMSapper)this.sapper.getItem()).sapperTick(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.sapper);
 		if (this.orientation != this.blockMetadata)
 			this.orientation = (byte)ForgeDirection.getOrientation(this.blockMetadata).ordinal();
-		
-		if(this.joules > 0)
-		{
-            TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvBatteryBox.BATTERY_BOX_METADATA + 2));
-            
-            if (connector != null)
-            {
-            	if (connector instanceof IConductor)
-				{
-					double joulesNeeded = ElectricityManager.instance.getElectricityRequired(((IConductor) connector).getNetwork());
-					double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.outputVoltage), ElectricInfo.getAmps(this.joules, this.outputVoltage)), 80), 0);
-					if (!this.worldObj.isRemote)
-						ElectricityManager.instance.produceElectricity(this, (IConductor) connector, transferAmps, this.outputVoltage);
-					this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.outputVoltage));
-                } 
-            }
-		}
+
+			/**
+			 * Output Electricity
+			 */
+
+			if (this.getJoules() > 0)
+			{
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
+
+
+					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.blockMetadata));
+					// Output UE electricity
+					if (connector instanceof IConductor)
+					{		
+						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
+						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.outputVoltage), ElectricInfo.getAmps(this.joules, this.outputVoltage)), 80), 0);
+						if (!this.worldObj.isRemote && transferAmps > 0)
+						{
+							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.outputVoltage);
+							this.setJoules(this.joules - ElectricInfo.getJoules(transferAmps, this.outputVoltage));							System.out.println("PROD");
+						}
+						else
+						{
+							((IConductor) connector).getNetwork().stopProducing(this);
+						}
+					}
+				}
 	}
 
 	private void sendPacket()
@@ -159,6 +178,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	@Override
 	public String getInvName()
 	{return "Induction Power Sender";}
+
 
 	@Override
 	public int getInventoryStackLimit() 

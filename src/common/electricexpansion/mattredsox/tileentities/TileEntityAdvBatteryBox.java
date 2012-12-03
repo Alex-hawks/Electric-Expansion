@@ -48,12 +48,12 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 {
 	private double joules = 0;
 
+	public double maxJoules;
+	
 	private ItemStack[] containingItems = new ItemStack[5];
 
 	private boolean isFull = false;
 
-	public double maxJoules;
-	
 	private int playersUsing = 0;
 
 	public IPowerProvider powerProvider;
@@ -262,14 +262,14 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.maxJoules);	}
+		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);
+	}
 
 	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		try
 		{
-			this.maxJoules = dataStream.readDouble();
 			this.joules = dataStream.readDouble();
 			this.disabledTicks = dataStream.readInt();
 		}
@@ -300,8 +300,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.joules = par1NBTTagCompound.getDouble("electricityStored");
-		this.maxJoules = par1NBTTagCompound.getDouble("maxJoules");
-		
+
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -325,8 +324,6 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setDouble("electricityStored", this.joules);
-		par1NBTTagCompound.setDouble("maxJoules", this.maxJoules);
-		
 		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -431,8 +428,9 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public String getInvName()
 	{
-		return "   Advanced Battery Box";	}
-	
+		return "   Advanced Battery Box";	
+	}
+
 	@Override
 	public int getInventoryStackLimit()
 	{
@@ -483,6 +481,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	
 		return this.maxJoules = 3000000 + slot1 + slot2 + slot3;
 	}
+
 	/**
 	 * BUILDCRAFT FUNCTIONS
 	 */

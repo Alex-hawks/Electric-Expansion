@@ -110,13 +110,8 @@ public class BlockVoltDetector extends BlockMachine
 					par1World.setBlockMetadataWithNotify(x, y, z, VOLT_DET_METADATA + 0);
 					break;
 			}
+		}	
 		}
-		
-			
-		}
-
-		
-	
 
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)

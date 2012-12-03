@@ -5,7 +5,6 @@ import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
 
 import java.util.Random;
 
-import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
@@ -16,12 +15,15 @@ import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.TileEntityDisableable;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -29,7 +31,9 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.InductionNetworks;
+import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.api.WirelessPowerMachine;
+
 
 public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
 {
@@ -71,6 +75,12 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	public boolean canUpdate()
 	{return true;}
 
+	public TileEntityInductionSender()
+	{
+		super();
+	}
+
+
 	@Override
 	public void updateEntity()
 	{
@@ -106,7 +116,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 			}
 		}
 	}
-
+	
 	private void sendPacket()
 	{PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, Vector3.get(this), 8);}
 
@@ -161,24 +171,6 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	{return this.joules == this.maxJoules;}
 
 	@Override
-	public void onReceive(Object sender, double amps, double voltage, ForgeDirection side) 
-	{
-		if (voltage > this.getVoltage())
-			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
-
-		if(!this.isDisabled())
-			this.addJoules(ElectricInfo.getJoules(amps, voltage));
-	}
-
-	@Override
-	public double wattRequest() 
-	{
-		if (!this.isDisabled())
-			return ElectricInfo.getWatts(this.getMaxJoules()) - ElectricInfo.getWatts(this.joules);
-		else return 0;
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
@@ -197,14 +189,6 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
 		if (this.sapper != null)
 			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
-	}
-
-	@Override
-	public boolean canReceiveFromSide(ForgeDirection side) 
-	{
-		if(side.ordinal() == 0 || side.ordinal() == 1)
-			return false;
-		else return side.ordinal() == this.blockMetadata + 2;
 	}
 
 	@Override
@@ -359,4 +343,5 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	@Override
 	public void detach(IComputerAccess computer) {}
+
 }

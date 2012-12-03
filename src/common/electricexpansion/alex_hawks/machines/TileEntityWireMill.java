@@ -5,7 +5,6 @@ import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
 
 import java.util.Random;
 
-import net.minecraft.src.Entity;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.INetworkManager;
@@ -14,14 +13,17 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
+import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -45,61 +47,72 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	private ItemStack sapper;
 	private int machineHP = 20;
 	public int orientation;
-
 	@Override
-	public double wattRequest()
+	public boolean canConnect(ForgeDirection side)
 	{
-		if(!this.isDisabled() && this.canDraw())
-			return this.WATTS_PER_TICK;
-		else return 0;
+		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2);
 	}
 
 	@Override
-	public boolean canReceiveFromSide(ForgeDirection side)
+	public void updateEntity()
 	{
-	return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2);
-}
+		if (!this.worldObj.isRemote)
+		{
+			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2);
+			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
-	@Override
-	public void onReceive(Object entity, double amps, double voltage, ForgeDirection side)
-	{
-		if (voltage > this.getVoltage())
-			this.worldObj.createExplosion((Entity)null, this.xCoord, this.yCoord, this.zCoord, 1F, true);
+			if (inputTile != null)
+			{
+				if (inputTile instanceof IConductor)
+				{
+					if (this.canDraw())
+					{
+						((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+						this.wattsReceived = Math.max(Math.min(this.wattsReceived + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+					}
+					else
+					{
+						((IConductor) inputTile).getNetwork().stopRequesting(this);
+					}
+				}
+			}
+		}
 
-		this.wattsReceived += ElectricInfo.getWatts(amps, voltage);
-	}
-	@Override
-	public boolean canUpdate()
-	{return true;}
-
-	@Override
-	public void updateEntity() 
-	{
-		//The bottom slot is for portable batteries
+		// The bottom slot is for portable
+		// batteries
 		if (this.inventory[0] != null)
+		{
 			if (this.inventory[0].getItem() instanceof IItemElectric)
 			{
-				IItemElectric electricItem = (IItemElectric)this.inventory[0].getItem();
+				IItemElectric electricItem = (IItemElectric) this.inventory[0].getItem();
 
 				if (electricItem.canProduceElectricity())
 				{
-					double receivedWattHours = electricItem.onUse(electricItem.getMaxJoules() * 0.005, this.inventory[1]);;
+					double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules(this.inventory[0]) * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.inventory[0]);
 					this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
-				} 
+				}
+			}
+		}
+
+		if (this.wattsReceived >= this.WATTS_PER_TICK-50 && !this.isDisabled())
+		{
+			// The left slot contains the item to
+			// be smelted
+			if (this.inventory[1] != null && this.canDraw() && this.drawingTicks == 0)
+			{
+				this.drawingTicks = this.getDrawingTime();
 			}
 
-		if(this.wattsReceived >= this.WATTS_PER_TICK && !this.isDisabled())
-		{
-			//The left slot contains the item to be drawn
-			if (this.canDraw() && this.drawingTicks == 0)
-				this.drawingTicks = this.getDrawingTime();
-
-			//Checks if the item can be drawn and if the drawing time left is greater than 0, if so, then draw the item.
+			// Checks if the item can be smelted
+			// and if the smelting time left is
+			// greater than 0, if so, then smelt
+			// the item.
 			if (this.canDraw() && this.drawingTicks > 0)
 			{
-				this.drawingTicks --;
+				this.drawingTicks--;
 
-				//When the item is finished drawing
+				// When the item is finished
+				// smelting
 				if (this.drawingTicks < 1)
 				{
 					this.drawItem();
@@ -107,14 +120,20 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				}
 			}
 			else
-			{this.drawingTicks = 0;}
+			{
+				this.drawingTicks = 0;
+			}
 
-			this.wattsReceived = 0;
+			this.wattsReceived -= this.WATTS_PER_TICK;
 		}
 
-		if(!this.worldObj.isRemote)
-			if(this.ticks % 20 == 0 && this.playersUsing > 0)
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+		if (!this.worldObj.isRemote)
+		{
+			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			{
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+			}
+		}
 	}
 
 	@Override
@@ -326,10 +345,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public double getVoltage()
 	{return 120;}
-
-	@Override
-	public boolean canConnect(ForgeDirection side)
-	{return canReceiveFromSide(side);}
 
 	/**
 	 * @return The amount of ticks required to draw this item

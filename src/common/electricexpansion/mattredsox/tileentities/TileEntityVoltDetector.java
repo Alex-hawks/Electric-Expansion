@@ -1,16 +1,25 @@
 package electricexpansion.mattredsox.tileentities;
 
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.Packet;
+import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+
+import com.google.common.io.ByteArrayDataInput;
+
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 
-public class TileEntityVoltDetector extends TileEntityElectricityReceiver implements IJouleStorage
+public class TileEntityVoltDetector extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver
 {
 	private double joules = 0;
 
@@ -88,14 +97,40 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 						{
 							((IConductor) connector).getNetwork().stopProducing(this);
 						}
-
 					}
-
 				}
 			}
 		}
+
+		if (!this.worldObj.isRemote)
+		{
+			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			{
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+			}
+		}
+	}
+	
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		return PacketManager.getPacket("ElecEx", this, this.voltIn, this.joules, this.disabledTicks);
 	}
 
+	@Override
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	{
+		try
+		{
+			this.joules = dataStream.readDouble();
+			this.voltIn = dataStream.readDouble();
+			this.disabledTicks = dataStream.readInt();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * Reads a tile entity from NBT.
 	 */
