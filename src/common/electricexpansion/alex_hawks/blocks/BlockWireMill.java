@@ -1,11 +1,5 @@
 package electricexpansion.alex_hawks.blocks;
 
-import java.util.Random;
-
-import basiccomponents.tile.TileEntityBatteryBox;
-import basiccomponents.tile.TileEntityCoalGenerator;
-import basiccomponents.tile.TileEntityElectricFurnace;
-
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.Item;
