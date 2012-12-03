@@ -55,7 +55,6 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 		//Mattredsox's Tile entity registrations
 		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
 		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
-//		GameRegistry.registerTileEntity(TileEntityDOWNTransformer.class, "TileEntityDownTrans");
 //		GameRegistry.registerTileEntity(TileEntityFuse.class, "TileEntityFuse");
 		
 		MinecraftForgeClient.preloadTexture(AITEMS);

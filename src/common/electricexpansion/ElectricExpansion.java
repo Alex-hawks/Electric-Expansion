@@ -42,7 +42,7 @@ import electricexpansion.alex_hawks.blocks.BlockSwitchWireBlock;
 import electricexpansion.alex_hawks.blocks.BlockWPT;
 import electricexpansion.alex_hawks.blocks.BlockWireBlock;
 import electricexpansion.alex_hawks.blocks.BlockWireMill;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockInsualtedWire;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockInsulatedWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockRawWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
@@ -223,22 +223,29 @@ public class ElectricExpansion {
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) 
 	{
-		UniversalElectricity.register(this, 1, 0, 0, false);
+		UniversalElectricity.register(this, 1, 2, 0, false);
 
 		if(!configLoaded){configLoad(CONFIG);}
 		if(startLogLogged[1] != true){StartLog("preInit");}
-		Item.itemsList[rawWire] = new ItemBlockRawWire(rawWire-256, blockRawWire);
-		Item.itemsList[insulatedWire] = new ItemBlockInsualtedWire(insulatedWire-256, blockInsulatedWire);
+/*	Item.itemsList[rawWire] = new ItemBlockRawWire(rawWire-256, blockRawWire);
+		Item.itemsList[insulatedWire] = new ItemBlockInsulatedWire(insulatedWire-256, blockInsulatedWire);
 		Item.itemsList[wireBlock] = new ItemBlockWireBlock(wireBlock-256, blockWireBlock);
 		Item.itemsList[SwitchWire] = new ItemBlockSwitchWire(SwitchWire-256, blockSwitchWire);
 		Item.itemsList[SwitchWireBlock] = new ItemBlockSwitchWireBlock(SwitchWireBlock-256, blockSwitchWireBlock);
-		Item.itemsList[WPT] = new ItemBlockSwitchWireBlock(WPT-256, blockWPT);
+		Item.itemsList[WPT] = new ItemBlockSwitchWireBlock(WPT-256, blockWPT);*/
 		//Redstone'd Insulated Cable
 		//Redstone'd Cable Blocks
 		GameRegistry.registerBlock(blockAdvBatteryBox);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
 		GameRegistry.registerBlock(blockLead);
+		
+		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class);
+		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class);
+		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class);
+		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class);
+		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class);
+
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 

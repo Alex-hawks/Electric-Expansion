@@ -6,7 +6,8 @@ import net.minecraft.src.Block;
 public class ItemBlockRawWire extends ItemBlockCableHelper 
 {
 	public ItemBlockRawWire(int par1, Block mainBlock)
-	{super(par1, mainBlock);}
+	{super(par1, mainBlock);
+	this.setItemName("RawWire");}
 
 	public int getIconFromDamage(int i)
 	{return i;}
