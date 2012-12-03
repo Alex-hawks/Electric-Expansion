@@ -16,19 +16,19 @@ public class ContainerVoltDetector extends Container
     public ContainerVoltDetector(TileEntityVoltDetector batteryBox)
     {
         this.tileEntity = batteryBox;
-        tileEntity.openChest();
     }
     
     public void onCraftGuiClosed(EntityPlayer entityplayer)
     {
 		super.onCraftGuiClosed(entityplayer);
-		tileEntity.closeChest();
     }
 
-    @Override
-    public boolean canInteractWith(EntityPlayer par1EntityPlayer)
-    {
-        return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
-    }
+	@Override
+	public boolean canInteractWith(EntityPlayer var1) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
 
 }

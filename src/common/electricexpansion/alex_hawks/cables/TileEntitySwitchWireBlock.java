@@ -1,7 +1,5 @@
 package electricexpansion.alex_hawks.cables;
 
-import universalelectricity.core.electricity.ElectricityManager;
-import universalelectricity.prefab.implement.IRedstoneReceptor;
 import net.minecraftforge.common.ForgeDirection;
 import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
