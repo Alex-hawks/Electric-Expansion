@@ -83,6 +83,39 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	
 	public boolean canConnect(ForgeDirection side)
 	{
+		/*boolean returnValue = false;
+		int x=0,y=0,z=0;
+		if	(side == ForgeDirection.DOWN){x=0;y=-1;z=0;}
+		else 	if	(side == ForgeDirection.UP){x=0;y=1;z=0;}
+		else 	if	(side == ForgeDirection.NORTH){x=0;y=0;z=-1;}
+		else 	if	(side == ForgeDirection.SOUTH){x=0;y=0;z=1;}
+		else 	if	(side == ForgeDirection.WEST){x=-1;y=0;z=0;}
+		else 	if	(side == ForgeDirection.EAST){x=1;y=0;z=0;}
+
+		int thisID 			= this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord);
+		int thismeta 		= this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+		TileEntity thisTE 	= this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord);
+		int ID 				= this.worldObj.getBlockId(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+		int meta 			= this.worldObj.getBlockMetadata(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+		TileEntity TE 		= this.worldObj.getBlockTileEntity(this.xCoord + x, this.yCoord + y, this.zCoord + z);
+
+		if(TE instanceof ISelectiveConnector)
+		{
+			if(this.cableType(thisID, thismeta) == ((ISelectiveConnector)TE).cableType(ID, meta))
+				returnValue = true;
+			else if(this.cableType(ID, meta) == "Connector")
+				returnValue = true;
+			else if(((ISelectiveConnector)TE).cableType(ID, meta) == "Connector")
+				returnValue = true;
+		}
+		else if(Loader.isModLoaded("BasicComponents"))
+		{
+			if(TE instanceof basiccomponents.tile.TileEntityCopperWire && this.cableType(thisID, thismeta) == "Copper")
+				returnValue = true;
+		}
+		else if((TE instanceof IConnector) && !(TE instanceof IConductor))
+				returnValue = true;
+		return returnValue;*/
 		return true;
 	}
 	
