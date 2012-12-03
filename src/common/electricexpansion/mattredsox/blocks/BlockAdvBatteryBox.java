@@ -1,5 +1,7 @@
 package electricexpansion.mattredsox.blocks;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
@@ -13,12 +15,13 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.modifier.IModifier;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.items.ItemUpgrade;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
-public class BlockAdvBatteryBox extends BlockMachine
+public class BlockAdvBatteryBox extends BlockMachine 
+
 {
 	public static final int BATTERY_BOX_METADATA = 0;
 
@@ -36,7 +39,48 @@ public class BlockAdvBatteryBox extends BlockMachine
 	{
 		return EECommonProxy.MattBLOCK_TEXTURE_FILE;
 	}
-
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public int getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
+    {
+    	int metadata = iBlockAccess.getBlockMetadata(x, y, z);
+    	TileEntityAdvBatteryBox tileEntity = (TileEntityAdvBatteryBox)iBlockAccess.getBlockTileEntity(x, y, z);
+        
+    	if (side == 0 || side == 1)
+        {
+            return this.blockIndexInTexture;
+        }
+    	else if(metadata >= BATTERY_BOX_METADATA)
+    	{
+    		metadata -= BATTERY_BOX_METADATA;
+    		
+    		//If it is the front side
+            if (side == metadata+2)
+            {
+                return this.blockIndexInTexture + 3;
+            }
+            //If it is the back side
+            else if (side == ForgeDirection.getOrientation(metadata+2).getOpposite().ordinal())
+            {
+                return this.blockIndexInTexture + 2;
+            }
+            //Tier 1
+         if(tileEntity.maxJoules <= 6000000 && tileEntity.maxJoules >= 3000000)
+         { return this.blockIndexInTexture + 6; }
+         
+         //Tier 2
+         if(tileEntity.maxJoules > 6000000 && tileEntity.maxJoules <= 9000000)
+         { return this.blockIndexInTexture + 4; }
+         
+         //Tier 3
+         if(tileEntity.maxJoules > 9000000)
+         { return this.blockIndexInTexture + 7; }
+         
+    	}
+        return this.blockIndexInTexture + 1;
+    	    	}
+   
 	
 	@Override
     public int getBlockTextureFromSideAndMetadata(int side, int metadata)
@@ -59,7 +103,6 @@ public class BlockAdvBatteryBox extends BlockMachine
             {
                 return this.blockIndexInTexture + 2;
             }
-
             return this.blockIndexInTexture + 4;
     	}
     	
@@ -204,7 +247,7 @@ public class BlockAdvBatteryBox extends BlockMachine
 	{
 		return true;
 	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{

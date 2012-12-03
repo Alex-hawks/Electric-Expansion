@@ -50,7 +50,9 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 {
 	private double joules = 0;
 
-	private ItemStack[] containingItems = new ItemStack[5];
+	public double maxJoules;
+	
+	public ItemStack[] containingItems = new ItemStack[5];
 
 	private boolean isFull = false;
 
@@ -266,7 +268,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);	}
+		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks, this.maxJoules);	}
 
 	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
@@ -275,6 +277,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 		{
 			this.joules = dataStream.readDouble();
 			this.disabledTicks = dataStream.readInt();
+			this.maxJoules = dataStream.readDouble();
 		}
 		catch (Exception e)
 		{
@@ -291,6 +294,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	@Override
 	public void closeChest()
 	{
+		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.playersUsing--;
 	}
 
@@ -302,7 +306,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.joules = par1NBTTagCompound.getDouble("electricityStored");
-
+		this.maxJoules = par1NBTTagCompound.getDouble("maxJoules");
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.containingItems = new ItemStack[this.getSizeInventory()];
 
@@ -326,6 +330,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setDouble("electricityStored", this.joules);
+		par1NBTTagCompound.setDouble("maxJoules", this.maxJoules);
 
 		NBTTagList var2 = new NBTTagList();
 
@@ -481,7 +486,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 		if(this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier)this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Capacity")
 			slot3 = ((IModifier)this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
 	
-		return 3000000 + slot1 + slot2 + slot3;
+		return this.maxJoules = 3000000 + slot1 + slot2 + slot3;
 	}
 
 	/**
@@ -608,20 +613,7 @@ public class TileEntityAdvBatteryBox extends TileEntityElectricityReceiver imple
 
 	public double getVoltage()
 	{
-		if(this.getMaxJoules() == 3000000)
-		return 240;
-		
-		if(this.getMaxJoules() == 6000000)
-		return 240;
-		
-		if(this.getMaxJoules() == 9000000)
-		return 480;
-		
-		if(this.getMaxJoules() == 1200000)
-		return 480;
-		
-		return 120;
-		
+		return 120;		
 	}
 	
 	/**
