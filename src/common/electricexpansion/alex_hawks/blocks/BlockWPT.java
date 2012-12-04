@@ -2,17 +2,21 @@ package electricexpansion.alex_hawks.blocks;
 
 import java.util.List;
 
+import basiccomponents.BCLoader;
+
 import universalelectricity.prefab.UETab;
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 import electricexpansion.EECommonProxy;
+import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.machines.TileEntityDistribution;
 import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
@@ -103,4 +107,23 @@ public class BlockWPT extends BlockContainer
 	@Override
 	public TileEntity createNewTileEntity(World var1) 
 	{return null;}
+	
+	/**
+	 * Called when the block is right clicked by the player
+	 */
+	@Override
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	{
+		int metadata = par1World.getBlockMetadata(x, y, z);
+
+		if (!par1World.isRemote)
+		{
+			
+				par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
+				return true;
+			
+		}
+
+		return true;
+	}
 }

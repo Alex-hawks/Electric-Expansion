@@ -46,6 +46,7 @@ import electricexpansion.alex_hawks.itemblocks.ItemBlockInsulatedWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockRawWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
+import electricexpansion.alex_hawks.itemblocks.ItemBlockWPT;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
 import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
@@ -238,6 +239,8 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockVoltDet);
 		GameRegistry.registerBlock(blockLead);
 		GameRegistry.registerBlock(blockTransformer);
+		
+		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class);
 		
 		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class);
 		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class);

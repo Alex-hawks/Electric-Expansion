@@ -104,7 +104,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	@Override
 	public Packet getDescriptionPacket()
-	{return PacketManager.getPacket("ElecEx", this, this.joules);}
+	{return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);}
 	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)

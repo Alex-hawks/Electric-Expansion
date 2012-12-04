@@ -10,11 +10,13 @@ import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
 import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
+import electricexpansion.alex_hawks.containers.ContainerInductionSender;
 import electricexpansion.alex_hawks.containers.ContainerWireMill;
 import electricexpansion.alex_hawks.machines.TileEntityDistribution;
 import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
 import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.alex_hawks.machines.TileEntityWireMill;
+import electricexpansion.client.alex_hawks.gui.GuiWPT;
 import electricexpansion.client.alex_hawks.gui.GuiWireMill;
 import electricexpansion.client.mattredsox.GUIAdvBatteryBox;
 import electricexpansion.client.mattredsox.GuiTransformer;
@@ -70,6 +72,7 @@ public class EECommonProxy implements IGuiHandler
 				case 1: return new GuiVoltDetector(player.inventory, (TileEntityVoltDetector)tileEntity);
 				case 2: return new GuiWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 				case 3: return new GuiTransformer(player.inventory, (TileEntityTransformer)tileEntity);
+				case 4: return new GuiWPT(player.inventory, (TileEntityInductionSender)tileEntity);
 			}
         }
 		return null;
@@ -86,6 +89,7 @@ public class EECommonProxy implements IGuiHandler
 				case 1: return new ContainerVoltDetector(((TileEntityVoltDetector)tileEntity));
 				case 2: return new ContainerWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 				case 3: return new ContainerTransformer(player.inventory, (TileEntityTransformer)tileEntity);
+				case 4: return new ContainerInductionSender(player.inventory, (TileEntityInductionSender)tileEntity);
 			}
         }
 		return null;
