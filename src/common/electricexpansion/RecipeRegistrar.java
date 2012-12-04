@@ -1,4 +1,4 @@
-package electricexpansion.alex_hawks.misc;
+package electricexpansion;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import basiccomponents.BasicComponents;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
 public class RecipeRegistrar 
 {	
@@ -105,18 +105,11 @@ public class RecipeRegistrar
 		//Machines
 		if(Loader.isModLoaded("BasicComponents")) 
 		{
-			//Lead-Tear Battery				
-			GameRegistry.addRecipe(new ItemStack(itemEliteBat), new Object [] {"!@!", "#$#", "!@!", '!', BasicComponents.itemSteelPlate, '@', new ItemStack(blockInsulatedWire, 1, 0), '#', ElectricExpansion.itemLead, '$', Item.ghastTear});
+			
 			
 			GameRegistry.addRecipe(new ItemStack(blockWireMill), new Object [] {"#$#", "!%!", "@!@", '!', BasicComponents.itemMotor, '#', BasicComponents.itemSteelPlate, '@', basiccomponents.BasicComponents.itemBronzePlate, '$', new ItemStack(BasicComponents.itemCircuit, 1, 0), '%', new ItemStack(itemParts, 1, 0)});
 			GameRegistry.addRecipe(new ItemStack(blockBatBox), new Object [] {"!!!", "@@@", "!$!", '!', BasicComponents.itemBattery.getUncharged(), '@', new ItemStack(BasicComponents.blockCopperWire, 1), '$', new ItemStack(BasicComponents.itemCircuit, 1, 2)});
 
-		}
-		//Parts
-		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond});	
-
-		if(Loader.isModLoaded("BasicComponents"))
-		{
 			//Tier 1 Upgrade
 			GameRegistry.addRecipe(new ItemStack(itemUpgrade, 1, 0), new Object [] {"$!$", "!@!", "#!#", '!', BasicComponents.itemBattery.getUncharged(), '@', new ItemStack(blockInsulatedWire, 1, 0), '#',  new ItemStack(BasicComponents.itemCircuit, 1, 0), '$', BasicComponents.itemBronzePlate});
 
@@ -126,10 +119,19 @@ public class RecipeRegistrar
 			//Tier 3 Upgrade		
 			GameRegistry.addRecipe(new ItemStack(itemUpgrade, 1, 2), new Object [] {"#!#", "!@!", "#!#", '!', ElectricExpansion.itemEliteBat.getUncharged(), '@', new ItemStack(itemUpgrade, 1, 1), '#',  new ItemStack(BasicComponents.itemCircuit, 1, 2)});
 
-			//Lead Block
-			GameRegistry.addRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', ElectricExpansion.itemLead});
-			GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
+			//Adv Battery
+			GameRegistry.addRecipe(new ItemStack(ElectricExpansion.itemAdvBat), new Object[] { " T ", "TRT", "TRT", 'T', BasicComponents.itemSteelIngot, 'R', Item.lightStoneDust});
+			
+			//Elite Battery				
+			GameRegistry.addRecipe(new ItemStack(itemEliteBat), new Object [] {"!@!", "#$#", "!@!", '!', BasicComponents.itemSteelPlate, '@', new ItemStack(blockInsulatedWire, 1, 0), '#', ElectricExpansion.itemLead, '$', Item.ghastTear});
 		}
+		//Parts
+		GameRegistry.addRecipe(new ItemStack(itemParts, 1, 0), new Object [] {" # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond});	
+
+		//Lead Block
+		GameRegistry.addRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object [] {"@@@", "@@@", "@@@", '@', ElectricExpansion.itemLead});
+		GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[]{ElectricExpansion.blockLead});
+		
 
 	}
 

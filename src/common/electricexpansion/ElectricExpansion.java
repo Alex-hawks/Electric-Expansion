@@ -48,13 +48,14 @@ import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
 import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
 import electricexpansion.alex_hawks.items.ItemParts;
-import electricexpansion.alex_hawks.misc.RecipeRegistrar;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockTransformer;
 import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemAdvancedBattery;
 import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemEliteBattery;
+import electricexpansion.mattredsox.items.ItemTransformerCoil;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
 @Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
@@ -84,7 +85,7 @@ public class ElectricExpansion {
 	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
 	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 8;
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
-	private static final int blockFuseID = BLOCK_ID_PREFIX + 12;
+	private static final int blockTransformerID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
 	private static final int blockWPTID = BLOCK_ID_PREFIX + 14;
 	private static final int blockLeadID = BLOCK_ID_PREFIX + 15;
@@ -96,6 +97,7 @@ public class ElectricExpansion {
 	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
 	private static final int itemAdvBatID = ITEM_ID_PREFIX + 5;
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
+	private static final int itemTransformerCoilID = ITEM_ID_PREFIX + 7; 
 	//Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -111,7 +113,7 @@ public class ElectricExpansion {
 	public static int AdvBatteryBox;
 	public static int VoltDet;
 	public static int wireMill;
-	public static int Fuse;
+	public static int Transformer;
 	public static int batBox;
 	public static int WPT;
 	public static int LeadBlock;
@@ -122,6 +124,7 @@ public class ElectricExpansion {
 	public static int Parts;
 	public static int Lead;
 	public static int AdvBat;
+	public static int TransformerCoil;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -138,7 +141,7 @@ public class ElectricExpansion {
 	public static final Block blockAdvBatteryBox = new BlockAdvBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
 	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("voltdet");
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
-	//public static final Block blockFuse = new BlockFuse(Fuse, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockFuse");
+	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockTransformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(EECommonProxy.ABLOCK);
 	
@@ -148,7 +151,7 @@ public class ElectricExpansion {
 	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
-//	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
+	public static final Item itemTransformerCoil = new ItemTransformerCoil(TransformerCoil).setCreativeTab(UETab.INSTANCE).setItemName("transformerCoil");
 
 	
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
@@ -174,7 +177,7 @@ public class ElectricExpansion {
 		AdvBatteryBox = CONFIG.getBlock("Advanced_Battery_Box", blockAdvBatteryBoxID).getInt();
 		VoltDet = CONFIG.getBlock("Voltage_Detector", blockVoltDetID).getInt();
 		wireMill = CONFIG.getBlock("Wire_Mill", blockWireMillID).getInt();
-		Fuse = CONFIG.getBlock("Relay", blockFuseID).getInt();
+		Transformer = CONFIG.getBlock("Transformer", blockTransformerID).getInt();
 		WPT = CONFIG.getBlock("Wireless_Transfer_Machines", blockWPTID).getInt();
 		LeadBlock = CONFIG.getBlock("Lead_Block", blockLeadID).getInt();
 
@@ -184,6 +187,7 @@ public class ElectricExpansion {
 		Parts = CONFIG.getItem("Parts", itemPartsID).getInt();
 		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
 		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt(); 
+		TransformerCoil = CONFIG.getItem("Transformer_Coil", itemTransformerCoilID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;
@@ -233,6 +237,7 @@ public class ElectricExpansion {
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);
 		GameRegistry.registerBlock(blockLead);
+		GameRegistry.registerBlock(blockTransformer);
 		
 		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class);
 		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class);
