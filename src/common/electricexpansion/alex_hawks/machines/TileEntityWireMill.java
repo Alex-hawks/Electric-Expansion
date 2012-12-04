@@ -1,8 +1,5 @@
 package electricexpansion.alex_hawks.machines;
 
-import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
-
 import java.util.Random;
 
 import net.minecraft.src.EntityPlayer;
@@ -23,14 +20,13 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.alex_hawks.blocks.BlockWireMill;
 import electricexpansion.alex_hawks.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IHMRepairable
+public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
 {
 	public final double WATTS_PER_TICK = 500;
 	public int drawingTicks = 0;
@@ -44,8 +40,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	private ItemStack[] inventory = new ItemStack[3];
 
 	private int playersUsing = 0;
-	private ItemStack sapper;
-	private int machineHP = 20;
 	public int orientation;
 	@Override
 	public boolean canConnect(ForgeDirection side)
@@ -96,23 +90,15 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 		if (this.wattsReceived >= this.WATTS_PER_TICK-50 && !this.isDisabled())
 		{
-			// The left slot contains the item to
-			// be smelted
 			if (this.inventory[1] != null && this.canDraw() && this.drawingTicks == 0)
 			{
 				this.drawingTicks = this.getDrawingTime();
 			}
 
-			// Checks if the item can be smelted
-			// and if the smelting time left is
-			// greater than 0, if so, then smelt
-			// the item.
 			if (this.canDraw() && this.drawingTicks > 0)
 			{
 				this.drawingTicks--;
 
-				// When the item is finished
-				// smelting
 				if (this.drawingTicks < 1)
 				{
 					this.drawItem();
@@ -232,10 +218,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (var5 >= 0 && var5 < this.inventory.length)
 				this.inventory[var5] = ItemStack.loadItemStackFromNBT(var4);
 		}
-
-		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
-		try{this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));}
-		catch(NullPointerException e) {this.sapper = null;}
 	}
 	/**
 	 * Writes a tile entity to NBT.
@@ -246,8 +228,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("drawingTicks", this.drawingTicks);
 		NBTTagList var2 = new NBTTagList();
-		if (this.sapper != null)
-			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)
 		{
@@ -260,7 +240,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			}
 		}
 		par1NBTTagCompound.setTag("Items", var2);
-		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
 	}
 
 	@Override
@@ -360,57 +339,4 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 		return -1;
 	}
-
-	@Override
-	public boolean attemptToRepair(int repairAmount)
-	{
-		if (this.machineHP != this.getMaxHP() && !this.isBeingSapped())
-		{
-			this.machineHP += repairAmount;
-			return true;
-		}
-		else return false;
-	}
-
-	@Override
-	public boolean setSapper(ItemStack sapper)
-	{
-		if (this.sapper == null)
-		{
-			this.sapper = sapper;
-			return true;
-		}
-		else return false;
-	}
-
-	@Override
-	public boolean attemptToUnSap(EntityPlayer player)
-	{
-		boolean returnValue = false;
-		if (this.isBeingSapped())
-		{
-			int randomDigit = new Random().nextInt(((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player));
-			if (randomDigit == ((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player) / 2)
-			{
-				((IHMSapper)this.sapper.getItem()).onRemoved(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-				this.sapper = null;
-				returnValue = true;
-			}
-		}
-		return returnValue;
-	}
-
-	@Override
-	public boolean isBeingSapped()
-	{return this.sapper != null;}
-
-	@Override
-	public boolean isDisabled()
-	{return this.isBeingSapped() || this.machineHP == 0;}
-
-	public int getMaxHP()
-	{return 20;}
-
-	public int getHP()
-	{return this.machineHP;}
 }

@@ -1,8 +1,5 @@
 package electricexpansion.alex_hawks.machines;
 
-import hawksmachinery.api.HMRepairInterfaces.IHMRepairable;
-import hawksmachinery.api.HMRepairInterfaces.IHMSapper;
-
 import java.util.Random;
 
 import net.minecraft.src.EntityPlayer;
@@ -12,18 +9,14 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityDisableable;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -31,19 +24,14 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.alex_hawks.wpt.InductionNetworks;
-import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.api.WirelessPowerMachine;
 
-
-public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IHMRepairable, IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
+public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
 {
 	private double joules = 0;
 	private int playersUsing = 0;
-	private ItemStack sapper;
-	private int machineHP;
 	private short frequency;
 	private static final double maxJoules = 500000; //To eventually go in config #Eventually
-	private final int maxMachineHP = 20;
 	private byte orientation;
 	private boolean isOpen = false;
 	private static InductionNetworks network;
@@ -88,14 +76,8 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 			this.joules = 0;
 		if (this.joules > this.maxJoules)
 			this.joules = this.maxJoules;
-		if (this.machineHP < 0)
-			this.machineHP = 0;
-		if (this.machineHP > this.getMaxHP())
-			this.machineHP = this.getMaxHP();
 		if (!this.worldObj.isRemote)
 			this.sendPacket();
-		if (this.isBeingSapped())
-			((IHMSapper)this.sapper.getItem()).sapperTick(this.worldObj, this.xCoord, this.yCoord, this.zCoord, this.sapper);
 		if (this.orientation != this.blockMetadata)
 			this.orientation = (byte)ForgeDirection.getOrientation(this.blockMetadata).ordinal();
 
@@ -122,7 +104,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	@Override
 	public Packet getDescriptionPacket()
-	{return PacketManager.getPacket("ElecEx", this, this.joules, this.machineHP);}
+	{return PacketManager.getPacket("ElecEx", this, this.joules);}
 	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
@@ -176,8 +158,6 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		super.readFromNBT(par1NBTTagCompound);
 		this.joules = par1NBTTagCompound.getDouble("joules");
 		this.frequency = par1NBTTagCompound.getShort("frequency");
-		this.machineHP = par1NBTTagCompound.getInteger("machineHP");
-		this.sapper = ItemStack.loadItemStackFromNBT((NBTTagCompound) par1NBTTagCompound.getTag("Sapper"));
 	}
 
 	@Override
@@ -186,9 +166,6 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setDouble("joules" ,this.joules);
 		par1NBTTagCompound.setShort("frequency", this.frequency);
-		par1NBTTagCompound.setInteger("machineHP", this.machineHP);
-		if (this.sapper != null)
-			par1NBTTagCompound.setCompoundTag("Sapper", this.sapper.writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
@@ -202,57 +179,6 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		catch(Exception e)
 		{e.printStackTrace(); }
 	}
-
-	@Override
-	public boolean attemptToRepair(int repairAmount)
-	{
-		if (this.machineHP != this.getMaxHP() && !this.isBeingSapped())
-		{
-			this.machineHP += repairAmount;
-			return true;
-		}
-		else return false;
-	}
-
-	@Override
-	public boolean setSapper(ItemStack sapper) 
-	{
-		if (this.sapper == null)
-		{
-			this.sapper = sapper;
-			return true;
-		}
-		else return false;
-	}
-
-	@Override
-	public boolean attemptToUnSap(EntityPlayer player)
-	{
-		boolean returnValue = false;
-		if (this.isBeingSapped())
-		{
-			int randomDigit = new Random().nextInt(((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player));
-			if (randomDigit == ((IHMSapper)this.sapper.getItem()).getRemovalValue(this.sapper, player) / 2)
-			{
-				((IHMSapper)this.sapper.getItem()).onRemoved(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
-				this.sapper = null;
-				returnValue = true;
-			}
-		}
-		return returnValue;
-	}
-
-	@Override
-	public boolean isBeingSapped()
-	{return this.sapper != null;}
-
-	@Override
-	public int getMaxHP() 
-	{return maxMachineHP;}
-
-	@Override
-	public int getHP() 
-	{return machineHP;}
 
 	@Override
 	public boolean isPoweringTo(ForgeDirection side) 
@@ -296,7 +222,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	@Override
 	public String[] getMethodNames() 
-	{return new String[] { "getVoltage", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency", "getHP" };}
+	{return new String[] { "getVoltage", "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency" };}
 
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException 
@@ -307,17 +233,15 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 		final int getJoules = 3;
 		final int getFrequency = 4;
 		final int setFrequency = 5;
-		final int getHP = 6;
 		int arg0 = 0;
 		try
 		{
 			if((Integer)arguments[0] != null)
 				arg0 = ((Integer)arguments[0]).intValue();
 		}
-		catch(Exception e)
-		{ElectricExpansion.EELogger.fine("Failed to get new frequency, from ComputerCraft functions.");}
+		catch(Exception e)	{}
 
-		if(!this.isBeingSapped())
+		if(!this.isDisabled())
 		{
 			switch (method)
 			{
@@ -327,11 +251,10 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 			case getJoules:			return new Object[]{ getJoules() };
 			case getFrequency:		return new Object[]{ getFrequency() };
 			case setFrequency:		return new Object[]{ setFrequency(arg0, true) };
-			case getHP:				return new Object[]{ getHP() };
 			default:				throw new IllegalArgumentException("Function unimplemented");
 			}
 		}
-		else return new Object[] { "Remove the sapper first" };
+		else return new Object[] { "Please wait for the EMP to run out." };
 	}
 
 	@Override
