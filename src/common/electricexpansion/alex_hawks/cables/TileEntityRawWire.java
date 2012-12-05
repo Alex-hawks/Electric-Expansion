@@ -1,5 +1,7 @@
 package electricexpansion.alex_hawks.cables;
 
+import universalelectricity.prefab.UEDamageSource;
+import net.minecraft.src.EntityPlayer;
 import electricexpansion.alex_hawks.helpers.TileEntityCableHelper;
 
 public class TileEntityRawWire extends TileEntityCableHelper
@@ -19,5 +21,44 @@ public class TileEntityRawWire extends TileEntityCableHelper
     	case 5: return 0.01;
     	default: return 0.10;
     	}
+	}
+    
+    @Override
+    public boolean canUpdate()
+    {return true;}
+    
+    @Override
+    public void updateEntity()
+    {this.damageEntity();}
+    
+    public void damageEntity()
+    {
+    	if(!worldObj.isRemote)
+    	{
+    		if(this.getNetwork().getProduced().getWatts() > 0)
+    		{
+    			for(Object player : this.worldObj.playerEntities)
+    			{
+    				if(player instanceof EntityPlayer)
+    				{
+    					if(((EntityPlayer)player).getPlayerCoordinates().getDistanceSquared(this.xCoord, this.yCoord, this.zCoord) <= 9)
+    						((EntityPlayer)player).attackEntityFrom(UEDamageSource.electrocution, this.getDamageFromMeta(this.getBlockMetadata()));
+    				}
+    			}
+    		}
+    	}
+    }
+	
+    private int getDamageFromMeta(int meta) 
+	{
+		switch(meta)
+		{
+		case 0: return 3;
+		case 1: return 2;
+		case 2: return 1;
+		case 3: return 8;
+		case 4: return 2;
+		default: return 4;
+		}
 	}
 }

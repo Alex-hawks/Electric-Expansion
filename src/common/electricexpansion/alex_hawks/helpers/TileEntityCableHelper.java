@@ -83,14 +83,10 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	
 	public boolean canConnect(ForgeDirection side)
 	{
-		/*boolean returnValue = false;
-		int x=0,y=0,z=0;
-		if	(side == ForgeDirection.DOWN){x=0;y=-1;z=0;}
-		else 	if	(side == ForgeDirection.UP){x=0;y=1;z=0;}
-		else 	if	(side == ForgeDirection.NORTH){x=0;y=0;z=-1;}
-		else 	if	(side == ForgeDirection.SOUTH){x=0;y=0;z=1;}
-		else 	if	(side == ForgeDirection.WEST){x=-1;y=0;z=0;}
-		else 	if	(side == ForgeDirection.EAST){x=1;y=0;z=0;}
+/*		boolean returnValue = false;
+		int x = side.offsetX;
+		int y = side.offsetY;
+		int z = side.offsetZ;
 
 		int thisID 			= this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord);
 		int thismeta 		= this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
@@ -115,8 +111,8 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 		}
 		else if((TE instanceof IConnector) && !(TE instanceof IConductor))
 				returnValue = true;
-		return returnValue;*/
-		return true;
+		return returnValue;
+*/		return true;
 	}
 	
 	public String cableType(int ID, int meta)
