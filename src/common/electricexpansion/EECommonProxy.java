@@ -10,6 +10,8 @@ import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
 import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
+import electricexpansion.alex_hawks.containers.ContainerDistribution;
+import electricexpansion.alex_hawks.containers.ContainerInductionReciever;
 import electricexpansion.alex_hawks.containers.ContainerInductionSender;
 import electricexpansion.alex_hawks.containers.ContainerWireMill;
 import electricexpansion.alex_hawks.machines.TileEntityDistribution;
@@ -72,7 +74,15 @@ public class EECommonProxy implements IGuiHandler
 				case 1: return new GuiVoltDetector(player.inventory, (TileEntityVoltDetector)tileEntity);
 				case 2: return new GuiWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 				case 3: return new GuiTransformer(player.inventory, (TileEntityTransformer)tileEntity);
-				case 4: return new GuiWPT(player.inventory, (TileEntityInductionSender)tileEntity);
+				case 4: 
+				{
+					if(tileEntity.getBlockMetadata()>= 0 && tileEntity.getBlockMetadata() < 4)
+						return new GuiWPT(player.inventory, (TileEntityDistribution)tileEntity);
+					if(tileEntity.getBlockMetadata()>= 4 && tileEntity.getBlockMetadata() < 8)
+						return new GuiWPT(player.inventory, (TileEntityInductionSender)tileEntity);
+					if(tileEntity.getBlockMetadata()>= 8 && tileEntity.getBlockMetadata() < 12)
+						return new GuiWPT(player.inventory, (TileEntityInductionReciever)tileEntity);
+				}
 			}
         }
 		return null;
@@ -81,7 +91,7 @@ public class EECommonProxy implements IGuiHandler
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) 
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-	//	if (tileEntity != null)
+		if (tileEntity != null)
         {
 			switch(ID)
 			{
@@ -89,7 +99,15 @@ public class EECommonProxy implements IGuiHandler
 				case 1: return new ContainerVoltDetector(((TileEntityVoltDetector)tileEntity));
 				case 2: return new ContainerWireMill(player.inventory, (TileEntityWireMill)tileEntity);
 				case 3: return new ContainerTransformer(player.inventory, (TileEntityTransformer)tileEntity);
-				case 4: return new ContainerInductionSender(player.inventory, (TileEntityInductionSender)tileEntity);
+				case 4: 
+				{
+					if(tileEntity.getBlockMetadata()>= 0 && tileEntity.getBlockMetadata() < 4)
+						return new ContainerDistribution(player.inventory, (TileEntityDistribution)tileEntity);
+					if(tileEntity.getBlockMetadata()>= 4 && tileEntity.getBlockMetadata() < 8)
+						return new ContainerInductionSender(player.inventory, (TileEntityInductionSender)tileEntity);
+					if(tileEntity.getBlockMetadata()>= 8 && tileEntity.getBlockMetadata() < 12)
+						return new ContainerInductionReciever(player.inventory, (TileEntityInductionReciever)tileEntity);
+				}
 			}
         }
 		return null;
