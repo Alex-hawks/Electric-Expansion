@@ -216,6 +216,7 @@ public class BlockMultimeter extends BlockMachine
         {
         	TileEntityMultimeter tileEntity = (TileEntityMultimeter)par1World.getBlockTileEntity(x, y, z);
 
+        	System.out.println(tileEntity.elecPack.toString());
             par5EntityPlayer.openGui(ElectricExpansion.instance, 1, par1World, x, y, z);
 
         }

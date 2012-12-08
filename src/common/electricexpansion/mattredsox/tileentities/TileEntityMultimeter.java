@@ -21,6 +21,7 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.ElectricExpansion;
 import electricexpansion.mattredsox.blocks.BlockMultimeter;
 
 public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver
@@ -31,7 +32,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 
 	private int playersUsing = 0;
 
-	public ElectricityPack elecPack;
+	public ElectricityPack elecPack = new ElectricityPack(0, 0);
 
 
 	public TileEntityMultimeter()
@@ -61,7 +62,8 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 				{
 					if (inputTile instanceof IConductor)
 					{
-						this.elecPack = ((IConductor)inputTile).getNetwork().getProduced();
+					 elecPack = ((IConductor)inputTile).getNetwork().getProduced();
+
 						if (this.joules >= this.getMaxJoules())
 						{
 							((IConductor) inputTile).getNetwork().stopRequesting(this);
@@ -90,7 +92,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 					if (connector instanceof IConductor)
 					{
 						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
-						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.elecPack.voltage), ElectricInfo.getAmps(this.joules, this.elecPack.voltage)), 80), 0);
 
 						if (!this.worldObj.isRemote && transferAmps > 0)
 						{
@@ -119,7 +121,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.joules, this.elecPack.amperes, this.elecPack.voltage, this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.elecPack.amperes, this.elecPack.voltage);
 
 	}
 
@@ -128,10 +130,20 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	{
 		try
 		{
-			this.joules = dataStream.readDouble();
-			this.disabledTicks = dataStream.readInt();
+			int id = dataStream.readInt();
+			if(id == -1) 
+			{
+				if(dataStream.readBoolean())
+				{
+					this.playersUsing++;
+				}
+			else playersUsing--;
+			}
+			if(id != -1)
+			{
+			this.elecPack.amperes = dataStream.readDouble();			
 			this.elecPack.voltage = dataStream.readDouble();
-			this.elecPack.amperes = dataStream.readDouble();
+			}
 			
 		}
 		catch (Exception e)
@@ -182,17 +194,13 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxJoules(Object... data)
 	{
-		return 100;
+		return 1000;
 	}
 	
-	@Override
+/*	@Override
 	public double getVoltage()
 	{
-		if(elecPack != null)
-		return this.elecPack.voltage;
-		
-		else
 		return 0;
-	}
+	}*/
 
 }
