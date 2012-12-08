@@ -1,5 +1,6 @@
 package electricexpansion.alex_hawks.machines;
 
+import java.util.EnumSet;
 import java.util.Random;
 
 import net.minecraft.src.EntityPlayer;
@@ -14,12 +15,15 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
+
+import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -41,10 +45,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	private int playersUsing = 0;
 	public int orientation;
+	
 	@Override
-	public boolean canConnect(ForgeDirection side)
+	public void initiate()
 	{
-		return side == ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2);
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2)));
 	}
 
 	@Override

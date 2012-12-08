@@ -18,6 +18,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
@@ -231,9 +232,11 @@ public class ElectricExpansion {
 	public void preInit(FMLPreInitializationEvent event) 
 	{
 		UniversalElectricity.register(this, 1, 2, 0, false);
-
+		
 		if(!configLoaded){configLoad(CONFIG);}
 		if(startLogLogged[1] != true){StartLog("preInit");}
+		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", version, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
+
 		GameRegistry.registerBlock(blockAdvBatteryBox);
 		GameRegistry.registerBlock(blockWireMill);
 		GameRegistry.registerBlock(blockVoltDet);

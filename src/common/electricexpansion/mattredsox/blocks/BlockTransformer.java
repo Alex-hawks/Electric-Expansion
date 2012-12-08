@@ -13,6 +13,7 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
+import electricexpansion.client.EEClientProxy;
 import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
@@ -81,8 +82,7 @@ public class BlockTransformer extends BlockMachine
     }
 
 	/**
-	 * Called when the block is placed in the
-	 * world.
+	 * Called when the block is placed in the world.
 	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
@@ -91,29 +91,31 @@ public class BlockTransformer extends BlockMachine
 
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
-		
-	 if (metadata >= meta)
+
+		if (metadata >= meta)
 		{
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, meta + 3);
-					break;
-				case 1:
 					par1World.setBlockMetadataWithNotify(x, y, z, meta + 1);
 					break;
-				case 2:
+				case 1:
 					par1World.setBlockMetadataWithNotify(x, y, z, meta + 2);
 					break;
-				case 3:
+				case 2:
 					par1World.setBlockMetadataWithNotify(x, y, z, meta + 0);
 					break;
+				case 3:
+					par1World.setBlockMetadataWithNotify(x, y, z, meta + 3);
+					break;
 			}
-		}	
 		}
+	
+	}
+
 
 	@Override
-	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
 		int original = metadata;
@@ -181,12 +183,6 @@ public class BlockTransformer extends BlockMachine
 	}
 
 	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
 	public boolean renderAsNormalBlock()
 	{
 		return false;
@@ -209,7 +205,7 @@ public class BlockTransformer extends BlockMachine
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer)
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {
@@ -221,4 +217,23 @@ public class BlockTransformer extends BlockMachine
 
         return true;
     }
+    
+	
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
+	{
+		return true;
+	}
+
+	@Override
+	public int getRenderType()
+	{
+	return EEClientProxy.RENDER_ID;
+	}
 }
