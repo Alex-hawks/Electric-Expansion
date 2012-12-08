@@ -1,22 +1,17 @@
 package electricexpansion.alex_hawks.helpers;
 
-import com.google.common.io.ByteArrayDataInput;
-
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IJouleStorage;
-import universalelectricity.core.implement.IConnector;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityConductor;
-import cpw.mods.fml.common.Loader;
+
+import com.google.common.io.ByteArrayDataInput;
+
 import electricexpansion.ElectricExpansion;
 import electricexpansion.api.CableInterfaces.ISelectiveConnector;
 
