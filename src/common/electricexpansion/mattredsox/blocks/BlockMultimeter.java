@@ -15,14 +15,14 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
+import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
 
-public class BlockVoltDetector extends BlockMachine
+public class BlockMultimeter extends BlockMachine
 {
-	public static final int VOLT_DET_METADATA = 0;
+	public static final int MULTIMETER_METADATA = 0;
 
 
-	public BlockVoltDetector(int id, int textureIndex)
+	public BlockMultimeter(int id, int textureIndex)
 	{
 		super("Voltage Detector", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
@@ -43,9 +43,9 @@ public class BlockVoltDetector extends BlockMachine
         {
             return this.blockIndexInTexture;
         }
-    	else if(metadata >= VOLT_DET_METADATA)
+    	else if(metadata >= MULTIMETER_METADATA)
     	{
-    		metadata -= VOLT_DET_METADATA;
+    		metadata -= MULTIMETER_METADATA;
     		
     		//If it is the front side
             if (side == metadata+2)
@@ -93,21 +93,21 @@ public class BlockVoltDetector extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 		
-	 if (metadata >= VOLT_DET_METADATA)
+	 if (metadata >= MULTIMETER_METADATA)
 		{
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, VOLT_DET_METADATA + 3);
+					par1World.setBlockMetadataWithNotify(x, y, z, MULTIMETER_METADATA + 3);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, VOLT_DET_METADATA + 1);
+					par1World.setBlockMetadataWithNotify(x, y, z, MULTIMETER_METADATA + 1);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, VOLT_DET_METADATA + 2);
+					par1World.setBlockMetadataWithNotify(x, y, z, MULTIMETER_METADATA + 2);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, VOLT_DET_METADATA + 0);
+					par1World.setBlockMetadataWithNotify(x, y, z, MULTIMETER_METADATA + 0);
 					break;
 			}
 		}	
@@ -121,9 +121,9 @@ public class BlockVoltDetector extends BlockMachine
 
 		int change = 0;
 
-		 if (metadata >= VOLT_DET_METADATA)
+		 if (metadata >= MULTIMETER_METADATA)
 		{
-			original -= VOLT_DET_METADATA;
+			original -= MULTIMETER_METADATA;
 		}
 
 		// Reorient the block
@@ -143,9 +143,9 @@ public class BlockVoltDetector extends BlockMachine
 				break;
 		}
 
-		 if (metadata >= VOLT_DET_METADATA)
+		 if (metadata >= MULTIMETER_METADATA)
 		{
-			change += VOLT_DET_METADATA;
+			change += MULTIMETER_METADATA;
 		}
 
 		par1World.setBlockMetadataWithNotify(x, y, z, change);
@@ -202,14 +202,9 @@ public class BlockVoltDetector extends BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
-			return new TileEntityVoltDetector();
+			return new TileEntityMultimeter();
 	}
 
-	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
-	{
-		return new ItemStack(ElectricExpansion.blockVoltDet);
-	}
 
     /**
      * Called when the block is right clicked by the player
@@ -219,7 +214,7 @@ public class BlockVoltDetector extends BlockMachine
     {
         if (!par1World.isRemote)
         {
-            TileEntityVoltDetector tileEntity = (TileEntityVoltDetector)par1World.getBlockTileEntity(x, y, z);
+        	TileEntityMultimeter tileEntity = (TileEntityMultimeter)par1World.getBlockTileEntity(x, y, z);
 
             par5EntityPlayer.openGui(ElectricExpansion.instance, 1, par1World, x, y, z);
 

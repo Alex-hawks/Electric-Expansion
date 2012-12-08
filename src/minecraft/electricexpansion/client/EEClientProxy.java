@@ -18,8 +18,8 @@ import electricexpansion.client.alex_hawks.RenderRawWire;
 import electricexpansion.client.alex_hawks.RenderWireMill;
 import electricexpansion.client.mattredsox.RenderTransformer;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
 import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
-import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 public class EEClientProxy extends electricexpansion.EECommonProxy
 {
@@ -56,7 +56,7 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 		//Mattredsox's Tile entity registrations
 		ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
 		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
-		GameRegistry.registerTileEntity(TileEntityVoltDetector.class, "TileEntityVoltDet");
+		GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
 
 		
 		MinecraftForgeClient.preloadTexture(AITEMS);

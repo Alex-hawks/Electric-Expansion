@@ -14,6 +14,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -40,6 +41,8 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 	public IPowerProvider powerProvider;
 
+	private ElectricityPack elecPack;
+
 	public TileEntityTransformer()
 	{
 		super();
@@ -48,7 +51,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 4), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 4).getOpposite()));
 	}
 
 
@@ -68,6 +71,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				{
 					if (inputTile instanceof IConductor)
 					{
+						this.elecPack = ((IConductor)inputTile).getNetwork().getProduced();
 						if (this.joules >= this.getMaxJoules())
 						{
 							((IConductor) inputTile).getNetwork().stopRequesting(this);

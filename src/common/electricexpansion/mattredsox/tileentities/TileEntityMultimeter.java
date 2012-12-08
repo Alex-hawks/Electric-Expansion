@@ -11,6 +11,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -20,20 +21,20 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
-import electricexpansion.mattredsox.blocks.BlockVoltDetector;
+import electricexpansion.mattredsox.blocks.BlockMultimeter;
 
-public class TileEntityVoltDetector extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver
+public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver
 {
 	private double joules = 0;
-
-	public double voltIn;
 	
 	private boolean isFull = false;
 
 	private int playersUsing = 0;
 
+	public ElectricityPack elecPack;
 
-	public TileEntityVoltDetector()
+
+	public TileEntityMultimeter()
 	{
 		super();
 	}
@@ -41,8 +42,9 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockMultimeter.MULTIMETER_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockMultimeter.MULTIMETER_METADATA + 2).getOpposite()));
 	}
+	
 	@Override
 	public void updateEntity()
 	{
@@ -52,13 +54,14 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2).getOpposite();
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockMultimeter.MULTIMETER_METADATA + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
 				if (inputTile != null)
 				{
 					if (inputTile instanceof IConductor)
 					{
+						this.elecPack = ((IConductor)inputTile).getNetwork().getProduced();
 						if (this.joules >= this.getMaxJoules())
 						{
 							((IConductor) inputTile).getNetwork().stopRequesting(this);
@@ -76,7 +79,7 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 			 */
 			if (this.joules > 0)
 			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockVoltDetector.VOLT_DET_METADATA + 2);
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockMultimeter.MULTIMETER_METADATA + 2);
 				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
 				if (tileEntity != null)
@@ -116,7 +119,8 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.voltIn, this.joules, this.disabledTicks);
+		return PacketManager.getPacket("ElecEx", this, this.joules, this.elecPack.amperes, this.elecPack.voltage, this.disabledTicks);
+
 	}
 
 	@Override
@@ -125,8 +129,10 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 		try
 		{
 			this.joules = dataStream.readDouble();
-			this.voltIn = dataStream.readDouble();
 			this.disabledTicks = dataStream.readInt();
+			this.elecPack.voltage = dataStream.readDouble();
+			this.elecPack.amperes = dataStream.readDouble();
+			
 		}
 		catch (Exception e)
 		{
@@ -141,7 +147,6 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.joules = par1NBTTagCompound.getDouble("electricityStored");
-		this.voltIn = par1NBTTagCompound.getDouble("voltIn");
 	}
 	
 
@@ -153,13 +158,12 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setDouble("electricityStored", this.joules);
-		par1NBTTagCompound.setDouble("voltIn", this.voltIn);
 	}
 
 	
 	public String getInvName()
 	{
-		return "Voltage Detector";
+		return "Multimeter";
 	}
 
 
@@ -184,7 +188,11 @@ public class TileEntityVoltDetector extends TileEntityElectricityReceiver implem
 	@Override
 	public double getVoltage()
 	{
-		return voltIn;
+		if(elecPack != null)
+		return this.elecPack.voltage;
+		
+		else
+		return 0;
 	}
 
 }

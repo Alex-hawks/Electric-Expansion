@@ -52,19 +52,19 @@ import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
 import electricexpansion.alex_hawks.items.ItemParts;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
+import electricexpansion.mattredsox.blocks.BlockMultimeter;
 import electricexpansion.mattredsox.blocks.BlockTransformer;
-import electricexpansion.mattredsox.blocks.BlockVoltDetector;
 import electricexpansion.mattredsox.items.ItemAdvancedBattery;
 import electricexpansion.mattredsox.items.ItemBase;
 import electricexpansion.mattredsox.items.ItemEliteBattery;
 import electricexpansion.mattredsox.items.ItemTransformerCoil;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.0", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.4", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	private static int[] versionArray = {0, 4, 0}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	private static int[] versionArray = {0, 4, 4}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	private static String version;
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
@@ -85,7 +85,7 @@ public class ElectricExpansion {
 	//private static final int redstoneWireID = BLOCK_ID_PREFIX + 5;
 	//private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
 	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
-	private static final int blockVoltDetID = BLOCK_ID_PREFIX + 8;
+	private static final int blockMultiMeterID = BLOCK_ID_PREFIX + 8;
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
 	private static final int blockTransformerID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
@@ -113,7 +113,7 @@ public class ElectricExpansion {
 	//public static int redstoneWire;
 	//public static int redstoneWireBlock;
 	public static int AdvBatteryBox;
-	public static int VoltDet;
+	public static int MultiMeter;
 	public static int wireMill;
 	public static int Transformer;
 	public static int batBox;
@@ -141,7 +141,7 @@ public class ElectricExpansion {
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static final Block blockAdvBatteryBox = new BlockAdvBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
-	public static final Block blockVoltDet = new BlockVoltDetector(VoltDet, 0).setCreativeTab(UETab.INSTANCE).setBlockName("voltdet");
+	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("MultiMeter");
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockTransformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
@@ -177,7 +177,7 @@ public class ElectricExpansion {
 		//Redstone'd Cable Blocks
 
 		AdvBatteryBox = CONFIG.getBlock("Advanced_Battery_Box", blockAdvBatteryBoxID).getInt();
-		VoltDet = CONFIG.getBlock("Voltage_Detector", blockVoltDetID).getInt();
+		MultiMeter = CONFIG.getBlock("Voltage_Detector", blockMultiMeterID).getInt();
 		wireMill = CONFIG.getBlock("Wire_Mill", blockWireMillID).getInt();
 		Transformer = CONFIG.getBlock("Transformer", blockTransformerID).getInt();
 		WPT = CONFIG.getBlock("Wireless_Transfer_Machines", blockWPTID).getInt();
@@ -239,7 +239,7 @@ public class ElectricExpansion {
 
 		GameRegistry.registerBlock(blockAdvBatteryBox);
 		GameRegistry.registerBlock(blockWireMill);
-		GameRegistry.registerBlock(blockVoltDet);
+		GameRegistry.registerBlock(blockMultiMeter);
 		GameRegistry.registerBlock(blockLead);
 		GameRegistry.registerBlock(blockTransformer);
 		

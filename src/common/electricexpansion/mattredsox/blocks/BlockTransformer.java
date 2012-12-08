@@ -15,7 +15,6 @@ import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
 import electricexpansion.client.EEClientProxy;
 import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
-import electricexpansion.mattredsox.tileentities.TileEntityVoltDetector;
 
 public class BlockTransformer extends BlockMachine
 {
