@@ -31,22 +31,12 @@ import electricexpansion.ElectricExpansion;
 import electricexpansion.mattredsox.blocks.BlockTransformer;
 import electricexpansion.mattredsox.items.ItemTransformerCoil;
 
-public class TileEntityTransformer extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IInventory
-{
-	private double joules = 0;
-	
+public class TileEntityTransformer extends TileEntityElectricityReceiver implements IPacketReceiver, IInventory
+{	
 	public ItemStack[] containingItems = new ItemStack[2];
 
-	private boolean isFull = false;
-
 	private int playersUsing = 0;
-
-	public IPowerProvider powerProvider;
-
-	public ElectricityPack elecPack = new ElectricityPack(0, 0);
 	
-	public double voltageAdd = elecPack.voltage;
-
 	public TileEntityTransformer()
 	{
 		super();
@@ -58,7 +48,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 4), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 4).getOpposite()));
 	}
 
-
 	@Override
 	public void updateEntity()
 	{
@@ -68,15 +57,15 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		{
 			if (!this.worldObj.isRemote)
 			{
+				ElectricPack receivePack = new ElectricPack(0, 0);
+				
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
 				if (inputTile != null)
 				{
 					if (inputTile instanceof IConductor)
-					{
-						 elecPack = ((IConductor)inputTile).getNetwork().getProduced();
-						 
+					{						 
 						 if(this.containingItems[1] != null && this.containingItems[1].getItem() instanceof ItemTransformerCoil)
 						 {
 							if(this.containingItems[1].stackSize == 1)
@@ -90,74 +79,45 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 						else
 						{
 							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), voltageAdd);
-							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts());
+							receivePack = ((IConductor) inputTile).getNetwork().consumeElectricity(this);
 						}
 					}
 				}
-			}
-			/**
-			 * Output Electricity
-			 */
-
-			if (this.joules > 0)
-			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
-
-				if (tileEntity != null)
+			
+				/**
+				 * Output Electricity
+				 */
+	
+				if (this.receivePack.getWatts() > 0)
 				{
-					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), outputDirection);
-
-					// Output UE electricity
-					if (connector instanceof IConductor)
+					ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
+					TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
+	
+					if (tileEntity != null)
 					{
-						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
-						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, voltageAdd), ElectricInfo.getAmps(this.joules, voltageAdd)), 80), 0);
-
-						if (!this.worldObj.isRemote && transferAmps > 0)
+						TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), outputDirection);
+	
+						// Output UE electricity
+						if (connector instanceof IConductor)
 						{
-							((IConductor) connector).getNetwork().startProducing(this, transferAmps, voltageAdd);
-							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, voltageAdd));
+							double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
+							double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, voltageAdd), ElectricInfo.getAmps(this.joules, voltageAdd)), 80), 0);
+	
+							if (transferAmps > 0)
+							{
+								((IConductor) connector).getNetwork().startProducing(this, receivePack.amperes, receivePack.voltage + VOLTAGE_DECREASE);
+								this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, voltageAdd));
+							}
+							else
+							{
+								((IConductor) connector).getNetwork().stopProducing(this);
+							}
+	
 						}
-						else
-						{
-							((IConductor) connector).getNetwork().stopProducing(this);
-						}
-
+						
 					}
-					
 				}
 			}
-		}
-
-		// Energy Loss
-		this.setJoules(this.joules - 50);
-
-		if (!this.worldObj.isRemote)
-		{
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
-			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
-			}
-		}
-	}
-
-	@Override
-	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.elecPack.voltage);
-	}
-
-	@Override
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-		try
-		{
-			this.elecPack.voltage = dataStream.readDouble();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
 		}
 	}
 
@@ -181,7 +141,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
-		this.joules = par1NBTTagCompound.getDouble("electricityStored");
 
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.containingItems = new ItemStack[this.getSizeInventory()];
@@ -205,7 +164,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeToNBT(par1NBTTagCompound);
-		par1NBTTagCompound.setDouble("electricityStored", this.joules);
 		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.containingItems.length; ++var3)
@@ -294,7 +252,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public String getInvName()
 	{
-		return "          Transformer";
+		return "Transformer";
 	}
 
 	@Override
@@ -308,44 +266,4 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	{
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
-	
-	@Override
-	public double getJoules(Object... data)
-	{
-		return this.joules;
-	}
-
-	@Override
-	public void setJoules(double joules, Object... data)
-	{
-		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
-	}
-
-	@Override
-	public double getMaxJoules(Object... data)
-	{
-		return 1000;
-	}
-
-	@Override
-	public double getVoltage() 
-	{	
-/*		int slot1 = 0, slot2 = 0, slot3 = 0;
-		
-		if(this.containingItems[0] != null && this.containingItems[0].getItem() instanceof ItemTransformerCoil)
-				{
-			if(this.containingItems[0].stackSize == 1)
-				slot1 = 120;
-				}
-		//if(this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier)this.containingItems[3].getItem()).getName(this.containingItems[3]) == "Capacity")
-		//	slot2 = ((IModifier)this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
-		//if(this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier)this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Capacity")
-		///	slot3 = ((IModifier)this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
-*/	
-		//return elecPack.voltage + slot1 + slot2 + slot3;
-		return 120;
-	}
-	
-
-	
 }
