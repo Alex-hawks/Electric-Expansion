@@ -96,9 +96,8 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 
 						if (!this.worldObj.isRemote && transferAmps > 0)
 						{
-							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
-							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, this.getVoltage()));
-							System.out.println("PROD");
+							((IConductor) connector).getNetwork().startProducing(this, transferAmps, elecPack.voltage);
+							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, elecPack.voltage));
 						}
 						else
 						{
@@ -107,6 +106,8 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 					}
 				}
 			}
+			this.setJoules(this.joules - 50);
+
 		}
 
 		if (!this.worldObj.isRemote)
@@ -197,10 +198,5 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 		return 1000;
 	}
 	
-/*	@Override
-	public double getVoltage()
-	{
-		return 0;
-	}*/
 
 }

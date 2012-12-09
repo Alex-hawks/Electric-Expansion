@@ -49,8 +49,8 @@ public class GuiMultimeter extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 15, 6, 4210752);
-        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.elecPack.voltage, ElectricUnit.VOLTAGE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 80)) / 2, 0xFFFFFF);
-        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.elecPack.amperes, ElectricUnit.AMPERE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 60)) / 2, 0xFFFFFF);
+        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.elecPack.voltage, ElectricUnit.VOLTAGE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 80)) / 2, 0x000000);
+        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.elecPack.amperes, ElectricUnit.AMPERE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 60)) / 2, 0x000000);
 
     }
 

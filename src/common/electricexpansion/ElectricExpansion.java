@@ -60,12 +60,11 @@ import electricexpansion.mattredsox.items.ItemEliteBattery;
 import electricexpansion.mattredsox.items.ItemTransformerCoil;
 import electricexpansion.mattredsox.items.ItemUpgrade;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version="0.4.4", dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version= ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
-	private static int[] versionArray = {0, 4, 4}; //Change EVERY release!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	private static String version;
+
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
 	
@@ -74,6 +73,12 @@ public class ElectricExpansion {
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
 	private static final String[] LANGUAGE_SUPPORTED = new String[]
 	{ "en_US" };
+	
+	public static final int MAJOR_VERSION = 0;
+	public static final int MINOR_VERSION = 4;
+	public static final int REVISION_VERSION = 4;
+	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
+	
 	
 	//private, these are the default options.
 	//Blocks
@@ -198,10 +203,7 @@ public class ElectricExpansion {
 
 	private static void StartLog(String string1)
 	{
-		int i;
-		version = "v";
-		for (i=0; i<versionArray.length; i++)
-			version = version + "." + versionArray[i];
+		
 		String string2 = null;
 		int j = 0;
 
@@ -222,7 +224,7 @@ public class ElectricExpansion {
 		}
 
 		EELogger.setParent(FMLLog.getLogger());
-		EELogger.info(string2 + " ElectricExpansion " + version);
+		EELogger.info(string2 + " ElectricExpansion v." + VERSION);
 		startLogLogged[j] = true;
 		if(startLogLogged[1] && startLogLogged[2] && startLogLogged[3])
 			startLogLogged[0] = true;
@@ -235,7 +237,7 @@ public class ElectricExpansion {
 		
 		if(!configLoaded){configLoad(CONFIG);}
 		if(startLogLogged[1] != true){StartLog("preInit");}
-		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", version, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
+		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", VERSION, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
 
 		GameRegistry.registerBlock(blockAdvBatteryBox);
 		GameRegistry.registerBlock(blockWireMill);
