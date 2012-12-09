@@ -106,7 +106,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 					}
 				}
 			}
-			this.setJoules(this.joules - 50);
+			this.setJoules(this.joules - 1);
 
 		}
 
@@ -195,7 +195,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	@Override
 	public double getMaxJoules(Object... data)
 	{
-		return 1000;
+		return 100;
 	}
 	
 

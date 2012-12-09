@@ -76,7 +76,7 @@ public class ElectricExpansion {
 	
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 4;
+	public static final int REVISION_VERSION = 5;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 	
 	

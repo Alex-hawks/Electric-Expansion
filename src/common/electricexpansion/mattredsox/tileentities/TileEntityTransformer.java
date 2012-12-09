@@ -37,6 +37,10 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 	private int playersUsing = 0;
 	
+	public static final ElectricityPack receivePack = new ElectricityPack(0, 0);
+
+	public static final double VOLTAGE_DECREASE = 0;
+	
 	public TileEntityTransformer()
 	{
 		super();
@@ -57,7 +61,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ElectricPack receivePack = new ElectricPack(0, 0);
+				ElectricityPack receivePack = new ElectricityPack(0, 0);
 				
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
@@ -66,21 +70,17 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				{
 					if (inputTile instanceof IConductor)
 					{						 
-						 if(this.containingItems[1] != null && this.containingItems[1].getItem() instanceof ItemTransformerCoil)
+/*						 if(this.containingItems[1] != null && this.containingItems[1].getItem() instanceof ItemTransformerCoil)
 						 {
 							if(this.containingItems[1].stackSize == 1)
 								voltageAdd = voltageAdd + 120;
-						 }
+						 }*/
 						 
-						if (this.joules >= this.getMaxJoules())
-						{
-							((IConductor) inputTile).getNetwork().stopRequesting(this);
-						}
-						else
-						{
-							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), voltageAdd);
+					//	else
+						//{
+							((IConductor) inputTile).getNetwork().startRequesting(this, 4.15, 120);
 							receivePack = ((IConductor) inputTile).getNetwork().consumeElectricity(this);
-						}
+						//}
 					}
 				}
 			
@@ -99,23 +99,17 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	
 						// Output UE electricity
 						if (connector instanceof IConductor)
-						{
-							double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
-							double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, voltageAdd), ElectricInfo.getAmps(this.joules, voltageAdd)), 80), 0);
-	
-							if (transferAmps > 0)
-							{
+						{						
 								((IConductor) connector).getNetwork().startProducing(this, receivePack.amperes, receivePack.voltage + VOLTAGE_DECREASE);
-								this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, voltageAdd));
-							}
-							else
-							{
-								((IConductor) connector).getNetwork().stopProducing(this);
-							}
-	
 						}
-						
+					else
+					{
+						((IConductor) connector).getNetwork().stopProducing(this);				
 					}
+	
+				}
+						
+					
 				}
 			}
 		}
@@ -265,5 +259,28 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+	}
+
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.receivePack.voltage);
+
+	}
+
+	@Override
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	{
+		try
+		{
+			
+			this.receivePack.voltage = dataStream.readDouble();
+			
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
