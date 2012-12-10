@@ -210,10 +210,10 @@ public class BlockTransformer extends BlockMachine
         {
         	TileEntityTransformer tileEntity = (TileEntityTransformer)par1World.getBlockTileEntity(x, y, z);
 
-        	System.out.println("Watts: " + tileEntity.receivePack.getWatts());
+        	/*System.out.println("Watts: " + tileEntity.receivePack.getWatts());
         	System.out.println("Incoming Volts: " + tileEntity.receivePack.voltage);
         	System.out.println("Incoming Amps: " + tileEntity.receivePack.amperes);
-        	System.out.println(tileEntity.VOLTAGE_DECREASE + " Decrease in Voltage");
+        	System.out.println(tileEntity.VOLTAGE_DECREASE + " Decrease in Voltage");*/
 
             par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, x, y, z);
 

@@ -25,3 +25,4 @@ X ElectricExpansion_v0.3.6(1.4.5).jar
 x ElectricExpansion_v0.4.2.jar
 @ ElectricExpansion_v0.4.4.jar
 @ ElectricExpansion_v0.4.5.jar
+@ ElectricExpansion_v0.4.6.jar

@@ -87,7 +87,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				/**
 				 * Output Electricity
 				 */
-
+/*
 				if (this.receivePack.getWatts() > 0)
 				{
 					ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
@@ -115,8 +115,8 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 						}
 
-					}
-				}
+					}*/
+			//	}
 			}
 		}
 	}
