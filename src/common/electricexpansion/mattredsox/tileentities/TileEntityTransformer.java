@@ -87,29 +87,35 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				/**
 				 * Output Electricity
 				 */
-	
+
 				if (this.receivePack.getWatts() > 0)
 				{
 					ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
 					TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
-	
+
 					if (tileEntity != null)
 					{
 						TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), outputDirection);
-	
+
 						// Output UE electricity
 						if (connector instanceof IConductor)
-						{						
+						{
+							double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
+							double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, receivePack.voltage), ElectricInfo.getAmps(this.joules, voltageAdd)), 80), 0);
+
+							if (transferAmps > 0)
+							{
 								((IConductor) connector).getNetwork().startProducing(this, receivePack.amperes, receivePack.voltage + VOLTAGE_DECREASE);
+								//this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, voltageAdd));
+							}
+							else
+							{
+								((IConductor) connector).getNetwork().stopProducing(this);
+							}
+
 						}
-					else
-					{
-						((IConductor) connector).getNetwork().stopProducing(this);				
+
 					}
-	
-				}
-						
-					
 				}
 			}
 		}
