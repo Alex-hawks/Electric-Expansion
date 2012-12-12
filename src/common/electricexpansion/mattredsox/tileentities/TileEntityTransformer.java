@@ -16,7 +16,6 @@ import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -36,8 +35,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	public ItemStack[] containingItems = new ItemStack[2];
 
 	private int playersUsing = 0;
-	
-	public static final ElectricityPack receivePack = new ElectricityPack(0, 0);
 
 	public static final double VOLTAGE_DECREASE = 0;
 	
@@ -61,26 +58,21 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		{
 			if (!this.worldObj.isRemote)
 			{
+
 				ElectricityPack receivePack = new ElectricityPack(0, 0);
+				
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
+				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 				
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
-				if (inputTile != null)
+				if (inputTile != null && outputTile != null)
 				{
-					if (inputTile instanceof IConductor)
-					{						 
-/*						 if(this.containingItems[1] != null && this.containingItems[1].getItem() instanceof ItemTransformerCoil)
-						 {
-							if(this.containingItems[1].stackSize == 1)
-								voltageAdd = voltageAdd + 120;
-						 }*/
-						 
-					//	else
-						//{
-							((IConductor) inputTile).getNetwork().startRequesting(this, 4.15, 120);
-							receivePack = ((IConductor) inputTile).getNetwork().consumeElectricity(this);
-						//}
+					if (inputTile instanceof IConductor && outputTile instanceof IConductor)
+					{
+						((IConductor) inputTile).getNetwork().startRequesting(this, ((IConductor)outputTile).getNetwork().getRequest());
+						receivePack = ((IConductor) inputTile).getNetwork().consumeElectricity(this);
 					}
 				}
 			
@@ -90,8 +82,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 /*
 				if (this.receivePack.getWatts() > 0)
 				{
-					ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
-					TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
 					if (tileEntity != null)
 					{
