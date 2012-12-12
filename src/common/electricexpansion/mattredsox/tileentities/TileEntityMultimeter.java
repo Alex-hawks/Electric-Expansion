@@ -57,6 +57,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 					if (inputTile instanceof IConductor)
 					{
 					 	this.electricityReading = ((IConductor)inputTile).getNetwork().getProduced();
+					 	System.out.println(((IConductor)inputTile).getNetwork().getProduced().getWatts());
 					}
 					else
 					{

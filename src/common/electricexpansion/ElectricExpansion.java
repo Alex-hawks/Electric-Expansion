@@ -146,7 +146,7 @@ public class ElectricExpansion {
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static final Block blockAdvBatteryBox = new BlockAdvBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
-	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("MultiMeter");
+	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("multiMeter");
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockTransformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
