@@ -1,6 +1,5 @@
 package electricexpansion.alex_hawks.containers;
 
-import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
@@ -72,15 +71,7 @@ public class ContainerWireMill extends Container
 						}
 					}
 				}
-				else if(var4.getItem() instanceof IElectricItem)
-				{
-					if(((IElectricItem)var4.getItem()).canProvideEnergy())
-					{
-						if(!mergeItemStack(var4, 1, 2, false))
-						{
-							return null;
-						}
-					}
+				
 					else {
 						if(!mergeItemStack(var4, 0, 1, false))
 						{
@@ -93,27 +84,11 @@ public class ContainerWireMill extends Container
 					return null;
 				}
 			}
-			else if (!this.mergeItemStack(var4, 3, 38, false))
-			{
-				return null;
-			}
 
-			if (var4.stackSize == 0)
-			{
-				var3.putStack((ItemStack)null);
-			}
 			else
 			{
 				var3.onSlotChanged();
 			}
-
-			if (var4.stackSize == var2.stackSize)
-			{
-				return null;
-			}
-
-			var3.onPickupFromSlot(par1EntityPlayer, var4);
-		}
 
 		return var2;
 	}

@@ -1,6 +1,5 @@
 package electricexpansion.mattredsox;
 
-import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;

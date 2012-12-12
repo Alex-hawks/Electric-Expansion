@@ -31,7 +31,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	/**
 	 * The reading this multimeter did on how much electricity was produced on the last tick.
 	*/
-	public final ElectricityPack electricityReading = new ElectricityPack();
+	public ElectricityPack electricityReading = new ElectricityPack();
 
 	@Override
 	public void initiate()

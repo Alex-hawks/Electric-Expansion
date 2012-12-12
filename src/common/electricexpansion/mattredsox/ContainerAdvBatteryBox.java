@@ -1,6 +1,5 @@
 package electricexpansion.mattredsox;
 
-import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
@@ -89,22 +88,7 @@ public class ContainerAdvBatteryBox extends Container
                         }
                     }
                 }
-                else if(var4.getItem() instanceof IElectricItem)
-                {
-                	if(((IElectricItem)var4.getItem()).canProvideEnergy())
-                	{
-                		if(!mergeItemStack(var4, 1, 2, false))
-                		{
-                			return null;
-                		}
-                	}
-                	else {
-                		if(!mergeItemStack(var4, 0, 1, false))
-                		{
-                			return null;
-                		}
-                	}
-                }
+             
                 else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
                 {
                     return null;

@@ -260,7 +260,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.receivePack.voltage);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this);
 
 	}
 
@@ -270,7 +270,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		try
 		{
 			
-			this.receivePack.voltage = dataStream.readDouble();
+		//	this.receivePack.voltage = dataStream.readDouble();
 			
 
 		}
