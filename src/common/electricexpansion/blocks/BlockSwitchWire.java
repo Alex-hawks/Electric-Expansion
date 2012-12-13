@@ -1,4 +1,4 @@
-package electricexpansion.alex_hawks.blocks;
+package electricexpansion.blocks;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
+import electricexpansion.cables.TileEntitySwitchWire;
 
 public class BlockSwitchWire extends BlockConductor 
 {

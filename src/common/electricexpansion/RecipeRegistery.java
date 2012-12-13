@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.alex_hawks.misc.WireMillRecipes;
+import electricexpansion.misc.WireMillRecipes;
 
 public class RecipeRegistery
 {

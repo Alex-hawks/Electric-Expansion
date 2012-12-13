@@ -1,4 +1,4 @@
-package electricexpansion.client.render;
+package electricexpansion.render;
 
 import net.minecraft.src.Block;
 import net.minecraft.src.IBlockAccess;
@@ -8,11 +8,11 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import electricexpansion.EEClientProxy;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.client.EEClientProxy;
-import electricexpansion.client.model.ModelTransformer;
-import electricexpansion.client.model.ModelWireMill;
+import electricexpansion.model.ModelTransformer;
+import electricexpansion.model.ModelWireMill;
 
 public class RenderHandler implements ISimpleBlockRenderingHandler
 {

@@ -1,5 +1,5 @@
 
-package electricexpansion.client.render;
+package electricexpansion.render;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -9,10 +9,10 @@ import org.lwjgl.opengl.GL11;
 
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
 import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
-import electricexpansion.client.model.ModelInsulatedWire;
+import electricexpansion.cables.TileEntityInsulatedWire;
+import electricexpansion.cables.TileEntitySwitchWire;
+import electricexpansion.model.ModelInsulatedWire;
 
 public class RenderInsulatedWire extends TileEntitySpecialRenderer 
 {

@@ -1,4 +1,4 @@
-package electricexpansion.client.render;
+package electricexpansion.render;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -6,26 +6,26 @@ import net.minecraft.src.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;
 
 import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.blocks.BlockWireMill;
-import electricexpansion.client.model.ModelWireMill;
+import electricexpansion.blocks.BlockTransformer;
+import electricexpansion.model.ModelTransformer;
 
-public class RenderWireMill extends TileEntitySpecialRenderer
+public class RenderTransformer extends TileEntitySpecialRenderer
 {
-	private ModelWireMill model;
+	private ModelTransformer model;
 
-	public RenderWireMill()
+	public RenderTransformer()
 	{
-		this.model = new ModelWireMill();
+		this.model = new ModelTransformer();
 
 	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity var1, double var2, double var3, double var4, float var5)
 	{
-		bindTextureByName(EECommonProxy.ATEXTURES + "wiremill.png");
+		bindTextureByName(EECommonProxy.MattFILE_PATH + "transformer.png");
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) var2 + 0.5F, (float) var3 + 1.5F, (float) var4 + 0.5F);
-		switch (var1.worldObj.getBlockMetadata(var1.xCoord, var1.yCoord, var1.zCoord) - BlockWireMill.metaWireMill)
+		switch (var1.worldObj.getBlockMetadata(var1.xCoord, var1.yCoord, var1.zCoord) - BlockTransformer.meta)
 		{
 			case 0: GL11.glRotatef(0, 0.0F, 1.0F, 0.0F); break;
 			case 1: GL11.glRotatef(180, 0.0F, 1.0F, 0.0F); break;

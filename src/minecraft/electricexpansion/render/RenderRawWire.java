@@ -1,4 +1,4 @@
-package electricexpansion.client.render;
+package electricexpansion.render;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -7,9 +7,9 @@ import net.minecraftforge.common.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import electricexpansion.EECommonProxy;
-import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
-import electricexpansion.client.model.ModelRawWire;
+import electricexpansion.cables.TileEntityRawWire;
+import electricexpansion.model.ModelRawWire;
 
 
 public class RenderRawWire extends TileEntitySpecialRenderer

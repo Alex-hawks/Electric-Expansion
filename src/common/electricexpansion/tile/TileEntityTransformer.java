@@ -25,8 +25,8 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.ElectricExpansion;
+import electricexpansion.blocks.BlockTransformer;
 import electricexpansion.items.ItemTransformerCoil;
-import electricexpansion.mattredsox.blocks.BlockTransformer;
 
 public class TileEntityTransformer extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IInventory
 {
@@ -37,8 +37,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	private boolean isFull = false;
 
 	private int playersUsing = 0;
-
-	public IPowerProvider powerProvider;
 
 	public ElectricityPack elecPack = new ElectricityPack(0, 0);
 	

@@ -1,4 +1,4 @@
-package electricexpansion.alex_hawks.blocks;
+package electricexpansion.blocks;
 
 import java.util.List;
 
@@ -14,9 +14,9 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.machines.TileEntityDistribution;
-import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
-import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
+import electricexpansion.tile.TileEntityDistribution;
+import electricexpansion.tile.TileEntityInductionReciever;
+import electricexpansion.tile.TileEntityInductionSender;
 
 public class BlockWPT extends BlockContainer
 {

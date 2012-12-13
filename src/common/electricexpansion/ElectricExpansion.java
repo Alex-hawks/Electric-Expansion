@@ -36,31 +36,31 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import electricexpansion.alex_hawks.blocks.BlockInsulatedWire;
-import electricexpansion.alex_hawks.blocks.BlockRawWire;
-import electricexpansion.alex_hawks.blocks.BlockSwitchWire;
-import electricexpansion.alex_hawks.blocks.BlockSwitchWireBlock;
-import electricexpansion.alex_hawks.blocks.BlockWPT;
-import electricexpansion.alex_hawks.blocks.BlockWireBlock;
-import electricexpansion.alex_hawks.blocks.BlockWireMill;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockInsulatedWire;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockRawWire;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWire;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockSwitchWireBlock;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockWPT;
-import electricexpansion.alex_hawks.itemblocks.ItemBlockWireBlock;
-import electricexpansion.alex_hawks.items.ItemParts;
-import electricexpansion.alex_hawks.wpt.distributionNetworks;
-import electricexpansion.mattredsox.blocks.BlockAdvBatteryBox;
-import electricexpansion.mattredsox.blocks.BlockMultimeter;
-import electricexpansion.mattredsox.blocks.BlockTransformer;
-import electricexpansion.mattredsox.items.ItemAdvancedBattery;
-import electricexpansion.mattredsox.items.ItemBase;
-import electricexpansion.mattredsox.items.ItemEliteBattery;
-import electricexpansion.mattredsox.items.ItemTransformerCoil;
-import electricexpansion.mattredsox.items.ItemUpgrade;
+import electricexpansion.blocks.BlockAdvBatteryBox;
+import electricexpansion.blocks.BlockInsulatedWire;
+import electricexpansion.blocks.BlockMultimeter;
+import electricexpansion.blocks.BlockRawWire;
+import electricexpansion.blocks.BlockSwitchWire;
+import electricexpansion.blocks.BlockSwitchWireBlock;
+import electricexpansion.blocks.BlockTransformer;
+import electricexpansion.blocks.BlockWPT;
+import electricexpansion.blocks.BlockWireBlock;
+import electricexpansion.blocks.BlockWireMill;
+import electricexpansion.itemblocks.ItemBlockInsulatedWire;
+import electricexpansion.itemblocks.ItemBlockRawWire;
+import electricexpansion.itemblocks.ItemBlockSwitchWire;
+import electricexpansion.itemblocks.ItemBlockSwitchWireBlock;
+import electricexpansion.itemblocks.ItemBlockWPT;
+import electricexpansion.itemblocks.ItemBlockWireBlock;
+import electricexpansion.items.ItemAdvancedBattery;
+import electricexpansion.items.ItemBase;
+import electricexpansion.items.ItemEliteBattery;
+import electricexpansion.items.ItemParts;
+import electricexpansion.items.ItemTransformerCoil;
+import electricexpansion.items.ItemUpgrade;
+import electricexpansion.wpt.distributionNetworks;
 
-@Mod(modid="ElectricExpansion", name="Electric Expansion", version= ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:HawksMachinery", useMetadata = true)
+@Mod(modid="ElectricExpansion", name="Electric Expansion", version= ElectricExpansion.VERSION, useMetadata = true)
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion {
 
@@ -76,7 +76,7 @@ public class ElectricExpansion {
 	
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 4;
+	public static final int REVISION_VERSION = 7;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 	
 	
@@ -167,7 +167,7 @@ public class ElectricExpansion {
 	@Instance("ElectricExpansion")
 	public static ElectricExpansion instance;	
 	
-	@SidedProxy(clientSide="electricexpansion.client.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
+	@SidedProxy(clientSide="electricexpansion.EEClientProxy", serverSide="electricexpansion.EECommonProxy")
 	public static EECommonProxy proxy;
 
 	public static boolean configLoad(Configuration CONFIG)

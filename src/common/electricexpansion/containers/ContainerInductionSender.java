@@ -1,11 +1,11 @@
-package electricexpansion.alex_hawks.containers;
+package electricexpansion.containers;
 
-import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import electricexpansion.tile.TileEntityInductionSender;
 
 public class ContainerInductionSender extends Container 
 {

@@ -1,4 +1,4 @@
-package electricexpansion.alex_hawks.blocks;
+package electricexpansion.blocks;
 
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -12,10 +12,10 @@ import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
+import electricexpansion.EEClientProxy;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.machines.TileEntityWireMill;
-import electricexpansion.client.EEClientProxy;
+import electricexpansion.tile.TileEntityWireMill;
 
 public class BlockWireMill extends BlockMachine
 {

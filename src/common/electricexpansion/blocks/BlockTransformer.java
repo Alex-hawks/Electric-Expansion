@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox.blocks;
+package electricexpansion.blocks;
 
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -13,8 +13,8 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import electricexpansion.EECommonProxy;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.client.EEClientProxy;
-import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
+import electricexpansion.EEClientProxy;
+import electricexpansion.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockMachine
 {

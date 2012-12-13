@@ -1,26 +1,26 @@
-package electricexpansion.client;
+package electricexpansion;
 
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
-import electricexpansion.alex_hawks.cables.TileEntityRawWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
-import electricexpansion.alex_hawks.cables.TileEntitySwitchWireBlock;
-import electricexpansion.alex_hawks.cables.TileEntityWireBlock;
-import electricexpansion.alex_hawks.machines.TileEntityDistribution;
-import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
-import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
-import electricexpansion.alex_hawks.machines.TileEntityWireMill;
-import electricexpansion.client.render.RenderHandler;
-import electricexpansion.client.render.RenderInsulatedWire;
-import electricexpansion.client.render.RenderRawWire;
-import electricexpansion.client.render.RenderTransformer;
-import electricexpansion.client.render.RenderWireMill;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
-import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
+import electricexpansion.cables.TileEntityInsulatedWire;
+import electricexpansion.cables.TileEntityRawWire;
+import electricexpansion.cables.TileEntitySwitchWire;
+import electricexpansion.cables.TileEntitySwitchWireBlock;
+import electricexpansion.cables.TileEntityWireBlock;
+import electricexpansion.render.RenderHandler;
+import electricexpansion.render.RenderInsulatedWire;
+import electricexpansion.render.RenderRawWire;
+import electricexpansion.render.RenderTransformer;
+import electricexpansion.render.RenderWireMill;
+import electricexpansion.tile.TileEntityAdvBatteryBox;
+import electricexpansion.tile.TileEntityDistribution;
+import electricexpansion.tile.TileEntityInductionReciever;
+import electricexpansion.tile.TileEntityInductionSender;
+import electricexpansion.tile.TileEntityMultimeter;
+import electricexpansion.tile.TileEntityTransformer;
+import electricexpansion.tile.TileEntityWireMill;
 
 public class EEClientProxy extends electricexpansion.EECommonProxy
 {

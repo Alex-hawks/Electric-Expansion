@@ -1,4 +1,4 @@
-package electricexpansion.alex_hawks.itemblocks;
+package electricexpansion.itemblocks;
 
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;

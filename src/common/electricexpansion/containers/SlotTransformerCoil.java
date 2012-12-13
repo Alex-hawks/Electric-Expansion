@@ -1,9 +1,9 @@
-package electricexpansion.mattredsox;
+package electricexpansion.containers;
 
-import electricexpansion.mattredsox.items.ItemTransformerCoil;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import electricexpansion.items.ItemTransformerCoil;
 
 
 public class SlotTransformerCoil extends Slot

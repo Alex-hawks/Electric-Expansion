@@ -1,8 +1,8 @@
-package electricexpansion.mattredsox;
+package electricexpansion.containers;
 
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
-import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
+import electricexpansion.tile.TileEntityMultimeter;
 
 public class ContainerMultimeter extends Container
 {

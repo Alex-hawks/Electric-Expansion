@@ -1,21 +1,16 @@
-package electricexpansion.client.gui;
+package electricexpansion.gui;
 
 import net.minecraft.src.GuiContainer;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import universalelectricity.prefab.network.PacketManager;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import electricexpansion.ElectricExpansion;
-import electricexpansion.mattredsox.ContainerAdvBatteryBox;
-import electricexpansion.mattredsox.ContainerMultimeter;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
+import electricexpansion.containers.ContainerMultimeter;
+import electricexpansion.tile.TileEntityMultimeter;
 
 public class GuiMultimeter extends GuiContainer
 {

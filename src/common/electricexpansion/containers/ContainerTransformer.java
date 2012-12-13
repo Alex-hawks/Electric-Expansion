@@ -1,11 +1,11 @@
-package electricexpansion.mattredsox;
+package electricexpansion.containers;
 
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
+import electricexpansion.tile.TileEntityTransformer;
 
 public class ContainerTransformer extends Container
 {

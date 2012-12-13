@@ -1,23 +1,21 @@
-package electricexpansion.client.gui;
+package electricexpansion.gui;
 
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.GuiTextField;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.Packet250CustomPayload;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import electricexpansion.EECommonProxy;
-import electricexpansion.ElectricExpansion;
-import electricexpansion.alex_hawks.containers.ContainerDistribution;
-import electricexpansion.alex_hawks.containers.ContainerInductionReciever;
-import electricexpansion.alex_hawks.containers.ContainerInductionSender;
-import electricexpansion.alex_hawks.machines.TileEntityDistribution;
-import electricexpansion.alex_hawks.machines.TileEntityInductionReciever;
-import electricexpansion.alex_hawks.machines.TileEntityInductionSender;
 import electricexpansion.api.WirelessPowerMachine;
+import electricexpansion.containers.ContainerDistribution;
+import electricexpansion.containers.ContainerInductionReciever;
+import electricexpansion.containers.ContainerInductionSender;
+import electricexpansion.tile.TileEntityDistribution;
+import electricexpansion.tile.TileEntityInductionReciever;
+import electricexpansion.tile.TileEntityInductionSender;
 
 public class GuiWPT extends GuiContainer
 {

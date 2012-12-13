@@ -1,4 +1,4 @@
-package electricexpansion.client.gui;
+package electricexpansion.gui;
 
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
@@ -6,12 +6,8 @@ import net.minecraft.src.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-import electricexpansion.mattredsox.ContainerAdvBatteryBox;
-import electricexpansion.mattredsox.ContainerTransformer;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
-import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
+import electricexpansion.containers.ContainerTransformer;
+import electricexpansion.tile.TileEntityTransformer;
 
 public class GuiTransformer extends GuiContainer
 {

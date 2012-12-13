@@ -1,7 +1,6 @@
-package electricexpansion.alex_hawks.itemblocks;
+package electricexpansion.itemblocks;
 
-import electricexpansion.alex_hawks.helpers.ItemBlockCableHelper;
-import net.minecraft.src.Block;
+import electricexpansion.helpers.ItemBlockCableHelper;
 
 public class ItemBlockWireBlock extends ItemBlockCableHelper 
 {

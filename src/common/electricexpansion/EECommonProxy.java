@@ -10,11 +10,6 @@ import electricexpansion.cables.TileEntityRawWire;
 import electricexpansion.cables.TileEntitySwitchWire;
 import electricexpansion.cables.TileEntitySwitchWireBlock;
 import electricexpansion.cables.TileEntityWireBlock;
-import electricexpansion.client.gui.GUIAdvBatteryBox;
-import electricexpansion.client.gui.GuiMultimeter;
-import electricexpansion.client.gui.GuiTransformer;
-import electricexpansion.client.gui.GuiWPT;
-import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.containers.ContainerAdvBatteryBox;
 import electricexpansion.containers.ContainerDistribution;
 import electricexpansion.containers.ContainerInductionReciever;
@@ -22,6 +17,11 @@ import electricexpansion.containers.ContainerInductionSender;
 import electricexpansion.containers.ContainerMultimeter;
 import electricexpansion.containers.ContainerTransformer;
 import electricexpansion.containers.ContainerWireMill;
+import electricexpansion.gui.GUIAdvBatteryBox;
+import electricexpansion.gui.GuiMultimeter;
+import electricexpansion.gui.GuiTransformer;
+import electricexpansion.gui.GuiWPT;
+import electricexpansion.gui.GuiWireMill;
 import electricexpansion.tile.TileEntityAdvBatteryBox;
 import electricexpansion.tile.TileEntityDistribution;
 import electricexpansion.tile.TileEntityInductionReciever;
@@ -29,6 +29,7 @@ import electricexpansion.tile.TileEntityInductionSender;
 import electricexpansion.tile.TileEntityMultimeter;
 import electricexpansion.tile.TileEntityTransformer;
 import electricexpansion.tile.TileEntityWireMill;
+
 
 public class EECommonProxy implements IGuiHandler
 {

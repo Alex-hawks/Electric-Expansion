@@ -1,4 +1,4 @@
-package electricexpansion.client.render;
+package electricexpansion.render;
 
 import net.minecraft.src.FontRenderer;
 import net.minecraft.src.TileEntity;
@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
+import electricexpansion.tile.TileEntityMultimeter;
 
 /**
  * Class used to render text onto the multimeter block.
