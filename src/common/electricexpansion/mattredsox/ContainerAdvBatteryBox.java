@@ -1,14 +1,10 @@
 package electricexpansion.mattredsox;
 
-import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.prefab.SlotElectricItem;
-import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.modifier.SlotModifier;
 import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 
@@ -56,82 +52,4 @@ public class ContainerAdvBatteryBox extends Container
         return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
     }
 
-    /**
-     * Called to transfer a stack from one inventory to the other eg. when shift clicking.
-     */
-    @Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1)
-    {
-        ItemStack var2 = null;
-        Slot var3 = (Slot)this.inventorySlots.get(par1);
-
-        if (var3 != null && var3.getHasStack())
-        {
-            ItemStack var4 = var3.getStack();
-            var2 = var4.copy();
-
-            if (par1 != 0 && par1 != 1)
-            {
-                if (var4.getItem() instanceof IItemElectric)
-                {
-                    if (((IItemElectric)var4.getItem()).canProduceElectricity())
-                    {
-                        if (!this.mergeItemStack(var4, 1, 2, false))
-                        {
-                            return null;
-                        }
-                    }
-                    else
-                    {
-                        if (!this.mergeItemStack(var4, 0, 1, false))
-                        {
-                            return null;
-                        }
-                    }
-                }
-                else if(var4.getItem() instanceof IElectricItem)
-                {
-                	if(((IElectricItem)var4.getItem()).canProvideEnergy())
-                	{
-                		if(!mergeItemStack(var4, 1, 2, false))
-                		{
-                			return null;
-                		}
-                	}
-                	else {
-                		if(!mergeItemStack(var4, 0, 1, false))
-                		{
-                			return null;
-                		}
-                	}
-                }
-                else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(var4, 3, 38, false))
-            {
-                return null;
-            }
-
-            if (var4.stackSize == 0)
-            {
-                var3.putStack((ItemStack)null);
-            }
-            else
-            {
-                var3.onSlotChanged();
-            }
-
-            if (var4.stackSize == var2.stackSize)
-            {
-                return null;
-            }
-
-            var3.onPickupFromSlot(par1EntityPlayer, var4);
-        }
-
-        return var2;
-    }
 }

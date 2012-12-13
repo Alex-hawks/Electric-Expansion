@@ -1,7 +1,6 @@
 package electricexpansion.alex_hawks.machines;
 
 import java.util.EnumSet;
-import java.util.Random;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -20,13 +19,12 @@ import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
-import electricexpansion.ElectricExpansion;
+import electricexpansion.alex_hawks.blocks.BlockWPT;
 import electricexpansion.alex_hawks.wpt.distributionNetworks;
 import electricexpansion.api.WirelessPowerMachine;
 
@@ -44,7 +42,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2).getOpposite()));
 	}
 
 
@@ -57,7 +55,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2).getOpposite();
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
 				if (inputTile != null)
@@ -83,7 +81,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 
 			if (this.getJoules() > 0)
 			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockBasicMachine.BATTERY_BOX_METADATA + 2);
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2);
 				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
 				if (tileEntity != null)

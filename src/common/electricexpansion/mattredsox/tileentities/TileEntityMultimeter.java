@@ -88,4 +88,9 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 			}
 		}
 	}
+	
+	public String getInvName()
+	{
+		return "Multimeter";
+	}
 }

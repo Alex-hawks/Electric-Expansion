@@ -1,7 +1,6 @@
 package electricexpansion.alex_hawks.machines;
 
 import java.util.EnumSet;
-import java.util.Random;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IInventory;
@@ -22,8 +21,6 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-
-import basiccomponents.block.BlockBasicMachine;
 
 import com.google.common.io.ByteArrayDataInput;
 
