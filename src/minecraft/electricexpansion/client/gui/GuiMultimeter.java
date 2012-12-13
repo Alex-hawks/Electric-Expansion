@@ -10,9 +10,9 @@ import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import electricexpansion.ElectricExpansion;
-import electricexpansion.containers.ContainerMultimeter;
-import electricexpansion.tile.TileEntityMultimeter;
+import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.containers.ContainerMultimeter;
+import electricexpansion.common.tile.TileEntityMultimeter;
 
 @SideOnly(Side.CLIENT)
 public class GuiMultimeter extends GuiContainer

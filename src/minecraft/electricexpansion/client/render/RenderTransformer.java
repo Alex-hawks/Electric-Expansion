@@ -7,9 +7,9 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.EECommonProxy;
-import electricexpansion.blocks.BlockTransformer;
 import electricexpansion.client.model.ModelTransformer;
+import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.blocks.BlockTransformer;
 
 @SideOnly(Side.CLIENT)
 public class RenderTransformer extends TileEntitySpecialRenderer

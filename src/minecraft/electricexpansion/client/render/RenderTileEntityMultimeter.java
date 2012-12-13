@@ -10,7 +10,7 @@ import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.tile.TileEntityMultimeter;
+import electricexpansion.common.tile.TileEntityMultimeter;
 
 /**
  * Class used to render text onto the multimeter block.

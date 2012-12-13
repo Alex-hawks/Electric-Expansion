@@ -10,8 +10,8 @@ import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.containers.ContainerAdvBatteryBox;
-import electricexpansion.tile.TileEntityAdvancedBatteryBox;
+import electricexpansion.common.containers.ContainerAdvBatteryBox;
+import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 @SideOnly(Side.CLIENT)
 public class GuiAdvBatteryBox extends GuiContainer

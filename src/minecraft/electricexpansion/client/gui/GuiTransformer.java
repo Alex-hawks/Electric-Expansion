@@ -8,8 +8,8 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.containers.ContainerTransformer;
-import electricexpansion.tile.TileEntityTransformer;
+import electricexpansion.common.containers.ContainerTransformer;
+import electricexpansion.common.tile.TileEntityTransformer;
 
 @SideOnly(Side.CLIENT)
 public class GuiTransformer extends GuiContainer

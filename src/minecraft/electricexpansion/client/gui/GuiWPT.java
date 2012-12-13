@@ -10,14 +10,14 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.EECommonProxy;
 import electricexpansion.api.WirelessPowerMachine;
-import electricexpansion.containers.ContainerDistribution;
-import electricexpansion.containers.ContainerInductionReciever;
-import electricexpansion.containers.ContainerInductionSender;
-import electricexpansion.tile.TileEntityDistribution;
-import electricexpansion.tile.TileEntityInductionReciever;
-import electricexpansion.tile.TileEntityInductionSender;
+import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.containers.ContainerDistribution;
+import electricexpansion.common.containers.ContainerInductionReciever;
+import electricexpansion.common.containers.ContainerInductionSender;
+import electricexpansion.common.tile.TileEntityDistribution;
+import electricexpansion.common.tile.TileEntityInductionReciever;
+import electricexpansion.common.tile.TileEntityInductionSender;
 
 @SideOnly(Side.CLIENT)
 public class GuiWPT extends GuiContainer

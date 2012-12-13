@@ -8,12 +8,12 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.EECommonProxy;
-import electricexpansion.ElectricExpansion;
 import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
-import electricexpansion.cables.TileEntityInsulatedWire;
-import electricexpansion.cables.TileEntitySwitchWire;
 import electricexpansion.client.model.ModelInsulatedWire;
+import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.cables.TileEntityInsulatedWire;
+import electricexpansion.common.cables.TileEntitySwitchWire;
 
 @SideOnly(Side.CLIENT)
 public class RenderInsulatedWire extends TileEntitySpecialRenderer

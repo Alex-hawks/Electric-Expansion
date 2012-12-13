@@ -10,11 +10,11 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.EECommonProxy;
-import electricexpansion.ElectricExpansion;
-import electricexpansion.client.EEClientProxy;
+import electricexpansion.client.ClientProxy;
 import electricexpansion.client.model.ModelTransformer;
 import electricexpansion.client.model.ModelWireMill;
+import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.ElectricExpansion;
 
 @SideOnly(Side.CLIENT)
 public class RenderHandler implements ISimpleBlockRenderingHandler
@@ -65,7 +65,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public int getRenderId()
 	{
-		return EEClientProxy.RENDER_ID;
+		return ClientProxy.RENDER_ID;
 	}
 
 }

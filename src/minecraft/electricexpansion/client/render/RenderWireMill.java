@@ -7,9 +7,9 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.EECommonProxy;
-import electricexpansion.blocks.BlockWireMill;
 import electricexpansion.client.model.ModelWireMill;
+import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.blocks.BlockWireMill;
 
 @SideOnly(Side.CLIENT)
 public class RenderWireMill extends TileEntitySpecialRenderer

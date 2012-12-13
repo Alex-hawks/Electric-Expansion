@@ -10,9 +10,9 @@ import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.EECommonProxy;
-import electricexpansion.containers.ContainerWireMill;
-import electricexpansion.tile.TileEntityWireMill;
+import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.containers.ContainerWireMill;
+import electricexpansion.common.tile.TileEntityWireMill;
 
 @SideOnly(Side.CLIENT)
 public class GuiWireMill extends GuiContainer
