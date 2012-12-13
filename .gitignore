@@ -20,14 +20,15 @@
 /src/minecraft/*
 /src/common/*
 /src/resources/*
-!/src/*/electricexpansion/
+!/src/minecraft/electricexpansion/
+!/src/minecraft/universalelectricity/
+!/src/minecraft/dan200/
 !/mcmod.info
 !/modversion.txt
 !/textures
 !/README
 !/misc, not for compilation or distribution/
 /src/common/electricexpansion/languages
-!src/common/universalelectricity/*
 
 
 *.bat
