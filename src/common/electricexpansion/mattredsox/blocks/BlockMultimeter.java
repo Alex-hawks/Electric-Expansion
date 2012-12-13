@@ -24,7 +24,7 @@ public class BlockMultimeter extends BlockMachine
 
 	public BlockMultimeter(int id, int textureIndex)
 	{
-		super("Multimeter", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("Voltage Detector", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();

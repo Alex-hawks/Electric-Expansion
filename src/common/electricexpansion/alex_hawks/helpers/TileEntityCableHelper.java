@@ -5,17 +5,12 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
-import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityAdvanced;
 import universalelectricity.prefab.tile.TileEntityConductor;
 
 import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.Loader;
 
 import electricexpansion.ElectricExpansion;
 import electricexpansion.api.CableInterfaces.ISelectiveConnector;
@@ -83,7 +78,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	
 	public boolean canConnect(ForgeDirection side)
 	{
-	boolean returnValue = false;
+/*		boolean returnValue = false;
 		int x = side.offsetX;
 		int y = side.offsetY;
 		int z = side.offsetZ;
@@ -109,10 +104,10 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 			if(TE instanceof basiccomponents.tile.TileEntityCopperWire && this.cableType(thisID, thismeta) == "Copper")
 				returnValue = true;
 		}
-		else if((TE instanceof TileEntityAdvanced) && !(TE instanceof IConductor))
+		else if((TE instanceof IConnector) && !(TE instanceof IConductor))
 				returnValue = true;
 		return returnValue;
-//	return true;
+*/		return true;
 	}
 	
 	public String cableType(int ID, int meta)

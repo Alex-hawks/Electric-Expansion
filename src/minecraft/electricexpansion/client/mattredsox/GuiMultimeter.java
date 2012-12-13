@@ -30,17 +30,16 @@ public class GuiMultimeter extends GuiContainer
         this.tileEntity = MultiMeter;
     }
     
-    @Override
     public void initGui()
     {
-   	PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) -1, true));
+   PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) -1, true));
     }
     
     @Override
     public void onGuiClosed()
     {
     	super.onGuiClosed();
-    	PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) -1, false));
+    PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) -1, false));
     }
     
     /**
@@ -50,8 +49,9 @@ public class GuiMultimeter extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 15, 6, 4210752);
-        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.electricityReading.amperes, ElectricUnit.AMPERE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 80)) / 2, 0x000000);
-        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.electricityReading.voltage, ElectricUnit.VOLTAGE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 60)) / 2, 0x000000);
+        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.electricityReading.voltage, ElectricUnit.VOLTAGE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 80)) / 2, 0x000000);
+        this.fontRenderer.drawString(ElectricInfo.getDisplay(tileEntity.electricityReading.amperes, ElectricUnit.AMPERE), (this.width - (this.xSize - 130)) / 2, (this.height - (this.ySize - 60)) / 2, 0x000000);
+
     }
 
     /**
@@ -60,15 +60,14 @@ public class GuiMultimeter extends GuiContainer
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
-    	//TODO Use a static variable reference to your texture folder path  juts in case you change the path in the future. It'll save you loads of time!
-	int var4 = this.mc.renderEngine.getTexture("/electricexpansion/textures/mattredsox/VoltDetectorGUI.png");
+		int var4 = this.mc.renderEngine.getTexture("/electricexpansion/textures/mattredsox/VoltDetectorGUI.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(var4);
         
         containerWidth = (this.width - this.xSize) / 2;
         containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
-        //int scale = (int)(((double)this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
- //       this.drawTexturedModalRect(containerWidth + 64, containerHeight + 51, 176, 0, scale, 20);
+        int scale = (int)(((double)this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
+        this.drawTexturedModalRect(containerWidth + 64, containerHeight + 51, 176, 0, scale, 20);
     }
 }

@@ -76,7 +76,7 @@ public class ElectricExpansion {
 	
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 6;
+	public static final int REVISION_VERSION = 4;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 	
 	
@@ -146,7 +146,7 @@ public class ElectricExpansion {
 	//public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static final Block blockAdvBatteryBox = new BlockAdvBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
-	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("multiMeter");
+	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("MultiMeter");
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockTransformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
@@ -266,8 +266,8 @@ public class ElectricExpansion {
 	{
 		if(startLogLogged[2] != true){StartLog("Init");}
 		proxy.init();
-		RecipeRegistrar.crafting();
-		RecipeRegistrar.drawing();
+		RecipeRegistery.crafting();
+		RecipeRegistery.drawing();
 		UETab.setItemStack(new ItemStack(this.blockAdvBatteryBox));
 
 		for (String language : LANGUAGE_SUPPORTED)

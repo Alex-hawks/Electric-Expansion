@@ -4,7 +4,6 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.EECommonProxy;
 import electricexpansion.alex_hawks.cables.TileEntityInsulatedWire;
 import electricexpansion.alex_hawks.cables.TileEntityRawWire;
 import electricexpansion.alex_hawks.cables.TileEntitySwitchWire;
@@ -22,11 +21,9 @@ import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
 import electricexpansion.mattredsox.tileentities.TileEntityMultimeter;
 import electricexpansion.mattredsox.tileentities.TileEntityTransformer;
 
-public class EEClientProxy extends EECommonProxy
+public class EEClientProxy extends electricexpansion.EECommonProxy
 {
-	public static int RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 
-	
 	//@Override
 	public static void registerRenderers() 
 	{
@@ -37,10 +34,12 @@ public class EEClientProxy extends EECommonProxy
 		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);*/
 	}
 
+	public static int RENDER_ID;
 	
 	@Override
 	public void init()
 	{
+		 RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 			RenderingRegistry.registerBlockHandler(new RenderHandler());
 
 		//Alex's Tile Entity Renderer registrations

@@ -1,4 +1,4 @@
-package electricexpansion.mattredsox;
+package electricexpansion.alex_hawks.misc;
 
 import ic2.api.IElectricItem;
 import net.minecraft.src.Container;
@@ -6,26 +6,20 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import net.minecraft.src.SlotFurnace;
 import universalelectricity.core.implement.IItemElectric;
-import universalelectricity.prefab.SlotElectricItem;
-import universalelectricity.prefab.modifier.IModifier;
-import universalelectricity.prefab.modifier.SlotModifier;
-import electricexpansion.mattredsox.tileentities.TileEntityAdvBatteryBox;
+import electricexpansion.alex_hawks.machines.TileEntityWireMill;
 
-public class ContainerAdvBatteryBox extends Container
+public class ContainerWireMill extends Container
 {
-    private TileEntityAdvBatteryBox tileEntity;
+    private TileEntityWireMill tileEntity;
 
-    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvBatteryBox AdvBatteryBox)
+    public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
     {
-        this.tileEntity = AdvBatteryBox;
-        this.addSlotToContainer(new SlotElectricItem(AdvBatteryBox, 0, 11, 24)); //Top slot
-        this.addSlotToContainer(new SlotElectricItem(AdvBatteryBox, 1, 11, 48)); //Bottom slot
-        
-        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 2, 149, 7)); //1st Upgrade slot
-        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 3, 149, 31)); //2nd Upgrade slot
-        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 4, 149, 55)); //3rd Upgrade slot
-
+        this.tileEntity = tileEntity;
+        this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(tileEntity, 0, 55, 49)); //Electric Input Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); //To be drawn into wire
+        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); //Drawing result
         int var3;
 
         for (var3 = 0; var3 < 3; ++var3)
@@ -134,4 +128,5 @@ public class ContainerAdvBatteryBox extends Container
 
         return var2;
     }
+    
 }
