@@ -19,7 +19,7 @@ import electricexpansion.common.tile.TileEntityMultimeter;
  * 
  */
 @SideOnly(Side.CLIENT)
-public class RenderTileEntityMultimeter extends TileEntitySpecialRenderer
+public class RenderMultimeter extends TileEntitySpecialRenderer
 {
 	@Override
 	public void renderTileEntityAt(TileEntity var1, double x, double y, double z, float var8)
@@ -29,7 +29,7 @@ public class RenderTileEntityMultimeter extends TileEntitySpecialRenderer
 		/**
 		 * Render from side 2 to 6. This means render all sides excluding top and bottom.
 		 */
-		for (int side = 2; side < 6; side++)
+		for (int side = 0; side < 2; side++)
 		{
 			GL11.glPushMatrix();
 			GL11.glPolygonOffset(-10, -10);

@@ -27,6 +27,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	public TileEntityCableHelper()
 	{
 		this.reset();
+		this.channel = ElectricExpansion.CHANNEL;
 	}
 
 	@Override
@@ -79,12 +80,6 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 		{
 			this.refreshConnectedBlocks();
 		}
-	}
-
-	@Override
-	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this);
 	}
 
 	public boolean canConnect(ForgeDirection side)

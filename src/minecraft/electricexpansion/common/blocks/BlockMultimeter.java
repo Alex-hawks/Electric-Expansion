@@ -21,7 +21,7 @@ public class BlockMultimeter extends BlockMachine
 
 	public BlockMultimeter(int id, int textureIndex)
 	{
-		super("Voltage Detector", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("Multimeter", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
@@ -45,16 +45,7 @@ public class BlockMultimeter extends BlockMachine
 			metadata -= MULTIMETER_METADATA;
 
 			// If it is the front side
-			if (side == metadata + 2)
-			{
-				return this.blockIndexInTexture + 3;
-			}
-			// If it is the back side
-			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
-			// else if (side == 3)
-			// {
-			// return this.blockIndexInTexture + 1;
-			// }
+			if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
 
 			return this.blockIndexInTexture + 5;
 		}

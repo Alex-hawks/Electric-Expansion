@@ -112,20 +112,22 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 			switch (angle)
 			{
 				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 3);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 3);
 					break;
 				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 1);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 1);
 					break;
 				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 2);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 2);
 					break;
 				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, BATTERY_BOX_METADATA + 0);
+					par1World.setBlockMetadata(x, y, z, BATTERY_BOX_METADATA + 0);
 					break;
 			}
 		}
 
+		par1World.notifyBlockChange(x, y, z, this.blockID);
+		((TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z)).initiate();
 	}
 
 	@Override

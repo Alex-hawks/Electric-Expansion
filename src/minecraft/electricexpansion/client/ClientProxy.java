@@ -9,7 +9,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.client.render.RenderHandler;
 import electricexpansion.client.render.RenderInsulatedWire;
 import electricexpansion.client.render.RenderRawWire;
-import electricexpansion.client.render.RenderTileEntityMultimeter;
+import electricexpansion.client.render.RenderMultimeter;
 import electricexpansion.client.render.RenderTransformer;
 import electricexpansion.client.render.RenderWireMill;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
@@ -61,7 +61,7 @@ public class ClientProxy extends electricexpansion.common.EECommonProxy
 
 		// Mattredsox's Tile entity registrations
 		ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
-		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderTileEntityMultimeter());
+		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 
 		MinecraftForgeClient.preloadTexture(AITEMS);

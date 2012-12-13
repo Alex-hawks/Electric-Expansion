@@ -33,7 +33,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockMultimeter.MULTIMETER_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockMultimeter.MULTIMETER_METADATA + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite()));
 	}
 
 	@Override
