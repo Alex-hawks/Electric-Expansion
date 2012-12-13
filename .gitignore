@@ -25,11 +25,10 @@
 !/src/minecraft/dan200/
 !/mcmod.info
 !/modversion.txt
-!/textures
+!/include.bat
 !/README
-!/misc, not for compilation or distribution/
-/src/common/electricexpansion/languages
-
+!/resources/
+!/misc/
 
 *.bat
 *.sh
