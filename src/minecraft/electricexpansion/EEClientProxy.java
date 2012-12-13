@@ -12,6 +12,7 @@ import electricexpansion.cables.TileEntityWireBlock;
 import electricexpansion.render.RenderHandler;
 import electricexpansion.render.RenderInsulatedWire;
 import electricexpansion.render.RenderRawWire;
+import electricexpansion.render.RenderTileEntityMultimeter;
 import electricexpansion.render.RenderTransformer;
 import electricexpansion.render.RenderWireMill;
 import electricexpansion.tile.TileEntityAdvBatteryBox;
@@ -56,9 +57,8 @@ public class EEClientProxy extends electricexpansion.EECommonProxy
 		
 		//Mattredsox's Tile entity registrations
 		ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
+		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderTileEntityMultimeter());
 		GameRegistry.registerTileEntity(TileEntityAdvBatteryBox.class, "TileEntityAdvBox");
-		GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
-
 		
 		MinecraftForgeClient.preloadTexture(AITEMS);
 		MinecraftForgeClient.preloadTexture(ABLOCK);
