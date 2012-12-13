@@ -1,9 +1,0 @@
-List in this file the API's that should be distributed in the Electric Expansion zip file.
-As at creation, it includes all API's that were in the repo.
-I have done this, as it is illegal to distribute AT LEAST ONE of these...
-Tell me (Alex_hawks) if this list changes...
-BuildCraft
-ComputerCraft
-IC2
-Railcraft
-Universal Electricity
