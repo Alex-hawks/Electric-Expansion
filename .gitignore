@@ -1,3 +1,10 @@
+*.bat
+*.sh
+*.log
+*.db
+*.iml
+*.lnk
+
 /bin/*
 /conf/*
 /docs/*
@@ -29,10 +36,3 @@
 !/README
 !/resources/
 !/misc/
-
-*.bat
-*.sh
-*.log
-*.db
-*.iml
-*.lnk
