@@ -1,3 +1,10 @@
+*.bat
+*.sh
+*.log
+*.db
+*.iml
+*.lnk
+
 /bin/*
 /conf/*
 /docs/*
@@ -20,19 +27,12 @@
 /src/minecraft/*
 /src/common/*
 /src/resources/*
-!/src/*/electricexpansion/
+!/src/minecraft/electricexpansion/
+!/src/minecraft/universalelectricity/
+!/src/minecraft/dan200/
 !/mcmod.info
 !/modversion.txt
-!/textures
+!/include.bat
 !/README
-!/misc, not for compilation or distribution/
-/src/common/electricexpansion/languages
-!src/common/universalelectricity/*
-
-
-*.bat
-*.sh
-*.log
-*.db
-*.iml
-*.lnk
+!/resources/
+!/misc/
