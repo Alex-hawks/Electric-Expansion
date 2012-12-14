@@ -5,7 +5,7 @@ import electricexpansion.common.helpers.TileEntityCableHelper;
 
 public class TileEntitySwitchWire extends TileEntityCableHelper
 {
-	@Override
+/*	@Override
 	public boolean canConnect(ForgeDirection side)
 	{
 		boolean connect = false;
@@ -13,5 +13,5 @@ public class TileEntitySwitchWire extends TileEntityCableHelper
 			;
 		connect = super.canConnect(side);
 		return connect;
-	}
+	}*/
 }
