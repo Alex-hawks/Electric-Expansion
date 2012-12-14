@@ -180,7 +180,8 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		{
 			TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z);
 
-			if (par5EntityPlayer.inventory.getCurrentItem() != null)
+//issues with this, They can only open the GUI if their hand ISN'T empty, if this if() is called
+//			if (par5EntityPlayer.inventory.getCurrentItem() != null) 
 			{
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
 				return true;
