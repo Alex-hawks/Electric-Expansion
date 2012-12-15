@@ -83,15 +83,13 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 			return this.blockIndexInTexture + 3;
 		}
 		
-		
-		
 		// If it is the back side
 		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
 		{
 			return this.blockIndexInTexture + 2; 
 		}
 		
-		return this.blockIndexInTexture + 1;
+		return this.blockIndexInTexture + 4;
 	}
 	
 	/**

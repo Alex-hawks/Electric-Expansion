@@ -50,8 +50,9 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 4), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 4).getOpposite()));
-	}
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() +  2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
+	}	
 
 	@Override
 	public void updateEntity()
@@ -62,7 +63,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2).getOpposite();
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
 				if (inputTile != null)
@@ -95,7 +96,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 			if (this.joules > 0)
 			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.meta + 2);
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - 2);
 				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
 				if (tileEntity != null)

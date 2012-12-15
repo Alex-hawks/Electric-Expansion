@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import electricexpansion.common.items.ItemTransformerCoil;
 import electricexpansion.common.tile.TileEntityTransformer;
 
 public class ContainerTransformer extends Container
@@ -54,6 +55,45 @@ public class ContainerTransformer extends Container
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par1)
 	{
-		return null;
+		ItemStack var2 = null;
+		Slot var3 = (Slot) this.inventorySlots.get(par1);
+
+		if (var3 != null && var3.getHasStack())
+		{
+			ItemStack var4 = var3.getStack();
+			var2 = var4.copy();
+
+			if (par1 != 0 && par1 != 1)
+			{
+				if (var4.getItem() instanceof ItemTransformerCoil)
+				{
+					
+						if (!this.mergeItemStack(var4, 1, 2, false)) { return null; }
+					
+					else
+					{
+						if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
+					}
+				}
+
+				else if (par1 >= 30 && par1 < 38 && !this.mergeItemStack(var4, 3, 30, false)) { return null; }
+			}
+			else if (!this.mergeItemStack(var4, 3, 38, false)) { return null; }
+
+			if (var4.stackSize == 0)
+			{
+				var3.putStack((ItemStack) null);
+			}
+			else
+			{
+				var3.onSlotChanged();
+			}
+
+			if (var4.stackSize == var2.stackSize) { return null; }
+
+			var3.onPickupFromSlot(par1EntityPlayer, var4);
+		}
+
+		return var2;
 	}
 }

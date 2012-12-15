@@ -29,6 +29,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
 
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
@@ -52,6 +53,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 				if (inputTile != null)
 				{
@@ -76,7 +78,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 						}
 						else
 						{
-							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), this.getVoltage());
+							((IConductor) inputTile).getNetwork().startRequesting(this, (this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
 							this.setJoules(this.joules + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts());
 						}
 					}
@@ -96,7 +98,6 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 					double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
 					this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
 				}
-
 			}
 
 			// Power redstone if the battery box is full
@@ -110,7 +111,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 			if (this.isFull != isFullThisCheck)
 			{
 				this.isFull = isFullThisCheck;
-				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
 			}
 
 			/**
@@ -133,28 +134,26 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 						this.setJoules(this.joules + joulesReceived);
 					}
 				}
-
 			}
 
-			if (this.joules > 0)
+			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 				if (tileEntity != null)
 				{
-					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), outputDirection);
+					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 					// Output UE electricity
 					if (connector instanceof IConductor)
 					{
-						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
-						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.joules, this.getVoltage())), 80), 0);
+						double outputWatts = Math.min(((IConductor) connector).getNetwork().getRequest().getWatts(), Math.min(this.getJoules(), 50000));
 
-						if (!this.worldObj.isRemote && transferAmps > 0)
+						if (this.getJoules() > 0 && outputWatts > 0)
 						{
-							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
-							this.setJoules(this.joules - ElectricInfo.getWatts(transferAmps, this.getVoltage()));
+							((IConductor) connector).getNetwork().startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
+							this.setJoules(this.joules - outputWatts);
 						}
 						else
 						{
@@ -167,21 +166,21 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		}
 
 		// Energy Loss
-		this.setJoules(this.joules - 0.00005);
+		this.setJoules(this.joules - 0.0005);
 
 		if (!this.worldObj.isRemote)
 		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
 	}
-
+	
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.joules, this.disabledTicks);
 	}
 
 	@Override

@@ -144,9 +144,9 @@ public class ElectricExpansion
 	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static final Block blockAdvBatteryBox = new BlockAdvancedBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
-	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("MultiMeter");
+	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Multimeter");
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
-	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("blockTransformer");
+	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(EECommonProxy.ABLOCK);
 
@@ -179,7 +179,7 @@ public class ElectricExpansion
 		// Redstone'd Cable Blocks
 
 		AdvBatteryBox = CONFIG.getBlock("Advanced_Battery_Box", blockAdvBatteryBoxID).getInt();
-		MultiMeter = CONFIG.getBlock("Voltage_Detector", blockMultiMeterID).getInt();
+		MultiMeter = CONFIG.getBlock("Multimeter", blockMultiMeterID).getInt();
 		wireMill = CONFIG.getBlock("Wire_Mill", blockWireMillID).getInt();
 		Transformer = CONFIG.getBlock("Transformer", blockTransformerID).getInt();
 		WPT = CONFIG.getBlock("Wireless_Transfer_Machines", blockWPTID).getInt();

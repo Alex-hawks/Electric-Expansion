@@ -2,8 +2,11 @@ package electricexpansion.common.blocks;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -11,6 +14,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.EECommonProxy;
 import electricexpansion.common.ElectricExpansion;
@@ -18,11 +22,11 @@ import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockMachine
 {
-	public static final int meta = 0;
+//	public static final int meta = 0;
 
 	public BlockTransformer(int id, int textureIndex)
 	{
-		super("Voltage Detector", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("Transformer", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
@@ -32,45 +36,6 @@ public class BlockTransformer extends BlockMachine
 	public String getTextureFile()
 	{
 		return EECommonProxy.MattBLOCK_TEXTURE_FILE;
-	}
-
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
-	{
-		if (side == 0 || side == 1)
-		{
-			return this.blockIndexInTexture;
-		}
-		else if (metadata >= meta)
-		{
-			metadata -= meta;
-
-			// If it is the front side
-			if (side == metadata + 2)
-			{
-				return this.blockIndexInTexture + 3;
-			}
-			// If it is the back side
-			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
-			// else if (side == 3)
-			// {
-			// return this.blockIndexInTexture + 1;
-			// }
-
-			return this.blockIndexInTexture + 5;
-		}
-		else
-		{
-			// If it is the front side
-			if (side == metadata + 2)
-			{
-				return this.blockIndexInTexture + 3;
-			}
-			// If it is the back side
-			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 5; }
-		}
-
-		return this.blockIndexInTexture + 1;
 	}
 
 	/**
@@ -84,42 +49,33 @@ public class BlockTransformer extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 
-		if (metadata >= meta)
-		{
+
 			switch (angle)
 			{
-				case 0:
-					par1World.setBlockMetadataWithNotify(x, y, z, meta + 1);
-					break;
-				case 1:
-					par1World.setBlockMetadataWithNotify(x, y, z, meta + 2);
-					break;
-				case 2:
-					par1World.setBlockMetadataWithNotify(x, y, z, meta + 0);
-					break;
-				case 3:
-					par1World.setBlockMetadataWithNotify(x, y, z, meta + 3);
-					break;
+			case 0:
+				par1World.setBlockMetadata(x, y, z, 3);
+				break;
+			case 1:
+				par1World.setBlockMetadata(x, y, z, 1);
+				break;
+			case 2:
+				par1World.setBlockMetadata(x, y, z, 2);
+				break;
+			case 3:
+				par1World.setBlockMetadata(x, y, z, 0);
+				break;
 			}
-		}
-
 	}
 
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
-		int original = metadata;
 
 		int change = 0;
 
-		if (metadata >= meta)
-		{
-			original -= meta;
-		}
-
 		// Reorient the block
-		switch (original)
+		switch (metadata)
 		{
 			case 0:
 				change = 3;
@@ -135,52 +91,17 @@ public class BlockTransformer extends BlockMachine
 				break;
 		}
 
-		if (metadata >= meta)
-		{
-			change += meta;
-		}
 
 		par1World.setBlockMetadataWithNotify(x, y, z, change);
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
 		return true;
-	}
-
-	/**
-	 * Is this block powering the block on the specified side
-	 */
-	@Override
-	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-	{
-		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
-
-		return false;
-	}
-
-	/**
-	 * Is this block indirectly powering the block on the specified side
-	 */
-	@Override
-	public boolean isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-	{
-		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
-
-		return false;
 	}
 
 	@Override
 	public boolean renderAsNormalBlock()
 	{
 		return false;
-	}
-
-	@Override
-	public boolean canProvidePower()
-	{
-		return true;
 	}
 
 	@Override
@@ -198,10 +119,6 @@ public class BlockTransformer extends BlockMachine
 		if (!par1World.isRemote)
 		{
 			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
-
-			System.out.println("Voltage: " + tileEntity.getVoltage());
-			System.out.println("Incoming: " + tileEntity.elecPack.voltage);
-			System.out.println(tileEntity.voltageAdd + " Added Voltage");
 
 			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, x, y, z);
 
@@ -227,4 +144,11 @@ public class BlockTransformer extends BlockMachine
 	{
 		return ClientProxy.RENDER_ID;
 	}
+	
+	@Override
+	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+	{
+		return new ItemStack(ElectricExpansion.blockTransformer);
+	}
 }
+
