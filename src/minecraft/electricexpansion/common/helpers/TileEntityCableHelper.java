@@ -36,15 +36,15 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	@Override
 	public void updateEntity()
 	{
+		ElectricExpansion.EELogger.warning("The code was called!!! 2");	//isn't being called
 		super.updateEntity();
 		ticks++;
 		if(ticks == 20)
 		{
 			this.registerConnections();
 			ticks = 0;
-			System.out.println("The code was called!!! 1");
+			ElectricExpansion.EELogger.warning("The code was called!!! 1");	//isn't being called
 		}
-		System.out.println("The code was called!!! 2");
 	}
 	
 	public TileEntityCableHelper()
@@ -52,6 +52,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 	//	this.reset();
 		super();
 		this.channel = ElectricExpansion.CHANNEL;
+
+		System.out.println("The code was called!!! 0");	//is being called
+		this.updateEntity();
 	}
 
 	@Override
@@ -134,10 +137,11 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 			}
 			if(validDirections.contains(null))
 				validDirections.remove(null);
+			if(validDirections.isEmpty())
+				validDirections.add(ForgeDirection.UNKNOWN);
 			ElectricityConnections.registerConnector(this, validDirections);
 			this.refreshConnectedBlocks();
-			this.initiate();
-			System.out.println("The code was called!!! 3");
+			System.out.println("The code was called!!! 3");	//isn't being called
 		}
 	}
 
