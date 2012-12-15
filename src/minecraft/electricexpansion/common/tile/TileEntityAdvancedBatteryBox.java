@@ -51,7 +51,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvancedBatteryBox.BATTERY_BOX_METADATA + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvancedBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvancedBatteryBox.BATTERY_BOX_METADATA + 2).getOpposite();
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
 				if (inputTile != null)
@@ -138,7 +138,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 
 			if (this.joules > 0)
 			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockAdvancedBatteryBox.BATTERY_BOX_METADATA + 2);
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
 				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
 
 				if (tileEntity != null)

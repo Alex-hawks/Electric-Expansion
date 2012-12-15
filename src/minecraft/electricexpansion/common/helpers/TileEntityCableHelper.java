@@ -40,14 +40,14 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 		ticks++;
 		if(ticks == 20)
 		{
-			registerConnections();
+			this.registerConnections();
 			ticks = 0;
 		}
 	}
 	
 	public TileEntityCableHelper()
 	{
-		this.reset();
+	//	this.reset();
 		this.channel = ElectricExpansion.CHANNEL;
 	}
 
