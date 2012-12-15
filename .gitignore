@@ -4,6 +4,7 @@
 *.db
 *.iml
 *.lnk
+*.exe
 
 /bin/*
 /conf/*
@@ -20,8 +21,8 @@
 /builds/*
 /CHANGELOG
 /LICENSE.txt
-/info.txt
-/buildnumber.txt
+!/info.txt
+!/buildnumber.txt
 
 
 /src/minecraft/*
