@@ -52,8 +52,7 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		// GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
-		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class,
-		// "TileEntityRedstoneWireBlock");
+		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
 
 		// Mattredsox's Tile entity registrations
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
