@@ -27,9 +27,6 @@ import electricexpansion.common.ElectricExpansion;
 
 public abstract class TileEntityCableHelper extends TileEntityConductor implements ISelectiveConnector
 {
-	private ElectricityNetwork network;
-	private int ticks = 0;
-
 	@Override
 	public boolean canUpdate()
 	{return true;}
@@ -93,16 +90,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 				return 500;
 		}
 	}
-
-	@Override
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-		if (this.worldObj.isRemote)
-		{
-			this.refreshConnectedBlocks();
-		}
-	}
-
+	
 	public void registerConnections()
 	{
 		int xOffset = 0, yOffset = 0, zOffset = 0;
@@ -110,6 +98,7 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 		if(!this.worldObj.isRemote)
 		{
 			ElectricityConnections.unregisterConnector(this);
+			EnumSet<ForgeDirection> validDirections = EnumSet.noneOf(ForgeDirection.class);
 		
 			for(int i = 0; i < 6; i++)
 			{
@@ -120,8 +109,6 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 				int neighbourX = this.xCoord + xOffset;
 				int neighbourY = this.yCoord + yOffset;
 				int neighbourZ = this.zCoord + zOffset;
-				
-				EnumSet<ForgeDirection> validDirections = EnumSet.noneOf(ForgeDirection.class);
 				
 				TileEntity neighbourTE = this.worldObj.getBlockTileEntity(neighbourX, neighbourY, neighbourZ);
 				
@@ -138,13 +125,14 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 						}
 					}
 				}
-				if(validDirections != null)
-				{
-					if(validDirections.contains(null))
-						validDirections.remove(null);
-					ElectricityConnections.registerConnector(this, validDirections);
-				}
 			}
+			if(validDirections != null)
+			{
+				if(validDirections.contains(null))
+					validDirections.remove(null);
+				ElectricityConnections.registerConnector(this, validDirections);
+			}
+			this.refreshConnectedBlocks();
 		}
 	}
 
