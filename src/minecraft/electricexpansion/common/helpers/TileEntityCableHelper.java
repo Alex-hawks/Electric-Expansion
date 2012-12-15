@@ -126,12 +126,9 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 					}
 				}
 			}
-			if(validDirections != null)
-			{
-				if(validDirections.contains(null))
-					validDirections.remove(null);
-				ElectricityConnections.registerConnector(this, validDirections);
-			}
+			if(validDirections.contains(null))
+				validDirections.remove(null);
+			ElectricityConnections.registerConnector(this, validDirections);
 			this.refreshConnectedBlocks();
 		}
 	}
