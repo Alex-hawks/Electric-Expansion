@@ -29,22 +29,28 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 {
 	@Override
 	public boolean canUpdate()
-	{return true;}
+	{
+		return true;
+	}
 	
 	@Override
 	public void updateEntity()
 	{
+		super.updateEntity();
 		ticks++;
 		if(ticks == 20)
 		{
 			this.registerConnections();
 			ticks = 0;
+			System.out.println("The code was called!!! 1");
 		}
+		System.out.println("The code was called!!! 2");
 	}
 	
 	public TileEntityCableHelper()
 	{
 	//	this.reset();
+		super();
 		this.channel = ElectricExpansion.CHANNEL;
 	}
 
@@ -130,6 +136,8 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 				validDirections.remove(null);
 			ElectricityConnections.registerConnector(this, validDirections);
 			this.refreshConnectedBlocks();
+			this.initiate();
+			System.out.println("The code was called!!! 3");
 		}
 	}
 
