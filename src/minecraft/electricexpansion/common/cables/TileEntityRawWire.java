@@ -58,7 +58,6 @@ public class TileEntityRawWire extends TileEntityConductorBase
 			{
 				int radius = 2;
 				List<EntityPlayer> entities = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(this.xCoord + radius, this.yCoord + radius, this.zCoord + radius, this.xCoord - radius, this.yCoord - radius, this.zCoord - radius));
-				System.out.println(entities.isEmpty());
 				for (EntityPlayer entity : entities)
 				{
 					entity.attackEntityFrom(UEDamageSource.electrocution, this.getDamageFromMeta(this.getBlockMetadata()));
