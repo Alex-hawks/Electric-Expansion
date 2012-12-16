@@ -55,13 +55,13 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
 
 		// Tier 1
-		if (tileEntity.maxJoules <= 6000000 && tileEntity.maxJoules >= 3000000) { return this.blockIndexInTexture + 6; }
+		if (tileEntity.getMaxJoules() <= 6000000 && tileEntity.getMaxJoules() >= 3000000) { return this.blockIndexInTexture + 6; }
 
 		// Tier 2
-		if (tileEntity.maxJoules > 6000000 && tileEntity.maxJoules <= 9000000) { return this.blockIndexInTexture + 4; }
+		if (tileEntity.getMaxJoules() > 6000000 && tileEntity.getMaxJoules() <= 9000000) { return this.blockIndexInTexture + 4; }
 
 		// Tier 3
-		if (tileEntity.maxJoules > 9000000) { return this.blockIndexInTexture + 7; }
+		if (tileEntity.getMaxJoules() > 9000000) { return this.blockIndexInTexture + 7; }
 
 		return this.blockIndexInTexture + 1;
 	}

@@ -81,7 +81,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 				return 500;
 		}
 	}
-
+/*
 	public void registerConnections()
 	{
 		int xOffset = 0, yOffset = 0, zOffset = 0;
@@ -125,7 +125,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			this.refreshConnectedBlocks();
 			System.out.println("The code was called!!! 3"); // isn't being called
 		}
-	}
+	}*/
 
 	@Override
 	public String cableType(int ID, int meta)
