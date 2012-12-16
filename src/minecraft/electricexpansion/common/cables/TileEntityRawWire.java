@@ -3,6 +3,7 @@ package electricexpansion.common.cables;
 import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import universalelectricity.prefab.UEDamageSource;
 import electricexpansion.common.helpers.TileEntityConductorBase;
@@ -56,9 +57,9 @@ public class TileEntityRawWire extends TileEntityConductorBase
 			if (this.getNetwork().getProduced().getWatts() > 0)
 			{
 				int radius = 2;
-				List<EntityLiving> entities = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(this.xCoord + radius, this.yCoord + radius, this.zCoord + radius, this.xCoord - radius, this.yCoord - radius, this.zCoord - radius));
-
-				for (EntityLiving entity : entities)
+				List<EntityPlayer> entities = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(this.xCoord + radius, this.yCoord + radius, this.zCoord + radius, this.xCoord - radius, this.yCoord - radius, this.zCoord - radius));
+				System.out.println(entities.isEmpty());
+				for (EntityPlayer entity : entities)
 				{
 					entity.attackEntityFrom(UEDamageSource.electrocution, this.getDamageFromMeta(this.getBlockMetadata()));
 				}

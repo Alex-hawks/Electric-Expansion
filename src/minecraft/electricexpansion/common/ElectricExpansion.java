@@ -60,7 +60,7 @@ import electricexpansion.common.items.ItemTransformerCoil;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.wpt.DistributionNetworks;
 
-@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, useMetadata = true)
+@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, useMetadata = true, dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
