@@ -37,26 +37,38 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	{
 		super.updateEntity();
 
-		this.lastReading = this.electricityReading;
-
-		if (!this.isDisabled())
+		if (this.ticks % 20 == 0)
 		{
+			this.lastReading = this.electricityReading;
+			
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
-				if (inputTile != null)
+				if (!this.isDisabled())
 				{
-					if (inputTile instanceof IConductor)
-					{
-						this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
 
-						if (this.ticks % 20 == 0 && this.electricityReading.getWatts() != this.lastReading.getWatts())
+					ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+					TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+
+					if (inputTile != null)
+					{
+						if (inputTile instanceof IConductor)
 						{
-							PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
+							this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
+						}
+						else
+						{
+							this.electricityReading = new ElectricityPack();
 						}
 					}
+					else
+					{
+						this.electricityReading = new ElectricityPack();
+					}
+				}
+
+				if (this.electricityReading.getWatts() != this.lastReading.getWatts())
+				{
+					PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
 				}
 			}
 		}
