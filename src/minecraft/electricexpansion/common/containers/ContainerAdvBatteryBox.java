@@ -53,7 +53,7 @@ public class ContainerAdvBatteryBox extends Container
 	{
 		return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
 	}
-	
+
 	/**
 	 * Called to transfer a stack from one inventory to the other eg. when shift clicking.
 	 */

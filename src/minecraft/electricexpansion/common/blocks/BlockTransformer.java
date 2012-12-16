@@ -2,18 +2,15 @@ package electricexpansion.common.blocks;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.CommonProxy;
@@ -22,7 +19,7 @@ import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockMachine
 {
-//	public static final int meta = 0;
+	// public static final int meta = 0;
 
 	public BlockTransformer(int id, int textureIndex)
 	{
@@ -49,9 +46,8 @@ public class BlockTransformer extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 
-
-			switch (angle)
-			{
+		switch (angle)
+		{
 			case 0:
 				par1World.setBlockMetadata(x, y, z, 3);
 				break;
@@ -64,7 +60,7 @@ public class BlockTransformer extends BlockMachine
 			case 3:
 				par1World.setBlockMetadata(x, y, z, 0);
 				break;
-			}
+		}
 	}
 
 	@Override
@@ -90,7 +86,6 @@ public class BlockTransformer extends BlockMachine
 				change = 0;
 				break;
 		}
-
 
 		par1World.setBlockMetadataWithNotify(x, y, z, change);
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
@@ -144,11 +139,10 @@ public class BlockTransformer extends BlockMachine
 	{
 		return ClientProxy.RENDER_ID;
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
 		return new ItemStack(ElectricExpansion.blockTransformer);
 	}
 }
-

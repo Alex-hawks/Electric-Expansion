@@ -1,10 +1,10 @@
 package electricexpansion.common.cables;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntitySwitchWire extends TileEntityConductorBase
@@ -21,8 +21,11 @@ public class TileEntitySwitchWire extends TileEntityConductorBase
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
-					Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
-					
+					if (tileEntity instanceof IConductor)
+					{
+						Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+					}
+
 					return;
 				}
 			}
@@ -42,7 +45,7 @@ public class TileEntitySwitchWire extends TileEntityConductorBase
 			this.visuallyConnected[side.ordinal()] = false;
 		}
 	}
-	
+
 	@Override
 	public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
 	{
@@ -55,7 +58,10 @@ public class TileEntitySwitchWire extends TileEntityConductorBase
 					this.connectedBlocks[side.ordinal()] = tileEntity;
 					this.visuallyConnected[side.ordinal()] = true;
 
-					Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+					if (tileEntity instanceof IConductor)
+					{
+						Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+					}
 
 					return;
 				}

@@ -40,7 +40,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 		if (this.ticks % 20 == 0)
 		{
 			this.lastReading = this.electricityReading;
-			
+
 			if (!this.worldObj.isRemote)
 			{
 				if (!this.isDisabled())

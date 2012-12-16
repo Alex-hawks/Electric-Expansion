@@ -61,9 +61,6 @@ public class BlockSwitchWire extends BlockConductor
 		}
 
 		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-		
-		for(TileEntity tile : tileEntity.connectedBlocks)
-		System.out.println(tile);
 	}
 
 	@Override

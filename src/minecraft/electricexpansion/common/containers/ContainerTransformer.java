@@ -67,9 +67,12 @@ public class ContainerTransformer extends Container
 			{
 				if (var4.getItem() instanceof ItemTransformerCoil)
 				{
-					
-						if (!this.mergeItemStack(var4, 1, 2, false)) { return null; }
-					
+
+					if (!this.mergeItemStack(var4, 1, 2, false))
+					{
+						return null;
+					}
+
 					else
 					{
 						if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }

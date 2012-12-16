@@ -241,7 +241,7 @@ public class ElectricExpansion
 		{
 			StartLog("preInit");
 		}
-		
+
 		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", VERSION, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
 
 		GameRegistry.registerBlock(blockAdvBatteryBox);

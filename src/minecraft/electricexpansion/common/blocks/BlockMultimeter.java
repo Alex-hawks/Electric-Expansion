@@ -13,7 +13,6 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.common.CommonProxy;
-import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityMultimeter;
 
 public class BlockMultimeter extends BlockMachine

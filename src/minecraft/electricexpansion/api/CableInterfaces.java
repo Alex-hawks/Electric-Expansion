@@ -1,7 +1,5 @@
 package electricexpansion.api;
 
-import net.minecraftforge.common.ForgeDirection;
-
 public class CableInterfaces
 {
 	/**

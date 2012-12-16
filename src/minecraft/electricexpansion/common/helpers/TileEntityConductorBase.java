@@ -1,22 +1,7 @@
 package electricexpansion.common.helpers;
 
-import java.util.Collections;
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.prefab.tile.TileEntityConductor;
-
-import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.Loader;
 import electricexpansion.api.CableInterfaces.ISelectiveConnector;
 import electricexpansion.common.ElectricExpansion;
 
@@ -81,51 +66,6 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 				return 500;
 		}
 	}
-/*
-	public void registerConnections()
-	{
-		int xOffset = 0, yOffset = 0, zOffset = 0;
-
-		if (!this.worldObj.isRemote)
-		{
-			ElectricityConnections.unregisterConnector(this);
-			EnumSet<ForgeDirection> validDirections = EnumSet.noneOf(ForgeDirection.class);
-
-			for (int i = 0; i < 6; i++)
-			{
-				xOffset = ForgeDirection.getOrientation(i).offsetX;
-				yOffset = ForgeDirection.getOrientation(i).offsetY;
-				zOffset = ForgeDirection.getOrientation(i).offsetZ;
-
-				int neighbourX = this.xCoord + xOffset;
-				int neighbourY = this.yCoord + yOffset;
-				int neighbourZ = this.zCoord + zOffset;
-
-				TileEntity neighbourTE = this.worldObj.getBlockTileEntity(neighbourX, neighbourY, neighbourZ);
-
-				if (ElectricityConnections.isConnector(neighbourTE))
-				{
-					if (ElectricityConnections.canConnect(neighbourTE, ForgeDirection.getOrientation(i).getOpposite()))
-					{
-						if (neighbourTE instanceof ISelectiveConnector)
-						{
-							if (canConnectToThisType(neighbourTE))
-							{
-								validDirections.add(ForgeDirection.getOrientation(i));
-							}
-						}
-					}
-				}
-			}
-			if (validDirections.contains(null))
-				validDirections.remove(null);
-			if (validDirections.isEmpty())
-				validDirections.add(ForgeDirection.UNKNOWN);
-			ElectricityConnections.registerConnector(this, validDirections);
-			this.refreshConnectedBlocks();
-			System.out.println("The code was called!!! 3"); // isn't being called
-		}
-	}*/
 
 	@Override
 	public String cableType(int ID, int meta)
@@ -175,17 +115,5 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, setToID);
 		}
-	}
-
-	protected boolean canConnectToThisType(TileEntity neighbour)
-	{
-		if (this.cableType(this.worldObj.getBlockId(neighbour.xCoord, neighbour.yCoord, neighbour.zCoord), neighbour.blockMetadata) == "Connector")
-			return true;
-		else if (this.cableType(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), this.blockMetadata) == this.cableType(this.worldObj.getBlockId(neighbour.xCoord, neighbour.yCoord, neighbour.zCoord), neighbour.blockMetadata))
-			return true;
-		else if (this.cableType(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), this.blockMetadata) == "Connector")
-			return true;
-		else
-			return false;
 	}
 }
