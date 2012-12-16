@@ -16,7 +16,7 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.client.ClientProxy;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityTransformer;
 
@@ -35,7 +35,7 @@ public class BlockTransformer extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.MattBLOCK_TEXTURE_FILE;
+		return CommonProxy.MattBLOCK_TEXTURE_FILE;
 	}
 
 	/**

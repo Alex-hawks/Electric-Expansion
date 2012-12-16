@@ -10,7 +10,7 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.api.CableInterfaces.IPanelElectricMachine;
 import electricexpansion.client.model.ModelRawWire;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntityRawWire;
 
 @SideOnly(Side.CLIENT)
@@ -30,15 +30,15 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 		if (meta != -1)
 		{
 			if (meta == 0)
-				textureToUse = EECommonProxy.ATEXTURES + "RawCopperWire.png";
+				textureToUse = CommonProxy.ATEXTURES + "RawCopperWire.png";
 			else if (meta == 1)
-				textureToUse = EECommonProxy.ATEXTURES + "RawTinWire.png";
+				textureToUse = CommonProxy.ATEXTURES + "RawTinWire.png";
 			else if (meta == 2)
-				textureToUse = EECommonProxy.ATEXTURES + "RawSilverWire.png";
+				textureToUse = CommonProxy.ATEXTURES + "RawSilverWire.png";
 			else if (meta == 3)
-				textureToUse = EECommonProxy.ATEXTURES + "RawHVWire.png";
+				textureToUse = CommonProxy.ATEXTURES + "RawHVWire.png";
 			else if (meta == 4)
-				textureToUse = EECommonProxy.ATEXTURES + "RawEndiumWire.png";
+				textureToUse = CommonProxy.ATEXTURES + "RawEndiumWire.png";
 		}
 
 		// Texture file

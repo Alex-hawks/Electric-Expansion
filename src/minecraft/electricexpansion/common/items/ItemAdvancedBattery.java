@@ -2,7 +2,7 @@ package electricexpansion.common.items;
 
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 
 public class ItemAdvancedBattery extends ItemElectric
 {
@@ -29,7 +29,7 @@ public class ItemAdvancedBattery extends ItemElectric
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.MattItem_TEXTURE_FILE;
+		return CommonProxy.MattItem_TEXTURE_FILE;
 	}
 
 	@Override

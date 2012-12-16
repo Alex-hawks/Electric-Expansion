@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityDistribution;
 import electricexpansion.common.tile.TileEntityInductionReciever;
@@ -111,7 +111,7 @@ public class BlockWPT extends BlockContainer
 
 	public String getTextureFile()
 	{
-		return EECommonProxy.ABLOCK;
+		return CommonProxy.ABLOCK;
 	}
 
 	@SideOnly(Side.CLIENT)

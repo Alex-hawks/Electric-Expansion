@@ -12,6 +12,7 @@ import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
@@ -19,22 +20,15 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.blocks.BlockMultimeter;
 
-public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IPacketReceiver
+public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable
 {
 	public ElectricityPack electricityReading = new ElectricityPack();
-
-	public TileEntityMultimeter()
-	{
-		super();
-	}
 
 	@Override
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite()));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockMultiMeter.blockID);
 	}
 
 	@Override
@@ -93,5 +87,17 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	public String getInvName()
 	{
 		return "Multimeter";
+	}
+
+	@Override
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(this.getBlockMetadata());
+	}
+
+	@Override
+	public void setDirection(ForgeDirection facingDirection)
+	{
+		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, facingDirection.ordinal());
 	}
 }

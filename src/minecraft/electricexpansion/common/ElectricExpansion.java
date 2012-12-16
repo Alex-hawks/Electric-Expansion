@@ -148,7 +148,7 @@ public class ElectricExpansion
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
-	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(EECommonProxy.ABLOCK);
+	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(CommonProxy.ABLOCK);
 
 	// Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
@@ -165,7 +165,7 @@ public class ElectricExpansion
 	public static ElectricExpansion instance;
 
 	@SidedProxy(clientSide = "electricexpansion.client.ClientProxy", serverSide = "electricexpansion.common.CommonProxy")
-	public static EECommonProxy proxy;
+	public static CommonProxy proxy;
 
 	public static boolean configLoad(Configuration CONFIG)
 	{

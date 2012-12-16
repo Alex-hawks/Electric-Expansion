@@ -12,7 +12,7 @@ import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntityRawWire;
 
 public class BlockRawWire extends BlockConductor
@@ -61,7 +61,7 @@ public class BlockRawWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.AITEMS;
+		return CommonProxy.AITEMS;
 	}
 
 	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)

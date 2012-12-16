@@ -15,7 +15,7 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
@@ -33,7 +33,7 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.MattBLOCK_TEXTURE_FILE;
+		return CommonProxy.MattBLOCK_TEXTURE_FILE;
 	}
 
 	@Override

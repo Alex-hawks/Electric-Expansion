@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.api.WirelessPowerMachine;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerInductionReciever;
 import electricexpansion.common.containers.ContainerInductionSender;
@@ -98,7 +98,7 @@ public class GuiWPT extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		int var4 = this.mc.renderEngine.getTexture(EECommonProxy.ATEXTURES + "WPTGui.png");
+		int var4 = this.mc.renderEngine.getTexture(CommonProxy.ATEXTURES + "WPTGui.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		containerWidth = (this.width - this.xSize) / 2;

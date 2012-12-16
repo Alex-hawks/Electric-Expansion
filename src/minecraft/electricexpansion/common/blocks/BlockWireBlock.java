@@ -11,7 +11,7 @@ import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntityWireBlock;
 
 public class BlockWireBlock extends BlockConductor
@@ -66,7 +66,7 @@ public class BlockWireBlock extends BlockConductor
 
 	public String getTextureFile()
 	{
-		return EECommonProxy.ABLOCK;
+		return CommonProxy.ABLOCK;
 	}
 
 	@SideOnly(Side.CLIENT)

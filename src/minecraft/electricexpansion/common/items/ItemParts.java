@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 
 public class ItemParts extends Item
 {
@@ -20,7 +20,7 @@ public class ItemParts extends Item
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setMaxStackSize(32);
 		this.setIconIndex(240);
-		this.setTextureFile(EECommonProxy.AITEMS);
+		this.setTextureFile(CommonProxy.AITEMS);
 	}
 
 	@Override
