@@ -2,9 +2,9 @@ package electricexpansion.common.cables;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import electricexpansion.common.helpers.TileEntityCableHelper;
+import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntitySwitchWireBlock extends TileEntityCableHelper
+public class TileEntitySwitchWireBlock extends TileEntityConductorBase
 {
 	@Override
 	protected boolean canConnectToThisType(TileEntity neighbour)

@@ -25,36 +25,19 @@ import electricexpansion.common.ElectricExpansion;
  * @author Alex_hawks Helper Class used by me to make adding methods to all cables easily...
  */
 
-public abstract class TileEntityCableHelper extends TileEntityConductor implements ISelectiveConnector
+public abstract class TileEntityConductorBase extends TileEntityConductor implements ISelectiveConnector
 {
-	@Override
-	public boolean canUpdate()
+	public TileEntityConductorBase()
 	{
-		return true;
-	}
-	
-	@Override
-	public void updateEntity()
-	{
-		ElectricExpansion.EELogger.warning("The code was called!!! 2");	//isn't being called
-		super.updateEntity();
-		ticks++;
-		if(ticks == 20)
-		{
-			this.registerConnections();
-			ticks = 0;
-			ElectricExpansion.EELogger.warning("The code was called!!! 1");	//isn't being called
-		}
-	}
-	
-	public TileEntityCableHelper()
-	{
-	//	this.reset();
 		super();
 		this.channel = ElectricExpansion.CHANNEL;
+	}
 
-		System.out.println("The code was called!!! 0");	//is being called
-		this.updateEntity();
+	@Override
+	public void initiate()
+	{
+		super.initiate();
+		System.out.println("INITIATED");
 	}
 
 	@Override
@@ -99,35 +82,35 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 				return 500;
 		}
 	}
-	
+
 	public void registerConnections()
 	{
 		int xOffset = 0, yOffset = 0, zOffset = 0;
-		
-		if(!this.worldObj.isRemote)
+
+		if (!this.worldObj.isRemote)
 		{
 			ElectricityConnections.unregisterConnector(this);
 			EnumSet<ForgeDirection> validDirections = EnumSet.noneOf(ForgeDirection.class);
-		
-			for(int i = 0; i < 6; i++)
+
+			for (int i = 0; i < 6; i++)
 			{
 				xOffset = ForgeDirection.getOrientation(i).offsetX;
 				yOffset = ForgeDirection.getOrientation(i).offsetY;
 				zOffset = ForgeDirection.getOrientation(i).offsetZ;
-				
+
 				int neighbourX = this.xCoord + xOffset;
 				int neighbourY = this.yCoord + yOffset;
 				int neighbourZ = this.zCoord + zOffset;
-				
+
 				TileEntity neighbourTE = this.worldObj.getBlockTileEntity(neighbourX, neighbourY, neighbourZ);
-				
-				if(ElectricityConnections.isConnector(neighbourTE))
+
+				if (ElectricityConnections.isConnector(neighbourTE))
 				{
-					if(ElectricityConnections.canConnect(neighbourTE, ForgeDirection.getOrientation(i).getOpposite()))
+					if (ElectricityConnections.canConnect(neighbourTE, ForgeDirection.getOrientation(i).getOpposite()))
 					{
-						if(neighbourTE instanceof ISelectiveConnector)
+						if (neighbourTE instanceof ISelectiveConnector)
 						{
-							if(canConnectToThisType(neighbourTE))
+							if (canConnectToThisType(neighbourTE))
 							{
 								validDirections.add(ForgeDirection.getOrientation(i));
 							}
@@ -135,13 +118,13 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 					}
 				}
 			}
-			if(validDirections.contains(null))
+			if (validDirections.contains(null))
 				validDirections.remove(null);
-			if(validDirections.isEmpty())
+			if (validDirections.isEmpty())
 				validDirections.add(ForgeDirection.UNKNOWN);
 			ElectricityConnections.registerConnector(this, validDirections);
 			this.refreshConnectedBlocks();
-			System.out.println("The code was called!!! 3");	//isn't being called
+			System.out.println("The code was called!!! 3"); // isn't being called
 		}
 	}
 
@@ -194,15 +177,16 @@ public abstract class TileEntityCableHelper extends TileEntityConductor implemen
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, setToID);
 		}
 	}
-	
+
 	protected boolean canConnectToThisType(TileEntity neighbour)
 	{
-		if(this.cableType(this.worldObj.getBlockId(neighbour.xCoord, neighbour.yCoord, neighbour.zCoord), neighbour.blockMetadata) == "Connector")
+		if (this.cableType(this.worldObj.getBlockId(neighbour.xCoord, neighbour.yCoord, neighbour.zCoord), neighbour.blockMetadata) == "Connector")
 			return true;
-		else if(this.cableType(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), this.blockMetadata) == this.cableType(this.worldObj.getBlockId(neighbour.xCoord, neighbour.yCoord, neighbour.zCoord), neighbour.blockMetadata))
+		else if (this.cableType(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), this.blockMetadata) == this.cableType(this.worldObj.getBlockId(neighbour.xCoord, neighbour.yCoord, neighbour.zCoord), neighbour.blockMetadata))
 			return true;
-		else if(this.cableType(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), this.blockMetadata) == "Connector")
+		else if (this.cableType(this.worldObj.getBlockId(this.xCoord, this.yCoord, this.zCoord), this.blockMetadata) == "Connector")
 			return true;
-		else return false;
+		else
+			return false;
 	}
 }

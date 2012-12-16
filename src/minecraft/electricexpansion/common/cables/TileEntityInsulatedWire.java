@@ -1,8 +1,8 @@
 package electricexpansion.common.cables;
 
-import electricexpansion.common.helpers.TileEntityCableHelper;
+import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityInsulatedWire extends TileEntityCableHelper
+public class TileEntityInsulatedWire extends TileEntityConductorBase
 {
 	// everything is in the helper class.
 	// this class MUST remain existent...

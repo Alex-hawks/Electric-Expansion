@@ -2,9 +2,9 @@ package electricexpansion.common.cables;
 
 import net.minecraft.entity.player.EntityPlayer;
 import universalelectricity.prefab.UEDamageSource;
-import electricexpansion.common.helpers.TileEntityCableHelper;
+import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityRawWire extends TileEntityCableHelper
+public class TileEntityRawWire extends TileEntityConductorBase
 {
 	private byte ticks = 0;
 
