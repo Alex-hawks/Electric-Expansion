@@ -37,7 +37,6 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	public void initiate()
 	{
 		super.initiate();
-		System.out.println("INITIATED");
 	}
 
 	@Override

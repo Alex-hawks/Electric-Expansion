@@ -24,6 +24,7 @@ import electricexpansion.common.ElectricExpansion;
 public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable
 {
 	public ElectricityPack electricityReading = new ElectricityPack();
+	private ElectricityPack lastReading = new ElectricityPack();
 
 	@Override
 	public void initiate()
@@ -36,12 +37,14 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	{
 		super.updateEntity();
 
+		this.lastReading = this.electricityReading;
+
 		if (!this.isDisabled())
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 				if (inputTile != null)
 				{
@@ -49,9 +52,9 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 					{
 						this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
 
-						if (this.ticks % 20 == 0)
+						if (this.ticks % 20 == 0 && this.electricityReading.getWatts() != this.lastReading.getWatts())
 						{
-							PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+							PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
 						}
 					}
 				}

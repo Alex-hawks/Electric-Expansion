@@ -64,21 +64,6 @@ public class BlockRawWire extends BlockConductor
 		return CommonProxy.AITEMS;
 	}
 
-	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-	{
-		// I have relocated this to the TE...
-		// And now I can use a range...
-		/*
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 0)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 3);
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 1)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 2);
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 2)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 1);
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 3)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 8);
-		 */}
-
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{

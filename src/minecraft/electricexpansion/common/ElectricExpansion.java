@@ -141,10 +141,11 @@ public class ElectricExpansion
 	public static final Block blockSwitchWire = new BlockSwitchWire(SwitchWire, 0);
 	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(SwitchWireBlock, 0);
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new
+	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
-	public static final Block blockAdvBatteryBox = new BlockAdvancedBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE).setBlockName("advbatbox");
-	public static final Block blockMultiMeter = new BlockMultimeter(MultiMeter, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Multimeter");
+	public static final Block blockAdvBatteryBox = new BlockAdvancedBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE);
+	public static final Block blockMultimeter = new BlockMultimeter(MultiMeter, 0);
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
@@ -240,11 +241,12 @@ public class ElectricExpansion
 		{
 			StartLog("preInit");
 		}
+		
 		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", VERSION, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
 
 		GameRegistry.registerBlock(blockAdvBatteryBox);
 		GameRegistry.registerBlock(blockWireMill);
-		GameRegistry.registerBlock(blockMultiMeter);
+		GameRegistry.registerBlock(blockMultimeter);
 		GameRegistry.registerBlock(blockLead);
 		GameRegistry.registerBlock(blockTransformer);
 
@@ -259,7 +261,9 @@ public class ElectricExpansion
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
 		if (!Loader.isModLoaded("BasicComponents"))
+		{
 			System.out.println("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
+		}
 	}
 
 	@Init

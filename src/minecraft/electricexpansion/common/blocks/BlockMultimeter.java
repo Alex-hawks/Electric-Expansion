@@ -22,14 +22,9 @@ public class BlockMultimeter extends BlockMachine
 	{
 		super("multimeter", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
-		this.setStepSound(soundMetalFootstep);
-		this.setRequiresSelfNotify();
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return CommonProxy.MattBLOCK_TEXTURE_FILE;
+		this.setStepSound(this.soundMetalFootstep);
+		this.setTextureFile(CommonProxy.MattBLOCK_TEXTURE_FILE);
+		this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override
