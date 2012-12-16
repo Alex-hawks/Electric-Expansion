@@ -1,12 +1,12 @@
 package electricexpansion.common.containers;
 
-import universalelectricity.core.implement.IItemElectric;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
+import universalelectricity.core.implement.IItemElectric;
 import electricexpansion.common.misc.WireMillRecipes;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -45,6 +45,7 @@ public class ContainerWireMill extends Container
 	{
 		return this.tileEntity.isUseableByPlayer(par1EntityPlayer);
 	}
+
 	/**
 	 * Called to transfer a stack from one inventory to the other eg. when shift clicking.
 	 */

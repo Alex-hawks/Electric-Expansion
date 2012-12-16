@@ -1,18 +1,20 @@
 package electricexpansion.common.blocks;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 
 public class BlockSwitchWire extends BlockConductor
@@ -26,6 +28,39 @@ public class BlockSwitchWire extends BlockConductor
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
 		this.setCreativeTab(UETab.INSTANCE);
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z)
+	{
+		super.onBlockAdded(world, x, y, z);
+		this.updateWireSwitch(world, x, y, z);
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, int par5)
+	{
+		super.onNeighborBlockChange(world, x, y, z, par5);
+		this.updateWireSwitch(world, x, y, z);
+	}
+
+	private void updateWireSwitch(World world, int x, int y, int z)
+	{
+		TileEntitySwitchWire tileEntity = (TileEntitySwitchWire) world.getBlockTileEntity(x, y, z);
+
+		if (!world.isRemote && tileEntity != null)
+		{
+			if (world.isBlockIndirectlyGettingPowered(x, y, z))
+			{
+				ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
+			}
+			else
+			{
+				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UNKNOWN));
+			}
+		}
+
+		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override
@@ -61,11 +96,11 @@ public class BlockSwitchWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.AITEMS;
+		return CommonProxy.AITEMS;
 	}
 
 	@Override
-	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
+	public boolean canProvidePower()
 	{
 		return true;
 	}

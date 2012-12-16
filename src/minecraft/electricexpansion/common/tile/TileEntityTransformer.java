@@ -25,7 +25,6 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.blocks.BlockTransformer;
 import electricexpansion.common.items.ItemTransformerCoil;
 
 public class TileEntityTransformer extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IInventory
@@ -50,9 +49,9 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() +  2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
-	}	
+	}
 
 	@Override
 	public void updateEntity()

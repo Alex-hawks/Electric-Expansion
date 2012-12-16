@@ -13,7 +13,7 @@ import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.client.model.ModelTransformer;
 import electricexpansion.client.model.ModelWireMill;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 
 @SideOnly(Side.CLIENT)
@@ -29,7 +29,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 
 		if (block.blockID == ElectricExpansion.blockWireMill.blockID)
 		{
-			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(EECommonProxy.ATEXTURES + "wiremill.png"));
+			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(CommonProxy.ATEXTURES + "wiremill.png"));
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.5F, .8F, 0.5F);
 			// GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
@@ -39,7 +39,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 		}
 		if (block.blockID == ElectricExpansion.blockTransformer.blockID)
 		{
-			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(EECommonProxy.MattFILE_PATH + "transformer.png"));
+			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(CommonProxy.MattFILE_PATH + "transformer.png"));
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.5F, .8F, 0.5F);
 			// GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);

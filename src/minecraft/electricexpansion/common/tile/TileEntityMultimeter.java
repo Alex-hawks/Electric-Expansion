@@ -12,6 +12,7 @@ import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
@@ -19,22 +20,16 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.blocks.BlockMultimeter;
 
-public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IPacketReceiver
+public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable
 {
 	public ElectricityPack electricityReading = new ElectricityPack();
-
-	public TileEntityMultimeter()
-	{
-		super();
-	}
+	private ElectricityPack lastReading = new ElectricityPack();
 
 	@Override
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite()));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockMultiMeter.blockID);
 	}
 
 	@Override
@@ -42,24 +37,38 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	{
 		super.updateEntity();
 
-		if (!this.isDisabled())
+		if (this.ticks % 20 == 0)
 		{
+			this.lastReading = this.electricityReading;
+
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
-
-				if (inputTile != null)
+				if (!this.isDisabled())
 				{
-					if (inputTile instanceof IConductor)
-					{
-						this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
 
-						if (this.ticks % 20 == 0)
+					ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+					TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+
+					if (inputTile != null)
+					{
+						if (inputTile instanceof IConductor)
 						{
-							PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+							this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
+						}
+						else
+						{
+							this.electricityReading = new ElectricityPack();
 						}
 					}
+					else
+					{
+						this.electricityReading = new ElectricityPack();
+					}
+				}
+
+				if (this.electricityReading.getWatts() != this.lastReading.getWatts())
+				{
+					PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
 				}
 			}
 		}
@@ -93,5 +102,17 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	public String getInvName()
 	{
 		return "Multimeter";
+	}
+
+	@Override
+	public ForgeDirection getDirection()
+	{
+		return ForgeDirection.getOrientation(this.getBlockMetadata());
+	}
+
+	@Override
+	public void setDirection(ForgeDirection facingDirection)
+	{
+		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, facingDirection.ordinal());
 	}
 }

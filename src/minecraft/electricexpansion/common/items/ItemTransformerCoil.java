@@ -1,7 +1,7 @@
 package electricexpansion.common.items;
 
 import net.minecraft.item.Item;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 
 public class ItemTransformerCoil extends Item
 {
@@ -16,7 +16,7 @@ public class ItemTransformerCoil extends Item
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.MattItem_TEXTURE_FILE;
+		return CommonProxy.MattItem_TEXTURE_FILE;
 	}
 
 }

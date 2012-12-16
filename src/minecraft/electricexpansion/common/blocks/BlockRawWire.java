@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -12,7 +11,7 @@ import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntityRawWire;
 
 public class BlockRawWire extends BlockConductor
@@ -61,23 +60,8 @@ public class BlockRawWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.AITEMS;
+		return CommonProxy.AITEMS;
 	}
-
-	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
-	{
-		// I have relocated this to the TE...
-		// And now I can use a range...
-		/*
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 0)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 3);
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 1)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 2);
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 2)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 1);
-		 * if(par1World.getBlockMetadata(par2, par3, par4) == 3)
-		 * par5Entity.attackEntityFrom(UEDamageSource.electrocution, 8);
-		 */}
 
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)

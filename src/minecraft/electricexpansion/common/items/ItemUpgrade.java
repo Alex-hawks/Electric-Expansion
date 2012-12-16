@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.modifier.IModifier;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 
 public class ItemUpgrade extends Item implements IModifier
 {
@@ -50,7 +50,7 @@ public class ItemUpgrade extends Item implements IModifier
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.MattItem_TEXTURE_FILE;
+		return CommonProxy.MattItem_TEXTURE_FILE;
 	}
 
 	@Override

@@ -5,11 +5,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
-import electricexpansion.client.gui.GuiAdvBatteryBox;
-import electricexpansion.client.gui.GuiMultimeter;
-import electricexpansion.client.gui.GuiTransformer;
-import electricexpansion.client.gui.GuiWPT;
-import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
@@ -19,7 +14,6 @@ import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerInductionReciever;
 import electricexpansion.common.containers.ContainerInductionSender;
-import electricexpansion.common.containers.ContainerMultimeter;
 import electricexpansion.common.containers.ContainerTransformer;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
@@ -30,7 +24,7 @@ import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
 
-public class EECommonProxy implements IGuiHandler
+public class CommonProxy implements IGuiHandler
 {
 	// Mattredsox's Textures
 	public static final String MattFILE_PATH = "/electricexpansion/textures/mattredsox/";
@@ -52,7 +46,8 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		// GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
-		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
+		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class,
+		// "TileEntityRedstoneWireBlock");
 
 		// Mattredsox's Tile entity registrations
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
@@ -63,35 +58,13 @@ public class EECommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 	}
 
+	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		// if (tileEntity != null)
-		{
-			switch (ID)
-			{
-				case 0:
-					return new GuiAdvBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
-				case 1:
-					return new GuiMultimeter((TileEntityMultimeter) tileEntity);
-				case 2:
-					return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-				case 3:
-					return new GuiTransformer(player.inventory, (TileEntityTransformer) tileEntity);
-				case 4:
-				{
-					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)
-						return new GuiWPT(player.inventory, (TileEntityDistribution) tileEntity);
-					if (tileEntity.getBlockMetadata() >= 4 && tileEntity.getBlockMetadata() < 8)
-						return new GuiWPT(player.inventory, (TileEntityInductionSender) tileEntity);
-					if (tileEntity.getBlockMetadata() >= 8 && tileEntity.getBlockMetadata() < 12)
-						return new GuiWPT(player.inventory, (TileEntityInductionReciever) tileEntity);
-				}
-			}
-		}
 		return null;
 	}
 
+	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
@@ -101,8 +74,6 @@ public class EECommonProxy implements IGuiHandler
 			{
 				case 0:
 					return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvancedBatteryBox) tileEntity));
-				case 1:
-					return new ContainerMultimeter(((TileEntityMultimeter) tileEntity));
 				case 2:
 					return new ContainerWireMill(player.inventory, (TileEntityWireMill) tileEntity);
 				case 3:

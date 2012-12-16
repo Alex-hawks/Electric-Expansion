@@ -15,7 +15,7 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import electricexpansion.common.EECommonProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
@@ -24,7 +24,7 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 
 	public BlockAdvancedBatteryBox(int id, int textureIndex)
 	{
-		super("Bat Box", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("advbatbox", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
@@ -33,7 +33,7 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return EECommonProxy.MattBLOCK_TEXTURE_FILE;
+		return CommonProxy.MattBLOCK_TEXTURE_FILE;
 	}
 
 	@Override
@@ -43,55 +43,46 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
 		TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) iBlockAccess.getBlockTileEntity(x, y, z);
 
-		if (side == 0 || side == 1)
-		{
-			return this.blockIndexInTexture;
-		}
-		
+		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
+
 		// If it is the front side
 		if (side == metadata + 2)
 		{
 			return this.blockIndexInTexture + 3;
 		}
-		
+
 		// If it is the back side
 		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
-		
+
 		// Tier 1
-		if (tileEntity.maxJoules <= 6000000 && tileEntity.maxJoules >= 3000000) { return this.blockIndexInTexture + 6; }
-		
+		if (tileEntity.getMaxJoules() <= 6000000 && tileEntity.getMaxJoules() >= 3000000) { return this.blockIndexInTexture + 6; }
+
 		// Tier 2
-		if (tileEntity.maxJoules > 6000000 && tileEntity.maxJoules <= 9000000) { return this.blockIndexInTexture + 4; }
-		
-		// Tier 3	
-		if (tileEntity.maxJoules > 9000000) { return this.blockIndexInTexture + 7; }
-		
+		if (tileEntity.getMaxJoules() > 6000000 && tileEntity.getMaxJoules() <= 9000000) { return this.blockIndexInTexture + 4; }
+
+		// Tier 3
+		if (tileEntity.getMaxJoules() > 9000000) { return this.blockIndexInTexture + 7; }
+
 		return this.blockIndexInTexture + 1;
 	}
 
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		if (side == 0 || side == 1)
-		{
-			return this.blockIndexInTexture;
-		}
-		
+		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
+
 		// If it is the front side
 		if (side == metadata + 2)
 		{
 			return this.blockIndexInTexture + 3;
 		}
-		
+
 		// If it is the back side
-		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
-		{
-			return this.blockIndexInTexture + 2; 
-		}
-		
+		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
+
 		return this.blockIndexInTexture + 4;
 	}
-	
+
 	/**
 	 * Called when the block is placed in the world.
 	 */
@@ -103,22 +94,21 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 
-	
-			switch (angle)
-			{
-				case 0:
-					par1World.setBlockMetadata(x, y, z, + 3);
-					break;
-				case 1:
-					par1World.setBlockMetadata(x, y, z, + 1);
-					break;
-				case 2:
-					par1World.setBlockMetadata(x, y, z, + 2);
-					break;
-				case 3:
-					par1World.setBlockMetadata(x, y, z, + 0);
-					break;
-			}
+		switch (angle)
+		{
+			case 0:
+				par1World.setBlockMetadata(x, y, z, +3);
+				break;
+			case 1:
+				par1World.setBlockMetadata(x, y, z, +1);
+				break;
+			case 2:
+				par1World.setBlockMetadata(x, y, z, +2);
+				break;
+			case 3:
+				par1World.setBlockMetadata(x, y, z, +0);
+				break;
+		}
 
 		par1World.notifyBlockChange(x, y, z, this.blockID);
 		((TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z)).initiate();
@@ -130,7 +120,6 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		int metadata = par1World.getBlockMetadata(x, y, z);
 
 		int change = 0;
-
 
 		// Reorient the block
 		switch (metadata)
@@ -149,8 +138,8 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 				break;
 		}
 
-			change += metadata;
-		
+		change += metadata;
+
 		par1World.setBlockMetadataWithNotify(x, y, z, change);
 
 		return true;
@@ -166,8 +155,9 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		{
 			TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z);
 
-//issues with this, They can only open the GUI if their hand ISN'T empty, if this if() is called
-//			if (par5EntityPlayer.inventory.getCurrentItem() != null) 
+			// issues with this, They can only open the GUI if their hand ISN'T empty, if this if()
+			// is called
+			// if (par5EntityPlayer.inventory.getCurrentItem() != null)
 			{
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
 				return true;

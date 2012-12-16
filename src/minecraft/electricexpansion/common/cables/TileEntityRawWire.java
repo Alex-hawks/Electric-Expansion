@@ -1,20 +1,23 @@
 package electricexpansion.common.cables;
 
-import net.minecraft.entity.player.EntityPlayer;
+import java.util.List;
+
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.util.AxisAlignedBB;
 import universalelectricity.prefab.UEDamageSource;
-import electricexpansion.common.helpers.TileEntityCableHelper;
+import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityRawWire extends TileEntityCableHelper
+public class TileEntityRawWire extends TileEntityConductorBase
 {
-	private byte ticks = 0;
-
+	/**
+	 * Values will NOT be actual values or precise relative values. But if x is meant to be greater
+	 * than y, it will be. Maybe by 10^10 or 10^-10. But the one meant to be greater, will be.
+	 */
 	@Override
 	public double getResistance()
-	// Values will NOT be actual values or precise relative values. But if x is meant to be greater
-	// than y, it will be.
-	// Maybe by 10^10 or 10^-10. But the one meant to be greater, will be.
 	{
-		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		int meta = this.getBlockMetadata();
+
 		switch (meta)
 		{
 			case 0:
@@ -33,40 +36,39 @@ public class TileEntityRawWire extends TileEntityCableHelper
 	}
 
 	@Override
-	public boolean canUpdate()
-	{
-		return true;
-	}
-
-	@Override
 	public void updateEntity()
 	{
-		this.ticks++;
-		if (this.ticks == 20)
+		super.updateEntity();
+
+		if (this.ticks % 60 == 0)
 		{
-			this.damagePlayers();
-			this.ticks = 0;
+			this.electrocuteEntities();
 		}
 	}
 
-	public void damagePlayers()
+	/**
+	 * Electrocute entities around it.
+	 */
+	public void electrocuteEntities()
 	{
 		if (!worldObj.isRemote)
 		{
 			if (this.getNetwork().getProduced().getWatts() > 0)
 			{
-				for (Object player : this.worldObj.playerEntities)
+				int radius = 2;
+				List<EntityLiving> entities = this.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(this.xCoord + radius, this.yCoord + radius, this.zCoord + radius, this.xCoord - radius, this.yCoord - radius, this.zCoord - radius));
+
+				for (EntityLiving entity : entities)
 				{
-					if (player instanceof EntityPlayer)
-					{
-						if (((EntityPlayer) player).getPlayerCoordinates().getDistanceSquared(this.xCoord, this.yCoord, this.zCoord) <= 9)
-							((EntityPlayer) player).attackEntityFrom(UEDamageSource.electrocution, this.getDamageFromMeta(this.getBlockMetadata()));
-					}
+					entity.attackEntityFrom(UEDamageSource.electrocution, this.getDamageFromMeta(this.getBlockMetadata()));
 				}
 			}
 		}
 	}
 
+	/**
+	 * Gets the electrocution damage based on the metadata.
+	 */
 	private int getDamageFromMeta(int meta)
 	{
 		switch (meta)
