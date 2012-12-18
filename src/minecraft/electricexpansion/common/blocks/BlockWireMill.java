@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
@@ -82,6 +83,8 @@ public class BlockWireMill extends BlockMachine
 		par1World.markBlockForRenderUpdate(x, y, y);
 		par1World.setBlockMetadata(x, y, z, change);
 
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+
 		return true;
 	}
 
@@ -139,6 +142,8 @@ public class BlockWireMill extends BlockMachine
 					break;
 			}
 		}
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override

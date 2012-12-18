@@ -61,6 +61,8 @@ public class BlockTransformer extends BlockMachine
 				par1World.setBlockMetadata(x, y, z, 0);
 				break;
 		}
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override

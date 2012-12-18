@@ -68,14 +68,14 @@ public class ElectricExpansion
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
 
-	public static final String CHANNEL = "ElectricExpa";
+	public static final String CHANNEL = "ElexEx";
 
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
 	private static final String[] LANGUAGE_SUPPORTED = new String[] { "en_US" };
 
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 7;
+	public static final int REVISION_VERSION = 8;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	// private, these are the default options.

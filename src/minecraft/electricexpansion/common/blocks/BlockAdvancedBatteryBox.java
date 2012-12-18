@@ -13,6 +13,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.common.CommonProxy;
@@ -97,21 +98,21 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockMetadata(x, y, z, +3);
+				par1World.setBlockMetadata(x, y, z, 3);
 				break;
 			case 1:
-				par1World.setBlockMetadata(x, y, z, +1);
+				par1World.setBlockMetadata(x, y, z, 1);
 				break;
 			case 2:
-				par1World.setBlockMetadata(x, y, z, +2);
+				par1World.setBlockMetadata(x, y, z, 2);
 				break;
 			case 3:
-				par1World.setBlockMetadata(x, y, z, +0);
+				par1World.setBlockMetadata(x, y, z, 0);
 				break;
 		}
 
-		par1World.notifyBlockChange(x, y, z, this.blockID);
-		((TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z)).initiate();
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 
 		int change = 0;
 
-		// Reorient the block
+		// Re-orient the block
 		switch (metadata)
 		{
 			case 0:
@@ -138,9 +139,9 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 				break;
 		}
 
-		change += metadata;
+		par1World.setBlockMetadata(x, y, z, change);
 
-		par1World.setBlockMetadataWithNotify(x, y, z, change);
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
 		return true;
 	}
