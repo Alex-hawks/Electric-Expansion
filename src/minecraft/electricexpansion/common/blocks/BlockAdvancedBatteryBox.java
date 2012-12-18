@@ -2,6 +2,7 @@ package electricexpansion.common.blocks;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -22,7 +23,6 @@ import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class BlockAdvancedBatteryBox extends BlockMachine
 {
-
 	public BlockAdvancedBatteryBox(int id, int textureIndex)
 	{
 		super("advbatbox", id, UniversalElectricity.machine, UETab.INSTANCE);
@@ -156,9 +156,6 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		{
 			TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z);
 
-			// issues with this, They can only open the GUI if their hand ISN'T empty, if this if()
-			// is called
-			// if (par5EntityPlayer.inventory.getCurrentItem() != null)
 			{
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
 				return true;
@@ -216,11 +213,19 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
 		return new TileEntityAdvancedBatteryBox();
+
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(ElectricExpansion.blockAdvBatteryBox);
+		int id = idPicked(world, x, y, z);
+
+		if (id == 0) { return null; }
+
+		Item item = Item.itemsList[id];
+		if (item == null) { return null; }
+
+		return new ItemStack(id, 1, 0);
 	}
 }

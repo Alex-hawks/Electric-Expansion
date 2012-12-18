@@ -9,7 +9,6 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.client.model.ModelWireMill;
 import electricexpansion.common.CommonProxy;
-import electricexpansion.common.blocks.BlockWireMill;
 
 @SideOnly(Side.CLIENT)
 public class RenderWireMill extends TileEntitySpecialRenderer
@@ -28,7 +27,7 @@ public class RenderWireMill extends TileEntitySpecialRenderer
 		bindTextureByName(CommonProxy.ATEXTURES + "wiremill.png");
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) var2 + 0.5F, (float) var3 + 1.5F, (float) var4 + 0.5F);
-		switch (var1.worldObj.getBlockMetadata(var1.xCoord, var1.yCoord, var1.zCoord) - BlockWireMill.metaWireMill)
+		switch (var1.worldObj.getBlockMetadata(var1.xCoord, var1.yCoord, var1.zCoord))
 		{
 			case 0:
 				GL11.glRotatef(0, 0.0F, 1.0F, 0.0F);

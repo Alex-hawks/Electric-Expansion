@@ -61,6 +61,7 @@ public class BlockTransformer extends BlockMachine
 				par1World.setBlockMetadata(x, y, z, 0);
 				break;
 		}
+
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
@@ -72,7 +73,7 @@ public class BlockTransformer extends BlockMachine
 
 		int change = 0;
 
-		// Reorient the block
+		// Re-orient the block
 		switch (metadata)
 		{
 			case 0:
@@ -89,7 +90,8 @@ public class BlockTransformer extends BlockMachine
 				break;
 		}
 
-		par1World.setBlockMetadataWithNotify(x, y, z, change);
+		par1World.setBlockMetadata(x, y, z, change);
+
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
 		return true;

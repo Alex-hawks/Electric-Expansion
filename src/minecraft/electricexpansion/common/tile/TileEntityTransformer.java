@@ -11,6 +11,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
@@ -27,12 +28,14 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 {
 	public ElectricityPack electricityReading = new ElectricityPack();
 	private ElectricityPack lastReading = new ElectricityPack();
+	private ItemStack[] containingItems = new ItemStack[5];
+	private int playersUsing = 0;
 
 	@Override
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
-		this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
 	}
 
 	@Override
@@ -69,6 +72,30 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 					}
 				}
 
+				// Check if requesting power on output
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+
+				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+
+				if (network != null)
+				{
+					if (network.getRequest().getWatts() != 0)
+					{
+						double requestedAmp = network.getRequest().amperes;
+						double requestedVolts = network.getRequest().voltage;
+
+						network.startProducing(this, requestedAmp, requestedVolts);
+
+					}
+
+					else
+					{
+						network.stopProducing(this);
+					}
+				}
+
+				// Send packet to clients with Amps and Volts
 				if (this.electricityReading.getWatts() != this.lastReading.getWatts())
 				{
 					PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
@@ -122,63 +149,93 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public int getSizeInventory()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return this.containingItems.length;
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int var1)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return this.containingItems[var1];
 	}
 
 	@Override
-	public ItemStack decrStackSize(int var1, int var2)
+	public ItemStack decrStackSize(int par1, int par2)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if (this.containingItems[par1] != null)
+		{
+			ItemStack var3;
+
+			if (this.containingItems[par1].stackSize <= par2)
+			{
+				var3 = this.containingItems[par1];
+				this.containingItems[par1] = null;
+				return var3;
+			}
+			else
+			{
+				var3 = this.containingItems[par1].splitStack(par2);
+
+				if (this.containingItems[par1].stackSize == 0)
+				{
+					this.containingItems[par1] = null;
+				}
+
+				return var3;
+			}
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int var1)
+	public ItemStack getStackInSlotOnClosing(int par1)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		if (this.containingItems[par1] != null)
+		{
+			ItemStack var2 = this.containingItems[par1];
+			this.containingItems[par1] = null;
+			return var2;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2)
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		// TODO Auto-generated method stub
+		this.containingItems[par1] = par2ItemStack;
 
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
 	}
 
 	@Override
-	public int getInventoryStackLimit()
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer var1)
-	{
-		// TODO Auto-generated method stub
-		return false;
+		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
 	public void openChest()
 	{
-		// TODO Auto-generated method stub
-
+		this.playersUsing++;
 	}
 
 	@Override
 	public void closeChest()
 	{
-		// TODO Auto-generated method stub
+		this.playersUsing--;
+	}
 
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 4;
 	}
 }
