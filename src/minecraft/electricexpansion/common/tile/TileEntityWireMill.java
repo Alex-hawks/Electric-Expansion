@@ -44,7 +44,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public void initiate()
 	{
-		System.out.println("INIT");
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2)));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockWireMill.blockID);
 	}
@@ -52,6 +51,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public void updateEntity()
 	{
+		super.updateEntity();
 		if (!this.worldObj.isRemote)
 		{
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
