@@ -49,12 +49,11 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 			if (!this.worldObj.isRemote)
 			{
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+
 				if (!this.isDisabled())
 				{
-
-					ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
-					TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
 					if (inputTile != null)
 					{
 						if (inputTile instanceof IConductor)
@@ -77,24 +76,44 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
 				if (network != null)
 				{
-					if (network.getRequest().getWatts() != 0)
+					if (inputNetwork != null)
 					{
-						double requestedAmp = network.getRequest().amperes;
-						double requestedVolts = network.getRequest().voltage;
 
-						network.startProducing(this, requestedAmp, requestedVolts);
+						if (network.getRequest().getWatts() != 0)
+						{
+							System.out.println(network.getRequest().voltage + " REQUESTED VOLTAGE OUT");
+							System.out.println(network.getRequest().getWatts() + " REQUESTED WATT OUT");
 
+							double requestedAmp = network.getRequest().amperes;
+							double requestedVolts = network.getRequest().voltage;
+
+							double actualProduce = network.getRequest().getWatts() / 25;
+
+							inputNetwork.startRequesting(this, network.getRequest());
+
+							if (inputNetwork.getProduced().getWatts() != 0)
+							{
+								System.out.println(inputNetwork.getProduced().voltage + " PRODUCED VOLTAGE INPUT");
+								System.out.println(inputNetwork.getProduced().getWatts() + " PRODUCED WATT INPUT");
+								System.out.println(actualProduce + " ACTUAL REQUESTED OUT");
+
+								network.consumeElectricity(this);
+								network.startProducing(this, actualProduce / requestedVolts, network.getRequest().voltage);
+							}
+
+						}
+
+						else
+						{
+							network.stopProducing(this);
+						}
 					}
 
-					else
-					{
-						network.stopProducing(this);
-					}
 				}
-
 				// Send packet to clients with Amps and Volts
 				if (this.electricityReading.getWatts() != this.lastReading.getWatts())
 				{

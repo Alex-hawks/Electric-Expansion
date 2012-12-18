@@ -391,6 +391,12 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		return 5000000 + slot1 + slot2 + slot3;
 	}
 
+	@Override
+	public double getVoltage()
+	{
+		return 240;
+	}
+
 	/**
 	 * COMPUTERCRAFT FUNCTIONS
 	 */
