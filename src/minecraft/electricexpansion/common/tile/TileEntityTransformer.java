@@ -26,10 +26,11 @@ import electricexpansion.common.ElectricExpansion;
 
 public class TileEntityTransformer extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable, IInventory
 {
-	public ElectricityPack electricityReading = new ElectricityPack();
-	private ElectricityPack lastReading = new ElectricityPack();
 	private ItemStack[] containingItems = new ItemStack[5];
 	private int playersUsing = 0;
+
+//USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
+        public boolean stepUp = false;
 
 	@Override
 	public void initiate()
@@ -52,25 +53,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-				if (!this.isDisabled())
-				{
-					if (inputTile != null)
-					{
-						if (inputTile instanceof IConductor)
-						{
-							this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
-						}
-						else
-						{
-							this.electricityReading = new ElectricityPack();
-						}
-					}
-					else
-					{
-						this.electricityReading = new ElectricityPack();
-					}
-				}
-
 				// Check if requesting power on output
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
@@ -78,12 +60,11 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
-				if (network != null)
+				if (network != null && inputNetwork != null)
 				{
-					if (inputNetwork != null)
-					{
+					
 
-						if (network.getRequest().getWatts() != 0)
+						if (network.getRequest().getWatts() > 0)
 						{
 							System.out.println(network.getRequest().voltage + " REQUESTED VOLTAGE OUT");
 							System.out.println(network.getRequest().getWatts() + " REQUESTED WATT OUT");
@@ -91,66 +72,38 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 							double requestedAmp = network.getRequest().amperes;
 							double requestedVolts = network.getRequest().voltage;
 
-							double actualProduce = network.getRequest().getWatts() / 25;
-
 							inputNetwork.startRequesting(this, network.getRequest());
 
-							if (inputNetwork.getProduced().getWatts() != 0)
+							if (inputNetwork.getProduced().getWatts() > 0)
 							{
 								System.out.println(inputNetwork.getProduced().voltage + " PRODUCED VOLTAGE INPUT");
 								System.out.println(inputNetwork.getProduced().getWatts() + " PRODUCED WATT INPUT");
 								System.out.println(actualProduce + " ACTUAL REQUESTED OUT");
 
-								network.consumeElectricity(this);
-								network.startProducing(this, actualProduce / requestedVolts, network.getRequest().voltage);
-							}
+								ElectricityPack actualEnergy = network.consumeElectricity(this);
+double newVoltage = actualEnergy.voltage + THEAMOUNTYOUSTEPUP;
+								network.startProducing(this, network.getRequest().getWatts()/newVoltage, newVoltage);
+							}else
+						{
+							network.stopProducing(this);
+						}
 
 						}
 
 						else
 						{
-							network.stopProducing(this);
+							network.stopRequesting(this);
 						}
-					}
+					
 
 				}
-				// Send packet to clients with Amps and Volts
-				if (this.electricityReading.getWatts() != this.lastReading.getWatts())
-				{
-					PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
-				}
-			}
-		}
-	}
-
-	@Override
-	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.electricityReading.amperes, this.electricityReading.voltage);
-
-	}
-
-	@Override
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-		if (this.worldObj.isRemote)
-		{
-			try
-			{
-				this.electricityReading.amperes = dataStream.readDouble();
-				this.electricityReading.voltage = dataStream.readDouble();
-
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
 			}
 		}
 	}
 
 	public String getInvName()
 	{
-		return "Multimeter";
+		return "Transformer";
 	}
 
 	@Override
