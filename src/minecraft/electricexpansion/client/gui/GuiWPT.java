@@ -8,8 +8,8 @@ import net.minecraft.inventory.IInventory;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.WirelessPowerMachine;
 import electricexpansion.common.CommonProxy;
 import electricexpansion.common.containers.ContainerDistribution;

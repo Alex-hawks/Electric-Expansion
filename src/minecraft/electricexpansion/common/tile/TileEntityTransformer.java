@@ -5,26 +5,18 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-
-import com.google.common.io.ByteArrayDataInput;
-
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityTransformer extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable, IInventory
+public class TileEntityTransformer extends TileEntityElectricityReceiver implements IRotatable, IInventory
 {
 	private ItemStack[] containingItems = new ItemStack[5];
 	private int playersUsing = 0;
@@ -46,8 +38,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 		if (this.ticks % 20 == 0)
 		{
-			this.lastReading = this.electricityReading;
-
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
@@ -78,10 +68,9 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 							{
 								System.out.println(inputNetwork.getProduced().voltage + " PRODUCED VOLTAGE INPUT");
 								System.out.println(inputNetwork.getProduced().getWatts() + " PRODUCED WATT INPUT");
-								System.out.println(actualProduce + " ACTUAL REQUESTED OUT");
 
 								ElectricityPack actualEnergy = network.consumeElectricity(this);
-double newVoltage = actualEnergy.voltage + THEAMOUNTYOUSTEPUP;
+double newVoltage = actualEnergy.voltage + 120; //AMOUNT UP CONVERTED
 								network.startProducing(this, network.getRequest().getWatts()/newVoltage, newVoltage);
 							}else
 						{
