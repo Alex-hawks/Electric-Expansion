@@ -2,6 +2,7 @@ package electricexpansion.common.blocks;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -13,6 +14,7 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import electricexpansion.common.CommonProxy;
@@ -21,7 +23,6 @@ import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class BlockAdvancedBatteryBox extends BlockMachine
 {
-
 	public BlockAdvancedBatteryBox(int id, int textureIndex)
 	{
 		super("advbatbox", id, UniversalElectricity.machine, UETab.INSTANCE);
@@ -97,21 +98,21 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockMetadata(x, y, z, +3);
+				par1World.setBlockMetadata(x, y, z, 3);
 				break;
 			case 1:
-				par1World.setBlockMetadata(x, y, z, +1);
+				par1World.setBlockMetadata(x, y, z, 1);
 				break;
 			case 2:
-				par1World.setBlockMetadata(x, y, z, +2);
+				par1World.setBlockMetadata(x, y, z, 2);
 				break;
 			case 3:
-				par1World.setBlockMetadata(x, y, z, +0);
+				par1World.setBlockMetadata(x, y, z, 0);
 				break;
 		}
 
-		par1World.notifyBlockChange(x, y, z, this.blockID);
-		((TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z)).initiate();
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 
 		int change = 0;
 
-		// Reorient the block
+		// Re-orient the block
 		switch (metadata)
 		{
 			case 0:
@@ -138,9 +139,9 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 				break;
 		}
 
-		change += metadata;
+		par1World.setBlockMetadata(x, y, z, change);
 
-		par1World.setBlockMetadataWithNotify(x, y, z, change);
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
 		return true;
 	}
@@ -155,9 +156,6 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		{
 			TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) par1World.getBlockTileEntity(x, y, z);
 
-			// issues with this, They can only open the GUI if their hand ISN'T empty, if this if()
-			// is called
-			// if (par5EntityPlayer.inventory.getCurrentItem() != null)
 			{
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
 				return true;
@@ -215,11 +213,19 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
 		return new TileEntityAdvancedBatteryBox();
+
 	}
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
-		return new ItemStack(ElectricExpansion.blockAdvBatteryBox);
+		int id = idPicked(world, x, y, z);
+
+		if (id == 0) { return null; }
+
+		Item item = Item.itemsList[id];
+		if (item == null) { return null; }
+
+		return new ItemStack(id, 1, 0);
 	}
 }

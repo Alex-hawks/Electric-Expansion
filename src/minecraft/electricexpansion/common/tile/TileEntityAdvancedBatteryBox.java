@@ -50,7 +50,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
-		this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
 	}
 
 	@Override
@@ -389,6 +389,12 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 			slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
 
 		return 5000000 + slot1 + slot2 + slot3;
+	}
+
+	@Override
+	public double getVoltage()
+	{
+		return 240;
 	}
 
 	/**

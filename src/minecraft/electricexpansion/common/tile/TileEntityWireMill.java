@@ -24,7 +24,7 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
-import electricexpansion.common.blocks.BlockWireMill;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.WireMillRecipes;
 
 public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
@@ -44,15 +44,17 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2)));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2)));
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockWireMill.blockID);
 	}
 
 	@Override
 	public void updateEntity()
 	{
+		super.updateEntity();
 		if (!this.worldObj.isRemote)
 		{
-			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockWireMill.metaWireMill + 2);
+			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
 			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
 
 			if (inputTile != null)
