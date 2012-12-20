@@ -9,4 +9,6 @@ public interface WirelessPowerMachine
 	public double getJoules(Object... data);
 
 	public double getMaxJoules(Object... data);
+
+	public String getType();
 }

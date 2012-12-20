@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
@@ -111,7 +112,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+				this.sendPacket();
 			}
 		}
 	}
@@ -122,11 +123,22 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
+	public void sendPacket()
+	{
+		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
+	}
+	
+	@Override
+	public Packet getDescriptionPacket()
+	{
+		return PacketManager.getPacket("ElecEx", this, this.getFrequency(), this.disabledTicks);
+	}
+	
 	@Override
 	public void openChest()
 	{
 		if (!this.worldObj.isRemote)
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+			this.sendPacket();
 		this.playersUsing++;
 	}
 
@@ -168,7 +180,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	@Override
 	public String getInvName()
 	{
-		return "Induction Power Sender";
+		return "Quantum Battery Box";
 	}
 
 	@Override
@@ -303,9 +315,10 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	{
 	}
 
+	@Override
 	public String getType()
 	{
-		return "Balence Wireless Power Transfer";
+		return "Quantum Battery Box";
 	}
 
 	@Override
@@ -338,5 +351,4 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			e.printStackTrace();
 		}
 	}
-
 }

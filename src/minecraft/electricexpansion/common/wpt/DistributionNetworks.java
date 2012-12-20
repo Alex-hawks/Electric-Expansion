@@ -16,7 +16,6 @@ import electricexpansion.common.ElectricExpansion;
 
 public class DistributionNetworks
 {
-	;
 	public static DistributionNetworks instance;
 	private static MinecraftServer server = MinecraftServer.getServer();
 	private static double[] joules = new double[32768];

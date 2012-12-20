@@ -31,7 +31,7 @@ public class GuiWPT extends GuiContainer
 
 	private int containerWidth;
 	private int containerHeight;
-
+	
 	public GuiWPT(InventoryPlayer par1InventoryPlayer, TileEntityInductionSender tileEntity)
 	{
 		super(new ContainerInductionSender(par1InventoryPlayer, tileEntity));
@@ -60,11 +60,9 @@ public class GuiWPT extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		textField.drawTextBox();
-		this.fontRenderer.drawString(Text, 7, 46, 0xffffff);
 
-		this.fontRenderer.drawString(((IInventory) this.tileEntity).getInvName(), 60, 6, 4210752);
-		this.fontRenderer.drawString("Current Frequency: " + ((WirelessPowerMachine) tileEntity).getFrequency(), 10, 28, 4210752);
-		String displayText = "";
+		this.fontRenderer.drawString(((IInventory) this.tileEntity).getInvName(), 42, 6, 4210752);
+		this.fontRenderer.drawString("Current Frequency: " + tileEntity.getFrequency(), 10, 28, 4210752);
 	}
 
 	/**
@@ -77,10 +75,10 @@ public class GuiWPT extends GuiContainer
 		Keyboard.enableRepeatEvents(true);
 		int var1 = (this.width - this.xSize) / 2;
 		int var2 = (this.height - this.ySize) / 2;
-		this.textField = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
-		textField.setMaxStringLength(10);
-		textField.setFocused(false);
-
+		textField = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
+		textField.setMaxStringLength(5);
+		textField.setFocused(true);
+		textField.setText(tileEntity.getFrequency() + "");
 	}
 
 	/**
@@ -124,6 +122,10 @@ public class GuiWPT extends GuiContainer
 	@Override
 	public void updateScreen()
 	{
-		Text = textField.getText();
+		int newFrequency = 0;
+		if(this.textField.getText() != null && !(this.textField.getText().equals("")))
+			newFrequency = Math.max(Integer.parseInt(this.textField.getText()), 0);
+		if(newFrequency < 32768)
+		tileEntity.setFrequency((short)newFrequency);
 	}
 }
