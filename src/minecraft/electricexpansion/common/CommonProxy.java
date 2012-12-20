@@ -14,7 +14,6 @@ import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerInductionReciever;
 import electricexpansion.common.containers.ContainerInductionSender;
-import electricexpansion.common.containers.ContainerTransformer;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityDistribution;
@@ -76,8 +75,7 @@ public class CommonProxy implements IGuiHandler
 					return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvancedBatteryBox) tileEntity));
 				case 2:
 					return new ContainerWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-				case 3:
-					return new ContainerTransformer(player.inventory, (TileEntityTransformer) tileEntity);
+				// 3:
 				case 4:
 				{
 					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)

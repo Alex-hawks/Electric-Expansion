@@ -52,14 +52,11 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
-				if (network != null && inputNetwork != null)
+				if (network != null && inputNetwork != null && network != inputNetwork)
 				{
 
-
 					if (network.getRequest().getWatts() > 0)
-					{
-						System.out.println(network.getRequest().voltage + " REQUESTED VOLTAGE OUT");
-						System.out.println(network.getRequest().getWatts() + " REQUESTED WATT OUT");
+						{
 
 						double requestedAmp = network.getRequest().amperes;
 						double requestedVolts = network.getRequest().voltage;
@@ -75,7 +72,8 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 							ElectricityPack actualEnergy = network.consumeElectricity(this);
 							double newVoltage = actualEnergy.voltage + THEAMOUNTYOUSTEPUP;
 							network.startProducing(this, network.getRequest().getWatts()/newVoltage, newVoltage);
-						}else
+						}
+						else
 						{
 							network.stopProducing(this);
 						}

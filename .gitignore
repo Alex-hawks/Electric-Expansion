@@ -5,6 +5,7 @@
 *.iml
 *.lnk
 *.exe
+*.cmd
 
 /bin/*
 /conf/*

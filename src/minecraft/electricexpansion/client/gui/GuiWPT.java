@@ -1,5 +1,6 @@
 package electricexpansion.client.gui;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,6 +27,7 @@ public class GuiWPT extends GuiContainer
 	private Class<? extends WirelessPowerMachine> tileEntityType;
 
 	private GuiTextField textField;
+	private GuiButton button;
 
 	private String Text;
 
@@ -79,6 +81,8 @@ public class GuiWPT extends GuiContainer
 		textField.setMaxStringLength(5);
 		textField.setFocused(true);
 		textField.setText(tileEntity.getFrequency() + "");
+		
+		button = new GuiButton(0, 6, 50, 50, 13, "Set");
 	}
 
 	/**
