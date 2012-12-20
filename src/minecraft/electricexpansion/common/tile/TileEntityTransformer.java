@@ -50,29 +50,32 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
-				if (network != null && inputNetwork != null)
+				if (network != null && inputNetwork != null && network != inputNetwork)
 				{
 					
 
 						if (network.getRequest().getWatts() > 0)
 						{
-							System.out.println(network.getRequest().voltage + " REQUESTED VOLTAGE OUT");
-							System.out.println(network.getRequest().getWatts() + " REQUESTED WATT OUT");
-
-							double requestedAmp = network.getRequest().amperes;
-							double requestedVolts = network.getRequest().voltage;
 
 							inputNetwork.startRequesting(this, network.getRequest());
 
 							if (inputNetwork.getProduced().getWatts() > 0)
 							{
-								System.out.println(inputNetwork.getProduced().voltage + " PRODUCED VOLTAGE INPUT");
-								System.out.println(inputNetwork.getProduced().getWatts() + " PRODUCED WATT INPUT");
 
-								ElectricityPack actualEnergy = network.consumeElectricity(this);
-double newVoltage = actualEnergy.voltage + 120; //AMOUNT UP CONVERTED
-								network.startProducing(this, network.getRequest().getWatts()/newVoltage, newVoltage);
-							}else
+								ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
+							double newVoltage;
+							if(stepUp)
+							{
+								newVoltage = actualEnergy.voltage + 120;
+
+							}
+							else
+							{
+								newVoltage = actualEnergy.voltage - 120;
+							}
+								network.startProducing(this, inputNetwork.getProduced().getWatts()/newVoltage, newVoltage);
+							}
+							else
 						{
 							network.stopProducing(this);
 						}

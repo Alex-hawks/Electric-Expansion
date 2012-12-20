@@ -56,7 +56,6 @@ import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;
 import electricexpansion.common.items.ItemParts;
-import electricexpansion.common.items.ItemTransformerCoil;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.wpt.DistributionNetworks;
 
@@ -102,7 +101,6 @@ public class ElectricExpansion
 	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
 	private static final int itemAdvBatID = ITEM_ID_PREFIX + 5;
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
-	private static final int itemTransformerCoilID = ITEM_ID_PREFIX + 7;
 	// Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -129,7 +127,6 @@ public class ElectricExpansion
 	public static int Parts;
 	public static int Lead;
 	public static int AdvBat;
-	public static int TransformerCoil;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -157,7 +154,6 @@ public class ElectricExpansion
 	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
-	public static final Item itemTransformerCoil = new ItemTransformerCoil(TransformerCoil).setCreativeTab(UETab.INSTANCE).setItemName("transformerCoil");
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -192,7 +188,6 @@ public class ElectricExpansion
 		Parts = CONFIG.getItem("Parts", itemPartsID).getInt();
 		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
 		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt();
-		TransformerCoil = CONFIG.getItem("Transformer_Coil", itemTransformerCoilID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;

@@ -96,6 +96,25 @@ public class BlockTransformer extends BlockMachine
 
 		return true;
 	}
+	
+	/**
+	 * Called when a player uses a wrench on the machine while sneaking
+	 * 
+	 * @return True if some happens
+	 */
+	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
+
+	if(tileEntity.stepUp == true)
+		tileEntity.stepUp = false;
+		
+	if(tileEntity.stepUp == false)
+		tileEntity.stepUp = true;
+	
+		return true;
+	}
+
 
 	@Override
 	public boolean renderAsNormalBlock()
@@ -107,23 +126,6 @@ public class BlockTransformer extends BlockMachine
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
 		return new TileEntityTransformer();
-	}
-
-	/**
-	 * Called when the block is right clicked by the player
-	 */
-	@Override
-	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		if (!par1World.isRemote)
-		{
-			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
-
-			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, x, y, z);
-
-		}
-
-		return true;
 	}
 
 	@Override
