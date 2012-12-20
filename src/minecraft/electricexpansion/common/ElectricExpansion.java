@@ -55,6 +55,7 @@ import electricexpansion.common.itemblocks.ItemBlockWireBlock;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;
+import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.wpt.DistributionNetworks;
@@ -67,7 +68,7 @@ public class ElectricExpansion
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
 
-	public static final String CHANNEL = "ElexEx";
+	public static final String CHANNEL = "ElecEx";
 
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
 	private static final String[] LANGUAGE_SUPPORTED = new String[] { "en_US", "en_AU", "en_UK" };
@@ -102,6 +103,7 @@ public class ElectricExpansion
 	private static final int itemAdvBatID = ITEM_ID_PREFIX + 5;
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
 	private static final int itemCoilID = ITEM_ID_PREFIX + 7;
+	private static final int itemMultimeterID = ITEM_ID_PREFIX + 8;
 
 	// Other
 	private static final int superConductorUpkeepDefault = 500;
@@ -130,6 +132,7 @@ public class ElectricExpansion
 	public static int Lead;
 	public static int AdvBat;
 	public static int Coil;
+	public static int MultimeterItem;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -158,6 +161,7 @@ public class ElectricExpansion
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
 	public static final Item itemCoil = new ItemBase(Coil, 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
+	public static final Item itemMultimeter = new ItemMultimeter(10).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -193,6 +197,7 @@ public class ElectricExpansion
 		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
 		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt();
 		Coil = CONFIG.getItem("Coil", itemCoilID).getInt();
+		Coil = CONFIG.getItem("Item_Multimeter", itemMultimeterID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;
