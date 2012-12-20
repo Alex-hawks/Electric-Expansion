@@ -55,7 +55,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 				if (inputTile != null)
 				{
@@ -81,12 +81,12 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			if (this.getJoules() > 0)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2);
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), outputDirection);
+				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 				if (tileEntity != null)
 				{
 
-					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, Vector3.get(this), ForgeDirection.getOrientation(this.blockMetadata));
+					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(this.blockMetadata));
 					// Output UE electricity
 					if (connector instanceof IConductor)
 					{

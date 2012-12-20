@@ -105,7 +105,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 
 	private void sendPacket()
 	{
-		PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, Vector3.get(this), 8);
+		PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 8);
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	public void openChest()
 	{
 		if (!this.worldObj.isRemote)
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
 		this.playersUsing++;
 	}
 

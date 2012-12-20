@@ -74,7 +74,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 8;
+	public static final int REVISION_VERSION = 10;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	// private, these are the default options.
@@ -101,6 +101,8 @@ public class ElectricExpansion
 	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
 	private static final int itemAdvBatID = ITEM_ID_PREFIX + 5;
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
+	private static final int itemCoilID = ITEM_ID_PREFIX + 7;
+
 	// Other
 	private static final int superConductorUpkeepDefault = 500;
 
@@ -127,6 +129,7 @@ public class ElectricExpansion
 	public static int Parts;
 	public static int Lead;
 	public static int AdvBat;
+	public static int Coil;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -154,6 +157,7 @@ public class ElectricExpansion
 	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
+	public static final Item itemCoil = new ItemBase(Coil, 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -188,6 +192,7 @@ public class ElectricExpansion
 		Parts = CONFIG.getItem("Parts", itemPartsID).getInt();
 		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
 		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt();
+		Coil = CONFIG.getItem("Coil", itemCoilID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;
@@ -239,19 +244,19 @@ public class ElectricExpansion
 
 		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", VERSION, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
 
-		GameRegistry.registerBlock(blockAdvBatteryBox);
-		GameRegistry.registerBlock(blockWireMill);
-		GameRegistry.registerBlock(blockMultimeter);
-		GameRegistry.registerBlock(blockLead);
-		GameRegistry.registerBlock(blockTransformer);
+		GameRegistry.registerBlock(blockAdvBatteryBox, "blockAdvBatteryBox");
+		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
+		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
+		GameRegistry.registerBlock(blockLead, "blockLead");
+		GameRegistry.registerBlock(blockTransformer, "blockTransformer");
 
-		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class);
+		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class, "blockWPT");
 
-		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class);
-		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class);
-		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class);
-		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class);
-		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class);
+		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class, "blockRawWire");
+		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire");
+		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire");
+		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
+		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 

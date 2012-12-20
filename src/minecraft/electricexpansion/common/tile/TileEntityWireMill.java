@@ -55,7 +55,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		if (!this.worldObj.isRemote)
 		{
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, Vector3.get(this), inputDirection);
+			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 			if (inputTile != null)
 			{
@@ -119,7 +119,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 12);
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
 	}
@@ -148,7 +148,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	public void openChest()
 	{
 		if (!this.worldObj.isRemote)
-			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, Vector3.get(this), 15);
+			PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
 		this.playersUsing++;
 	}
 

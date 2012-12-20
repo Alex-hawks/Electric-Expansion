@@ -21,6 +21,9 @@ public class RecipeRegistery
 	private static final Item itemParts = ElectricExpansion.itemParts;
 	private static final Item itemEliteBat = ElectricExpansion.itemEliteBat;
 	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
+	private static final Block blockTransformer = ElectricExpansion.blockTransformer;
+	private static final Block blockMultimeter = ElectricExpansion.blockMultimeter;
+
 
 	public static void crafting()
 	{
@@ -128,6 +131,12 @@ public class RecipeRegistery
 		// Lead Block
 		GameRegistry.addRecipe(new ItemStack(ElectricExpansion.blockLead, 1), new Object[] { "@@@", "@@@", "@@@", '@', ElectricExpansion.itemLead });
 		GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemLead, 9), new Object[] { ElectricExpansion.blockLead });
+
+		//Tranformer
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockTransformer), new Object[] { "$ $", "!@!", "###", '!', ElectricExpansion.itemCoil, '$', "plateBronze", '@', "basicCircuit", '#', "plateSteel" }));
+
+		//Multimeter
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0) , '%', "basicCircuit", '^', Block.glass, '@', Item.stick }));
 
 	}
 
