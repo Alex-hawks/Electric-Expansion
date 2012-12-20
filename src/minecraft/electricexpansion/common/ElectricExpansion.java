@@ -71,7 +71,7 @@ public class ElectricExpansion
 	public static final String CHANNEL = "ElexEx";
 
 	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
-	private static final String[] LANGUAGE_SUPPORTED = new String[] { "en_US" };
+	private static final String[] LANGUAGE_SUPPORTED = new String[] { "en_US", "en_AU", "en_UK" };
 
 	public static final int MAJOR_VERSION = 0;
 	public static final int MINOR_VERSION = 4;
