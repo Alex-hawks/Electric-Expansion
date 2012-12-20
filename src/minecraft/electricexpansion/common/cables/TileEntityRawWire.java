@@ -2,7 +2,6 @@ package electricexpansion.common.cables;
 
 import java.util.List;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import universalelectricity.prefab.UEDamageSource;

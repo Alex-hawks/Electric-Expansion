@@ -5,23 +5,15 @@ import java.util.EnumSet;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
-import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
-
-import com.google.common.io.ByteArrayDataInput;
-
 import electricexpansion.common.ElectricExpansion;
 
 public class TileEntityTransformer extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable, IInventory
@@ -29,8 +21,8 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	private ItemStack[] containingItems = new ItemStack[5];
 	private int playersUsing = 0;
 
-//USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
-        public boolean stepUp = false;
+	//USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
+	public boolean stepUp = false;
 
 	@Override
 	public void initiate()
@@ -62,39 +54,39 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 				if (network != null && inputNetwork != null)
 				{
-					
 
-						if (network.getRequest().getWatts() > 0)
+
+					if (network.getRequest().getWatts() > 0)
+					{
+						System.out.println(network.getRequest().voltage + " REQUESTED VOLTAGE OUT");
+						System.out.println(network.getRequest().getWatts() + " REQUESTED WATT OUT");
+
+						double requestedAmp = network.getRequest().amperes;
+						double requestedVolts = network.getRequest().voltage;
+
+						inputNetwork.startRequesting(this, network.getRequest());
+
+						if (inputNetwork.getProduced().getWatts() > 0)
 						{
-							System.out.println(network.getRequest().voltage + " REQUESTED VOLTAGE OUT");
-							System.out.println(network.getRequest().getWatts() + " REQUESTED WATT OUT");
+							System.out.println(inputNetwork.getProduced().voltage + " PRODUCED VOLTAGE INPUT");
+							System.out.println(inputNetwork.getProduced().getWatts() + " PRODUCED WATT INPUT");
+							System.out.println(actualProduce + " ACTUAL REQUESTED OUT");
 
-							double requestedAmp = network.getRequest().amperes;
-							double requestedVolts = network.getRequest().voltage;
-
-							inputNetwork.startRequesting(this, network.getRequest());
-
-							if (inputNetwork.getProduced().getWatts() > 0)
-							{
-								System.out.println(inputNetwork.getProduced().voltage + " PRODUCED VOLTAGE INPUT");
-								System.out.println(inputNetwork.getProduced().getWatts() + " PRODUCED WATT INPUT");
-								System.out.println(actualProduce + " ACTUAL REQUESTED OUT");
-
-								ElectricityPack actualEnergy = network.consumeElectricity(this);
-double newVoltage = actualEnergy.voltage + THEAMOUNTYOUSTEPUP;
-								network.startProducing(this, network.getRequest().getWatts()/newVoltage, newVoltage);
-							}else
+							ElectricityPack actualEnergy = network.consumeElectricity(this);
+							double newVoltage = actualEnergy.voltage + THEAMOUNTYOUSTEPUP;
+							network.startProducing(this, network.getRequest().getWatts()/newVoltage, newVoltage);
+						}else
 						{
 							network.stopProducing(this);
 						}
 
-						}
+					}
 
-						else
-						{
-							network.stopRequesting(this);
-						}
-					
+					else
+					{
+						network.stopRequesting(this);
+					}
+
 
 				}
 			}
