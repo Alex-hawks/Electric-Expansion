@@ -15,6 +15,7 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
@@ -40,6 +41,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	private int playersUsing = 0;
 	public int orientation;
+	private double joulesReceived;
 
 	@Override
 	public void initiate()
@@ -47,29 +49,29 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2)));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockWireMill.blockID);
 	}
-
+	
 	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
+
 		if (!this.worldObj.isRemote)
 		{
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
 			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-			if (inputTile != null)
+			ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+
+			if (network != null)
 			{
-				if (inputTile instanceof IConductor)
+				if (this.canDraw())
 				{
-					if (this.canDraw())
-					{
-						((IConductor) inputTile).getNetwork().startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-						this.wattsReceived = Math.max(Math.min(this.wattsReceived + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
-					}
-					else
-					{
-						((IConductor) inputTile).getNetwork().stopRequesting(this);
-					}
+					network.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+					this.joulesReceived = Math.max(Math.min(this.joulesReceived + network.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+				}
+				else
+				{
+					network.stopRequesting(this);
 				}
 			}
 		}
@@ -85,22 +87,30 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				if (electricItem.canProduceElectricity())
 				{
 					double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules(this.inventory[0]) * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.inventory[0]);
-					this.wattsReceived += ElectricInfo.getWatts(receivedWattHours);
+					this.joulesReceived += ElectricInfo.getWatts(receivedWattHours);
 				}
 			}
 		}
 
-		if (this.wattsReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
+		if (this.joulesReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
 		{
+			// The left slot contains the item to
+			// be processed
 			if (this.inventory[1] != null && this.canDraw() && this.drawingTicks == 0)
 			{
 				this.drawingTicks = this.getDrawingTime();
 			}
 
+			// Checks if the item can be processed
+			// and if the drawing time left is
+			// greater than 0, if so, then draw
+			// the item.
 			if (this.canDraw() && this.drawingTicks > 0)
 			{
 				this.drawingTicks--;
 
+				// When the item is finished
+				// drawing
 				if (this.drawingTicks < 1)
 				{
 					this.drawItem();
@@ -112,7 +122,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				this.drawingTicks = 0;
 			}
 
-			this.wattsReceived -= this.WATTS_PER_TICK;
+			this.joulesReceived -= this.WATTS_PER_TICK;
 		}
 
 		if (!this.worldObj.isRemote)

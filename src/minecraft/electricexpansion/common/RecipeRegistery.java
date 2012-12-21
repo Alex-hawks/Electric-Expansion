@@ -148,6 +148,6 @@ public class RecipeRegistery
 		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 60);
 		WireMillRecipes.addDrawing("ingotEndium", new ItemStack(blockRawWire, 6, 4), 60);
 
-		WireMillRecipes.addDrawing(new ItemStack(Block.cloth), new ItemStack(Item.silk, 3), 40);
+		WireMillRecipes.addDrawing(new ItemStack(Block.cloth), new ItemStack(Item.silk, 4), 30);
 	}
 }
