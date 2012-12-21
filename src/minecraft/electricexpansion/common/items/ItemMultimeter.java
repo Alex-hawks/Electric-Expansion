@@ -1,16 +1,22 @@
-package electricexpansion.common.items;
+	package electricexpansion.common.items;
+
+import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UETab;
+import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityConductor;
 import electricexpansion.common.CommonProxy;
@@ -35,7 +41,7 @@ public class ItemMultimeter extends Item
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World worldObj, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
 	{
-		if (!worldObj.isRemote)
+		if (worldObj.isRemote)
 		return false;
 		
 		TileEntity tile = worldObj.getBlockTileEntity(x, y, z);
@@ -47,12 +53,13 @@ public class ItemMultimeter extends Item
 		ElectricityPack getProduced = wireTile.getNetwork().getProduced();
 
 
-		PacketDispatcher.sendPacketToPlayer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (double) getProduced.amperes, (double) getProduced.voltage), (Player) player);
 		player.addChatMessage("Reading Successful!");
-		player.addChatMessage("Amperes Produced: " + getProduced.amperes);
-		player.addChatMessage("Voltage Produced: " + getProduced.amperes);
-	//	player.addChatMessage("Watts Produced: " + getProduced.getWatts());
+		player.addChatMessage("Amperes Produced: " + ElectricInfo.roundDecimals(getProduced.amperes));
+		player.addChatMessage("Voltage Produced: " + ElectricInfo.roundDecimals(getProduced.voltage));
+		player.addChatMessage("Watts Produced: " + ElectricInfo.roundDecimals(getProduced.getWatts()));
 			
 		return true;
 	}
+
+
 }
