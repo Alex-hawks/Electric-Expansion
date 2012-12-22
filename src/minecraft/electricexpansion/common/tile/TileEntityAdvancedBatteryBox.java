@@ -440,14 +440,16 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		return true;
 	}
 
-	@Override
-	public void attach(IComputerAccess computer, String computerSide)
-	{
-	}
+
 
 	@Override
 	public void detach(IComputerAccess computer)
 	{
+	}
+
+	@Override
+	public void attach(IComputerAccess computer) {
+		
 	}
 
 }

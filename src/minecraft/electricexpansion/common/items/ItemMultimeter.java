@@ -52,12 +52,9 @@ public class ItemMultimeter extends Item
 		
 		ElectricityPack getProduced = wireTile.getNetwork().getProduced();
 
-
 		player.addChatMessage("Reading Successful!");
-		player.addChatMessage("Amperes Produced: " + ElectricInfo.roundDecimals(getProduced.amperes));
-		player.addChatMessage("Voltage Produced: " + ElectricInfo.roundDecimals(getProduced.voltage));
-		player.addChatMessage("Watts Produced: " + ElectricInfo.roundDecimals(getProduced.getWatts()));
-			
+		player.addChatMessage("Amperes: " + ElectricInfo.roundDecimals(getProduced.amperes) + "Voltage: " + ElectricInfo.roundDecimals(getProduced.voltage) + "Watts: " + ElectricInfo.roundDecimals(getProduced.getWatts()));			
+		
 		return true;
 	}
 
