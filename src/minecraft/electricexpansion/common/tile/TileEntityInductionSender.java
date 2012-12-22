@@ -21,6 +21,7 @@ import com.google.common.io.ByteArrayDataInput;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.WirelessPowerMachine;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.wpt.InductionNetworks;
 
 public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
@@ -111,7 +112,7 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.joules, this.disabledTicks);
 	}
 
 	@Override

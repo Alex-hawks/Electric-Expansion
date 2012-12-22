@@ -26,6 +26,7 @@ import com.google.common.io.ByteArrayDataInput;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.WirelessPowerMachine;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.wpt.DistributionNetworks;
 
 public class TileEntityDistribution extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral, IInventory, WirelessPowerMachine
@@ -131,7 +132,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.getFrequency(), this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks);
 	}
 	
 	@Override

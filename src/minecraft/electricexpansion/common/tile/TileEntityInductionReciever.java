@@ -138,7 +138,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.joules, this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.joules, this.disabledTicks);
 	}
 
 	@Override

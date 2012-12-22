@@ -16,7 +16,6 @@ import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -60,18 +59,18 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
 			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-			ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
-			if (network != null)
+			if (inputNetwork != null)
 			{
 				if (this.canDraw())
 				{
-					network.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-					this.joulesReceived = Math.max(Math.min(this.joulesReceived + network.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+					inputNetwork.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
+					this.joulesReceived = Math.max(Math.min(this.joulesReceived + inputNetwork.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
 				}
 				else
 				{
-					network.stopRequesting(this);
+					inputNetwork.stopRequesting(this);
 				}
 			}
 		}
@@ -137,11 +136,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, this.drawingTicks, this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks);
 	}
 
 	@Override
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		try
 		{

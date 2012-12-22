@@ -271,7 +271,7 @@ public class ElectricExpansion
 
 		if (!Loader.isModLoaded("BasicComponents"))
 		{
-			System.out.println("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
+			EELogger.fine("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
 		}
 	}
 
@@ -292,6 +292,9 @@ public class ElectricExpansion
 			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
 		}
 
+		UniversalElectricity.isVoltageSensitive = true;
+		
+		EELogger.finest("Successfully toggled Voltage Sensitivity!");
 	}
 
 	@PostInit
@@ -302,7 +305,7 @@ public class ElectricExpansion
 			StartLog("postInit");
 		}
 		OreDictionary.registerOre("ingotLead", this.itemLead);
-		OreDictionary.registerOre("leadBlock", this.blockLead);
+		OreDictionary.registerOre("blockLead", this.blockLead);
 		MinecraftForge.EVENT_BUS.register(this);
 
 	}
