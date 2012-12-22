@@ -45,8 +45,11 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	@Override
 	public void setFrequency(short newFrequency)
 	{
-		InductionNetworks.setRecieverFreq(this.frequency, newFrequency, this);
-		this.frequency = newFrequency;
+		if (newFrequency != (Short)null)
+		{
+			InductionNetworks.setRecieverFreq(this.frequency, newFrequency, this);
+			this.frequency = newFrequency;
+		}
 	}
 
 	public void setFrequency(int frequency)
