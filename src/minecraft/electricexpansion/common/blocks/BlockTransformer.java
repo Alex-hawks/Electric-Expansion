@@ -12,6 +12,8 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
@@ -97,22 +99,26 @@ public class BlockTransformer extends BlockMachine
 		return true;
 	}
 	
-	/**
-	 * Called when a player uses a wrench on the machine while sneaking
-	 * 
-	 * @return True if some happens
-	 */
-	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	@Override
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
+		if(!par1World.isRemote)
+		{
 		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
-	if(tileEntity.stepUp == true)
-		tileEntity.stepUp = false;
-		
-	if(tileEntity.stepUp == false)
-		tileEntity.stepUp = true;
+		tileEntity.stepUp = !tileEntity.stepUp;
 	
-		return true;
+		if(tileEntity.stepUp)
+		par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Up Converting");
+		
+		if(!tileEntity.stepUp)
+			par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Down Converting");
+
+	return true;
+	
+		}
+		
+		return false;
 	}
 
 
@@ -139,7 +145,8 @@ public class BlockTransformer extends BlockMachine
 	{
 		return true;
 	}
-
+	
+	 @SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{

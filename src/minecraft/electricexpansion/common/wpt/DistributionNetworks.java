@@ -12,6 +12,9 @@ import net.minecraft.world.World;
 
 import com.google.common.io.Files;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 import electricexpansion.common.ElectricExpansion;
 
 public class DistributionNetworks
@@ -42,7 +45,8 @@ public class DistributionNetworks
 	{
 		return maxJoules;
 	}
-
+	
+	@SideOnly(Side.SERVER)
 	public static void onWorldSave(World world)
 	{
 		String folder = "";
@@ -94,58 +98,41 @@ public class DistributionNetworks
 		}
 	}
 
-	public static void onWorldLoad(World world)
+	@SideOnly(Side.SERVER)
+	public static void onWorldLoad()
 	{
 		String folder = "";
-		if (!world.isRemote && server.isDedicatedServer())
+		if (server.isDedicatedServer())
 		{
 			folder = server.getFolderName();
 		}
-		else if (!world.isRemote)
+		else if (!server.isDedicatedServer())
 		{
 			folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName();
 		}
 
-		File oldFile = null;
-		if (!world.isRemote && !server.isDedicatedServer())
-		{
-			oldFile = new File(Minecraft.getMinecraftDir() + File.separator + server.getFolderName() + File.separator + "ElectricExpansion", "QuantumStorage.dat");
-		}
 		try
 		{
-			if (oldFile != null && oldFile.exists())
-				Files.move(oldFile, new File(folder + File.separator + "ElectricExpansion" + File.separator + "QuantumStorage.dat"));
-		}
-		catch (Exception e1)
-		{
-			ElectricExpansion.EELogger.fine("Old Quantum Battery Box save data doesn't exist. This is not something to worry about.");
-		}
+			File var2 = new File(folder + File.separator + "ElectricExpansion", "QuantumStorage.dat");
 
-		if (!world.isRemote)
-		{
-			try
+			if (var2.exists())
 			{
-				File var2 = new File(folder + File.separator + "ElectricExpansion", "QuantumStorage.dat");
-
-				if (var2.exists())
+				for (int i = 0; i < joules.length; i++)
 				{
-					for (int i = 0; i < joules.length; i++)
+					try
 					{
-						try
-						{
-							joules[i] = CompressedStreamTools.readCompressed(new FileInputStream(var2)).getDouble(i + "");
-						}
-						catch (Exception e)
-						{
-							joules[i] = 0;
-						}
+						joules[i] = CompressedStreamTools.readCompressed(new FileInputStream(var2)).getDouble(i + "");
+					}
+					catch (Exception e)
+					{
+						joules[i] = 0;
 					}
 				}
 			}
-			catch (Exception e)
-			{
-				ElectricExpansion.EELogger.severe("Failed to load the Quantum Battery Box Electricity Storage Data!");
-			}
+		}
+		catch (Exception e)
+		{
+			ElectricExpansion.EELogger.severe("Failed to load the Quantum Battery Box Electricity Storage Data!");
 		}
 	}
 }

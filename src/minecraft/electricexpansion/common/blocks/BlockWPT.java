@@ -128,7 +128,7 @@ public class BlockWPT extends BlockContainer
 		return null;
 	}
 
-	/**
+	/*
 	 * Called when the block is right clicked by the player
 	 */
 	@Override
