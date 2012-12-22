@@ -103,15 +103,12 @@ public class BlockTransformer extends BlockMachine
 	 * 
 	 * @return True if some happens
 	 */
+	@Override
 	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
-	if(tileEntity.stepUp)
-		tileEntity.stepUp = false;
-		
-	if(!tileEntity.stepUp)
-		tileEntity.stepUp = true;
+		tileEntity.stepUp = !tileEntity.stepUp;
 	
 	System.out.println(tileEntity.stepUp);
 		return true;
