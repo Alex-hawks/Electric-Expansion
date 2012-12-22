@@ -107,10 +107,10 @@ public class BlockTransformer extends BlockMachine
 	{
 		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
-	if(tileEntity.stepUp == true)
+	if(tileEntity.stepUp)
 		tileEntity.stepUp = false;
 		
-	if(tileEntity.stepUp == false)
+	if(!tileEntity.stepUp)
 		tileEntity.stepUp = true;
 	
 	System.out.println(tileEntity.stepUp);
@@ -134,24 +134,6 @@ public class BlockTransformer extends BlockMachine
 	public boolean isOpaqueCube()
 	{
 		return false;
-	}
-	
-	/**
-	 * Called when the block is right clicked by the player
-	 */
-	@Override
-	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
-
-	if(tileEntity.stepUp == true)
-		tileEntity.stepUp = false;
-		
-	if(tileEntity.stepUp == false)
-		tileEntity.stepUp = true;
-	
-	System.out.println(tileEntity.stepUp);
-		return true;
 	}
 
 	@Override
