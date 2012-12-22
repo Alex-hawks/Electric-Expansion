@@ -27,8 +27,9 @@ x ElectricExpansion_v0.4.2.jar
 X ElectricExpansion_v0.4.7.jar
 * ElectricExpansion_v0.4.8.jar
 * ElectricExpansion_v0.4.8.jar
-Minecraft 1.4.5 
-* ElectricExpansion_v0.4.9.jar
-@ ElectricExpansion_v0.4.10.jar
-@ ElectricExpansion_v0.4.11.jar
-@ ElectricExpansion_v0.4.13.jar
+Minecraft 1.4.5
+x ElectricExpansion_v0.4.9.jar
+x ElectricExpansion_v0.4.10.jar
+x ElectricExpansion_v0.4.11.jar
+x ElectricExpansion_v0.4.13.jar
+@ ElectricExpansion_v0.4.14.jar

@@ -12,10 +12,11 @@ import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockMachine
@@ -144,7 +145,8 @@ public class BlockTransformer extends BlockMachine
 	{
 		return true;
 	}
-
+	
+	 @SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{
