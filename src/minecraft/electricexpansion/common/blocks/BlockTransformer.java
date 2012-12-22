@@ -98,20 +98,26 @@ public class BlockTransformer extends BlockMachine
 		return true;
 	}
 	
-	/**
-	 * Called when a player uses a wrench on the machine while sneaking
-	 * 
-	 * @return True if some happens
-	 */
 	@Override
-	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
+		if(!par1World.isRemote)
+		{
 		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
 		tileEntity.stepUp = !tileEntity.stepUp;
 	
-	System.out.println(tileEntity.stepUp);
-		return true;
+		if(tileEntity.stepUp)
+		par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Up Converting");
+		
+		if(!tileEntity.stepUp)
+			par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Down Converting");
+
+	return true;
+	
+		}
+		
+		return false;
 	}
 
 

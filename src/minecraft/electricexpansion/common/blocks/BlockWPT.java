@@ -128,9 +128,9 @@ public class BlockWPT extends BlockContainer
 		return null;
 	}
 
-	/**
+/*	*//**
 	 * Called when the block is right clicked by the player
-	 */
+	 *//*
 	@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
@@ -145,5 +145,5 @@ public class BlockWPT extends BlockContainer
 		}
 
 		return true;
-	}
+	}*/
 }
