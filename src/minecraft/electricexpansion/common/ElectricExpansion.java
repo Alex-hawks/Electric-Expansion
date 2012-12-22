@@ -89,6 +89,8 @@ public class ElectricExpansion
 	// private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
 	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
 	private static final int blockMultiMeterID = BLOCK_ID_PREFIX + 8;
+	//9
+	//10
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
 	private static final int blockTransformerID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
@@ -161,7 +163,7 @@ public class ElectricExpansion
 	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
 	public static final Item itemCoil = new ItemBase(Coil, 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
-	public static final Item itemMultimeter = new ItemMultimeter(10).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
+	public static final Item itemMultimeter = new ItemMultimeter(MultimeterItem).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -197,7 +199,7 @@ public class ElectricExpansion
 		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
 		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt();
 		Coil = CONFIG.getItem("Coil", itemCoilID).getInt();
-		Coil = CONFIG.getItem("Item_Multimeter", itemMultimeterID).getInt();
+		MultimeterItem = CONFIG.getItem("Item_Multimeter", itemMultimeterID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;

@@ -61,18 +61,19 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 							if (inputNetwork.getProduced().getWatts() > 0)
 							{
+								
 
 								ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
-							double newVoltage;
-							if(stepUp)
-							{
-								newVoltage = actualEnergy.voltage + 120;
+							double newVoltage = actualEnergy.voltage + 120;
 
-							}
-							else
-							{
-								newVoltage = actualEnergy.voltage - 120;
-							}
+							/*if(!stepUp)
+								newVoltage = actualEnergy.voltage - 120;*/
+
+								
+								
+							System.out.println(inputNetwork.getProduced().getWatts() + " getWAt");
+							System.out.println(newVoltage + " nv");
+							System.out.println(inputNetwork.getProduced().getWatts()/newVoltage + " amps");
 								network.startProducing(this, inputNetwork.getProduced().getWatts()/newVoltage, newVoltage);
 							}
 							else

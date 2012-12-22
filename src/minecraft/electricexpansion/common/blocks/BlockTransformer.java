@@ -15,6 +15,7 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockMachine
@@ -112,6 +113,7 @@ public class BlockTransformer extends BlockMachine
 	if(tileEntity.stepUp == false)
 		tileEntity.stepUp = true;
 	
+	System.out.println(tileEntity.stepUp);
 		return true;
 	}
 
@@ -132,6 +134,24 @@ public class BlockTransformer extends BlockMachine
 	public boolean isOpaqueCube()
 	{
 		return false;
+	}
+	
+	/**
+	 * Called when the block is right clicked by the player
+	 */
+	@Override
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
+
+	if(tileEntity.stepUp == true)
+		tileEntity.stepUp = false;
+		
+	if(tileEntity.stepUp == false)
+		tileEntity.stepUp = true;
+	
+	System.out.println(tileEntity.stepUp);
+		return true;
 	}
 
 	@Override
