@@ -1,11 +1,13 @@
 package electricexpansion.common;
 
+import universalelectricity.prefab.RecipeHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.common.misc.WireMillRecipes;
 
@@ -23,6 +25,8 @@ public class RecipeRegistery
 	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
 	private static final Block blockTransformer = ElectricExpansion.blockTransformer;
 	private static final Block blockMultimeter = ElectricExpansion.blockMultimeter;
+	
+	private static Block basicCompWire;
 
 
 	public static void crafting()
@@ -138,6 +142,18 @@ public class RecipeRegistery
 		//Multimeter
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0) , '%', "basicCircuit", '^', Block.glass, '@', Item.stick }));
 
+	 	if(Loader.isModLoaded("BasicComponents")) 
+	 	{
+    		//Reflection to get Basic Components Wire
+    		try {
+    			basicCompWire = (Block)Class.forName("basiccomponents.common.BasicComponents").getField("blockCopperWire").get(Block.class);
+    		} catch (Exception e) {
+    			e.getStackTrace();
+    		}	
+
+    		RecipeHelper.removeRecipe(new ItemStack(basicCompWire));
+    		
+    	}		
 	}
 
 	public static void drawing()
