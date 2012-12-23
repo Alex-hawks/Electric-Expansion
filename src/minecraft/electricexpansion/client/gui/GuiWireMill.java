@@ -1,5 +1,8 @@
 package electricexpansion.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
@@ -35,15 +38,13 @@ public class GuiWireMill extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		this.fontRenderer.drawString("Wire Mill", 60, 6, 4210752);
-		this.fontRenderer.drawString("Input:", 10, 28, 4210752);
-		this.fontRenderer.drawString("Battery:", 10, 53, 4210752);
 		String displayText = "";
 
 		if (this.tileEntity.isDisabled())
 		{
 			displayText = "Disabled!";
 		}
-		else if (this.tileEntity.drawingTicks > 0)
+		else if (this.tileEntity.getDrawingTimeLeft() > 0)
 		{
 			displayText = "Working";
 		}
@@ -64,17 +65,28 @@ public class GuiWireMill extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		int var4 = this.mc.renderEngine.getTexture(CommonProxy.ATEXTURES + "WireMillGUI.png");
+		int var4 = this.mc.renderEngine.getTexture(this.getTexture());
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		containerWidth = (this.width - this.xSize) / 2;
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
-		if (this.tileEntity.drawingTicks > 0)
+		if (this.tileEntity.getDrawingTimeLeft() > 0)
 		{
-			int scale = (int) (((double) this.tileEntity.drawingTicks / this.tileEntity.getDrawingTime()) * 23);
-			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
+			int scale = (int) (((double) this.tileEntity.getDrawingTimeLeft() / this.tileEntity.getDrawingTime()) * 23);
+			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 27, 176, 0, 23 - scale, 13);
 		}
+		
+		if (this.tileEntity.getJoules() >= 0)
+		{
+			int scale = (int) (((double) this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 50));
+			this.drawTexturedModalRect(containerWidth + 35, containerHeight + 20, 176, 13, 4, 50 - scale);
+		}
+	}
+	
+	public static String getTexture()
+	{
+		return CommonProxy.ATEXTURES + "WireMillGUI.png";
 	}
 }

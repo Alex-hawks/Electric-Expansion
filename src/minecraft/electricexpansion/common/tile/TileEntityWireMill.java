@@ -13,10 +13,13 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IItemElectric;
+import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -27,11 +30,13 @@ import com.google.common.io.ByteArrayDataInput;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver
+public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage
 {
 	public final double WATTS_PER_TICK = 500;
-	public int drawingTicks = 0;
-	public double wattsReceived = 0;
+	public final double TRANSFER_LIMIT = 1000;
+	private int drawingTicks = 0;
+	private double joulesStored = 0;
+	public static double maxJoules = 75000;
 	/**
 	 * The ItemStacks that hold the items currently being used in the wire mill; 0 = battery; 1 =
 	 * input; 2 = output;
@@ -40,7 +45,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	private int playersUsing = 0;
 	public int orientation;
-	private double joulesReceived;
 
 	@Override
 	public void initiate()
@@ -63,10 +67,19 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 			if (inputNetwork != null)
 			{
-				if (this.canDraw())
+				if (this.joulesStored < this.maxJoules)
 				{
-					inputNetwork.startRequesting(this, WATTS_PER_TICK / this.getVoltage(), this.getVoltage());
-					this.joulesReceived = Math.max(Math.min(this.joulesReceived + inputNetwork.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+					inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), TRANSFER_LIMIT) / this.getVoltage(), this.getVoltage());
+					ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
+					this.setJoules(this.joulesStored + electricityPack.getWatts());
+
+					if (UniversalElectricity.isVoltageSensitive)
+					{
+						if (electricityPack.voltage > this.getVoltage())
+						{
+							this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
+						}
+					}
 				}
 				else
 				{
@@ -77,7 +90,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 		// The bottom slot is for portable
 		// batteries
-		if (this.inventory[0] != null)
+		if (this.inventory[0] != null && this.joulesStored < this.getMaxJoules())
 		{
 			if (this.inventory[0].getItem() instanceof IItemElectric)
 			{
@@ -85,13 +98,13 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 				if (electricItem.canProduceElectricity())
 				{
-					double receivedWattHours = electricItem.onUse(Math.min(electricItem.getMaxJoules(this.inventory[0]) * 0.01, ElectricInfo.getWattHours(WATTS_PER_TICK)), this.inventory[0]);
-					this.joulesReceived += ElectricInfo.getWatts(receivedWattHours);
+					double joulesReceived = electricItem.onUse(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT), this.inventory[0]);
+					this.setJoules(this.joulesStored + joulesReceived);
 				}
 			}
 		}
 
-		if (this.joulesReceived >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
+		if (this.joulesStored >= this.WATTS_PER_TICK - 50 && !this.isDisabled())
 		{
 			// The left slot contains the item to
 			// be processed
@@ -115,13 +128,12 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 					this.drawItem();
 					this.drawingTicks = 0;
 				}
+				this.joulesStored -= this.WATTS_PER_TICK;
 			}
 			else
 			{
 				this.drawingTicks = 0;
 			}
-
-			this.joulesReceived -= this.WATTS_PER_TICK;
 		}
 
 		if (!this.worldObj.isRemote)
@@ -131,12 +143,15 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
+		
+		this.joulesStored = Math.min(this.joulesStored, this.getMaxJoules());
+		this.joulesStored = Math.max(this.joulesStored, 0d);
 	}
 
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks, this.joulesStored);
 	}
 
 	@Override
@@ -146,6 +161,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{
 			this.drawingTicks = dataStream.readInt();
 			this.disabledTicks = dataStream.readInt();
+			this.joulesStored = dataStream.readDouble();
 		}
 		catch (Exception e)
 		{
@@ -235,6 +251,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		this.drawingTicks = par1NBTTagCompound.getInteger("drawingTicks");
 		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.inventory = new ItemStack[this.getSizeInventory()];
+		try
+		{
+			this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
+		}
+		catch(Exception e){}
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
@@ -255,6 +276,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("drawingTicks", this.drawingTicks);
 		NBTTagList var2 = new NBTTagList();
+		par1NBTTagCompound.setDouble("joulesStored", this.getJoules());
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)
 		{
@@ -379,5 +401,28 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (WireMillRecipes.drawing().getDrawingResult(this.inventory[1]) != null) { return (int) WireMillRecipes.drawing().getDrawingTicks(this.inventory[1]); }
 		}
 		return -1;
+	}
+	
+	public int getDrawingTimeLeft()
+	{
+		return this.drawingTicks;
+	}
+
+	@Override
+	public double getJoules(Object... data) 
+	{
+		return this.joulesStored;
+	}
+
+	@Override
+	public void setJoules(double joules, Object... data) 
+	{
+		this.joulesStored = joules;
+	}
+
+	@Override
+	public double getMaxJoules(Object... data) 
+	{
+		return this.maxJoules;
 	}
 }
