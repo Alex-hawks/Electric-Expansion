@@ -38,7 +38,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	{
 		super.updateEntity();
 
-		if (this.ticks % 20 == 0)
+		if (this.ticks % 10 == 0)
 		{
 			this.lastReading = this.electricityReading;
 
