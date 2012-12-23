@@ -76,8 +76,8 @@ public class ElectricExpansion
 	private static final String[] LANGUAGE_SUPPORTED = new String[] { "en_US", "en_AU", "en_UK" };
 
 	public static final int MAJOR_VERSION = 0;
-	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 15;
+	public static final int MINOR_VERSION = 5;
+	public static final int REVISION_VERSION = 2;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	// private, these are the default options.
