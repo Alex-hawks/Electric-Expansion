@@ -121,6 +121,26 @@ public class BlockTransformer extends BlockMachine
 		return false;
 	}
 
+	@Override
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		if(!par1World.isRemote)
+		{
+		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
+
+	
+		if(tileEntity.stepUp)
+		par5EntityPlayer.sendChatToPlayer("Transformer is currently set as: Up Converting");
+		
+		if(!tileEntity.stepUp)
+			par5EntityPlayer.sendChatToPlayer("Transformer is currently set as: Down Converting");
+
+	return true;
+	
+		}
+		
+		return false;
+	}
 
 	@Override
 	public boolean renderAsNormalBlock()
