@@ -26,47 +26,72 @@ public class BlockMultimeter extends BlockMachine
 		this.setCreativeTab(UETab.INSTANCE);
 	}
 
-	@Override
+/*	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
+		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
+
 		// If it is the front side
 		if (side == ForgeDirection.getOrientation(metadata).ordinal())
 		{
 			return this.blockIndexInTexture + 5;
 		}
-		else if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
+		if (side == ForgeDirection.OPPOSITES[metadata])		{ 
+			return this.blockIndexInTexture + 2; 
+		}
 
 		return this.blockIndexInTexture;
 
-	}
-
+	}*/
+	
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving)
+	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 2;
+		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
 
-		switch (angle)
-		{
-			case 0:
-				change = 2;
-				break;
-			case 1:
-				change = 5;
-				break;
-			case 2:
-				change = 3;
-				break;
-			case 3:
-				change = 4;
-				break;
 
-		}
-		world.setBlockMetadata(x, y, z, change);
-		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
-		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+
+			// If it is the front side
+			if (side == metadata + 2)
+			{
+				return this.blockIndexInTexture + 2;
+			}
+			// If it is the back side
+			else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 5; }
+			
+			return blockIndexInTexture;
 	}
 
+	/**
+	 * Called when the block is placed in the world.
+	 */
+	@Override
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+	{
+		int metadata = par1World.getBlockMetadata(x, y, z);
+
+		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int change = 3;
+
+		
+			switch (angle)
+			{
+				case 0:
+					par1World.setBlockMetadata(x, y, z, 1);
+					break;
+				case 1:
+					par1World.setBlockMetadata(x, y, z, 2);
+					break;
+				case 2:
+					par1World.setBlockMetadata(x, y, z, 0);
+					break;
+				case 3:
+					par1World.setBlockMetadata(x, y, z, 3);
+					break;
+			}
+		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+	}
 	@Override
 	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
