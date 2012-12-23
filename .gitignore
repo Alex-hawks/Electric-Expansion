@@ -31,7 +31,7 @@
 /src/resources/*
 !/src/minecraft/electricexpansion/
 !/src/minecraft/universalelectricity/
-!/src/minecraft/dan200/
+/src/minecraft/dan200/
 !/mcmod.info
 !/modversion.txt
 !/include.bat
