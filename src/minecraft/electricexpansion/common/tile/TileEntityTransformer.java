@@ -22,7 +22,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	private int playersUsing = 0;
 
 //USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
-        public boolean stepUp = false;
+        public boolean stepUp = true;
 
 	@Override
 	public void initiate()

@@ -127,7 +127,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemAdvBat), new Object[] { " T ", "TRT", "TRT", 'T', "ingotSteel", 'R', Item.lightStoneDust }));
 
 		// Elite Battery
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemEliteBat), new Object[] { "!@!", "#$#", "!@!", '!', "plateSteel", '@', new ItemStack(blockInsulatedWire, 1, 0), '#', ElectricExpansion.itemLead, '$', Item.ghastTear }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemEliteBat), new Object[] { "!@!", "#$#", "!@!", '!', "plateSteel", '@', new ItemStack(blockInsulatedWire, 1, 0), '#', "ingotLead", '$', Item.ghastTear }));
 
 		// Parts
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 0), new Object[] { " # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond }));

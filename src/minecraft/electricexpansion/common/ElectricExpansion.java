@@ -306,8 +306,16 @@ public class ElectricExpansion
 		}
 		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("blockLead", this.blockLead);
-		MinecraftForge.EVENT_BUS.register(this);
+		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
+		OreDictionary.registerOre("eliteBattery", this.itemEliteBat);
+		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
+		OreDictionary.registerOre("transformer", this.blockTransformer);
+		OreDictionary.registerOre("coil", this.itemCoil);
+		OreDictionary.registerOre("wireMill", this.blockWireMill);
+		OreDictionary.registerOre("multimeter", this.blockMultimeter);
+		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
 
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@ForgeSubscribe
