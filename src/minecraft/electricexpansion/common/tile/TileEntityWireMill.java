@@ -33,10 +33,10 @@ import electricexpansion.common.misc.WireMillRecipes;
 public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage
 {
 	public final double WATTS_PER_TICK = 500;
-	public final double TRANSFER_LIMIT = 1000;
+	public final double TRANSFER_LIMIT = 1250;
 	private int drawingTicks = 0;
 	private double joulesStored = 0;
-	public static double maxJoules = 75000;
+	public static double maxJoules = 150000;
 	/**
 	 * The ItemStacks that hold the items currently being used in the wire mill; 0 = battery; 1 =
 	 * input; 2 = output;
