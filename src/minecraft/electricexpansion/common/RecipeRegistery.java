@@ -25,7 +25,8 @@ public class RecipeRegistery
 	private static final Item itemUpgrade = ElectricExpansion.itemUpgrade;
 	private static final Block blockTransformer = ElectricExpansion.blockTransformer;
 	private static final Block blockMultimeter = ElectricExpansion.blockMultimeter;
-	
+	private static final Item itemMultimeter = ElectricExpansion.itemMultimeter;
+
 	private static Block basicCompWire;
 
 
@@ -141,8 +142,11 @@ public class RecipeRegistery
 
 		//Multimeter
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0) , '%', "basicCircuit", '^', Block.glass, '@', Item.stick }));
-
-	 	if(Loader.isModLoaded("BasicComponents")) 
+	
+		//Handheld Multimeter
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0) , '%', "advancedCircuit", '^', Block.glass, '@', Item.stick }));
+	 
+			if(Loader.isModLoaded("BasicComponents")) 
 	 	{
     		//Reflection to get Basic Components Wire
     		try {

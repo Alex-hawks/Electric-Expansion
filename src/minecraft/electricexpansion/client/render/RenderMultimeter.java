@@ -92,9 +92,11 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 
 				String amperes = ElectricInfo.getDisplay(tileEntity.electricityReading.amperes, ElectricUnit.AMPERE);
 				String voltage = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage, ElectricUnit.VOLTAGE);
+				String watt = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage*tileEntity.electricityReading.amperes, ElectricUnit.WATT);
 
 				maxWidth = Math.max(fontRenderer.getStringWidth(amperes), maxWidth);
 				maxWidth = Math.max(fontRenderer.getStringWidth(voltage), maxWidth);
+				maxWidth = Math.max(fontRenderer.getStringWidth(watt), maxWidth);
 				maxWidth += 4;
 				int lineHeight = fontRenderer.FONT_HEIGHT + 2;
 				int requiredHeight = lineHeight * 1;
@@ -123,6 +125,8 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 				GL11.glDisable(GL11.GL_LIGHTING);
 				fontRenderer.drawString(amperes, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 0 * lineHeight, 1);
 				fontRenderer.drawString(voltage, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 1 * lineHeight, 1);
+				fontRenderer.drawString(watt, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 2 * lineHeight, 1);
+
 				GL11.glEnable(GL11.GL_LIGHTING);
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				GL11.glDepthMask(true);

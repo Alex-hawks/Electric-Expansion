@@ -27,7 +27,7 @@ public class ItemMultimeter extends Item
 	public ItemMultimeter(int par1)
 	{
 		super(par1);
-		this.iconIndex = 1;
+		this.iconIndex = 11;
 		this.setItemName("itemMultimeter");
 		this.setCreativeTab(UETab.INSTANCE);
 	}
