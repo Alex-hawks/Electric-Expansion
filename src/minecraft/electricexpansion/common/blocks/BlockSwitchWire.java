@@ -59,8 +59,8 @@ public class BlockSwitchWire extends BlockConductor
 				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UNKNOWN));
 			}
 		}
-		if(world != null)
-			world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+		try{	world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);}
+		catch(NullPointerException e){}
 	}
 
 	@Override
