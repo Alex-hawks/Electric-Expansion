@@ -29,7 +29,7 @@ public class BlockWPT extends BlockContainer
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		this.setCreativeTab(UETab.INSTANCE);
+	//	this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override
@@ -131,7 +131,7 @@ public class BlockWPT extends BlockContainer
 	/*
 	 * Called when the block is right clicked by the player
 	 */
-	@Override
+	/*@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
@@ -145,5 +145,6 @@ public class BlockWPT extends BlockContainer
 		}
 
 		return true;
-	}
+	}*/
+
 }
