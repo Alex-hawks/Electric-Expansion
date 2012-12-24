@@ -27,8 +27,8 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 	public void renderAModelAt(TileEntity t, double x, double y, double z, float f)
 	{
 		String textureToUse = null;
-		int ID = t.worldObj.getBlockId((int) x,(int) y,(int) z);
-		int meta = t.worldObj.getBlockMetadata((int)x, (int)y, (int)z);
+		int ID = t.getBlockType().blockID;
+		int meta = t.getBlockMetadata();
 		if (meta != -1)
 		{
 			if (ID == ElectricExpansion.insulatedWire)
