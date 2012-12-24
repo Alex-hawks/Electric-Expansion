@@ -40,7 +40,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			case 3:
 				return 0.2;
 			case 4:
-				return 0.005;
+				return 0;
 			default:
 				return 0.05;
 		}
@@ -59,9 +59,9 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			case 2:
 				return 200;
 			case 3:
-				return 2500; // HV
+				return 5000; // HV
 			case 4:
-				return 1000;
+				return 1500;
 			default:
 				return 500;
 		}
