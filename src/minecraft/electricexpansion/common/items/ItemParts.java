@@ -56,9 +56,9 @@ public class ItemParts extends Item
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int var4 = 0; var4 < 3; var4++)
-			par3List.add(new ItemStack(par1, 1, var4));
+			par3List.add(new ItemStack(this, 1, var4));
 	}
 }
