@@ -66,7 +66,7 @@ public class BlockInsulatedWire extends BlockConductor
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int var4 = 0; var4 < 5; ++var4)
+		for (int var4 = 0; var4 < 5; var4++)
 			par3List.add(new ItemStack(par1, 1, var4));
 	}
 }

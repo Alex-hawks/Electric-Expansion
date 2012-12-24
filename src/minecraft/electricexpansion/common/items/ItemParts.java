@@ -18,9 +18,9 @@ public class ItemParts extends Item
 		this.setHasSubtypes(true);
 		this.setItemName("Parts");
 		this.setCreativeTab(UETab.INSTANCE);
-		this.setMaxStackSize(32);
-		this.setIconIndex(240);
-		this.setTextureFile(CommonProxy.AITEMS);
+		this.setMaxStackSize(64);
+		this.setIconIndex(48);
+		this.setTextureFile(CommonProxy.MattItem_TEXTURE_FILE);
 	}
 
 	@Override
@@ -45,6 +45,12 @@ public class ItemParts extends Item
 			case 0:
 				name = "DrawPlates";
 				break;
+			case 1:
+				name = "RawSuperConductorAlloy";
+				break;
+			case 2:
+				name = "SuperConductorAlloyIngot";
+				break;
 		}
 		return i.getItem().getItemName() + "." + name;
 	}
@@ -52,7 +58,7 @@ public class ItemParts extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int var4 = 0; var4 < 1; ++var4)
+		for (int var4 = 0; var4 < 3; var4++)
 			par3List.add(new ItemStack(par1, 1, var4));
 	}
 }

@@ -37,7 +37,7 @@ public class ItemBlockCableHelper extends ItemBlock
 				name = "HV";
 				break;
 			case 4:
-				name = "Endium";
+				name = "SuperConductor";
 				break;
 			case 5:
 				name = "Connector";
