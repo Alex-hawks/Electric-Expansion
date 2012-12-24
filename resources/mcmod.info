@@ -1,0 +1,17 @@
+[
+{
+  "modid" : "ElectricExpansion",
+  "name" : "Electric Expansion",
+  "version" : "0.5",
+  "url" : "http://calclavia.com/universalelectricity/?m=4",
+  "credits" : "",
+  "authors": [
+    "Mattredsox & Alex_hawks"
+  ],
+  "description": "Electric Expansion is a Universal Electricity mod that focuses mainly on energy storage and transfer as well as adding more cables for better energy transfer. This mod will make Universal Electricity more complex and realistic. We try to make all aspects as realistic as possible, whether that means the items and block names or the processes and materials for each aspect of Electric Expansion.",
+  "logoFile" : "",
+  "parent" : "",
+  "screenshots": [
+  ]
+}
+]
