@@ -403,7 +403,20 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	@Override
 	public double getVoltage()
 	{
-		return 240;
+		return this.has120Limit() ? 120 : 240;
+	}
+
+	private boolean has120Limit() 
+	{
+		boolean slot1 = false, slot2 = false, slot3 = false;
+		
+		if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "OutputLimiter")
+			slot1 = true;
+		if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "OutputLimiter")
+			slot2 = true;
+		if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "OutputLimiter")
+			slot3 = true;
+		return slot1 || slot2 || slot3;
 	}
 
 	/**

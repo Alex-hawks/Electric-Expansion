@@ -29,7 +29,7 @@ public class TileEntityRawWire extends TileEntityConductorBase
 			case 3:
 				return 0.40;
 			case 5:
-				return 0.01;
+				return 0;
 			default:
 				return 0.10;
 		}
@@ -81,7 +81,7 @@ public class TileEntityRawWire extends TileEntityConductorBase
 			case 3:
 				return 8;
 			case 4:
-				return 2;
+				return 5;
 			default:
 				return 4;
 		}

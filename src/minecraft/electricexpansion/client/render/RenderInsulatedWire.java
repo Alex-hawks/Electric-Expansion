@@ -42,9 +42,9 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				else if (meta == 3)
 					textureToUse = CommonProxy.ATEXTURES + "InsulatedHVWire.png";
 				else if (meta == 4)
-					textureToUse = CommonProxy.ATEXTURES + "InsulatedEndiumWire.png";
+					textureToUse = CommonProxy.ATEXTURES + "InsulatedSCWire.png";
 			}
-			else if (ID == ElectricExpansion.SwitchWire && t.getWorldObj().isBlockGettingPowered(t.xCoord, t.yCoord, t.zCoord))
+			else if (ID == ElectricExpansion.SwitchWire && t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
 			{
 				if (meta == 0)
 					textureToUse = CommonProxy.ATEXTURES + "CopperSwitchWireOn.png";
@@ -54,10 +54,10 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					textureToUse = CommonProxy.ATEXTURES + "SilverSwitchWireOn.png";
 				else if (meta == 3)
 					textureToUse = CommonProxy.ATEXTURES + "HVSwitchWireOn.png";
-				else if (meta == 3)
-					textureToUse = CommonProxy.ATEXTURES + "EndiumSwitchWireOn.png";
+				else if (meta == 4)
+					textureToUse = CommonProxy.ATEXTURES + "SCSwitchWireOn.png";
 			}
-			else if (ID == ElectricExpansion.SwitchWire && !(t.getWorldObj().isBlockGettingPowered(t.xCoord, t.yCoord, t.zCoord)))
+			else if (ID == ElectricExpansion.SwitchWire && !(t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord)))
 			{
 				if (meta == 0)
 					textureToUse = CommonProxy.ATEXTURES + "CopperSwitchWireOff.png";
@@ -67,8 +67,8 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					textureToUse = CommonProxy.ATEXTURES + "SilverSwitchWireOff.png";
 				else if (meta == 3)
 					textureToUse = CommonProxy.ATEXTURES + "HVSwitchWireOff.png";
-				else if (meta == 3)
-					textureToUse = CommonProxy.ATEXTURES + "EndiumSwitchWireOff.png";
+				else if (meta == 4)
+					textureToUse = CommonProxy.ATEXTURES + "SCSwitchWireOff.png";
 			}
 		}
 
