@@ -40,3 +40,4 @@ x ElectricExpansion_v0.5.1.jar
 * ElectricExpansion_v0.5.3.jar
 * ElectricExpansion_v0.5.4.jar
 * ElectricExpansion_v0.5.5.jar
+* ElectricExpansion_v1.0.0.jar
