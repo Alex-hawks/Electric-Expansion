@@ -27,7 +27,7 @@ public class BlockSwitchWire extends BlockConductor
 		this.setResistance(0.2F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
-		this.setCreativeTab(UETab.INSTANCE);
+	//	this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override
