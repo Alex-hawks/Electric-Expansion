@@ -11,15 +11,16 @@ import electricexpansion.common.ElectricExpansion;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-	private String[] names = new String[] { "Storage1", "Storage2", "Storage3" };
+	private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage" };
 
 	public ItemUpgrade(int id, int texture)
 	{
 		super(id);
 		this.setMaxDamage(0);
-		this.setMaxStackSize(1);
+		this.setMaxStackSize(16);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(UETab.INSTANCE);
+		this.setIconIndex(32);
 	}
 
 	@Override
@@ -37,12 +38,11 @@ public class ItemUpgrade extends Item implements IModifier
 	@Override
 	public int getIconFromDamage(int i)
 	{
-		if (i == 0)
-
-		{ return 5; }
-		if (i == 1) { return 8; }
-		if (i == 2) { return 4; }
-		if (i == 3) { return 7; }
+		if (i == 0) { return this.iconIndex + 0; }
+		if (i == 1) { return this.iconIndex + 1; }
+		if (i == 2) { return this.iconIndex + 2; }
+		if (i == 3) { return this.iconIndex + 3; }
+		if (i == 4) { return this.iconIndex + 4; }
 		return 6;
 
 	}
@@ -68,6 +68,8 @@ public class ItemUpgrade extends Item implements IModifier
 		if (itemstack.getItemDamage() == 0) { return "Capacity"; }
 		if (itemstack.getItemDamage() == 1) { return "Capacity"; }
 		if (itemstack.getItemDamage() == 2) { return "Capacity"; }
+		if (itemstack.getItemDamage() == 3) { return "Capacity"; }
+		if (itemstack.getItemDamage() == 4) { return "VoltageModifier"; }
 
 		return null;
 	}
@@ -78,6 +80,8 @@ public class ItemUpgrade extends Item implements IModifier
 		if (itemstack.getItemDamage() == 0) { return 1000000; }
 		if (itemstack.getItemDamage() == 1) { return 2000000; }
 		if (itemstack.getItemDamage() == 2) { return 3000000; }
+		if (itemstack.getItemDamage() == 3) { return 5000000; } //Tier 4 storage upgrade( "...unbeatable end game..." )
+		if (itemstack.getItemDamage() == 4) { return -2; }
 
 		return 0;
 	}
