@@ -33,7 +33,7 @@ public class BlockTransformer extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MattBLOCK_TEXTURE_FILE;
+		return ElectricExpansion.MATT_BLOCK_TEXTURE_FILE;
 	}
 
 	/**
@@ -128,16 +128,13 @@ public class BlockTransformer extends BlockMachine
 			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
 			if (tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Transformer is currently set as: Up Converting");
+				par5EntityPlayer.sendChatToPlayer("Transformer is currently up Converting");
 
 			if (!tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Transformer is currently set as: Down Converting");
-
-			return true;
-
+				par5EntityPlayer.sendChatToPlayer("Transformer is currently down Converting");
 		}
 
-		return false;
+		return true;
 	}
 
 	@Override

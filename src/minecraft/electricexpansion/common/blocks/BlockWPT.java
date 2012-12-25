@@ -108,7 +108,7 @@ public class BlockWPT extends BlockContainer
 
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ABLOCK;
+		return ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

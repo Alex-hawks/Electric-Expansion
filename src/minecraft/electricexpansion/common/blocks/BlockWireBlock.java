@@ -66,7 +66,7 @@ public class BlockWireBlock extends BlockConductor
 
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ABLOCK;
+		return ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

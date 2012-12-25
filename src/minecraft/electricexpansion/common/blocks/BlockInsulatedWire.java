@@ -60,7 +60,7 @@ public class BlockInsulatedWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.AITEMS;
+		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

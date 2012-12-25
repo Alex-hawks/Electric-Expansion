@@ -76,7 +76,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 					}
 					else
 					{
-						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 10000) / this.getVoltage(), this.getVoltage());
+						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 1000) / this.getVoltage(), this.getVoltage());
 						ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
 						this.setJoules(this.joules + electricityPack.getWatts());
 
@@ -347,7 +347,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	@Override
 	public String getInvName()
 	{
-		return "   Advanced Battery Box";
+		return "Advanced Battery Box";
 	}
 
 	@Override
@@ -404,8 +404,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	@Override
 	public double getVoltage()
 	{
-		return 240;
-	//	return this.has120Limit() ? 120 : 240;
+		return this.has120Limit() ? 120 : 240;
 	}
 
 	private boolean has120Limit()

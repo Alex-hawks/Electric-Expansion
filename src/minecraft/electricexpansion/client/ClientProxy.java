@@ -9,7 +9,7 @@ import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.client.gui.GuiAdvBatteryBox;
+import electricexpansion.client.gui.GuiAdvancedBatteryBox;
 import electricexpansion.client.gui.GuiWPT;
 import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.client.render.RenderHandler;
@@ -60,11 +60,11 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.AITEMS);
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.ABLOCK);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
 
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.MattBLOCK_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.MattItem_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.MATT_ITEM_TEXTURE_FILE);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class ClientProxy extends CommonProxy
 			switch (ID)
 			{
 				case 0:
-					return new GuiAdvBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
+					return new GuiAdvancedBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
 				case 2:
 					return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
 					// case 3:

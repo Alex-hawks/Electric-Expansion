@@ -24,7 +24,7 @@ public class BlockMultimeter extends BlockMachine
 		super("multimeter", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(this.soundMetalFootstep);
-		this.setTextureFile(ElectricExpansion.MattBLOCK_TEXTURE_FILE);
+		this.setTextureFile(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
 		this.setCreativeTab(UETab.INSTANCE);
 	}
 

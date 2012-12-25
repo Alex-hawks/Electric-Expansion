@@ -27,7 +27,7 @@ public class ItemMultimeter extends Item
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MattItem_TEXTURE_FILE;
+		return ElectricExpansion.MATT_ITEM_TEXTURE_FILE;
 	}
 
 	@Override

@@ -100,7 +100,7 @@ public class GuiWPT extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		int var4 = this.mc.renderEngine.getTexture(ElectricExpansion.ALEX_TEXTURES + "WPTGui.png");
+		int var4 = this.mc.renderEngine.getTexture(ElectricExpansion.ALEX_TEXTURE_PATH + "WPTGui.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		containerWidth = (this.width - this.xSize) / 2;

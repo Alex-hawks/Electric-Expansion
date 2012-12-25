@@ -33,7 +33,7 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MattBLOCK_TEXTURE_FILE;
+		return ElectricExpansion.MATT_BLOCK_TEXTURE_FILE;
 	}
 
 	@Override

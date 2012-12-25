@@ -20,7 +20,7 @@ public class ItemParts extends Item
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setMaxStackSize(64);
 		this.setIconIndex(48);
-		this.setTextureFile(ElectricExpansion.MattItem_TEXTURE_FILE);
+		this.setTextureFile(ElectricExpansion.MATT_ITEM_TEXTURE_FILE);
 	}
 
 	@Override

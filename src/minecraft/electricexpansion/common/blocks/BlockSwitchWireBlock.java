@@ -108,7 +108,7 @@ public class BlockSwitchWireBlock extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ABLOCK;
+		return ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)
