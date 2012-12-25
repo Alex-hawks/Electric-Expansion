@@ -177,6 +177,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 			}
 		}
 	}
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
@@ -406,10 +407,10 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		return this.has120Limit() ? 120 : 240;
 	}
 
-	private boolean has120Limit() 
+	private boolean has120Limit()
 	{
 		boolean slot1 = false, slot2 = false, slot3 = false;
-		
+
 		if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "OutputLimiter")
 			slot1 = true;
 		if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "OutputLimiter")
@@ -462,16 +463,15 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		return true;
 	}
 
-
-
 	@Override
 	public void detach(IComputerAccess computer)
 	{
 	}
 
 	@Override
-	public void attach(IComputerAccess computer) {
-		
+	public void attach(IComputerAccess computer)
+	{
+
 	}
 
 }
