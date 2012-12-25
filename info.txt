@@ -15,18 +15,18 @@ Older Minecraft Versions
 x ElectricExpansion_v0.3.3(1.4.5).jar
 @ ElectricExpansion_v0.3.4(1.4.5).jar
 x ElectricExpansion_v0.3.5(1.4.5).jar
-X ElectricExpansion_v0.3.6(1.4.5).jar
-* ElectricExpansion_v0.3.7(1.4.5).jar
+x ElectricExpansion_v0.3.6(1.4.5).jar
+@ ElectricExpansion_v0.3.7(1.4.5).jar
 @ ElectricExpansion_v0.3.8(1.4.5).jar
-* ElectricExpansion_v0.3.9(1.4.5).jar
-* ElectricExpansion_v0.3.10(1.4.5).jar
-* ElectricExpansion_v0.4.0(1.4.5).jar
-* ElectricExpansion_v0.4.1.jar
+@ ElectricExpansion_v0.3.9(1.4.5).jar
+@ ElectricExpansion_v0.3.10(1.4.5).jar
+@ ElectricExpansion_v0.4.0(1.4.5).jar
+@ ElectricExpansion_v0.4.1.jar
 x ElectricExpansion_v0.4.2.jar
 @ ElectricExpansion_v0.4.4.jar
-X ElectricExpansion_v0.4.7.jar
-* ElectricExpansion_v0.4.8.jar
-* ElectricExpansion_v0.4.8.jar
+x ElectricExpansion_v0.4.7.jar
+@ ElectricExpansion_v0.4.8.jar
+@ ElectricExpansion_v0.4.8.jar
 Minecraft 1.4.5
 x ElectricExpansion_v0.4.9.jar
 x ElectricExpansion_v0.4.10.jar
@@ -37,7 +37,11 @@ x ElectricExpansion_v0.4.13.jar
 @ ElectricExpansion_v0.4.15.jar
 x ElectricExpansion_v0.5.1.jar
 @ ElectricExpansion_v0.5.2.jar
-* ElectricExpansion_v0.5.3.jar
-* ElectricExpansion_v0.5.4.jar
-* ElectricExpansion_v0.5.5.jar
-* ElectricExpansion_v1.0.0.jar
+@ ElectricExpansion_v0.5.3.jar
+@ ElectricExpansion_v0.5.4.jar
+@ ElectricExpansion_v0.5.5.jar
+@ ElectricExpansion_v1.0.0.jar
+@ ElectricExpansion_v1.0.1.jar
+@ ElectricExpansion_v1.0.2.jar
+@ ElectricExpansion_v1.0.3.jar
+* ElectricExpansion_v1.0.4.jar

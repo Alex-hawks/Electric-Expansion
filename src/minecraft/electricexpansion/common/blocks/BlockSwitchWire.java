@@ -3,6 +3,7 @@ package electricexpansion.common.blocks;
 import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -12,9 +13,10 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.CommonProxy;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 
 public class BlockSwitchWire extends BlockConductor
@@ -58,9 +60,31 @@ public class BlockSwitchWire extends BlockConductor
 			{
 				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UNKNOWN));
 			}
+
+			for (int i = 0; i < 6; i++)
+			{
+				ForgeDirection direction = ForgeDirection.getOrientation(i);
+
+				Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)];
+
+				if (block != null)
+				{
+					if (block.blockID != this.blockID)
+					{
+						try
+						{
+							block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, this.blockID);
+						}
+						catch (Exception e)
+						{
+							FMLLog.severe("Failed to update switch wire");
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+
 		}
-		try{	world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);}
-		catch(NullPointerException e){}
 	}
 
 	@Override
@@ -96,7 +120,7 @@ public class BlockSwitchWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return CommonProxy.AITEMS;
+		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
 	}
 
 	@Override

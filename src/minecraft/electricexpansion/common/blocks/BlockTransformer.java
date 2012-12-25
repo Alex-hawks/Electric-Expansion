@@ -15,7 +15,6 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
-import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityTransformer;
 
@@ -34,7 +33,7 @@ public class BlockTransformer extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return CommonProxy.MattBLOCK_TEXTURE_FILE;
+		return ElectricExpansion.MATT_BLOCK_TEXTURE_FILE;
 	}
 
 	/**
@@ -98,48 +97,44 @@ public class BlockTransformer extends BlockMachine
 
 		return true;
 	}
-	
+
 	@Override
 	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		if(!par1World.isRemote)
+		if (!par1World.isRemote)
 		{
-		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
+			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
-		tileEntity.stepUp = !tileEntity.stepUp;
-	
-		if(tileEntity.stepUp)
-		par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Up Converting");
-		
-		if(!tileEntity.stepUp)
-			par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Down Converting");
+			tileEntity.stepUp = !tileEntity.stepUp;
 
-	return true;
-	
+			if (tileEntity.stepUp)
+				par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Up Converting");
+
+			if (!tileEntity.stepUp)
+				par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Down Converting");
+
+			return true;
+
 		}
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		if(!par1World.isRemote)
+		if (!par1World.isRemote)
 		{
-		TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
+			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
-	
-		if(tileEntity.stepUp)
-		par5EntityPlayer.sendChatToPlayer("Transformer is currently set as: Up Converting");
-		
-		if(!tileEntity.stepUp)
-			par5EntityPlayer.sendChatToPlayer("Transformer is currently set as: Down Converting");
+			if (tileEntity.stepUp)
+				par5EntityPlayer.sendChatToPlayer("Transformer is currently up Converting");
 
-	return true;
-	
+			if (!tileEntity.stepUp)
+				par5EntityPlayer.sendChatToPlayer("Transformer is currently down Converting");
 		}
-		
-		return false;
+
+		return true;
 	}
 
 	@Override
@@ -165,8 +160,8 @@ public class BlockTransformer extends BlockMachine
 	{
 		return true;
 	}
-	
-	 @SideOnly(Side.CLIENT)
+
+	@SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{

@@ -1,8 +1,5 @@
 package electricexpansion.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
@@ -13,7 +10,7 @@ import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.CommonProxy;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -77,16 +74,16 @@ public class GuiWireMill extends GuiContainer
 			int scale = (int) (((double) this.tileEntity.getDrawingTimeLeft() / this.tileEntity.getDrawingTime()) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 27, 176, 0, 23 - scale, 13);
 		}
-		
+
 		if (this.tileEntity.getJoules() >= 0)
 		{
 			int scale = (int) (((double) this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 50));
 			this.drawTexturedModalRect(containerWidth + 35, containerHeight + 20, 176, 13, 4, 50 - scale);
 		}
 	}
-	
+
 	public static String getTexture()
 	{
-		return CommonProxy.ATEXTURES + "WireMillGUI.png";
+		return ElectricExpansion.ALEX_TEXTURE_PATH + "WireMillGUI.png";
 	}
 }

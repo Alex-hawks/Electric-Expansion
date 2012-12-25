@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.model.ModelRawWire;
-import electricexpansion.common.CommonProxy;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
@@ -29,15 +29,15 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 		if (meta != -1)
 		{
 			if (meta == 0)
-				textureToUse = CommonProxy.ATEXTURES + "RawCopperWire.png";
+				textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "RawCopperWire.png";
 			else if (meta == 1)
-				textureToUse = CommonProxy.ATEXTURES + "RawTinWire.png";
+				textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "RawTinWire.png";
 			else if (meta == 2)
-				textureToUse = CommonProxy.ATEXTURES + "RawSilverWire.png";
+				textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "RawSilverWire.png";
 			else if (meta == 3)
-				textureToUse = CommonProxy.ATEXTURES + "RawHVWire.png";
+				textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "RawHVWire.png";
 			else if (meta == 4)
-				textureToUse = CommonProxy.ATEXTURES + "RawSCWire.png";
+				textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "RawSCWire.png";
 		}
 
 		// Texture file

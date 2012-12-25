@@ -4,14 +4,18 @@ import java.util.List;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.UEDamageSource;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.CommonProxy;
+import electricexpansion.api.EnumWireMaterial;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
 
 public class BlockRawWire extends BlockConductor
@@ -52,6 +56,15 @@ public class BlockRawWire extends BlockConductor
 	}
 
 	@Override
+	public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity entity)
+	{
+		if (entity instanceof EntityLiving)
+		{
+			((EntityLiving) entity).attackEntityFrom(UEDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
+		}
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntityRawWire();
@@ -60,7 +73,7 @@ public class BlockRawWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return CommonProxy.AITEMS;
+		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

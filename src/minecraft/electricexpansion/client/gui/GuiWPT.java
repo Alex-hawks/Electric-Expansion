@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.WirelessPowerMachine;
-import electricexpansion.common.CommonProxy;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerInductionReciever;
 import electricexpansion.common.containers.ContainerInductionSender;
@@ -33,7 +33,7 @@ public class GuiWPT extends GuiContainer
 
 	private int containerWidth;
 	private int containerHeight;
-	
+
 	public GuiWPT(InventoryPlayer par1InventoryPlayer, TileEntityInductionSender tileEntity)
 	{
 		super(new ContainerInductionSender(par1InventoryPlayer, tileEntity));
@@ -81,7 +81,7 @@ public class GuiWPT extends GuiContainer
 		textField.setMaxStringLength(5);
 		textField.setFocused(true);
 		textField.setText(tileEntity.getFrequency() + "");
-		
+
 		button = new GuiButton(0, 6, 50, 50, 13, "Set");
 	}
 
@@ -100,7 +100,7 @@ public class GuiWPT extends GuiContainer
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		int var4 = this.mc.renderEngine.getTexture(CommonProxy.ATEXTURES + "WPTGui.png");
+		int var4 = this.mc.renderEngine.getTexture(ElectricExpansion.ALEX_TEXTURE_PATH + "WPTGui.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 		containerWidth = (this.width - this.xSize) / 2;
@@ -127,9 +127,9 @@ public class GuiWPT extends GuiContainer
 	public void updateScreen()
 	{
 		int newFrequency = 0;
-		if(this.textField.getText() != null && !(this.textField.getText().equals("")))
+		if (this.textField.getText() != null && !(this.textField.getText().equals("")))
 			newFrequency = Math.max(Integer.parseInt(this.textField.getText()), 0);
-		if(newFrequency < 32768)
-		tileEntity.setFrequency((short)newFrequency);
+		if (newFrequency < 32768)
+			tileEntity.setFrequency((short) newFrequency);
 	}
 }
