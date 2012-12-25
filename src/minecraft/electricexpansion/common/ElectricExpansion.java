@@ -62,11 +62,10 @@ import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.wpt.DistributionNetworks;
 
-@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, useMetadata = true, dependencies = "after:BasicComponents")
+@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, certificateFingerprint="50bd09c8029b83eff7f285888d66ed826c894b4c", useMetadata = true, dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
-
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
 
@@ -77,7 +76,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 0;
-	public static final int REVISION_VERSION = 1;
+	public static final int REVISION_VERSION = 2;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	// private, these are the default options.

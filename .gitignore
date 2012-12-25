@@ -6,6 +6,8 @@
 *.lnk
 *.exe
 
+ElectricExpansion
+
 /bin/*
 /conf/*
 /docs/*
