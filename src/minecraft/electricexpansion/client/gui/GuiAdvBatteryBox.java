@@ -62,6 +62,6 @@ public class GuiAdvBatteryBox extends GuiContainer
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 		int scale = (int) (((double) this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
-		this.drawTexturedModalRect(containerWidth + 64, containerHeight + 52, 176, 0, scale, 20);
+		this.drawTexturedModalRect(containerWidth + 64, containerHeight + 51, 176, 0, scale, 20);
 	}
 }
