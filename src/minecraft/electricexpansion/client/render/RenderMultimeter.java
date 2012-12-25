@@ -92,7 +92,7 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 
 				String amperes = ElectricInfo.getDisplay(tileEntity.electricityReading.amperes, ElectricUnit.AMPERE);
 				String voltage = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage, ElectricUnit.VOLTAGE);
-				String watt = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage*tileEntity.electricityReading.amperes, ElectricUnit.WATT);
+				String watt = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage * tileEntity.electricityReading.amperes, ElectricUnit.WATT);
 
 				maxWidth = Math.max(fontRenderer.getStringWidth(amperes), maxWidth);
 				maxWidth = Math.max(fontRenderer.getStringWidth(voltage), maxWidth);

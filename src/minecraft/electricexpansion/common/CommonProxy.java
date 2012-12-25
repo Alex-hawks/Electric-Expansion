@@ -25,16 +25,6 @@ import electricexpansion.common.tile.TileEntityWireMill;
 
 public class CommonProxy implements IGuiHandler
 {
-	// Mattredsox's Textures
-	public static final String MattFILE_PATH = "/electricexpansion/textures/mattredsox/";
-	public static final String MattBLOCK_TEXTURE_FILE = MattFILE_PATH + "blocks.png";
-	public static final String MattItem_TEXTURE_FILE = MattFILE_PATH + "items.png";
-
-	// Alex_hawks' Textures
-	public static final String ATEXTURES = "/electricexpansion/textures/alex_hawks/";
-	public static final String AITEMS = "/electricexpansion/textures/alex_hawks/items.png";
-	public static final String ABLOCK = "/electricexpansion/textures/alex_hawks/block.png";
-
 	public void init()
 	{
 		// Alex_hawks' Tile entity registrations
@@ -75,7 +65,7 @@ public class CommonProxy implements IGuiHandler
 					return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvancedBatteryBox) tileEntity));
 				case 2:
 					return new ContainerWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-				// 3:
+					// 3:
 				case 4:
 				{
 					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)

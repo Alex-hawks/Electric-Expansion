@@ -9,12 +9,8 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-
-import com.google.common.io.Files;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
 import electricexpansion.common.ElectricExpansion;
 
 public class DistributionNetworks
@@ -45,7 +41,7 @@ public class DistributionNetworks
 	{
 		return maxJoules;
 	}
-	
+
 	@SideOnly(Side.SERVER)
 	public static void onWorldSave(World world)
 	{

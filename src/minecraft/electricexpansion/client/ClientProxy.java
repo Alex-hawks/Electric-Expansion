@@ -19,6 +19,7 @@ import electricexpansion.client.render.RenderRawWire;
 import electricexpansion.client.render.RenderTransformer;
 import electricexpansion.client.render.RenderWireMill;
 import electricexpansion.common.CommonProxy;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
@@ -59,11 +60,11 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 
-		MinecraftForgeClient.preloadTexture(AITEMS);
-		MinecraftForgeClient.preloadTexture(ABLOCK);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.AITEMS);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.ABLOCK);
 
-		MinecraftForgeClient.preloadTexture(MattBLOCK_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(MattItem_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.MattBLOCK_TEXTURE_FILE);
+		MinecraftForgeClient.preloadTexture(ElectricExpansion.MattItem_TEXTURE_FILE);
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class ClientProxy extends CommonProxy
 					return new GuiAdvBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
 				case 2:
 					return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-				//case 3:
+					// case 3:
 				case 4:
 				{
 					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)

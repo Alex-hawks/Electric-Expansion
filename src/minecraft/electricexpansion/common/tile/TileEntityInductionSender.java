@@ -319,8 +319,9 @@ public class TileEntityInductionSender extends TileEntityElectricityReceiver imp
 	}
 
 	@Override
-	public void attach(IComputerAccess computer) {
-		
+	public void attach(IComputerAccess computer)
+	{
+
 	}
 
 	@Override
