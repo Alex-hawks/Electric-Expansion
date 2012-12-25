@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -51,7 +52,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2)));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockWireMill.blockID);
 	}
-
+	
 	@Override
 	public void updateEntity()
 	{
@@ -142,7 +143,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
-
+		
 		this.joulesStored = Math.min(this.joulesStored, this.getMaxJoules());
 		this.joulesStored = Math.max(this.joulesStored, 0d);
 	}
@@ -254,9 +255,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{
 			this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
 		}
-		catch (Exception e)
-		{
-		}
+		catch(Exception e){}
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
@@ -403,26 +402,26 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		}
 		return -1;
 	}
-
+	
 	public int getDrawingTimeLeft()
 	{
 		return this.drawingTicks;
 	}
 
 	@Override
-	public double getJoules(Object... data)
+	public double getJoules(Object... data) 
 	{
 		return this.joulesStored;
 	}
 
 	@Override
-	public void setJoules(double joules, Object... data)
+	public void setJoules(double joules, Object... data) 
 	{
 		this.joulesStored = joules;
 	}
 
 	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules(Object... data) 
 	{
 		return this.maxJoules;
 	}

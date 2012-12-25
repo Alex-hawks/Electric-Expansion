@@ -5,11 +5,14 @@ import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import universalelectricity.prefab.UETab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityDistribution;
 import electricexpansion.common.tile.TileEntityInductionReciever;
@@ -26,7 +29,7 @@ public class BlockWPT extends BlockContainer
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		// this.setCreativeTab(UETab.INSTANCE);
+	//	this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override
@@ -108,7 +111,7 @@ public class BlockWPT extends BlockContainer
 
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ABLOCK;
+		return CommonProxy.ABLOCK;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -128,18 +131,20 @@ public class BlockWPT extends BlockContainer
 	/*
 	 * Called when the block is right clicked by the player
 	 */
-	/*
-	 * @Override public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer
-	 * par5EntityPlayer, int par6, float par7, float par8, float par9) { int metadata =
-	 * par1World.getBlockMetadata(x, y, z);
-	 * 
-	 * if (!par1World.isRemote) {
-	 * 
-	 * par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z); return true;
-	 * 
-	 * }
-	 * 
-	 * return true; }
-	 */
+	/*@Override
+	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	{
+		int metadata = par1World.getBlockMetadata(x, y, z);
+
+		if (!par1World.isRemote)
+		{
+
+			par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
+			return true;
+
+		}
+
+		return true;
+	}*/
 
 }

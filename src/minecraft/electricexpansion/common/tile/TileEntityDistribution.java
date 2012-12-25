@@ -128,13 +128,13 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	{
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj);
 	}
-
+	
 	@Override
 	public Packet getDescriptionPacket()
 	{
 		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks);
 	}
-
+	
 	@Override
 	public void openChest()
 	{
@@ -307,11 +307,10 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	}
 
 	@Override
-	public void attach(IComputerAccess computer)
-	{
-
+	public void attach(IComputerAccess computer) {
+		
 	}
-
+	
 	@Override
 	public void detach(IComputerAccess computer)
 	{

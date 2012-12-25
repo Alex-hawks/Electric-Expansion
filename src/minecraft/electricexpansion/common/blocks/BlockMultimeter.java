@@ -1,5 +1,7 @@
 package electricexpansion.common.blocks;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -12,9 +14,7 @@ import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.tile.TileEntityMultimeter;
 
 public class BlockMultimeter extends BlockMachine
@@ -24,38 +24,52 @@ public class BlockMultimeter extends BlockMachine
 		super("multimeter", id, UniversalElectricity.machine, UETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(this.soundMetalFootstep);
-		this.setTextureFile(ElectricExpansion.MattBLOCK_TEXTURE_FILE);
+		this.setTextureFile(CommonProxy.MattBLOCK_TEXTURE_FILE);
 		this.setCreativeTab(UETab.INSTANCE);
 	}
 
-	/*
-	 * @Override public int getBlockTextureFromSideAndMetadata(int side, int metadata) { if (side ==
-	 * 0 || side == 1) { return this.blockIndexInTexture; }
-	 * 
-	 * // If it is the front side if (side == ForgeDirection.getOrientation(metadata).ordinal()) {
-	 * return this.blockIndexInTexture + 5; } if (side == ForgeDirection.OPPOSITES[metadata]) {
-	 * return this.blockIndexInTexture + 2; }
-	 * 
-	 * return this.blockIndexInTexture;
-	 * 
-	 * }
-	 */
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
+/*	@Override
+	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-
-		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
-
-		// Top and Bottom
 		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
 
-		// If it is the FRONT side
-		if (side == ForgeDirection.getOrientation(metadata).ordinal()) { return blockIndexInTexture + 5; }
+		// If it is the front side
+		if (side == ForgeDirection.getOrientation(metadata).ordinal())
+		{
+			return this.blockIndexInTexture + 5;
+		}
+		if (side == ForgeDirection.OPPOSITES[metadata])		{ 
+			return this.blockIndexInTexture + 2; 
+		}
 
-		if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal()) { return blockIndexInTexture + 2; }
-		return blockIndexInTexture;
+		return this.blockIndexInTexture;
+
+	}*/
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)	
+	{
+		
+		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
+
+		//Top and Bottom
+		if (side == 0 || side == 1)
+		{
+			return this.blockIndexInTexture;
+		}
+		
+		//	 If it is the FRONT side
+		if(side == ForgeDirection.getOrientation(metadata).ordinal())
+			{
+				return blockIndexInTexture + 5;
+			}
+		
+		if(side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal())
+		{
+			return blockIndexInTexture + 2;
+		}
+			return blockIndexInTexture;
 	}
 
 	@Override
@@ -63,11 +77,12 @@ public class BlockMultimeter extends BlockMachine
 	{
 		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
 
-		if (side == 3) { return this.blockIndexInTexture + 5; }
+		if(side == 3) {return this.blockIndexInTexture + 5;}
 
 		return this.blockIndexInTexture;
 	}
 
+	
 	/**
 	 * Called when the block is placed in the world.
 	 */

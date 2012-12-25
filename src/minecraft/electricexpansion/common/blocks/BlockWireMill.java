@@ -15,6 +15,7 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -30,7 +31,7 @@ public class BlockWireMill extends BlockMachine
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MattBLOCK_TEXTURE_FILE;
+		return CommonProxy.MattBLOCK_TEXTURE_FILE;
 	}
 
 	/**
@@ -144,8 +145,8 @@ public class BlockWireMill extends BlockMachine
 	{
 		return true;
 	}
-
-	@SideOnly(Side.CLIENT)
+	
+	 @SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{

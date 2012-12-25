@@ -2,7 +2,7 @@ package electricexpansion.common.items;
 
 import net.minecraft.item.Item;
 import universalelectricity.prefab.UETab;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.CommonProxy;
 
 public class ItemBase extends Item
 {
@@ -16,6 +16,6 @@ public class ItemBase extends Item
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MattItem_TEXTURE_FILE;
+		return CommonProxy.MattItem_TEXTURE_FILE;
 	}
 }

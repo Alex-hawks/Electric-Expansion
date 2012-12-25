@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.model.ModelTransformer;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.CommonProxy;
 
 @SideOnly(Side.CLIENT)
 public class RenderTransformer extends TileEntitySpecialRenderer
@@ -24,7 +24,7 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity var1, double var2, double var3, double var4, float var5)
 	{
-		bindTextureByName(ElectricExpansion.MattFILE_PATH + "transformer.png");
+		bindTextureByName(CommonProxy.MattFILE_PATH + "transformer.png");
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) var2 + 0.5F, (float) var3 + 1.5F, (float) var4 + 0.5F);
 		switch (var1.worldObj.getBlockMetadata(var1.xCoord, var1.yCoord, var1.zCoord))

@@ -11,7 +11,7 @@ import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
 
 public class BlockInsulatedWire extends BlockConductor
@@ -60,7 +60,7 @@ public class BlockInsulatedWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.AITEMS;
+		return CommonProxy.AITEMS;
 	}
 
 	@SideOnly(Side.CLIENT)

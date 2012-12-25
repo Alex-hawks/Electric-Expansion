@@ -14,7 +14,7 @@ import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.UETab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 
 public class BlockSwitchWire extends BlockConductor
@@ -27,7 +27,7 @@ public class BlockSwitchWire extends BlockConductor
 		this.setResistance(0.2F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
-		this.setCreativeTab(UETab.INSTANCE);
+	//	this.setCreativeTab(UETab.INSTANCE);
 	}
 
 	@Override
@@ -58,9 +58,9 @@ public class BlockSwitchWire extends BlockConductor
 			{
 				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UNKNOWN));
 			}
-
-			world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 		}
+		try{	world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);}
+		catch(NullPointerException e){}
 	}
 
 	@Override
@@ -96,7 +96,7 @@ public class BlockSwitchWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.AITEMS;
+		return CommonProxy.AITEMS;
 	}
 
 	@Override

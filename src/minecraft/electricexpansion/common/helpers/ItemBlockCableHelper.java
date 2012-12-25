@@ -2,7 +2,6 @@ package electricexpansion.common.helpers;
 
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import electricexpansion.api.EnumWireMaterial;
 
 public class ItemBlockCableHelper extends ItemBlock
 {
@@ -19,8 +18,34 @@ public class ItemBlockCableHelper extends ItemBlock
 		return damage;
 	}
 
-	public String getItemNameIS(ItemStack itemStack)
+	public String getItemNameIS(ItemStack i)
 	{
-		return this.getItemName() + "." + EnumWireMaterial.values()[itemStack.getItemDamage()].name;
+		String name = null;
+		int j = i.getItemDamage();
+		switch (j)
+		{
+			case 0:
+				name = "Copper";
+				break;
+			case 1:
+				name = "Tin";
+				break;
+			case 2:
+				name = "Silver";
+				break;
+			case 3:
+				name = "HV";
+				break;
+			case 4:
+				name = "SuperConductor";
+				break;
+			case 5:
+				name = "Connector";
+				break;
+			default:
+				name = "Unknown";
+				break;
+		}
+		return i.getItem().getItemName() + "." + name;
 	}
 }

@@ -17,7 +17,6 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
-import universalelectricity.prefab.UEDamageSource;
 import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
@@ -63,38 +62,24 @@ import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.wpt.DistributionNetworks;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, dependencies = "after:BasicComponents")
+@Mod(modid = "ElectricExpansion", name = "Electric Expansion", version = ElectricExpansion.VERSION, certificateFingerprint="50bd09c8029b83eff7f285888d66ed826c894b4c", useMetadata = true, dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
-
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
 
 	public static final String CHANNEL = "ElecEx";
 
-	public static final String NAME = "Electric Expansion";
-
-	public static final String RESOURCE_PATH = "/electricexpansion/";
-	public static final String LANGUAGE_PATH = RESOURCE_PATH + "language/";
-	public static final String TEXTURE_PATH = RESOURCE_PATH + "textures/";
-	// Mattredsox's Textures
-	public static final String MattFILE_PATH = TEXTURE_PATH + "mattredsox/";
-	public static final String MattBLOCK_TEXTURE_FILE = MattFILE_PATH + "blocks.png";
-	public static final String MattItem_TEXTURE_FILE = MattFILE_PATH + "items.png";
-	// Alex Textures
-	public static final String ALEX_TEXTURES = TEXTURE_PATH + "alex_hawks/";
-	public static final String AITEMS = ALEX_TEXTURES + "items.png";
-	public static final String ABLOCK = ALEX_TEXTURES + "block.png";
-
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
+	public static final String LANGUAGE_PATH = "/electricexpansion/languages/";
+	private static final String[] LANGUAGE_SUPPORTED = new String[] { "en_US", "en_AU", "en_UK" };
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 0;
-	public static final int REVISION_VERSION = 3;
+	public static final int REVISION_VERSION = 2;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
-	// Private, these are the default options.
+	// private, these are the default options.
 	// Blocks
 	private static final int rawWireID = BLOCK_ID_PREFIX;
 	private static final int insulatedWireID = BLOCK_ID_PREFIX + 1;
@@ -105,8 +90,8 @@ public class ElectricExpansion
 	// private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
 	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
 	private static final int blockMultiMeterID = BLOCK_ID_PREFIX + 8;
-	// 9
-	// 10
+	//9
+	//10
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
 	private static final int blockTransformerID = BLOCK_ID_PREFIX + 12;
 	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
@@ -170,7 +155,7 @@ public class ElectricExpansion
 	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
-	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ABLOCK);
+	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(CommonProxy.ABLOCK);
 
 	// Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
@@ -287,8 +272,6 @@ public class ElectricExpansion
 		{
 			EELogger.fine("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
 		}
-
-		UEDamageSource.electrocution.registerDeathMessage();
 	}
 
 	@Init
@@ -303,43 +286,13 @@ public class ElectricExpansion
 		RecipeRegistery.drawing();
 		UETab.setItemStack(new ItemStack(this.blockAdvBatteryBox));
 
-		int languages = 0;
-
-		/**
-		 * Load all languages.
-		 */
-		for (String language : LANGUAGES_SUPPORTED)
+		for (String language : LANGUAGE_SUPPORTED)
 		{
 			LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
-
-			if (LanguageRegistry.instance().getStringLocalization("children", language) != "")
-			{
-				try
-				{
-					String[] children = LanguageRegistry.instance().getStringLocalization("children", language).split(",");
-
-					for (String child : children)
-					{
-						if (child != "" || child != null)
-						{
-							LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", child, false);
-							languages++;
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			languages++;
 		}
 
-		System.out.println(NAME + ": Loaded " + languages + " languages.");
-
 		UniversalElectricity.isVoltageSensitive = true;
-
+		
 		EELogger.finest("Successfully toggled Voltage Sensitivity!");
 	}
 
@@ -379,14 +332,14 @@ public class ElectricExpansion
 			}
 		}
 	}
-
+	
 	@SideOnly(Side.SERVER)
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
 	{
 		DistributionNetworks.onWorldSave(event.world);
 	}
-
+	
 	@SideOnly(Side.SERVER)
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load event)

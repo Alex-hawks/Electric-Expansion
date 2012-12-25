@@ -12,6 +12,7 @@ import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRotatable;
+import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import electricexpansion.common.ElectricExpansion;
 
@@ -20,8 +21,8 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	private ItemStack[] containingItems = new ItemStack[5];
 	private int playersUsing = 0;
 
-	// USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
-	public boolean stepUp = false;
+//USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
+        public boolean stepUp = false;
 
 	@Override
 	public void initiate()
@@ -52,33 +53,37 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				if (network != null && inputNetwork != null && network != inputNetwork)
 				{
 
-					if (network.getRequest().getWatts() > 0)
-					{
 
-						inputNetwork.startRequesting(this, network.getRequest());
-
-						if (inputNetwork.getProduced().getWatts() > 0)
+						if (network.getRequest().getWatts() > 0)
 						{
 
-							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
+							inputNetwork.startRequesting(this, network.getRequest());
+
+							if (inputNetwork.getProduced().getWatts() > 0)
+							{
+								
+
+								ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
 							double newVoltage = actualEnergy.voltage + 120;
 
-							if (!stepUp)
+							if(!stepUp)
 								newVoltage = actualEnergy.voltage - 120;
 
-							network.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
-						}
-						else
+								
+						network.startProducing(this, inputNetwork.getProduced().getWatts()/newVoltage, newVoltage);
+							}
+							else
 						{
 							network.stopProducing(this);
 						}
 
-					}
+						}
 
-					else
-					{
-						network.stopRequesting(this);
-					}
+						else
+						{
+							network.stopRequesting(this);
+						}
+
 
 				}
 			}

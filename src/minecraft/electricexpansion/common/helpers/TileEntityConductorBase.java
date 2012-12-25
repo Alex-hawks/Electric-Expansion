@@ -2,9 +2,7 @@ package electricexpansion.common.helpers;
 
 import net.minecraft.block.Block;
 import universalelectricity.prefab.tile.TileEntityConductor;
-import electricexpansion.api.EnumWireMaterial;
-import electricexpansion.api.EnumWireType;
-import electricexpansion.api.IAdvancedConductor;
+import electricexpansion.api.CableInterfaces.ISelectiveConnector;
 import electricexpansion.common.ElectricExpansion;
 
 /**
@@ -12,7 +10,7 @@ import electricexpansion.common.ElectricExpansion;
  * @author Alex_hawks Helper Class used by me to make adding methods to all cables easily...
  */
 
-public abstract class TileEntityConductorBase extends TileEntityConductor implements IAdvancedConductor
+public abstract class TileEntityConductorBase extends TileEntityConductor implements ISelectiveConnector
 {
 	public TileEntityConductorBase()
 	{
@@ -29,7 +27,23 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	@Override
 	public double getResistance()
 	{
-		return this.getWireMaterial(worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord)).resistance;
+		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+
+		switch (meta)
+		{
+			case 0:
+				return 0.05;
+			case 1:
+				return 0.04;
+			case 2:
+				return 0.02;
+			case 3:
+				return 0.2;
+			case 4:
+				return 0;
+			default:
+				return 0.05;
+		}
 	}
 
 	@Override
@@ -54,15 +68,31 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	}
 
 	@Override
-	public EnumWireType getWireType(int metadata)
+	public String cableType(int ID, int meta)
 	{
-		return EnumWireType.values()[metadata];
-	}
-
-	@Override
-	public EnumWireMaterial getWireMaterial(int metadata)
-	{
-		return EnumWireMaterial.values()[metadata];
+		String type = "Unknown";
+		switch (meta)
+		{
+			case 0:
+				type = "Copper";
+				break;
+			case 1:
+				type = "Tin";
+				break;
+			case 2:
+				type = "Silver";
+				break;
+			case 3:
+				type = "Aluminium";
+				break;
+			case 4:
+				type = "Endium";
+				break;
+			case 5:
+				type = "Connector";
+				break;
+		}
+		return type;
 	}
 
 	@Override
