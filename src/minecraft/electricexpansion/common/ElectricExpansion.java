@@ -187,7 +187,7 @@ public class ElectricExpansion
 	public static final Item itemCoil = new ItemBase(Coil, 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
 	public static final Item itemMultimeter = new ItemMultimeter(MultimeterItem).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
 	public static final Item itemSilverIngot = new ItemBase(SilverIngot, 3).setItemName("silveringot");
-	public static final OreGenBase silverOreGenerationn = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 180, 5, "pickaxe", 2).enable();
+	public static final OreGenBase silverOreGenerationn = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 5, "pickaxe", 2).enable();
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
