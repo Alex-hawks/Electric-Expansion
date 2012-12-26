@@ -22,6 +22,8 @@ import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.ore.OreGenBase;
+import universalelectricity.prefab.ore.OreGenReplaceStone;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -43,6 +45,7 @@ import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockRawWire;
+import electricexpansion.common.blocks.BlockSilverOre;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
 import electricexpansion.common.blocks.BlockTransformer;
@@ -105,7 +108,7 @@ public class ElectricExpansion
 	// private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
 	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
 	private static final int blockMultiMeterID = BLOCK_ID_PREFIX + 8;
-	// 9
+	private static final int blockSilverOreID = BLOCK_ID_PREFIX + 9;
 	// 10
 	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
 	private static final int blockTransformerID = BLOCK_ID_PREFIX + 12;
@@ -122,6 +125,7 @@ public class ElectricExpansion
 	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
 	private static final int itemCoilID = ITEM_ID_PREFIX + 7;
 	private static final int itemMultimeterID = ITEM_ID_PREFIX + 8;
+	private static final int itemSilverIngotID = ITEM_ID_PREFIX + 9;
 
 	// Other
 	private static final int superConductorUpkeepDefault = 500;
@@ -142,6 +146,7 @@ public class ElectricExpansion
 	public static int batBox;
 	public static int WPT;
 	public static int LeadBlock;
+	public static int SilverOre;
 	// Items
 	public static int Upgrade;
 	public static int EliteBat;
@@ -151,6 +156,7 @@ public class ElectricExpansion
 	public static int AdvBat;
 	public static int Coil;
 	public static int MultimeterItem;
+	public static int SilverIngot;
 
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
 	public static boolean configLoaded = configLoad(CONFIG);
@@ -171,7 +177,7 @@ public class ElectricExpansion
 	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
 	public static final Block blockWPT = new BlockWPT(WPT, 0);
 	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
-
+	public static final Block blockSilverOre = new BlockSilverOre(SilverOre);
 	// Items
 	public static final Item itemParts = new ItemParts(Parts, 0);
 	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
@@ -180,6 +186,8 @@ public class ElectricExpansion
 	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
 	public static final Item itemCoil = new ItemBase(Coil, 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
 	public static final Item itemMultimeter = new ItemMultimeter(MultimeterItem).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
+	public static final Item itemSilverIngot = new ItemBase(SilverIngot, 3).setItemName("silveringot");
+	public static final OreGenBase silverOreGenerationn = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 180, 5, "pickaxe", 2).enable();
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -207,7 +215,8 @@ public class ElectricExpansion
 		Transformer = CONFIG.getBlock("Transformer", blockTransformerID).getInt();
 		WPT = CONFIG.getBlock("Wireless_Transfer_Machines", blockWPTID).getInt();
 		LeadBlock = CONFIG.getBlock("Lead_Block", blockLeadID).getInt();
-
+		SilverOre = CONFIG.getBlock("Silver_Ore", blockSilverOreID).getInt();
+		
 		Upgrade = CONFIG.getItem("Advanced_Bat_Box_Upgrade", itemUpgradeID).getInt();
 		EliteBat = CONFIG.getItem("Elite_Battery", itemEliteBatID).getInt();
 		ConnectionAlloy = CONFIG.getItem("Connection_Alloy", connectorAlloyID).getInt();
@@ -216,6 +225,7 @@ public class ElectricExpansion
 		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt();
 		Coil = CONFIG.getItem("Coil", itemCoilID).getInt();
 		MultimeterItem = CONFIG.getItem("Item_Multimeter", itemMultimeterID).getInt();
+		SilverIngot = CONFIG.getItem("Silver_Ingot", itemSilverIngotID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;
@@ -272,6 +282,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, "blockTransformer");
+		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
 
 		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class, "blockWPT");
 
@@ -360,7 +371,9 @@ public class ElectricExpansion
 		OreDictionary.registerOre("wireMill", this.blockWireMill);
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
-
+		OreDictionary.registerOre("oreSilver", this.blockSilverOre);
+		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
+	
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
