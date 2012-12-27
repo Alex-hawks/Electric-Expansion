@@ -162,7 +162,7 @@ public class WireMillRecipes
 		for(int i = 0; i < recipeToInput.size(); i++)
 		{
 			ItemStack input = stackSizeChange(recipeToInput.get(i),getInputQTY(recipeToInput.get(i)));
-			int[] output = {recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i))}
+			int[] output = {recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i))};
 			recipes.put(input, output);
 		}
 		return recipes;
