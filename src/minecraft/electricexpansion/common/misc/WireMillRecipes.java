@@ -102,7 +102,7 @@ public class WireMillRecipes
 			int recipeID = 0;
 			recipeID = inputToRecipe.get(stackSizeToOne(input) + "");
 			if (input.stackSize >= recipeToInputQTY.get(recipeID))
-				return (int) this.recipeToInputQTY.get(recipeID);
+				return (int) recipeToInputQTY.get(recipeID);
 			else
 				return (Integer) null;
 		}
@@ -118,14 +118,14 @@ public class WireMillRecipes
 	 * @param item The Source ItemStack
 	 * @return The processing time, in ticks
 	 */
-	public Integer getDrawingTicks(ItemStack input)
+	public static Integer getDrawingTicks(ItemStack input)
 	{
 		try
 		{
 			int recipeID = 0;
 			recipeID = inputToRecipe.get(stackSizeToOne(input) + "");
 			if (input.stackSize >= recipeToInputQTY.get(recipeID))
-				return (Integer) this.recipeToTicks.get(recipeID);
+				return (Integer) recipeToTicks.get(recipeID);
 			else
 				return (Integer) null;
 		}
@@ -158,11 +158,11 @@ public class WireMillRecipes
 	
 	public static Map getRecipesForNEI()
 	{
-		Map<ItemStack, ItemStack> recipes = new HashMap<ItemStack, ItemStack>();
+		Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
 		for(int i = 0; i < recipeToInput.size(); i++)
 		{
 			ItemStack input = stackSizeChange(recipeToInput.get(i),getInputQTY(recipeToInput.get(i)));
-			ItemStack output = stackSizeChange(recipeToOutput.get(i),getInputQTY(recipeToOutput.get(i)));
+			int[] output = {recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i))}
 			recipes.put(input, output);
 		}
 		return recipes;
