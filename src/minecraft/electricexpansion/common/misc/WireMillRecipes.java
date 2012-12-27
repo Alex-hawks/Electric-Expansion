@@ -2,6 +2,7 @@ package electricexpansion.common.misc;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -11,6 +12,7 @@ public class WireMillRecipes
 	private static final WireMillRecipes drawingBase = new WireMillRecipes();
 
 	private static HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
+	private static HashMap<Integer,ItemStack> recipeToInput = new HashMap<Integer, ItemStack>();
 	private static HashMap<Integer, ItemStack> recipeToOutput = new HashMap<Integer, ItemStack>();
 	private static HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
 	private static HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
@@ -39,6 +41,7 @@ public class WireMillRecipes
 				boolean j = true;
 				int nextRecipeID = recipeToOutput.size();
 				inputToRecipe.put(stackSizeToOne(input) + "", nextRecipeID);
+				recipeToInput.put(nextRecipeID, stackSizeToOne(input));
 				recipeToOutput.put(nextRecipeID, output);
 				recipeToTicks.put(nextRecipeID, ticks);
 				recipeToInputQTY.put(nextRecipeID, input.stackSize);
@@ -92,7 +95,7 @@ public class WireMillRecipes
 		}
 	}
 
-	public int getInputQTY(ItemStack input)
+	public static int getInputQTY(ItemStack input)
 	{
 		try
 		{
@@ -143,5 +146,25 @@ public class WireMillRecipes
 			return new ItemStack(i.itemID, 1, i.getItemDamage());
 		else
 			return null;
+	}
+	
+	public static ItemStack stackSizeChange(ItemStack i, int j)
+	{
+		if (i != null && j != (Integer)null)
+			return new ItemStack(i.itemID, j, i.getItemDamage());
+		else
+			return null;
+	}
+	
+	public static Map getRecipesForNEI()
+	{
+		Map<ItemStack, ItemStack> recipes = new HashMap<ItemStack, ItemStack>();
+		for(int i = 0; i < recipeToInput.size(); i++)
+		{
+			ItemStack input = stackSizeChange(recipeToInput.get(i),getInputQTY(recipeToInput.get(i)));
+			ItemStack output = stackSizeChange(recipeToOutput.get(i),getInputQTY(recipeToOutput.get(i)));
+			recipes.put(input, output);
+		}
+		return recipes;
 	}
 }
