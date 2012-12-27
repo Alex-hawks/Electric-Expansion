@@ -91,103 +91,51 @@ public class ElectricExpansion
 	public static final String ALEX_BLOCK_TEXTURE_FILE = ALEX_TEXTURE_PATH + "block.png";
 
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
-
+	
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 0;
 	public static final int REVISION_VERSION = 4;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	// Private, these are the default options.
-	// Blocks
-	private static final int rawWireID = BLOCK_ID_PREFIX;
-	private static final int insulatedWireID = BLOCK_ID_PREFIX + 1;
-	private static final int wireBlockID = BLOCK_ID_PREFIX + 2;
-	private static final int switchWireID = BLOCK_ID_PREFIX + 3;
-	private static final int switchWireBlockID = BLOCK_ID_PREFIX + 4;
-	// private static final int redstoneWireID = BLOCK_ID_PREFIX + 5;
-	// private static final int redstoneWireBlockID = BLOCK_ID_PREFIX + 6;
-	private static final int blockAdvBatteryBoxID = BLOCK_ID_PREFIX + 7;
-	private static final int blockMultiMeterID = BLOCK_ID_PREFIX + 8;
-	private static final int blockSilverOreID = BLOCK_ID_PREFIX + 9;
-	// 10
-	private static final int blockWireMillID = BLOCK_ID_PREFIX + 11;
-	private static final int blockTransformerID = BLOCK_ID_PREFIX + 12;
-	private static final int blockBatBoxID = BLOCK_ID_PREFIX + 13;
-	private static final int blockWPTID = BLOCK_ID_PREFIX + 14;
-	private static final int blockLeadID = BLOCK_ID_PREFIX + 15;
 	// Items
-	private static final int itemUpgradeID = ITEM_ID_PREFIX;
-	private static final int itemEliteBatID = ITEM_ID_PREFIX + 1;
-	private static final int connectorAlloyID = ITEM_ID_PREFIX + 2;
-	private static final int itemPartsID = ITEM_ID_PREFIX + 3;
-	private static final int itemLeadID = ITEM_ID_PREFIX + 4;
-	private static final int itemAdvBatID = ITEM_ID_PREFIX + 5;
-	private static final int itemAdvancedBatID = ITEM_ID_PREFIX + 6;
-	private static final int itemCoilID = ITEM_ID_PREFIX + 7;
+	//6
 	private static final int itemMultimeterID = ITEM_ID_PREFIX + 8;
 	private static final int itemSilverIngotID = ITEM_ID_PREFIX + 9;
 
 	// Other
 	private static final int superConductorUpkeepDefault = 500;
 
-	// Runtime Values
-	// Blocks
-	public static int rawWire;
-	public static int insulatedWire;
-	public static int wireBlock;
-	public static int SwitchWire;
-	public static int SwitchWireBlock;
-	// public static int redstoneWire;
-	// public static int redstoneWireBlock;
-	public static int AdvBatteryBox;
-	public static int MultiMeter;
-	public static int wireMill;
-	public static int Transformer;
-	public static int batBox;
-	public static int WPT;
-	public static int LeadBlock;
-	public static int SilverOre;
-	// Items
-	public static int Upgrade;
-	public static int EliteBat;
-	public static int ConnectionAlloy;
-	public static int Parts;
-	public static int Lead;
-	public static int AdvBat;
-	public static int Coil;
-	public static int MultimeterItem;
-	public static int SilverIngot;
-
+	public static OreGenBase silverOreGeneration;
+	
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
-	public static boolean configLoaded = configLoad(CONFIG);
-
-	// Blocks
-	public static final Block blockRawWire = new BlockRawWire(rawWire, 0);
-	public static final Block blockInsulatedWire = new BlockInsulatedWire(insulatedWire, 0);
-	public static final Block blockWireBlock = new BlockWireBlock(wireBlock, 0);
-	public static final Block blockSwitchWire = new BlockSwitchWire(SwitchWire, 0);
-	public static final Block blockSwitchWireBlock = new BlockSwitchWireBlock(SwitchWireBlock, 0);
+	public static boolean configLoaded = configLoad(CONFIG);	
+	
+	public static Block blockRawWire;
+	public static Block blockInsulatedWire;
+	public static Block blockWireBlock;
+	public static Block blockSwitchWire;
+	public static Block blockSwitchWireBlock;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	// public static final Block blockRedstoneWireBlock = new
 	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
-	public static final Block blockAdvBatteryBox = new BlockAdvancedBatteryBox(AdvBatteryBox, 0).setCreativeTab(UETab.INSTANCE);
-	public static final Block blockMultimeter = new BlockMultimeter(MultiMeter, 0).setBlockName("multimeter");
-	public static final Block blockWireMill = new BlockWireMill(wireMill).setBlockName("wiremill");
-	public static final Block blockTransformer = new BlockTransformer(Transformer, 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
-	public static final Block blockWPT = new BlockWPT(WPT, 0);
-	public static final Block blockLead = new Block(blockLeadID, 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
-	public static final Block blockSilverOre = new BlockSilverOre(SilverOre);
+	public static Block blockAdvBatteryBox;
+	public static Block blockMultimeter;
+	public static Block blockWireMill;
+	public static Block blockTransformer;
+	public static Block blockWPT;
+	public static Block blockLead;
+	public static Block blockSilverOre;
 	// Items
-	public static final Item itemParts = new ItemParts(Parts, 0);
-	public static final Item itemUpgrade = new ItemUpgrade(Upgrade, 0).setItemName("Upgrade");
-	public static final ItemElectric itemEliteBat = new ItemEliteBattery(EliteBat);
-	public static final ItemElectric itemAdvBat = new ItemAdvancedBattery(AdvBat);
-	public static final Item itemLead = new ItemBase(Lead, 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
-	public static final Item itemCoil = new ItemBase(Coil, 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
-	public static final Item itemMultimeter = new ItemMultimeter(MultimeterItem).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
-	public static final Item itemSilverIngot = new ItemBase(SilverIngot, 3).setItemName("silveringot");
-	public static final OreGenBase silverOreGenerationn = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 5, "pickaxe", 2).enable();
+	public static Item itemParts;
+	public static Item itemUpgrade;
+	public static ItemElectric itemEliteBat;
+	public static ItemElectric itemAdvBat;
+	public static Item itemLead;
+	public static Item itemCoil;
+	public static Item itemMultimeter;
+	public static Item itemSilverIngot;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -201,31 +149,38 @@ public class ElectricExpansion
 	public static boolean configLoad(Configuration CONFIG)
 	{
 		CONFIG.load();
-		rawWire = CONFIG.getBlock("Uninsulated_Wire", rawWireID).getInt();
-		insulatedWire = CONFIG.getBlock("Insualted_Wire", insulatedWireID).getInt();
-		wireBlock = CONFIG.getBlock("Wire_Block", wireBlockID).getInt();
-		SwitchWire = CONFIG.getBlock("Switch_Wire", switchWireID).getInt();
-		SwitchWireBlock = CONFIG.getBlock("Switch_Wire_Block", switchWireBlockID).getInt();
+		
+		blockRawWire = new BlockRawWire(CONFIG.getBlock("Uninsulated_Wire", BLOCK_ID_PREFIX).getInt(), 0);
+		blockInsulatedWire = new BlockInsulatedWire(CONFIG.getBlock("Insulated_Wire",  BLOCK_ID_PREFIX + 1).getInt(), 0);
+		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
+		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
+		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
+		// +5 public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
+		// +6 public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(UETab.INSTANCE);
+		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
+		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
+		//10
+		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
+		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt(), 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
+		blockWPT = new BlockWPT(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
+		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
 		// Redstone'd Insulated Cable
 		// Redstone'd Cable Blocks
-
-		AdvBatteryBox = CONFIG.getBlock("Advanced_Battery_Box", blockAdvBatteryBoxID).getInt();
-		MultiMeter = CONFIG.getBlock("Multimeter", blockMultiMeterID).getInt();
-		wireMill = CONFIG.getBlock("Wire_Mill", blockWireMillID).getInt();
-		Transformer = CONFIG.getBlock("Transformer", blockTransformerID).getInt();
-		WPT = CONFIG.getBlock("Wireless_Transfer_Machines", blockWPTID).getInt();
-		LeadBlock = CONFIG.getBlock("Lead_Block", blockLeadID).getInt();
-		SilverOre = CONFIG.getBlock("Silver_Ore", blockSilverOreID).getInt();
+			
+		itemUpgrade = new ItemUpgrade(CONFIG.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0).setItemName("Upgrade");
+		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
+		//2
+		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
+		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
+		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
+		//6
+		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
+		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
+		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 3).setItemName("silveringot");
+				
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 0, 50, 40, 4).enable();
 		
-		Upgrade = CONFIG.getItem("Advanced_Bat_Box_Upgrade", itemUpgradeID).getInt();
-		EliteBat = CONFIG.getItem("Elite_Battery", itemEliteBatID).getInt();
-		ConnectionAlloy = CONFIG.getItem("Connection_Alloy", connectorAlloyID).getInt();
-		Parts = CONFIG.getItem("Parts", itemPartsID).getInt();
-		Lead = CONFIG.getItem("Lead_Ingot", itemLeadID).getInt();
-		AdvBat = CONFIG.getItem("Advanced_Battery", itemAdvBatID).getInt();
-		Coil = CONFIG.getItem("Coil", itemCoilID).getInt();
-		MultimeterItem = CONFIG.getItem("Item_Multimeter", itemMultimeterID).getInt();
-		SilverIngot = CONFIG.getItem("Silver_Ingot", itemSilverIngotID).getInt();
 		CONFIG.save();
 
 		configLoaded = true;
@@ -371,7 +326,6 @@ public class ElectricExpansion
 		OreDictionary.registerOre("wireMill", this.blockWireMill);
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
-		OreDictionary.registerOre("oreSilver", this.blockSilverOre);
 		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
 	
 		MinecraftForge.EVENT_BUS.register(this);
