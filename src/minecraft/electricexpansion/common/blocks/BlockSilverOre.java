@@ -13,14 +13,8 @@ public class BlockSilverOre extends Block
 		this.setCreativeTab(UETab.INSTANCE);
 		this.setBlockName("silverore");
 		this.setHardness(2f);
-		this.blockIndexInTexture = 6;
-	}
-
-
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.MATT_BLOCK_TEXTURE_FILE;
+		this.blockIndexInTexture = 8;
+		this.setTextureFile(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
 	}
 	
 }

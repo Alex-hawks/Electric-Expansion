@@ -177,9 +177,9 @@ public class ElectricExpansion
 		//6
 		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
-		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 3).setItemName("silveringot");
+		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 				
-		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 0, 50, 40, 4).enable();
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 50, 40, 4).enable();
 		
 		CONFIG.save();
 
