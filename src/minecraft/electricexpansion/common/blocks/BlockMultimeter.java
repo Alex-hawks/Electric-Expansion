@@ -28,19 +28,6 @@ public class BlockMultimeter extends BlockMachine
 		this.setCreativeTab(EETab.INSTANCE);
 	}
 
-	/*
-	 * @Override public int getBlockTextureFromSideAndMetadata(int side, int metadata) { if (side ==
-	 * 0 || side == 1) { return this.blockIndexInTexture; }
-	 * 
-	 * // If it is the front side if (side == ForgeDirection.getOrientation(metadata).ordinal()) {
-	 * return this.blockIndexInTexture + 5; } if (side == ForgeDirection.OPPOSITES[metadata]) {
-	 * return this.blockIndexInTexture + 2; }
-	 * 
-	 * return this.blockIndexInTexture;
-	 * 
-	 * }
-	 */
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)

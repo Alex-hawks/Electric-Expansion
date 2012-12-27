@@ -61,6 +61,7 @@ import electricexpansion.common.itemblocks.ItemBlockWireBlock;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;
+import electricexpansion.common.items.ItemInfiniteBattery;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUpgrade;
@@ -127,6 +128,8 @@ public class ElectricExpansion
 	public static Item itemCoil;
 	public static Item itemMultimeter;
 	public static Item itemSilverIngot;
+	public static Item itemInfBat;
+
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -169,7 +172,8 @@ public class ElectricExpansion
 		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(EETab.INSTANCE).setItemName("coil");
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
-				
+		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
+
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable();
 		
 		CONFIG.save();

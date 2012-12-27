@@ -30,7 +30,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite()));
-		this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockMultimeter.blockID);
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 					}
 				}
 
-				if (this.electricityReading.getWatts() != this.lastReading.getWatts())
+				if (this.electricityReading.amperes != this.lastReading.amperes)
 				{
 					PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
 				}

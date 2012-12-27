@@ -35,6 +35,6 @@ public class ItemEliteBattery extends ItemElectric
 	@Override
 	public double getVoltage()
 	{
-		return 50;
+		return 45;
 	}
 }
