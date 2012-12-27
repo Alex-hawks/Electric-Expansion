@@ -38,7 +38,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 1), new Object[] { " @ ", " @ ", " @ ", '@', "ingotTin" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 2), new Object[] { " @ ", " @ ", " @ ", '@', "ingotSilver" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 3), new Object[] { " @ ", " @ ", " @ ", '@', "ingotAluminium" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 2, 3), new Object[] { " @ ", " @ ", " @ ", '@', new ItemStack(itemParts, 1, 2) }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 2, 4), new Object[] { " @ ", " @ ", " @ ", '@', new ItemStack(itemParts, 1, 2) }));
 
 		// Recipes for supporting other UE add-ons, the slack way...
 		if (OreDictionary.getOres("copperWire").size() > 0)

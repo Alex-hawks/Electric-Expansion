@@ -159,10 +159,12 @@ public class WireMillRecipes
 	public static Map getRecipesForNEI()
 	{
 		Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
+		//int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3:ticks required)
+		//requiredEnergy = ticks required * 500 (TileEntityWireMill.WATTS_PER_TICK
 		for(int i = 0; i < recipeToInput.size(); i++)
 		{
 			ItemStack input = stackSizeChange(recipeToInput.get(i),getInputQTY(recipeToInput.get(i)));
-			int[] output = {recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i))}
+			int[] output = {recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i))};
 			recipes.put(input, output);
 		}
 		return recipes;
