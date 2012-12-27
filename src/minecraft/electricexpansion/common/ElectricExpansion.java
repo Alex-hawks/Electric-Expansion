@@ -24,6 +24,7 @@ import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.ore.OreGenBase;
 import universalelectricity.prefab.ore.OreGenReplaceStone;
+import universalelectricity.prefab.ore.OreGenerator;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -179,7 +180,7 @@ public class ElectricExpansion
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 				
-		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 50, 40, 4).enable();
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable();
 		
 		CONFIG.save();
 
@@ -307,6 +308,8 @@ public class ElectricExpansion
 		UniversalElectricity.isVoltageSensitive = true;
 
 		EELogger.finest("Successfully toggled Voltage Sensitivity!");
+		
+		OreGenerator.addOre(silverOreGeneration);
 	}
 
 	@PostInit
