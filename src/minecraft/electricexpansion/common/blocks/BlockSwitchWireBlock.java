@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
+import electricexpansion.common.misc.EETab;
 
 public class BlockSwitchWireBlock extends BlockConductor
 {
@@ -25,7 +26,7 @@ public class BlockSwitchWireBlock extends BlockConductor
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		// this.setCreativeTab(EETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override

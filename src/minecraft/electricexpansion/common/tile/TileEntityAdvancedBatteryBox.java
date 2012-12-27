@@ -35,6 +35,8 @@ import electricexpansion.common.ElectricExpansion;
 
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IRedstoneProvider, IInventory, ISidedInventory, IPeripheral
 {
+	private static final double MAX_OUTPUT = 10000;
+
 	private double joules = 0;
 
 	private ItemStack[] containingItems = new ItemStack[5];
@@ -151,7 +153,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 
 				if (outputNetwork != null && inputNetwork != outputNetwork)
 				{
-					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), 10000));
+					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), this.MAX_OUTPUT));
 
 					if (this.getJoules() > 0 && outputWatts > 0)
 					{

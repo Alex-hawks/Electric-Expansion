@@ -26,6 +26,7 @@ public class BlockRawWire extends BlockConductor
 		this.setBlockName("RawWire");
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
+		this.setHardness(0.1F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
 		this.setCreativeTab(EETab.INSTANCE);

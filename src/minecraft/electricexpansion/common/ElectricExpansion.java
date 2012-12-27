@@ -95,17 +95,8 @@ public class ElectricExpansion
 	
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 0;
-	public static final int REVISION_VERSION = 4;
+	public static final int REVISION_VERSION = 5;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
-
-	// Private, these are the default options.
-	// Items
-	//6
-	private static final int itemMultimeterID = ITEM_ID_PREFIX + 8;
-	private static final int itemSilverIngotID = ITEM_ID_PREFIX + 9;
-
-	// Other
-	private static final int superConductorUpkeepDefault = 500;
 
 	public static OreGenBase silverOreGeneration;
 	
@@ -118,8 +109,7 @@ public class ElectricExpansion
 	public static Block blockSwitchWire;
 	public static Block blockSwitchWireBlock;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new
-	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
