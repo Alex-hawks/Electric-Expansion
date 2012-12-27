@@ -5,10 +5,10 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import universalelectricity.prefab.UETab;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 
 public class ItemParts extends Item
 {
@@ -17,7 +17,7 @@ public class ItemParts extends Item
 		super(par1);
 		this.setHasSubtypes(true);
 		this.setItemName("Parts");
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 		this.setMaxStackSize(64);
 		this.setIconIndex(48);
 		this.setTextureFile(ElectricExpansion.MATT_ITEM_TEXTURE_FILE);

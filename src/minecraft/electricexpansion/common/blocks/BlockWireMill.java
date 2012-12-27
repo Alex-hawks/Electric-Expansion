@@ -10,19 +10,19 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityWireMill;
 
 public class BlockWireMill extends BlockMachine
 {
 	public BlockWireMill(int id)
 	{
-		super("blockEtcher", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("blockEtcher", id, UniversalElectricity.machine, EETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
 	}

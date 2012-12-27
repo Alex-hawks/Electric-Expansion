@@ -9,23 +9,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityMultimeter;
 
 public class BlockMultimeter extends BlockMachine
 {
 	public BlockMultimeter(int id, int textureIndex)
 	{
-		super("multimeter", id, UniversalElectricity.machine, UETab.INSTANCE);
+		super("multimeter", id, UniversalElectricity.machine, EETab.INSTANCE);
 		this.blockIndexInTexture = textureIndex;
 		this.setStepSound(this.soundMetalFootstep);
 		this.setTextureFile(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	/*

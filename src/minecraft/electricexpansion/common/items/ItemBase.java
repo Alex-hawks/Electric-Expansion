@@ -1,8 +1,8 @@
 package electricexpansion.common.items;
 
 import net.minecraft.item.Item;
-import universalelectricity.prefab.UETab;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 
 public class ItemBase extends Item
 {
@@ -10,7 +10,7 @@ public class ItemBase extends Item
 	{
 		super(id);
 		this.setIconIndex(texture);
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override

@@ -5,9 +5,9 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.modifier.IModifier;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
@@ -19,7 +19,7 @@ public class ItemUpgrade extends Item implements IModifier
 		this.setMaxDamage(0);
 		this.setMaxStackSize(16);
 		this.setHasSubtypes(true);
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 		this.setIconIndex(32);
 	}
 

@@ -12,12 +12,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.prefab.BlockConductor;
-import universalelectricity.prefab.UETab;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntitySwitchWire;
+import electricexpansion.common.misc.EETab;
 
 public class BlockSwitchWire extends BlockConductor
 {
@@ -29,7 +29,7 @@ public class BlockSwitchWire extends BlockConductor
 		this.setResistance(0.2F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override

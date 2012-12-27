@@ -1,8 +1,8 @@
 package electricexpansion.common.items;
 
 import universalelectricity.prefab.ItemElectric;
-import universalelectricity.prefab.UETab;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 
 public class ItemEliteBattery extends ItemElectric
 {
@@ -11,7 +11,7 @@ public class ItemEliteBattery extends ItemElectric
 		super(par1);
 		this.iconIndex = 1;
 		this.setItemName("EliteBattery");
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override

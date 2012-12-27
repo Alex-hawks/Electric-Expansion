@@ -25,7 +25,7 @@ public class BlockSwitchWireBlock extends BlockConductor
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		// this.setCreativeTab(UETab.INSTANCE);
+		// this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override

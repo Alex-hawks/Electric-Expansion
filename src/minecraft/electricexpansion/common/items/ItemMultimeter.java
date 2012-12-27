@@ -11,8 +11,8 @@ import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.implement.IVoltage;
-import universalelectricity.prefab.UETab;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EETab;
 
 public class ItemMultimeter extends Item
 {
@@ -21,7 +21,7 @@ public class ItemMultimeter extends Item
 		super(par1);
 		this.iconIndex = 11;
 		this.setItemName("itemMultimeter");
-		this.setCreativeTab(UETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override

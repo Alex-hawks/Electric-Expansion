@@ -18,7 +18,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.UEDamageSource;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.UpdateNotifier;
 import universalelectricity.prefab.network.ConnectionHandler;
 import universalelectricity.prefab.network.PacketManager;
@@ -65,6 +64,7 @@ import electricexpansion.common.items.ItemEliteBattery;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUpgrade;
+import electricexpansion.common.misc.EETab;
 import electricexpansion.common.wpt.DistributionNetworks;
 
 @Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, dependencies = "after:BasicComponents")
@@ -158,14 +158,14 @@ public class ElectricExpansion
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
 		// +5 public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 		// +6 public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
-		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(UETab.INSTANCE);
+		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
 		//10
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
-		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt(), 0).setCreativeTab(UETab.INSTANCE).setBlockName("Transformer");
+		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt(), 0).setCreativeTab(EETab.INSTANCE).setBlockName("Transformer");
 		blockWPT = new BlockWPT(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
-		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(UETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
+		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
 		// Redstone'd Insulated Cable
 		// Redstone'd Cable Blocks
 			
@@ -173,11 +173,11 @@ public class ElectricExpansion
 		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
 		//2
 		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
-		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(UETab.INSTANCE).setItemName("LeadIngot");
+		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(EETab.INSTANCE).setItemName("LeadIngot");
 		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
 		//6
-		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(UETab.INSTANCE).setItemName("coil");
-		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(UETab.INSTANCE).setItemName("itemMultimeter");
+		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(EETab.INSTANCE).setItemName("coil");
+		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 				
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable();
@@ -268,7 +268,7 @@ public class ElectricExpansion
 		proxy.init();
 		RecipeRegistery.crafting();
 		RecipeRegistery.drawing();
-		UETab.setItemStack(new ItemStack(this.blockAdvBatteryBox));
+		EETab.setItemStack(new ItemStack(this.blockTransformer));
 
 		int languages = 0;
 
