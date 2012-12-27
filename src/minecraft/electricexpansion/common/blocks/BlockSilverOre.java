@@ -1,14 +1,9 @@
 package electricexpansion.common.blocks;
 
-import java.util.List;
-
-import electricexpansion.common.ElectricExpansion;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import universalelectricity.prefab.UETab;
+import electricexpansion.common.ElectricExpansion;
 
 public class BlockSilverOre extends Block
 {

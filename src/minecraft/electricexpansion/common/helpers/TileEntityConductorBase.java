@@ -72,15 +72,15 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 		{
 			int ID = this.getBlockType().blockID;
 			int setToID = 0;
-			if (ID == ElectricExpansion.rawWire)
+			if (ID == ElectricExpansion.blockRawWire.blockID)
 				setToID = 0;
-			if (ID == ElectricExpansion.insulatedWire)
+			if (ID == ElectricExpansion.blockInsulatedWire.blockID)
 				setToID = 0;
-			if (ID == ElectricExpansion.wireBlock)
+			if (ID == ElectricExpansion.blockWireBlock.blockID)
 				setToID = Block.stone.blockID;
-			if (ID == ElectricExpansion.SwitchWire)
+			if (ID == ElectricExpansion.blockSwitchWire.blockID)
 				setToID = 0;
-			if (ID == ElectricExpansion.SwitchWireBlock)
+			if (ID == ElectricExpansion.blockSwitchWireBlock.blockID)
 				setToID = Block.stone.blockID;
 
 			this.worldObj.setBlockWithNotify(this.xCoord, this.yCoord, this.zCoord, setToID);
