@@ -6,6 +6,8 @@
 *.lnk
 *.exe
 
+/*
+
 /bin/*
 /conf/*
 /docs/*

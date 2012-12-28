@@ -68,7 +68,7 @@ import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.wpt.DistributionNetworks;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, certificateFingerprint="d2ba4666c3f8f5ee8718891802c3971bb8be94a7", dependencies = "after:BasicComponents")
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, certificateFingerprint="b34077d98c710152e788c277173c3d474769c3e6", dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
