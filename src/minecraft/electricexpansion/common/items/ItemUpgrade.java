@@ -11,7 +11,7 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-	private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade" };
+	private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade", "HVInputUpgrade" };
 
 	public ItemUpgrade(int id, int texture)
 	{
@@ -44,6 +44,7 @@ public class ItemUpgrade extends Item implements IModifier
 		if (i == 3) { return this.iconIndex + 3; }
 		if (i == 4) { return this.iconIndex + 4; }
 		if (i == 5) { return this.iconIndex + 5; }
+		if (i == 6) { return this.iconIndex + 6; }
 		return 6;
 
 	}
@@ -72,6 +73,7 @@ public class ItemUpgrade extends Item implements IModifier
 		if (itemstack.getItemDamage() == 3) { return "Capacity"; }
 		if (itemstack.getItemDamage() == 4) { return "VoltageModifier"; }
 		if (itemstack.getItemDamage() == 5) { return "VoltageModifier"; }
+		if (itemstack.getItemDamage() == 6) { return "InputVoltageModifier"; }
 
 		return null;
 	}
@@ -85,6 +87,7 @@ public class ItemUpgrade extends Item implements IModifier
 		if (itemstack.getItemDamage() == 3) { return 5000000; } //Tier 4 storage upgrade( "...unbeatable end game..." )
 		if (itemstack.getItemDamage() == 4) { return -2; }
 		if (itemstack.getItemDamage() == 5) { return 20; }
+		if (itemstack.getItemDamage() == 6) { return 20; }
 
 		return 0;
 	}
