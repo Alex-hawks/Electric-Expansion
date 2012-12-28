@@ -89,10 +89,10 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 				GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 				FontRenderer fontRenderer = this.getFontRenderer();
 				int maxWidth = 1;
-
+				
 				String amperes = ElectricInfo.getDisplay(tileEntity.electricityReading.amperes, ElectricUnit.AMPERE);
 				String voltage = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage, ElectricUnit.VOLTAGE);
-				String watt = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage * tileEntity.electricityReading.amperes, ElectricUnit.WATT);
+				String watt = ElectricInfo.getDisplay(tileEntity.electricityReading.voltage * tileEntity.electricityReading.amperes * 20, ElectricUnit.WATT);
 
 				maxWidth = Math.max(fontRenderer.getStringWidth(amperes), maxWidth);
 				maxWidth = Math.max(fontRenderer.getStringWidth(voltage), maxWidth);
@@ -111,16 +111,8 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 				int realHeight = (int) Math.floor(displayHeight / scale);
 				int realWidth = (int) Math.floor(displayWidth / scale);
 
-				if (scaleX < scaleY)
-				{
-					offsetX = 2 + 5;
-					offsetY = (realHeight - requiredHeight) / 2;
-				}
-				else
-				{
-					offsetX = (realWidth - maxWidth) / 2 + 2 + 5;
-					offsetY = 0;
-				}
+				  offsetY = (realHeight - requiredHeight) / 2;
+				  offsetX = (realWidth - maxWidth) / 2 + 2 + 5;
 
 				GL11.glDisable(GL11.GL_LIGHTING);
 				fontRenderer.drawString(amperes, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 0 * lineHeight, 1);
