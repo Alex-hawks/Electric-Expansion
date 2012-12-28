@@ -84,7 +84,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 
 						if (UniversalElectricity.isVoltageSensitive)
 						{
-							if (electricityPack.voltage > Math.max(this.getVoltage(), 240))
+							if (electricityPack.voltage > this.getInputVoltage())
 							{
 								this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
 							}
@@ -418,6 +418,35 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 		if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "VoltageModifier")
 				slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
 		if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "VoltageModifier")
+				slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
+		if(slot1 < 0)
+			slot1 = 1 / (slot1 * -1);
+		if(slot2 < 0)
+			slot2 = 1 / (slot2 * -1);
+		if(slot3 < 0)
+			slot3 = 1 / (slot3 * -1);
+		 return slot1 * slot2 * slot3;
+	}
+	
+	public double getInputVoltage()
+	{
+		return Math.max(this.getVoltage(), Math.max(240, getInputVoltageForCompare()));
+	}
+	
+	public double getInputVoltageForCompare()
+	{
+		return this.getInputVoltageForCompare() * 240;
+	}
+
+	private double getInputVoltageModifier()
+	{
+		double slot1 = 1, slot2 = 1, slot3 = 1;
+
+		if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "InputVoltageModifier")
+				slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
+		if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "InputVoltageModifier")
+				slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
+		if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "InputVoltageModifier")
 				slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
 		if(slot1 < 0)
 			slot1 = 1 / (slot1 * -1);
