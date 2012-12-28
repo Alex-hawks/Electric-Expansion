@@ -43,7 +43,7 @@ public class ItemMultimeter extends Item
 
 				ElectricityPack getProduced = wireTile.getNetwork().getProduced();
 
-				player.addChatMessage(ElectricInfo.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", " + ElectricInfo.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricInfo.getDisplay(getProduced.getWatts(), ElectricUnit.WATT));
+				player.addChatMessage(ElectricInfo.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", " + ElectricInfo.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricInfo.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
 			}
 			else
 			{
