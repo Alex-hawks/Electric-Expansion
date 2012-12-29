@@ -67,7 +67,8 @@ public class CommonProxy implements IGuiHandler
 					return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvancedBatteryBox) tileEntity));
 				case 2:
 					return new ContainerWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-					// 3:
+				case 3:
+					return null;
 				case 4:
 				{
 					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)
