@@ -74,7 +74,6 @@ public class ClientProxy extends CommonProxy
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
 	{
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-
 		if (tileEntity != null)
 		{
 			switch (ID)
@@ -84,7 +83,7 @@ public class ClientProxy extends CommonProxy
 				case 2:
 					return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
 				case 3:
-					return new GuiLogisticsWire(player);
+					return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
 				case 4:
 				{
 					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)
