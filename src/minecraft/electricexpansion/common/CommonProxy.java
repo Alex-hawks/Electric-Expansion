@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
+import electricexpansion.common.cables.TileEntityLogisticsWire;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
@@ -33,6 +34,7 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
+		GameRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		// GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
 		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class,

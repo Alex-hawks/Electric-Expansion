@@ -21,6 +21,7 @@ import electricexpansion.client.render.RenderWireMill;
 import electricexpansion.common.CommonProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
+import electricexpansion.common.cables.TileEntityLogisticsWire;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
@@ -49,6 +50,7 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
 		ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());
 		ClientRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
+		ClientRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire", new RenderInsulatedWire());
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
 		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");

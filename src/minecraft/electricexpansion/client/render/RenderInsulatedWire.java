@@ -39,6 +39,21 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				else if (metadata == 4)
 					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedSCWire.png";
 			}
+			
+			 if (blockID == ElectricExpansion.blockLogisticsWire.blockID)
+				{
+					if (metadata == 0)
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedCopperWire.png";
+					else if (metadata == 1)
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedTinWire.png";
+					else if (metadata == 2)
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedSilverWire.png";
+					else if (metadata == 3)
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedHVWire.png";
+					else if (metadata == 4)
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedSCWire.png";
+				}
+			 
 			else if (blockID == ElectricExpansion.blockSwitchWire.blockID)
 			{
 				if (t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
@@ -62,6 +77,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 							break;
 					}
 				}
+
 				else
 				{
 					if (metadata == 0)

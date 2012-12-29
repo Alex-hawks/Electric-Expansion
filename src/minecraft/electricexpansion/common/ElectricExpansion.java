@@ -43,6 +43,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
+import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockRawWire;
 import electricexpansion.common.blocks.BlockSilverOre;
@@ -53,6 +54,7 @@ import electricexpansion.common.blocks.BlockWPT;
 import electricexpansion.common.blocks.BlockWireBlock;
 import electricexpansion.common.blocks.BlockWireMill;
 import electricexpansion.common.itemblocks.ItemBlockInsulatedWire;
+import electricexpansion.common.itemblocks.ItemBlockLogisticsWire;
 import electricexpansion.common.itemblocks.ItemBlockRawWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWireBlock;
@@ -109,6 +111,7 @@ public class ElectricExpansion
 	public static Block blockWireBlock;
 	public static Block blockSwitchWire;
 	public static Block blockSwitchWireBlock;
+	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
 	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
@@ -159,6 +162,7 @@ public class ElectricExpansion
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt(), 0).setCreativeTab(EETab.INSTANCE).setBlockName("Transformer");
 		blockWPT = new BlockWPT(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
+		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		// Redstone'd Insulated Cable
 		// Redstone'd Cable Blocks
 			
@@ -241,6 +245,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire");
 		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
 		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
+		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire");
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
