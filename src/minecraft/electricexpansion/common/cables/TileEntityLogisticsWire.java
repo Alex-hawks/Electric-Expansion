@@ -22,7 +22,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase
 	public boolean buttonStatus1 = false;
 	public boolean buttonStatus2 = false;
 
-	@Override
+/*	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		try
@@ -44,6 +44,43 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase
 		catch (Exception e)
 		{
 			e.printStackTrace();
+		}
+	}*/
+	
+	@Override
+	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	{
+		if (this.worldObj.isRemote)
+		{
+			this.visuallyConnected[0] = dataStream.readBoolean();
+			this.visuallyConnected[1] = dataStream.readBoolean();
+			this.visuallyConnected[2] = dataStream.readBoolean();
+			this.visuallyConnected[3] = dataStream.readBoolean();
+			this.visuallyConnected[4] = dataStream.readBoolean();
+			this.visuallyConnected[5] = dataStream.readBoolean();
+		}
+		else
+		{
+			try
+			{
+				int id = dataStream.readInt();
+				if(id == -1) 
+				{
+					this.buttonStatus0 = dataStream.readBoolean();			
+				}
+				if(id == 0)
+				{
+					this.buttonStatus1 = dataStream.readBoolean();			
+				}
+				if(id == 1)
+				{
+					this.buttonStatus2 = dataStream.readBoolean();			
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	
