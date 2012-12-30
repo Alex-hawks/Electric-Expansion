@@ -146,6 +146,16 @@ public class BlockLogisticsWire extends BlockConductor
 	{
 			TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) par1World.getBlockTileEntity(par2, par3, par4);
 			
+		 /*     for(int x = 0; x < 5; x = x+1) {
+		    	  
+						if(par1World.isRemote)
+		  				System.out.println(tileEntity.visuallyConnected[x] + " client");
+		  				
+		  				if(!par1World.isRemote)
+		  					System.out.println(tileEntity.visuallyConnected[x] + " server");
+		  			*/
+		      // }	
+
 			{
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
 				return true;
