@@ -3,7 +3,9 @@ package electricexpansion.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -41,7 +43,9 @@ public class GuiLogisticsWire extends GuiScreen {
 		int posY = (this.height - ySizeOfTexture) / 2;
 
 		drawTexturedModalRect(posX, posY, 0, 0, xSizeOfTexture, ySizeOfTexture);
-
+		
+		this.fontRenderer.drawString("Logistics Wire", posX + xSizeOfTexture / 2 - 35, posY + 4, 4210752);
+		
 		super.drawScreen(x, y, f);
 	}
 
@@ -54,6 +58,7 @@ public class GuiLogisticsWire extends GuiScreen {
 		this.controlList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Redstone Output", tileEntity.buttonStatus0));
 		this.controlList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused", tileEntity.buttonStatus1));
 		this.controlList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused", tileEntity.buttonStatus2));
+
 
 	}
 
