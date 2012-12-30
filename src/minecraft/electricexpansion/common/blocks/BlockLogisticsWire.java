@@ -1,20 +1,24 @@
 package electricexpansion.common.blocks;
 
+import java.util.EnumSet;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.prefab.BlockConductor;
+import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityLogisticsWire;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class BlockLogisticsWire extends BlockConductor
 {
@@ -28,6 +32,61 @@ public class BlockLogisticsWire extends BlockConductor
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
 		this.setRequiresSelfNotify();
 		this.setCreativeTab(EETab.INSTANCE);
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z)
+	{
+		super.onBlockAdded(world, x, y, z);
+		this.updateWireSwitch(world, x, y, z);
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, int par5)
+	{
+		super.onNeighborBlockChange(world, x, y, z, par5);
+		this.updateWireSwitch(world, x, y, z);
+	}
+
+	private void updateWireSwitch(World world, int x, int y, int z)
+	{
+		TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) world.getBlockTileEntity(x, y, z);
+
+		if (!world.isRemote && tileEntity != null)
+		{
+			if (world.isBlockIndirectlyGettingPowered(x, y, z))
+			{
+				ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
+			}
+			else
+			{
+				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UNKNOWN));
+			}
+
+			for (int i = 0; i < 6; i++)
+			{
+				ForgeDirection direction = ForgeDirection.getOrientation(i);
+
+				Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)];
+
+				if (block != null)
+				{
+					if (block.blockID != this.blockID)
+					{
+						try
+						{
+							block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, this.blockID);
+						}
+						catch (Exception e)
+						{
+							FMLLog.severe("Failed to update switch wire");
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+
+		}
 	}
 
 	@Override
@@ -60,6 +119,25 @@ public class BlockLogisticsWire extends BlockConductor
 		return new TileEntityLogisticsWire();
 	}
 
+	@Override
+	public String getTextureFile()
+	{
+		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
+	}
+
+	@Override
+	public boolean canProvidePower()
+	{
+		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+	{
+		for (int var4 = 0; var4 < 5; ++var4)
+			par3List.add(new ItemStack(par1, 1, var4));
+	}
+
 	/**
 	 * Called when the block is right clicked by the player
 	 */
@@ -72,19 +150,6 @@ public class BlockLogisticsWire extends BlockConductor
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
 				return true;
 			}
-
-	}
-	
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-	{
-		for (int var4 = 0; var4 < 5; var4++)
-			par3List.add(new ItemStack(par1, 1, var4));
+			
 	}
 }

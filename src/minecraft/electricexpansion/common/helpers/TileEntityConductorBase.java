@@ -80,6 +80,8 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 				setToID = Block.stone.blockID;
 			if (ID == ElectricExpansion.blockSwitchWire.blockID)
 				setToID = 0;
+			if (ID == ElectricExpansion.blockLogisticsWire.blockID)
+				setToID = 0;
 			if (ID == ElectricExpansion.blockSwitchWireBlock.blockID)
 				setToID = Block.stone.blockID;
 
