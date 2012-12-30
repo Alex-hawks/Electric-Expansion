@@ -51,9 +51,9 @@ public class GuiLogisticsWire extends GuiScreen {
 		int posX = (this.width - xSizeOfTexture) / 2;
 		int posY = (this.height - ySizeOfTexture) / 2;
 
-		this.controlList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Redstone Output", tileEntity));
-		this.controlList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused", tileEntity));
-		this.controlList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused", tileEntity));
+		this.controlList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Redstone Output", tileEntity.buttonStatus0));
+		this.controlList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused", tileEntity.buttonStatus1));
+		this.controlList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused", tileEntity.buttonStatus2));
 
 	}
 
