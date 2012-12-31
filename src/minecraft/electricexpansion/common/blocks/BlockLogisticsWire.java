@@ -16,6 +16,7 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
@@ -56,9 +57,8 @@ public class BlockLogisticsWire extends BlockConductor
 
 		if (!world.isRemote && tileEntity != null)
 		{
-		
-			ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
 
+			ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
 
 			for (int i = 0; i < 6; i++)
 			{
@@ -139,25 +139,24 @@ public class BlockLogisticsWire extends BlockConductor
 	 * Called when the block is right clicked by the player
 	 */
 	@Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-			TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) par1World.getBlockTileEntity(par2, par3, par4);
-		
-			if(par1World.isRemote)
-			
-  				System.out.println(tileEntity.buttonStatus0 + " client");
-  				
-  				if(!par1World.isRemote)
-  				{
-  					System.out.println(tileEntity.buttonStatus0 + " server");
-  					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
+		TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) par1World.getBlockTileEntity(par2, par3, par4);
 
-  				}
-  				
-		  	{	
-				par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
-				return true;
-			}
-			
+		if (!par1World.isRemote)
+		{
+			System.out.println(tileEntity.buttonStatus0 + " server");
+
+		}
+		else
+		{
+			System.out.println(tileEntity.buttonStatus0 + " client");
+
+			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
+			return true;
+		}
+		
+		return true;
+
 	}
 }

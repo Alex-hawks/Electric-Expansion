@@ -52,8 +52,6 @@ public class GuiSwitchButton extends GuiButton
             
             int var5 = 0;
             
-            
-            
             if(this.isActive)
             	var5 = 16;
      
