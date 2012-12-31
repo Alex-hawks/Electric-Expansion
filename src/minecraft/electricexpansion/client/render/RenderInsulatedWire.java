@@ -26,7 +26,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		int metadata = t.worldObj.getBlockMetadata(t.xCoord, t.yCoord, t.zCoord);
 
 		if (metadata != -1) {
-			if (blockID == ElectricExpansion.blockInsulatedWire.blockID) 
+			if (blockID == ElectricExpansion.blockInsulatedWire.blockID || blockID == ElectricExpansion.blockLogisticsWire.blockID) 
 			{
 				if (metadata == 0)
 					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH
@@ -45,7 +45,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 							+ "InsulatedSCWire.png";
 			}
 
-			else if (blockID == ElectricExpansion.blockSwitchWire.blockID || blockID == ElectricExpansion.blockLogisticsWire.blockID) 
+			else if (blockID == ElectricExpansion.blockSwitchWire.blockID) 
 			{
 				if (t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
 				{
@@ -105,7 +105,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
 		boolean[] connectedSides = tileEntity.visuallyConnected;
 
-		if (tileEntity instanceof TileEntityInsulatedWire)
+		if (tileEntity instanceof TileEntityInsulatedWire || tileEntity instanceof TileEntityLogisticsWire)
 		{
 			if (connectedSides[0]) {
 				model.renderBottom();
@@ -127,7 +127,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			}
 		}
 		
-		else if (tileEntity instanceof TileEntitySwitchWire || tileEntity instanceof TileEntityLogisticsWire) 
+		else if (tileEntity instanceof TileEntitySwitchWire) 
 		{
 			if (tileEntity.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
 				{

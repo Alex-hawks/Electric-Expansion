@@ -59,7 +59,7 @@ public class GuiLogisticsWire extends GuiScreen {
 		this.controlList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused", tileEntity.buttonStatus1));
 		this.controlList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused", tileEntity.buttonStatus2));
 
-
+	   	PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) 3));
 	}
 
 	public void actionPerformed(GuiButton button) {
@@ -78,4 +78,5 @@ public class GuiLogisticsWire extends GuiScreen {
 			break;
 		}
 	}
+	    
 }
