@@ -9,11 +9,13 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -146,10 +148,14 @@ public class BlockLogisticsWire extends BlockConductor
 		if (!par1World.isRemote)
 		{
 			System.out.println(tileEntity.buttonStatus0 + " server");
+			PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
+
 
 		}
 		else
 		{
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 7, true));
+
 			System.out.println(tileEntity.buttonStatus0 + " client");
 
 			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
@@ -158,5 +164,31 @@ public class BlockLogisticsWire extends BlockConductor
 		
 		return true;
 
+	}
+	
+	/**
+	 * Is this block powering the block on the specified side
+	 */
+	@Override
+	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
+	}
+
+	/**
+	 * Is this block indirectly powering the block on the specified side
+	 */
+	@Override
+	public boolean isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
+
+		return false;
 	}
 }

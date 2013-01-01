@@ -55,8 +55,6 @@ public class GuiLogisticsWire extends GuiScreen
 	{
 		this.controlList.clear();
 
-		PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) 7, true));
-
 		int posX = (this.width - xSizeOfTexture) / 2;
 		int posY = (this.height - ySizeOfTexture) / 2;
 
@@ -96,5 +94,19 @@ public class GuiLogisticsWire extends GuiScreen
 	public boolean doesGuiPauseGame()
 	{
 		return false;
+	}
+
+	/**
+	 * Called from the main game loop to update the screen.
+	 */
+	@Override
+	public void updateScreen()
+	{
+		super.updateScreen();
+
+		if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead)
+		{
+			this.mc.thePlayer.closeScreen();
+		}
 	}
 }

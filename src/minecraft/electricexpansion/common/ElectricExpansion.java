@@ -343,7 +343,7 @@ public class ElectricExpansion
 				{
 					Random dropNumber = new Random();
 					int numberOfDrops = dropNumber.nextInt(4);
-					event.entity.dropItem(itemLead.shiftedIndex, numberOfDrops);
+					event.entity.dropItem(itemLead.itemID, numberOfDrops);
 				}
 			}
 		}

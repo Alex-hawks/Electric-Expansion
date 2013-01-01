@@ -9,6 +9,7 @@ import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +24,7 @@ import com.google.common.io.ByteArrayDataInput;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityLogisticsWire extends TileEntityConductorBase
+public class TileEntityLogisticsWire extends TileEntityConductorBase implements IRedstoneProvider
 {
 	// everything is in the helper class.
 	// this class MUST remain existent...
@@ -54,6 +55,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase
 
 				if (id == 3)
 				{
+					System.out.println("id 3 recieved client side");
 					this.buttonStatus0 = dataStream.readBoolean();
 					this.buttonStatus1 = dataStream.readBoolean();
 					this.buttonStatus2 = dataStream.readBoolean();
@@ -87,6 +89,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase
 				{
 					if (dataStream.readBoolean() == true)
 					{
+						System.out.println("adding to players");
 						this.playersUsing++;
 					}
 					else
@@ -194,11 +197,26 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 80 == 0)
+			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 3, this.buttonStatus0, this.buttonStatus1, this.buttonStatus2), this.worldObj, new Vector3(this), 12);
 			}
 		}
 
+	}
+
+	@Override
+	public boolean isPoweringTo(ForgeDirection side)
+	{
+		if(this.buttonStatus0 && this.getNetwork().getProduced().getWatts() > 0)
+		return true;
+		
+		return false;
+	}
+
+	@Override
+	public boolean isIndirectlyPoweringTo(ForgeDirection side)
+	{
+		return isPoweringTo(side);
 	}
 }
