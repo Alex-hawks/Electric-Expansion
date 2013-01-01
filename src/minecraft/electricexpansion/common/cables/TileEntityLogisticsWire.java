@@ -55,7 +55,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 				if (id == 3)
 				{
-					System.out.println("id 3 recieved client side");
 					this.buttonStatus0 = dataStream.readBoolean();
 					this.buttonStatus1 = dataStream.readBoolean();
 					this.buttonStatus2 = dataStream.readBoolean();
@@ -89,13 +88,11 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 				{
 					if (dataStream.readBoolean() == true)
 					{
-						System.out.println("adding to players");
 						this.playersUsing++;
 					}
 					else
 					{
 						playersUsing--;
-						System.out.println("- players");
 					}
 				}
 			}
@@ -197,9 +194,12 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			if (this.ticks % 10 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 3, this.buttonStatus0, this.buttonStatus1, this.buttonStatus2), this.worldObj, new Vector3(this), 12);
+
+				if (this.buttonStatus0 = this.getNetwork().getProduced().getWatts() > 0)
+					this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockLogisticsWire.blockID);
 			}
 		}
 
@@ -208,9 +208,9 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	@Override
 	public boolean isPoweringTo(ForgeDirection side)
 	{
-		if(this.buttonStatus0 && this.getNetwork().getProduced().getWatts() > 0)
-		return true;
-		
+		if (this.buttonStatus0 && this.getNetwork().getProduced().getWatts() > 0)
+			return true;
+
 		return false;
 	}
 

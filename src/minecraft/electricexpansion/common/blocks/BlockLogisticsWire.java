@@ -147,25 +147,22 @@ public class BlockLogisticsWire extends BlockConductor
 
 		if (!par1World.isRemote)
 		{
-			System.out.println(tileEntity.buttonStatus0 + " server");
 			PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
-
 
 		}
 		else
 		{
 			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 7, true));
 
-			System.out.println(tileEntity.buttonStatus0 + " client");
 
 			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
 			return true;
 		}
-		
+
 		return true;
 
 	}
-	
+
 	/**
 	 * Is this block powering the block on the specified side
 	 */
