@@ -53,7 +53,7 @@ public class GuiLogisticsWire extends GuiScreen
 
 	@Override
 	public void initGui()
-	{		
+	{
 
 	}
 
@@ -97,7 +97,7 @@ public class GuiLogisticsWire extends GuiScreen
 	public void updateScreen()
 	{
 		super.updateScreen();
-	
+
 		this.controlList.clear();
 
 		int posX = (this.width - xSizeOfTexture) / 2;
@@ -106,8 +106,8 @@ public class GuiLogisticsWire extends GuiScreen
 		this.controlList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Redstone Output", this.tileEntity.buttonStatus0));
 		this.controlList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused", this.tileEntity.buttonStatus1));
 		this.controlList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused", this.tileEntity.buttonStatus2));
-        
-        if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead)
+
+		if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead)
 		{
 			this.mc.thePlayer.closeScreen();
 		}

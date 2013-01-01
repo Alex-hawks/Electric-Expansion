@@ -70,7 +70,7 @@ import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.wpt.DistributionNetworks;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, certificateFingerprint="b34077d98c710152e788c277173c3d474769c3e6", dependencies = "after:BasicComponents")
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, certificateFingerprint = "b34077d98c710152e788c277173c3d474769c3e6", dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -95,17 +95,17 @@ public class ElectricExpansion
 	public static final String ALEX_BLOCK_TEXTURE_FILE = ALEX_TEXTURE_PATH + "block.png";
 
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
-	
+
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 0;
 	public static final int REVISION_VERSION = 6;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
-	
+
 	public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
-	public static boolean configLoaded = configLoad(CONFIG);	
-	
+	public static boolean configLoaded = configLoad(CONFIG);
+
 	public static Block blockRawWire;
 	public static Block blockInsulatedWire;
 	public static Block blockWireBlock;
@@ -113,7 +113,8 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new
+	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
@@ -133,7 +134,6 @@ public class ElectricExpansion
 	public static Item itemSilverIngot;
 	public static Item itemInfBat;
 
-
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
 
@@ -146,18 +146,19 @@ public class ElectricExpansion
 	public static boolean configLoad(Configuration CONFIG)
 	{
 		CONFIG.load();
-		
+
 		blockRawWire = new BlockRawWire(CONFIG.getBlock("Uninsulated_Wire", BLOCK_ID_PREFIX).getInt(), 0);
-		blockInsulatedWire = new BlockInsulatedWire(CONFIG.getBlock("Insulated_Wire",  BLOCK_ID_PREFIX + 1).getInt(), 0);
+		blockInsulatedWire = new BlockInsulatedWire(CONFIG.getBlock("Insulated_Wire", BLOCK_ID_PREFIX + 1).getInt(), 0);
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
 		// +5 public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-		// +6 public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+		// +6 public static final Block blockRedstoneWireBlock = new
+		// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
-		//10
+		// 10
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt(), 0).setCreativeTab(EETab.INSTANCE).setBlockName("Transformer");
 		blockWPT = new BlockWPT(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
@@ -165,21 +166,21 @@ public class ElectricExpansion
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		// Redstone'd Insulated Cable
 		// Redstone'd Cable Blocks
-			
+
 		itemUpgrade = new ItemUpgrade(CONFIG.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0).setItemName("Upgrade");
 		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
-		//2
+		// 2
 		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
 		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(EETab.INSTANCE).setItemName("LeadIngot");
 		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
-		//6
+		// 6
 		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(EETab.INSTANCE).setItemName("coil");
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
 
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable();
-		
+
 		CONFIG.save();
 
 		configLoaded = true;
@@ -307,7 +308,7 @@ public class ElectricExpansion
 		UniversalElectricity.isVoltageSensitive = true;
 
 		EELogger.finest("Successfully toggled Voltage Sensitivity!");
-		
+
 		OreGenerator.addOre(silverOreGeneration);
 	}
 
@@ -329,7 +330,7 @@ public class ElectricExpansion
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
 		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
-	
+
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 

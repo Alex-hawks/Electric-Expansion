@@ -84,7 +84,8 @@ public class ItemUpgrade extends Item implements IModifier
 		if (itemstack.getItemDamage() == 0) { return 1000000; }
 		if (itemstack.getItemDamage() == 1) { return 2000000; }
 		if (itemstack.getItemDamage() == 2) { return 3000000; }
-		if (itemstack.getItemDamage() == 3) { return 5000000; } //Tier 4 storage upgrade( "...unbeatable end game..." )
+		if (itemstack.getItemDamage() == 3) { return 5000000; } // Tier 4 storage upgrade(
+																// "...unbeatable end game..." )
 		if (itemstack.getItemDamage() == 4) { return -2; }
 		if (itemstack.getItemDamage() == 5) { return 20; }
 		if (itemstack.getItemDamage() == 6) { return 20; }

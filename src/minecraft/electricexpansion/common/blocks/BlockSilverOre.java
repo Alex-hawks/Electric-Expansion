@@ -16,6 +16,5 @@ public class BlockSilverOre extends Block
 		this.blockIndexInTexture = 8;
 		this.setTextureFile(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
 	}
-	
-}
 
+}

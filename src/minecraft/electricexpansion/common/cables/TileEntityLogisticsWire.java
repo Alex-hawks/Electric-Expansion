@@ -1,16 +1,5 @@
 package electricexpansion.common.cables;
 
-import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.core.electricity.Electricity;
-import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.implement.IItemElectric;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.implement.IRedstoneProvider;
-import universalelectricity.prefab.network.PacketManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -18,6 +7,12 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.Electricity;
+import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.implement.IRedstoneProvider;
+import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -194,12 +189,13 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 10 == 0 && this.playersUsing > 0)
+			if (this.ticks % 15 == 0)
 			{
-				PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 3, this.buttonStatus0, this.buttonStatus1, this.buttonStatus2), this.worldObj, new Vector3(this), 12);
-
-				if (this.buttonStatus0 = this.getNetwork().getProduced().getWatts() > 0)
-					this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockLogisticsWire.blockID);
+				if (this.getNetwork().getProduced().getWatts() > 0)
+				{
+					this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, ElectricExpansion.blockLogisticsWire.blockID);
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 3, this.buttonStatus0, this.buttonStatus1, this.buttonStatus2), this.worldObj, new Vector3(this), 12);
+				}
 			}
 		}
 

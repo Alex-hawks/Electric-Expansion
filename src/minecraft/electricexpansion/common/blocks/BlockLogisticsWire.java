@@ -154,7 +154,6 @@ public class BlockLogisticsWire extends BlockConductor
 		{
 			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 7, true));
 
-
 			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
 			return true;
 		}

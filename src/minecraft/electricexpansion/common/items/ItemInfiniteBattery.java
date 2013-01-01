@@ -9,8 +9,10 @@ import universalelectricity.core.implement.IItemElectric;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
-public class ItemInfiniteBattery extends Item implements IItemElectric {
-	public ItemInfiniteBattery(int id) {
+public class ItemInfiniteBattery extends Item implements IItemElectric
+{
+	public ItemInfiniteBattery(int id)
+	{
 		super(id);
 		this.setMaxStackSize(1);
 		this.setNoRepair();
@@ -20,37 +22,42 @@ public class ItemInfiniteBattery extends Item implements IItemElectric {
 	}
 
 	/**
-	 * Allows items to add custom lines of information to the mouseover
-	 * description. If you want to add more information to your item, you can
-	 * super.addInformation() to keep the electiricty info in the item info bar.
+	 * Allows items to add custom lines of information to the mouseover description. If you want to
+	 * add more information to your item, you can super.addInformation() to keep the electiricty
+	 * info in the item info bar.
 	 */
 	@Override
-	public void addInformation(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+	{
 
 		par3List.add("\u00a72 Infinite");
 	}
 
 	@Override
-	public double onReceive(double amps, double voltage, ItemStack itemStack) {
+	public double onReceive(double amps, double voltage, ItemStack itemStack)
+	{
 		return 0;
 	}
 
 	@Override
-	public double onUse(double joulesNeeded, ItemStack itemStack) {
+	public double onUse(double joulesNeeded, ItemStack itemStack)
+	{
 		return joulesNeeded;
 	}
 
-	public boolean canReceiveElectricity() {
+	public boolean canReceiveElectricity()
+	{
 		return true;
 	}
 
-	public boolean canProduceElectricity() {
+	public boolean canProduceElectricity()
+	{
 		return true;
 	}
 
 	@Override
-	public double getJoules(Object... data) {
+	public double getJoules(Object... data)
+	{
 		return 0;
 	}
 
@@ -61,12 +68,14 @@ public class ItemInfiniteBattery extends Item implements IItemElectric {
 	}
 
 	@Override
-	public double getVoltage() {
+	public double getVoltage()
+	{
 		return 50;
 	}
 
 	@Override
-	public void setJoules(double joules, Object... data) {
-		
+	public void setJoules(double joules, Object... data)
+	{
+
 	}
 }
