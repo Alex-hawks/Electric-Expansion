@@ -156,6 +156,10 @@ public class RecipeRegistery
 			RecipeHelper.removeRecipe(new ItemStack(basicCompWire));
 
 		}		
+
+	//Coil Recipe
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemCoil), new Object[] { "AAA", "ASA", "AAA", 'A', "plateCopper", 'B', new ItemStack(blockRawWire, 1, 0)}));
+
 	}
 
 	public static void drawing()
