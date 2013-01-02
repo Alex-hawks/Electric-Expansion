@@ -133,6 +133,11 @@ public class ElectricExpansion
 	public static Item itemMultimeter;
 	public static Item itemSilverIngot;
 	public static Item itemInfBat;
+	
+	
+	public static ItemStack transformer1;
+	public static ItemStack transformer2;
+	public static ItemStack transformer3;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -181,6 +186,10 @@ public class ElectricExpansion
 
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable();
 
+		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
+		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
+		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
+		
 		CONFIG.save();
 
 		configLoaded = true;
