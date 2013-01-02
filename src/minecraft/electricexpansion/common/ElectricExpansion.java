@@ -60,6 +60,7 @@ import electricexpansion.common.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWireBlock;
 import electricexpansion.common.itemblocks.ItemBlockWPT;
 import electricexpansion.common.itemblocks.ItemBlockWireBlock;
+import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;
@@ -245,7 +246,6 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
 		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
 		GameRegistry.registerBlock(blockLead, "blockLead");
-		GameRegistry.registerBlock(blockTransformer, "blockTransformer");
 		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
 
 		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class, "blockWPT");
@@ -255,6 +255,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire");
 		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
 		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
+		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire");
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);

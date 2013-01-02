@@ -279,5 +279,5 @@ public class BlockTransformer extends BlockMachine
 	{
 		return ClientProxy.RENDER_ID;
 	}
-
+	
 }
