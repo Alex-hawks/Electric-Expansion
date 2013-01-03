@@ -20,6 +20,8 @@ import universalelectricity.prefab.tile.TileEntityDisableable;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
+
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.WirelessPowerMachine;
@@ -41,7 +43,7 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	{
 		return frequency;
 	}
-
+	
 	@Override
 	public void setFrequency(short newFrequency)
 	{
@@ -50,7 +52,10 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 			InductionNetworks.setRecieverFreq(this.frequency, newFrequency, this);
 			this.frequency = newFrequency;
 		}
+		if(this.worldObj.isRemote)
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, newFrequency));
 	}
+
 
 	public void setFrequency(int frequency)
 	{
@@ -226,14 +231,25 @@ public class TileEntityInductionReciever extends TileEntityDisableable implement
 	@Override
 	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
-		try
+		if (this.worldObj.isRemote)
 		{
-			this.joules = dataStream.readDouble();
-			this.disabledTicks = dataStream.readInt();
+			try
+			{
+				this.frequency = dataStream.readShort();
+				this.disabledTicks = dataStream.readInt();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
-		catch (Exception e)
+		else
 		{
-			e.printStackTrace();
+			try
+			{
+				this.setFrequency(dataStream.readShort());
+			}
+			catch(Exception e){e.printStackTrace();}
 		}
 	}
 

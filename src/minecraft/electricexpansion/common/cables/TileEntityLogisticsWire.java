@@ -21,9 +21,6 @@ import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntityLogisticsWire extends TileEntityConductorBase implements IRedstoneProvider
 {
-	// everything is in the helper class.
-	// this class MUST remain existent...
-
 	public boolean buttonStatus0 = false;
 	public boolean buttonStatus1 = false;
 	public boolean buttonStatus2 = false;

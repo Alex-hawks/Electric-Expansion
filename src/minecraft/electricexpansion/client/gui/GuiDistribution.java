@@ -21,10 +21,9 @@ import electricexpansion.common.tile.TileEntityInductionReciever;
 import electricexpansion.common.tile.TileEntityInductionSender;
 
 @SideOnly(Side.CLIENT)
-public class GuiWPT extends GuiContainer
+public class GuiDistribution extends GuiContainer
 {
-	private WirelessPowerMachine tileEntity;
-	private Class<? extends WirelessPowerMachine> tileEntityType;
+	private TileEntityDistribution tileEntity;
 
 	private GuiTextField textField;
 	private GuiButton button;
@@ -34,25 +33,10 @@ public class GuiWPT extends GuiContainer
 	private int containerWidth;
 	private int containerHeight;
 
-	public GuiWPT(InventoryPlayer par1InventoryPlayer, TileEntityInductionSender tileEntity)
-	{
-		super(new ContainerInductionSender(par1InventoryPlayer, tileEntity));
-		this.tileEntity = tileEntity;
-		this.tileEntityType = TileEntityInductionSender.class;
-	}
-
-	public GuiWPT(InventoryPlayer par1InventoryPlayer, TileEntityInductionReciever tileEntity)
-	{
-		super(new ContainerInductionReciever(par1InventoryPlayer, tileEntity));
-		this.tileEntity = tileEntity;
-		this.tileEntityType = TileEntityInductionReciever.class;
-	}
-
-	public GuiWPT(InventoryPlayer par1InventoryPlayer, TileEntityDistribution tileEntity)
+	public GuiDistribution(InventoryPlayer par1InventoryPlayer, TileEntityDistribution tileEntity)
 	{
 		super(new ContainerDistribution(par1InventoryPlayer, tileEntity));
 		this.tileEntity = tileEntity;
-		this.tileEntityType = TileEntityDistribution.class;
 	}
 
 	/**

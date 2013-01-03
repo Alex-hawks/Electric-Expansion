@@ -10,8 +10,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.gui.GuiAdvancedBatteryBox;
+import electricexpansion.client.gui.GuiDistribution;
 import electricexpansion.client.gui.GuiLogisticsWire;
-import electricexpansion.client.gui.GuiWPT;
 import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.client.render.RenderHandler;
 import electricexpansion.client.render.RenderInsulatedWire;
@@ -89,14 +89,7 @@ public class ClientProxy extends CommonProxy
 				case 3:
 					return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
 				case 4:
-				{
-					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)
-						return new GuiWPT(player.inventory, (TileEntityDistribution) tileEntity);
-					if (tileEntity.getBlockMetadata() >= 4 && tileEntity.getBlockMetadata() < 8)
-						return new GuiWPT(player.inventory, (TileEntityInductionSender) tileEntity);
-					if (tileEntity.getBlockMetadata() >= 8 && tileEntity.getBlockMetadata() < 12)
-						return new GuiWPT(player.inventory, (TileEntityInductionReciever) tileEntity);
-				}
+//					return new GuiDistribution(player.inventory, (TileEntityDistribution) tileEntity);
 			}
 		}
 		return null;

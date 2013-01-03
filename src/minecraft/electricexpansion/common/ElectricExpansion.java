@@ -27,6 +27,7 @@ import universalelectricity.prefab.ore.OreGenerator;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.FingerprintWarning;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
@@ -50,7 +51,7 @@ import electricexpansion.common.blocks.BlockSilverOre;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
 import electricexpansion.common.blocks.BlockTransformer;
-import electricexpansion.common.blocks.BlockWPT;
+import electricexpansion.common.blocks.BlockDistribution;
 import electricexpansion.common.blocks.BlockWireBlock;
 import electricexpansion.common.blocks.BlockWireMill;
 import electricexpansion.common.itemblocks.ItemBlockInsulatedWire;
@@ -59,7 +60,6 @@ import electricexpansion.common.itemblocks.ItemBlockRawWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWireBlock;
 import electricexpansion.common.itemblocks.ItemBlockTransformer;
-import electricexpansion.common.itemblocks.ItemBlockWPT;
 import electricexpansion.common.itemblocks.ItemBlockWireBlock;
 import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.items.ItemAdvancedBattery;
@@ -115,14 +115,13 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new
-	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
 	public static Block blockWireMill;
 	public static Block blockTransformer;
-	public static Block blockWPT;
+	public static Block blockDistribution;
 	public static Block blockLead;
 	public static Block blockSilverOre;
 	// Items
@@ -168,7 +167,7 @@ public class ElectricExpansion
 		// 10
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt()).setCreativeTab(EETab.INSTANCE).setBlockName("transformer");
-		blockWPT = new BlockWPT(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
+		blockDistribution = new BlockDistribution(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		// Redstone'd Insulated Cable
@@ -250,7 +249,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
 
-		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class, "blockWPT");
+		GameRegistry.registerBlock(blockDistribution, "blockDistribution");
 
 		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class, "blockRawWire");
 		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire");
@@ -373,5 +372,12 @@ public class ElectricExpansion
 	public void onWorldLoad(WorldEvent.Load event)
 	{
 		DistributionNetworks.onWorldLoad();
+	}
+	
+	@FingerprintWarning
+	public void badSigniture()
+	{
+		EELogger.severe("Bad signiture on the .jar file. This mod will now refuse to load.");
+		return;
 	}
 }

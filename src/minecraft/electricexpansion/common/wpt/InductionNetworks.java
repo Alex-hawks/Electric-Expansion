@@ -22,14 +22,14 @@ public class InductionNetworks
 		}
 		catch (NullPointerException e)
 		{
-			if (newFreq == (Short) null)
-			{
-				ElectricExpansion.EELogger.severe("Must provide new frequency");
-				e.printStackTrace();
-			}
 			if (sender == null)
 			{
 				ElectricExpansion.EELogger.severe("Must provide the sender in question");
+				e.printStackTrace();
+			}
+			//if (newFreq == (Short) null)
+			{
+				ElectricExpansion.EELogger.severe("Must provide new frequency");
 				e.printStackTrace();
 			}
 		}
