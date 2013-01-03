@@ -62,6 +62,7 @@ import electricexpansion.common.itemblocks.ItemBlockSwitchWireBlock;
 import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.itemblocks.ItemBlockWPT;
 import electricexpansion.common.itemblocks.ItemBlockWireBlock;
+import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;

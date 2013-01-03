@@ -7,39 +7,28 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockTransformer extends ItemBlock
 {
-	public ItemBlockTransformer(int id)
+	public ItemBlockTransformer(int par1)
 	{
-		super(id);
-		this.setMaxDamage(0);
+		super(par1);
 		this.setHasSubtypes(true);
 	}
 
-	@Override
-	public int getMetadata(int damage)
+	public int getMetadata(int par1)
 	{
-		return damage;
+		return par1;
 	}
 
-	@Override
-	public String getItemNameIS(ItemStack itemstack)
+	public String getItemNameIS(ItemStack i)
 	{
-		int metadata = 0;
-
-		if (itemstack.getItemDamage() >= BlockTransformer.TIER_3_META)
-		{
-			metadata = 2;
-		}
-		else if (itemstack.getItemDamage() >= BlockTransformer.TIER_2_META)
-		{
-			metadata = 1;
-		}
-
-		return Block.blocksList[this.getBlockID()].getBlockName() + "." + metadata;
-	}
-
-	@Override
-	public String getItemName()
-	{
-		return Block.blocksList[this.getBlockID()].getBlockName() + ".0";
+		String name = null;
+		int j = i.getItemDamage();
+		if (j >= 0 && j < 4)
+			name = "60v";
+		if (j >= 4 && j < 8)
+			name = "120v";
+		if (j >= 8 && j < 12)
+			name = "240v";
+		return i.getItem().getItemName() + "." + name;
 	}
 }
+

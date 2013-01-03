@@ -352,5 +352,5 @@ public class BlockTransformer extends BlockMachine
 
 		return new ItemStack(id, 1, metadata);
 	}
-
+	
 }
