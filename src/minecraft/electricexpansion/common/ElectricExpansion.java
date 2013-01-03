@@ -115,7 +115,7 @@ public class ElectricExpansion
 	public static Block blockSwitchWire;
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
-	public static Block blockRedstoneWire;
+	//public static Block blockRedstoneWire;
 	// public static final Block blockRedstoneWireBlock = new
 
 	public static Block blockAdvBatteryBox;
@@ -159,9 +159,8 @@ public class ElectricExpansion
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
-		blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire", BLOCK_ID_PREFIX + 5).getInt(), 0);
+		//blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire", BLOCK_ID_PREFIX + 5).getInt(), 0);
 		// +6 public static final Block blockRedstoneWireBlock = new
-		// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
@@ -249,7 +248,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
-		GameRegistry.registerBlock(blockRedstoneWire, "blockRedstoneWire");
+		//GameRegistry.registerBlock(blockRedstoneWire, "blockRedstoneWire");
 
 		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class, "blockWPT");
 
