@@ -58,6 +58,7 @@ import electricexpansion.common.itemblocks.ItemBlockLogisticsWire;
 import electricexpansion.common.itemblocks.ItemBlockRawWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWireBlock;
+import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.itemblocks.ItemBlockWPT;
 import electricexpansion.common.itemblocks.ItemBlockWireBlock;
 import electricexpansion.common.itemblocks.ItemBlockTransformer;
@@ -98,8 +99,8 @@ public class ElectricExpansion
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
 
 	public static final int MAJOR_VERSION = 1;
-	public static final int MINOR_VERSION = 0;
-	public static final int REVISION_VERSION = 6;
+	public static final int MINOR_VERSION = 1;
+	public static final int REVISION_VERSION = 0;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -166,7 +167,7 @@ public class ElectricExpansion
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
 		// 10
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
-		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt(), 0).setCreativeTab(EETab.INSTANCE).setBlockName("Transformer");
+		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt()).setCreativeTab(EETab.INSTANCE).setBlockName("transformer");
 		blockWPT = new BlockWPT(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt(), 0);
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
@@ -229,7 +230,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 2, 0, false);
+		UniversalElectricity.register(this, 1, 2, 2, false);
 
 		if (!configLoaded)
 		{
@@ -246,6 +247,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
 		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
 		GameRegistry.registerBlock(blockLead, "blockLead");
+		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
 
 		GameRegistry.registerBlock(blockWPT, ItemBlockWPT.class, "blockWPT");
@@ -255,7 +257,6 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire");
 		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
 		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
-		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire");
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);

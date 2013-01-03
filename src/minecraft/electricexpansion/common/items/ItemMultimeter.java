@@ -43,18 +43,18 @@ public class ItemMultimeter extends Item
 
 				ElectricityPack getProduced = wireTile.getNetwork().getProduced();
 
-				player.addChatMessage(ElectricInfo.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", " + ElectricInfo.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricInfo.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
+				player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", " + ElectricInfo.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricInfo.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
 			}
 			else
 			{
 				if (tileEntity instanceof IJouleStorage)
 				{
 					IJouleStorage tileStorage = (IJouleStorage) tileEntity;
-					player.addChatMessage(ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/" + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES));
+					player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/" + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES));
 				}
 				if (tileEntity instanceof IVoltage)
 				{
-					player.addChatMessage(ElectricInfo.getDisplay(((IVoltage) tileEntity).getVoltage(), ElectricUnit.VOLTAGE));
+					player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(((IVoltage) tileEntity).getVoltage(), ElectricUnit.VOLTAGE));
 				}
 
 				return true;

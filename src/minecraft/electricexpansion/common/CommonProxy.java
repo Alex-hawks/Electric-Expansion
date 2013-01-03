@@ -21,7 +21,9 @@ import electricexpansion.common.tile.TileEntityDistribution;
 import electricexpansion.common.tile.TileEntityInductionReciever;
 import electricexpansion.common.tile.TileEntityInductionSender;
 import electricexpansion.common.tile.TileEntityMultimeter;
-import electricexpansion.common.tile.TileEntityTransformer;
+import electricexpansion.common.tile.TileEntityTransformerT1;
+import electricexpansion.common.tile.TileEntityTransformerT2;
+import electricexpansion.common.tile.TileEntityTransformerT3;
 import electricexpansion.common.tile.TileEntityWireMill;
 
 public class CommonProxy implements IGuiHandler
@@ -43,7 +45,9 @@ public class CommonProxy implements IGuiHandler
 		// Mattredsox's Tile entity registrations
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 		GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
-		GameRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer");
+		GameRegistry.registerTileEntity(TileEntityTransformerT1.class, "TileEntityTransformerT1");
+		GameRegistry.registerTileEntity(TileEntityTransformerT2.class, "TileEntityTransformerT2");
+		GameRegistry.registerTileEntity(TileEntityTransformerT3.class, "TileEntityTransformeT3");
 		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
 		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
 		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");

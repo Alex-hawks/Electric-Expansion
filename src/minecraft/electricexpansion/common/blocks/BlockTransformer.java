@@ -14,13 +14,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.UETab;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityTransformer;
+import electricexpansion.common.tile.TileEntityTransformerT1;
+import electricexpansion.common.tile.TileEntityTransformerT2;
+import electricexpansion.common.tile.TileEntityTransformerT3;
 
 public class BlockTransformer extends BlockMachine
 {
@@ -28,10 +29,9 @@ public class BlockTransformer extends BlockMachine
 	public static final int TIER_2_META = 4;
 	public static final int TIER_3_META = 8;
 
-	public BlockTransformer(int id, int textureIndex)
+	public BlockTransformer(int id)
 	{
-		super("Transformer", id, UniversalElectricity.machine, EETab.INSTANCE);
-		this.blockIndexInTexture = textureIndex;
+		super("transformer", id, UniversalElectricity.machine, EETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
 	}
@@ -47,7 +47,43 @@ public class BlockTransformer extends BlockMachine
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 
-		if (metadata >= TIER_1_META)
+		if (metadata >= TIER_3_META)
+		{
+			switch (angle)
+			{
+				case 0:
+					par1World.setBlockMetadata(x, y, z, TIER_3_META + 3);
+					break;
+				case 1:
+					par1World.setBlockMetadata(x, y, z, TIER_3_META + 1);
+					break;
+				case 2:
+					par1World.setBlockMetadata(x, y, z, TIER_3_META + 2);
+					break;
+				case 3:
+					par1World.setBlockMetadata(x, y, z, TIER_3_META + 0);
+					break;
+			}
+		}
+		else if (metadata >= TIER_2_META)
+		{
+			switch (angle)
+			{
+				case 0:
+					par1World.setBlockMetadata(x, y, z, TIER_2_META + 3);
+					break;
+				case 1:
+					par1World.setBlockMetadata(x, y, z, TIER_2_META + 1);
+					break;
+				case 2:
+					par1World.setBlockMetadata(x, y, z, TIER_2_META + 2);
+					break;
+				case 3:
+					par1World.setBlockMetadata(x, y, z, TIER_2_META + 0);
+					break;
+			}
+		}
+		else
 		{
 			switch (angle)
 			{
@@ -66,47 +102,9 @@ public class BlockTransformer extends BlockMachine
 			}
 		}
 
-		if (metadata >= TIER_2_META)
-		{
-			switch (angle)
-			{
-				case 0:
-					par1World.setBlockMetadata(x, y, z, TIER_2_META + 3);
-					break;
-				case 1:
-					par1World.setBlockMetadata(x, y, z, TIER_2_META + 1);
-					break;
-				case 2:
-					par1World.setBlockMetadata(x, y, z, TIER_2_META + 2);
-					break;
-				case 3:
-					par1World.setBlockMetadata(x, y, z, TIER_2_META);
-					break;
-			}
-		}
-		
-		else
-			
-			switch (angle)
-			{
-				case 0:
-					par1World.setBlockMetadata(x, y, z, TIER_3_META + 3);
-					break;
-				case 1:
-					par1World.setBlockMetadata(x, y, z, TIER_3_META + 1);
-					break;
-				case 2:
-					par1World.setBlockMetadata(x, y, z, TIER_3_META + 2);
-					break;
-				case 3:
-					par1World.setBlockMetadata(x, y, z, TIER_3_META);
-					break;
-			}
-		
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
-
 
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
@@ -158,6 +156,152 @@ public class BlockTransformer extends BlockMachine
 		return true;
 	}
 
+	@Override
+	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		int metadata = par1World.getBlockMetadata(x, y, z);
+
+		if (!par1World.isRemote)
+		{
+			if (metadata >= TIER_3_META)
+			{
+				TileEntityTransformerT3 tileEntity = (TileEntityTransformerT3) par1World.getBlockTileEntity(x, y, z);
+
+				tileEntity.stepUp = !tileEntity.stepUp;
+
+				if (tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Up Converting");
+
+				if (!tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Down Converting");
+				
+				return true;
+			}
+			
+			else if (metadata >= TIER_2_META)
+			{
+				TileEntityTransformerT2 tileEntity = (TileEntityTransformerT2) par1World.getBlockTileEntity(x, y, z);
+
+				tileEntity.stepUp = !tileEntity.stepUp;
+
+				if (tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer toggled to: Up Converting");
+
+				if (!tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer toggled to: Down Converting");
+			
+				return true;
+			}
+
+			else
+			{
+				TileEntityTransformerT1 tileEntity = (TileEntityTransformerT1) par1World.getBlockTileEntity(x, y, z);
+
+				tileEntity.stepUp = !tileEntity.stepUp;
+
+				if (tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer toggled to: Up Converting");
+
+				if (!tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer toggled to: Down Converting");
+			
+				return true;	
+			}
+
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+	{
+		int metadata = getDamageValue(par1World, x, y, z);
+
+		if (!par1World.isRemote)
+		{
+			if (metadata >= TIER_3_META)
+			{
+				TileEntityTransformerT3 tileEntity = (TileEntityTransformerT3) par1World.getBlockTileEntity(x, y, z);
+
+				if (tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer is currently up converting");
+
+				if (!tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer is currently down converting");
+				return true;
+			}
+
+			else if (metadata >= TIER_2_META)
+			{
+				TileEntityTransformerT2 tileEntity = (TileEntityTransformerT2) par1World.getBlockTileEntity(x, y, z);
+
+				if (tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer is currently up converting");
+
+				if (!tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer is currently down converting");
+				return true;
+			}
+
+			else
+			{
+				TileEntityTransformerT1 tileEntity = (TileEntityTransformerT1) par1World.getBlockTileEntity(x, y, z);
+
+				if (tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer is currently up converting");
+
+				if (!tileEntity.stepUp)
+					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer is currently down converting");
+				return true;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
+	{
+		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getRenderType()
+	{
+		return ClientProxy.RENDER_ID;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World var1, int metadata)
+	{
+		if (metadata >= TIER_3_META)
+		{
+			return new TileEntityTransformerT3();
+		}
+		else if (metadata >= TIER_2_META)
+		{
+			return new TileEntityTransformerT2();
+		}
+		else
+		{
+			return new TileEntityTransformerT1();
+		}
+
+	}
+
 	public ItemStack getTier1()
 	{
 		return new ItemStack(this.blockID, 1, TIER_1_META);
@@ -193,9 +337,9 @@ public class BlockTransformer extends BlockMachine
 
 		int metadata = getDamageValue(world, x, y, z);
 
-		if (metadata >= TIER_1_META)
+		if (metadata >= TIER_3_META)
 		{
-			metadata = TIER_1_META;
+			metadata = TIER_3_META;
 		}
 		else if (metadata >= TIER_2_META)
 		{
@@ -203,81 +347,10 @@ public class BlockTransformer extends BlockMachine
 		}
 		else
 		{
-			metadata = TIER_3_META;
+			metadata = TIER_1_META;
 		}
 
 		return new ItemStack(id, 1, metadata);
-	}
-	
-	@Override
-	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		if (!par1World.isRemote)
-		{
-			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
-
-			tileEntity.stepUp = !tileEntity.stepUp;
-
-			if (tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Up Converting");
-
-			if (!tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Transformer toggled to: Down Converting");
-
-			return true;
-
-		}
-
-		return false;
-	}
-
-
-	@Override
-	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		if (!par1World.isRemote)
-		{
-			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
-
-			if (tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Transformer is currently up Converting");
-
-			if (!tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Transformer is currently down Converting");
-		}
-
-		return true;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-
-	@Override
-	public TileEntity createNewTileEntity(World var1, int metadata)
-	{
-		return new TileEntityTransformer();
-	}
-
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
-	{
-		return true;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public int getRenderType()
-	{
-		return ClientProxy.RENDER_ID;
 	}
 	
 }
