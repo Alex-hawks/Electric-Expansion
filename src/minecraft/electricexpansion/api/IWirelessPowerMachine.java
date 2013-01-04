@@ -1,6 +1,6 @@
 package electricexpansion.api;
 
-public interface WirelessPowerMachine
+public interface IWirelessPowerMachine
 {
 	public short getFrequency();
 

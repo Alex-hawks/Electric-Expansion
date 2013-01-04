@@ -19,14 +19,13 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
-import electricexpansion.api.WirelessPowerMachine;
+import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.wpt.InductionNetworks;
 
-public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, WirelessPowerMachine
+public class TileEntityInductionSender extends TileEntityElectricityReceiver implements IPacketReceiver, IJouleStorage, IPeripheral, IRedstoneProvider, IInventory, IWirelessPowerMachine
 {
 	private double joules = 0;
 	private int playersUsing = 0;

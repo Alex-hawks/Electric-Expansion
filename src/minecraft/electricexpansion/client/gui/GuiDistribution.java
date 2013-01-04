@@ -11,17 +11,11 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.api.WirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerDistribution;
-import electricexpansion.common.containers.ContainerInductionReciever;
-import electricexpansion.common.containers.ContainerInductionSender;
 import electricexpansion.common.tile.TileEntityDistribution;
-import electricexpansion.common.tile.TileEntityInductionReciever;
-import electricexpansion.common.tile.TileEntityInductionSender;
 
 @SideOnly(Side.CLIENT)
 public class GuiDistribution extends GuiContainer
