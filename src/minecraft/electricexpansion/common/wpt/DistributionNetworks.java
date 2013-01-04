@@ -36,6 +36,12 @@ public class DistributionNetworks
 		joules[frequency] = joules[frequency] + addedJoules;
 		return joules[frequency];
 	}
+	
+	public static double removeJoules(short frequency, double removedJoules)
+	{
+		joules[frequency] = joules[frequency] - removedJoules;
+		return joules[frequency];
+	}
 
 	public static double getMaxJoules()
 	{

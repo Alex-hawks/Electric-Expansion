@@ -11,4 +11,6 @@ public interface IWirelessPowerMachine
 	public double getMaxJoules(Object... data);
 
 	public String getType();
+
+	double removeJoules(double outputWatts);
 }

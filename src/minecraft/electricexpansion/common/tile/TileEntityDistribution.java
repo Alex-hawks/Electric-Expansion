@@ -34,8 +34,6 @@ import electricexpansion.common.wpt.DistributionNetworks;
 
 public class TileEntityDistribution extends TileEntityElectricityReceiver implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral
 {
-	private double joules = 0;
-
 	private ItemStack[] containingItems = new ItemStack[2];
 
 	private int playersUsing = 0;
@@ -66,7 +64,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			{
 				if (inputNetwork != null)
 				{
-					if (this.joules >= this.getMaxJoules())
+					if (this.getJoules() >= this.getMaxJoules())
 					{
 						inputNetwork.stopRequesting(this);
 					}
@@ -74,7 +72,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 					{
 						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 10000) / this.getVoltage(), this.getVoltage());
 						ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
-						this.setJoules(this.joules + electricityPack.getWatts());
+						this.addJoules(electricityPack.getWatts());
 
 						if (UniversalElectricity.isVoltageSensitive)
 						{
@@ -87,25 +85,10 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 				}
 			}
 
-			/*
-			 * The top slot is for recharging items. Check if the item is a electric item. If so,
-			 * recharge it.
-			 */
-			if (this.containingItems[0] != null && this.joules > 0)
-			{
-				if (this.containingItems[0].getItem() instanceof IItemElectric)
-				{
-					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
-					double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getVoltage()), this.joules);
-					double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
-					this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
-				}
-			}
-
 			// Power redstone if the battery box is full
 			boolean isFullThisCheck = false;
 
-			if (this.joules >= this.getMaxJoules())
+			if (this.getJoules() >= this.getMaxJoules())
 			{
 				isFullThisCheck = true;
 			}
@@ -113,24 +96,6 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			/**
 			 * Output Electricity
 			 */
-
-			/**
-			 * The bottom slot is for decharging. Check if the item is a electric item. If so,
-			 * decharge it.
-			 */
-			if (this.containingItems[1] != null && this.joules < this.getMaxJoules())
-			{
-				if (this.containingItems[1].getItem() instanceof IItemElectric)
-				{
-					IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
-
-					if (electricItem.canProduceElectricity())
-					{
-						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
-						this.setJoules(this.joules + joulesReceived);
-					}
-				}
-			}
 
 			if (!this.worldObj.isRemote)
 			{
@@ -146,7 +111,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 					if (this.getJoules() > 0 && outputWatts > 0)
 					{
 						outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
-						this.setJoules(this.joules - outputWatts);
+						this.removeJoules(outputWatts);
 					}
 					else
 					{
@@ -155,9 +120,6 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 				}
 			}
 		}
-
-		// Energy Loss
-		this.setJoules(this.joules - 0.0005);
 
 		if (!this.worldObj.isRemote)
 		{
@@ -242,6 +204,12 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	public double getJoules(Object... data)
 	{
 		return DistributionNetworks.getJoules(this.frequency);
+	}
+
+	@Override
+	public double removeJoules(double outputWatts)
+	{
+		return DistributionNetworks.removeJoules(this.frequency, outputWatts);
 	}
 
 	@Override
