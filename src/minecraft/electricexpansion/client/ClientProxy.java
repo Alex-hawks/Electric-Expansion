@@ -89,7 +89,7 @@ public class ClientProxy extends CommonProxy
 				case 3:
 					return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
 				case 4:
-//					return new GuiDistribution(player.inventory, (TileEntityDistribution) tileEntity);
+					return new GuiDistribution(player.inventory, (TileEntityDistribution) tileEntity);
 			}
 		}
 		return null;

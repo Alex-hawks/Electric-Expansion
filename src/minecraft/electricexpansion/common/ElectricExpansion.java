@@ -142,6 +142,7 @@ public class ElectricExpansion
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
+	private boolean hasBadSig = false;
 
 	@Instance("ElectricExpansion")
 	public static ElectricExpansion instance;
@@ -229,6 +230,8 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
+		if(this.hasBadSig)
+			return;
 		UniversalElectricity.register(this, 1, 2, 2, false);
 
 		if (!configLoaded)
@@ -378,6 +381,6 @@ public class ElectricExpansion
 	public void badSigniture()
 	{
 		EELogger.severe("Bad signiture on the .jar file. This mod will now refuse to load.");
-		return;
+		this.hasBadSig = true;
 	}
 }

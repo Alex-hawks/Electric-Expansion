@@ -9,6 +9,9 @@ import net.minecraft.inventory.IInventory;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.WirelessPowerMachine;
@@ -47,8 +50,11 @@ public class GuiDistribution extends GuiContainer
 	{
 		textField.drawTextBox();
 
+		String displayJoules = ElectricInfo.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);
+
 		this.fontRenderer.drawString(((IInventory) this.tileEntity).getInvName(), 42, 6, 4210752);
-		this.fontRenderer.drawString("Current Frequency: " + tileEntity.getFrequency(), 10, 28, 4210752);
+		this.fontRenderer.drawString("Current Frequency: " + tileEntity.getFrequency(), 10, 20, 4210752);
+		this.fontRenderer.drawString("Current Storage: " + displayJoules, 10, 30, 4210752);
 	}
 
 	/**
