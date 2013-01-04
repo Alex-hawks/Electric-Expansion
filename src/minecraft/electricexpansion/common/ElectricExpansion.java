@@ -47,6 +47,7 @@ import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockRawWire;
+import electricexpansion.common.blocks.BlockRedstoneWire;
 import electricexpansion.common.blocks.BlockSilverOre;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
@@ -100,7 +101,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 1;
-	public static final int REVISION_VERSION = 0;
+	public static final int REVISION_VERSION = 1;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -159,9 +160,8 @@ public class ElectricExpansion
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
-		// +5 public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
+		//blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire", BLOCK_ID_PREFIX + 5).getInt(), 0);
 		// +6 public static final Block blockRedstoneWireBlock = new
-		// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
@@ -251,6 +251,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
+		//GameRegistry.registerBlock(blockRedstoneWire, "blockRedstoneWire");
 
 		GameRegistry.registerBlock(blockDistribution, "blockDistribution");
 

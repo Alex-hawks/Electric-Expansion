@@ -17,6 +17,7 @@ import electricexpansion.api.EnumWireMaterial;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.misc.EETab;
+import electricexpansion.common.tile.TileEntityTransformerT2;
 
 public class BlockRawWire extends BlockConductor
 {
@@ -61,7 +62,12 @@ public class BlockRawWire extends BlockConductor
 	{
 		if (entity instanceof EntityLiving)
 		{
-			((EntityLiving) entity).attackEntityFrom(UEDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
+			TileEntityRawWire tileEntity = (TileEntityRawWire) par1World.getBlockTileEntity(x, y, z);
+
+			if (tileEntity.getNetwork().getProduced().getWatts() > 0)
+			{
+				((EntityLiving) entity).attackEntityFrom(UEDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
+			}
 		}
 	}
 
