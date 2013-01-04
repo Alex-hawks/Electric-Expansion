@@ -110,7 +110,8 @@ public class GuiDistribution extends GuiContainer
 	protected void keyTyped(char par1, int par2)
 	{
 		super.keyTyped(par1, par2);
-		textField.textboxKeyTyped(par1, par2);
+		if(par1 == '0' || par1 == '1' || par1 == '2' || par1 == '3' || par1 == '4' || par1 == '5' || par1 == '6' || par1 == '7' || par1 == '8' || par1 == '9')
+			textField.textboxKeyTyped(par1, par2);
 	}
 
 	@Override
