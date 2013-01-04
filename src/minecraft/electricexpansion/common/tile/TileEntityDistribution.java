@@ -42,6 +42,8 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 
 	private boolean isOpen;
 
+	private double joulesForDisplay = 0;
+
 	@Override
 	public void initiate()
 	{
@@ -138,7 +140,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules());
 	}
 
 	@Override
@@ -150,6 +152,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			{
 				this.frequency = dataStream.readShort();
 				this.disabledTicks = dataStream.readInt();
+				this.joulesForDisplay  = dataStream.readDouble();
 			}
 			catch (Exception e)
 			{
@@ -224,23 +227,10 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		return DistributionNetworks.getMaxJoules();
 	}
 
-	/*@Override
-	public double getJoules(Object... data)
+	public double getJoulesForDisplay(Object... data)
 	{
-		return this.joules;
+		return this.joulesForDisplay;
 	}
-
-	@Override
-	public void setJoules(double joules, Object... data)
-	{
-		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
-	}
-
-	@Override
-	public double getMaxJoules(Object... data)
-	{
-		return 4000000;
-	}*/
 	
 	@Override
 	public int getSizeInventory()

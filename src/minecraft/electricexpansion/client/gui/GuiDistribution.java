@@ -44,7 +44,7 @@ public class GuiDistribution extends GuiContainer
 	{
 		textField.drawTextBox();
 
-		String displayJoules = ElectricInfo.getDisplayShort(tileEntity.getJoules(), ElectricUnit.JOULES);
+		String displayJoules = ElectricInfo.getDisplayShort(tileEntity.getJoulesForDisplay(), ElectricUnit.JOULES);
 
 		this.fontRenderer.drawString(((IInventory) this.tileEntity).getInvName(), 42, 6, 4210752);
 		this.fontRenderer.drawString("Current Frequency: " + tileEntity.getFrequency(), 10, 20, 4210752);
