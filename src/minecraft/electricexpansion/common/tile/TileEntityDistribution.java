@@ -11,12 +11,14 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.implement.IConductor;
+import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
@@ -24,28 +26,29 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
-import electricexpansion.api.WirelessPowerMachine;
+import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.wpt.DistributionNetworks;
 
-public class TileEntityDistribution extends TileEntityElectricityReceiver implements IJouleStorage, IPacketReceiver, IRedstoneProvider, IPeripheral, IInventory, WirelessPowerMachine
+public class TileEntityDistribution extends TileEntityElectricityReceiver implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral
 {
-	private short frequency;
-	private boolean isOpen;
-	private int playersUsing;
+	private double joules = 0;
 
-	public TileEntityDistribution()
-	{
-		super();
-	}
+	private ItemStack[] containingItems = new ItemStack[2];
+
+	private int playersUsing = 0;
+
+	private short frequency;
+
+	private boolean isOpen;
 
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockDistribution.blockID);
 	}
 
 	@Override
@@ -55,75 +58,114 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 
 		if (!this.isDisabled())
 		{
+			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
-				if (inputTile != null)
+				if (inputNetwork != null)
 				{
-					if (inputTile instanceof IConductor)
+					if (this.joules >= this.getMaxJoules())
 					{
-						if (this.getJoules() >= this.getMaxJoules())
+						inputNetwork.stopRequesting(this);
+					}
+					else
+					{
+						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 10000) / this.getVoltage(), this.getVoltage());
+						ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
+						this.setJoules(this.joules + electricityPack.getWatts());
+
+						if (UniversalElectricity.isVoltageSensitive)
 						{
-							((IConductor) inputTile).getNetwork().stopRequesting(this);
-						}
-						else
-						{
-							((IConductor) inputTile).getNetwork().startRequesting(this, this.getMaxJoules() - this.getJoules(), this.getVoltage());
-							this.setJoules(this.getJoules() + ((IConductor) inputTile).getNetwork().consumeElectricity(this).getWatts());
+							if (electricityPack.voltage > this.getVoltage())
+							{
+								this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
+							}
 						}
 					}
 				}
+			}
+
+			/*
+			 * The top slot is for recharging items. Check if the item is a electric item. If so,
+			 * recharge it.
+			 */
+			if (this.containingItems[0] != null && this.joules > 0)
+			{
+				if (this.containingItems[0].getItem() instanceof IItemElectric)
+				{
+					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
+					double ampsToGive = Math.min(ElectricInfo.getAmps(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getVoltage()), this.joules);
+					double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
+					this.setJoules(this.joules - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
+				}
+			}
+
+			// Power redstone if the battery box is full
+			boolean isFullThisCheck = false;
+
+			if (this.joules >= this.getMaxJoules())
+			{
+				isFullThisCheck = true;
 			}
 
 			/**
 			 * Output Electricity
 			 */
 
-			if (this.getJoules() > 0)
+			/**
+			 * The bottom slot is for decharging. Check if the item is a electric item. If so,
+			 * decharge it.
+			 */
+			if (this.containingItems[1] != null && this.joules < this.getMaxJoules())
 			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - blockMetadata + 2);
-				TileEntity tileEntity = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
-
-				if (tileEntity != null)
+				if (this.containingItems[1].getItem() instanceof IItemElectric)
 				{
+					IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
 
-					TileEntity connector = Vector3.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(this.blockMetadata));
-					// Output UE electricity
-					if (connector instanceof IConductor)
+					if (electricItem.canProduceElectricity())
 					{
-						double joulesNeeded = ((IConductor) connector).getNetwork().getRequest().getWatts();
-						double transferAmps = Math.max(Math.min(Math.min(ElectricInfo.getAmps(joulesNeeded, this.getVoltage()), ElectricInfo.getAmps(this.getJoules(), this.getVoltage())), 80), 0);
+						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
+						this.setJoules(this.joules + joulesReceived);
+					}
+				}
+			}
 
-						if (!this.worldObj.isRemote && transferAmps > 0)
-						{
-							((IConductor) connector).getNetwork().startProducing(this, transferAmps, this.getVoltage());
-							this.addJoules(0 - ElectricInfo.getJoules(transferAmps, this.getVoltage()));
-							System.out.println("PROD");
-						}
-						else
-						{
-							((IConductor) connector).getNetwork().stopProducing(this);
-						}
+			if (!this.worldObj.isRemote)
+			{
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
+				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+
+				if (outputNetwork != null && inputNetwork != outputNetwork)
+				{
+					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), 10000));
+
+					if (this.getJoules() > 0 && outputWatts > 0)
+					{
+						outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
+						this.setJoules(this.joules - outputWatts);
+					}
+					else
+					{
+						outputNetwork.stopProducing(this);
 					}
 				}
 			}
 		}
+
+		// Energy Loss
+		this.setJoules(this.joules - 0.0005);
+
 		if (!this.worldObj.isRemote)
 		{
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
-				this.sendPacket();
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
-	{
-		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	public void sendPacket()
@@ -138,10 +180,36 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	}
 
 	@Override
+	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
+	{
+		if (this.worldObj.isRemote)
+		{
+			try
+			{
+				this.frequency = dataStream.readShort();
+				this.disabledTicks = dataStream.readInt();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			try
+			{
+				this.setFrequency(dataStream.readShort());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
 	public void openChest()
 	{
-		if (!this.worldObj.isRemote)
-			this.sendPacket();
 		this.playersUsing++;
 	}
 
@@ -149,47 +217,6 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	public void closeChest()
 	{
 		this.playersUsing--;
-	}
-
-	@Override
-	public int getSizeInventory()
-	{
-		return 0;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int var1)
-	{
-		return null;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int var1, int var2)
-	{
-		return null;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int var1)
-	{
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int var1, ItemStack var2)
-	{
-	}
-
-	@Override
-	public String getInvName()
-	{
-		return "Quantum Battery Box";
-	}
-
-	@Override
-	public int getInventoryStackLimit()
-	{
-		return 0;
 	}
 
 	@Override
@@ -229,6 +256,173 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 		return DistributionNetworks.getMaxJoules();
 	}
 
+	/*@Override
+	public double getJoules(Object... data)
+	{
+		return this.joules;
+	}
+
+	@Override
+	public void setJoules(double joules, Object... data)
+	{
+		this.joules = Math.max(Math.min(joules, this.getMaxJoules()), 0);
+	}
+
+	@Override
+	public double getMaxJoules(Object... data)
+	{
+		return 4000000;
+	}*/
+	
+	@Override
+	public int getSizeInventory()
+	{
+		return this.containingItems.length;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int par1)
+	{
+		return this.containingItems[par1];
+	}
+
+	@Override
+	public ItemStack decrStackSize(int par1, int par2)
+	{
+		if (this.containingItems[par1] != null)
+		{
+			ItemStack var3;
+
+			if (this.containingItems[par1].stackSize <= par2)
+			{
+				var3 = this.containingItems[par1];
+				this.containingItems[par1] = null;
+				return var3;
+			}
+			else
+			{
+				var3 = this.containingItems[par1].splitStack(par2);
+
+				if (this.containingItems[par1].stackSize == 0)
+				{
+					this.containingItems[par1] = null;
+				}
+
+				return var3;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int par1)
+	{
+		if (this.containingItems[par1] != null)
+		{
+			ItemStack var2 = this.containingItems[par1];
+			this.containingItems[par1] = null;
+			return var2;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Override
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
+	{
+		this.containingItems[par1] = par2ItemStack;
+
+		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		{
+			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
+
+	@Override
+	public String getInvName()
+	{
+		return "Quantum Battery Box";
+	}
+
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 1;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
+	{
+		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+	}
+
+	/**
+	 * COMPUTERCRAFT FUNCTIONS
+	 */
+
+	@Override
+	public String getType()
+	{
+		return "BatteryBox";
+	}
+
+	@Override
+	public String[] getMethodNames()
+	{
+		return new String[] { "getVoltage", "getJoules", "isFull" };
+	}
+
+	@Override
+	public boolean canAttachToSide(int side)
+	{
+		return true;
+	}
+
+	@Override
+	public void attach(IComputerAccess computer)
+	{
+	}
+
+	@Override
+	public void detach(IComputerAccess computer)
+	{
+	}
+
+	@Override
+	public short getFrequency()
+	{
+		return frequency;
+	}
+
+	@Override
+	public void setFrequency(short newFrequency)
+	{
+		this.frequency = newFrequency;
+		if (this.worldObj.isRemote)
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, newFrequency));
+	}
+
+	public void setFrequency(int frequency)
+	{
+		this.setFrequency((short) frequency);
+	}
+
+	private int setFrequency(int frequency, boolean b)
+	{
+		return this.setFrequency((short) frequency, b);
+	}
+
+	private int setFrequency(short frequency, boolean b)
+	{
+		this.setFrequency(frequency);
+		return this.frequency;
+	}
+
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException
 	{
@@ -253,8 +447,6 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			{
 				case getWattage:
 					return new Object[] { ElectricInfo.getWatts(getJoules((Object) null)) };
-				case isFull:
-					return new Object[] { isFull() };
 				case getJoules:
 					return new Object[] { getJoules() };
 				case getFrequency:
@@ -269,103 +461,4 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			return new Object[] { "Please wait for the EMP to run out." };
 	}
 
-	@Override
-	public short getFrequency()
-	{
-		return frequency;
-	}
-
-	@Override
-	public void setFrequency(short newFrequency)
-	{
-		this.frequency = newFrequency;
-		if(this.worldObj.isRemote)
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, newFrequency));
-	}
-
-	public void setFrequency(int frequency)
-	{
-		this.setFrequency((short) frequency);
-	}
-
-	private int setFrequency(int frequency, boolean b)
-	{
-		return this.setFrequency((short) frequency, b);
-	}
-
-	private int setFrequency(short frequency, boolean b)
-	{
-		this.setFrequency(frequency);
-		return this.frequency;
-	}
-
-	private boolean isFull()
-	{
-		return this.getJoules((Object) null) == this.getMaxJoules();
-	}
-
-	@Override
-	public boolean canAttachToSide(int side)
-	{
-		return side == this.blockMetadata;
-	}
-
-	@Override
-	public void attach(IComputerAccess computer)
-	{
-
-	}
-
-	@Override
-	public void detach(IComputerAccess computer)
-	{
-	}
-
-	@Override
-	public String getType()
-	{
-		return "Quantum Battery Box";
-	}
-
-	@Override
-	public String[] getMethodNames()
-	{
-		return new String[] { "getWattage", "isFull", "getJoules", "getFrequency", "setFrequency" };
-	}
-
-	public boolean isPoweringTo(ForgeDirection side)
-	{
-		return DistributionNetworks.getJoules(this.frequency) == DistributionNetworks.getMaxJoules();
-	}
-
-	@Override
-	public boolean isIndirectlyPoweringTo(ForgeDirection side)
-	{
-		return DistributionNetworks.getJoules(this.frequency) == DistributionNetworks.getMaxJoules();
-	}
-
-	@Override
-	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-		if (this.worldObj.isRemote)
-		{
-			try
-			{
-				this.frequency = dataStream.readShort();
-				this.disabledTicks = dataStream.readInt();
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-		else
-		{
-			try
-			{
-				this.setFrequency(dataStream.readShort());
-			}
-			catch(Exception e){e.printStackTrace();}
-		}
-	}
 }
