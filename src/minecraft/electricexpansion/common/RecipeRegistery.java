@@ -37,7 +37,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 1), new Object[] { " @ ", " @ ", " @ ", '@', "ingotTin" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 2), new Object[] { " @ ", " @ ", " @ ", '@', "ingotSilver" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 3), new Object[] { " @ ", " @ ", " @ ", '@', "ingotAluminium" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 2, 4), new Object[] { " @ ", " @ ", " @ ", '@', new ItemStack(itemParts, 1, 2) }));
+//		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 2, 4), new Object[] { " @ ", " @ ", " @ ", '@', new ItemStack(itemParts, 1, 2) }));
 
 		// Recipes for supporting other UE add-ons, the slack way...
 		if (OreDictionary.getOres("copperWire").size() > 0)
@@ -58,7 +58,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 1), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotTin" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 2), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotSilver" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotAluminium" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 2, 4), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', new ItemStack(itemParts, 1, 2) }));
+//		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 2, 4), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', new ItemStack(itemParts, 1, 2) }));
 
 		// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
 		GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Item.leather, Block.stone });
@@ -114,7 +114,10 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0) }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!$!", '!', "battery", '@', "copperWire", '$', "eliteCircuit" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%', "basicCircuit", '^', Block.glass, '@', Item.stick }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockDistribution), new Object[] { "!!!", "!@!", "!!!", '@', new ItemStack(blockBatBox), '!', "antimatterGram"}));
+		if (OreDictionary.getOres("antimatterGram").size() > 0)
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockDistribution), new Object[] { "!!!", "!@!", "!!!", '@', new ItemStack(blockBatBox), '!', "antimatterGram"}));
+		else
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockDistribution), new Object[] { "!!!", "!@!", "!!!", '@', new ItemStack(blockBatBox), '!', new ItemStack(itemParts, 1 , 1)}));
 		
 		//Transformers
 		//T1
@@ -143,8 +146,8 @@ public class RecipeRegistery
 
 		// Parts
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 0), new Object[] { " # ", "! !", " ! ", '!', Item.ingotIron, '#', Item.diamond }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '!', Item.ingotGold, '#', "ingotSilver", '@', Item.enderPearl }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '#', Item.ingotGold, '!', "ingotSilver", '@', Item.enderPearl }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '!', Item.ingotGold, '#', "ingotSilver", '@', Item.eyeOfEnder }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '#', Item.ingotGold, '!', "ingotSilver", '@', Item.eyeOfEnder }));
 		FurnaceRecipes.smelting().addSmelting(itemParts.itemID, 1, new ItemStack(itemParts, 4, 2), 0);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemCoil), new Object[] { "AAA", "ASA", "AAA", 'A', "plateCopper", 'B', new ItemStack(blockRawWire, 1, 0) }));
 
