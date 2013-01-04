@@ -1,4 +1,4 @@
-package electricexpansion.common.wpt;
+package electricexpansion.common.misc;
 
 import java.io.File;
 import java.io.FileInputStream;

@@ -14,8 +14,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityDistribution;
-import electricexpansion.common.tile.TileEntityInductionReciever;
-import electricexpansion.common.tile.TileEntityInductionSender;
 
 public class BlockDistribution extends BlockContainer
 {

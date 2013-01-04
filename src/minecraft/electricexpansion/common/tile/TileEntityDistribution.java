@@ -30,7 +30,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.wpt.DistributionNetworks;
+import electricexpansion.common.misc.DistributionNetworks;
 
 public class TileEntityDistribution extends TileEntityElectricityReceiver implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral
 {

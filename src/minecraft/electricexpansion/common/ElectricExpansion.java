@@ -43,16 +43,15 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
+import electricexpansion.common.blocks.BlockDistribution;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockRawWire;
-import electricexpansion.common.blocks.BlockRedstoneWire;
 import electricexpansion.common.blocks.BlockSilverOre;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
 import electricexpansion.common.blocks.BlockTransformer;
-import electricexpansion.common.blocks.BlockDistribution;
 import electricexpansion.common.blocks.BlockWireBlock;
 import electricexpansion.common.blocks.BlockWireMill;
 import electricexpansion.common.itemblocks.ItemBlockInsulatedWire;
@@ -62,7 +61,6 @@ import electricexpansion.common.itemblocks.ItemBlockSwitchWire;
 import electricexpansion.common.itemblocks.ItemBlockSwitchWireBlock;
 import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.itemblocks.ItemBlockWireBlock;
-import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;
@@ -70,8 +68,8 @@ import electricexpansion.common.items.ItemInfiniteBattery;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUpgrade;
+import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.wpt.DistributionNetworks;
 
 @Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, certificateFingerprint = "b34077d98c710152e788c277173c3d474769c3e6", dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)

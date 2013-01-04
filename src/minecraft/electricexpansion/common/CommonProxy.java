@@ -13,13 +13,9 @@ import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
-import electricexpansion.common.containers.ContainerInductionReciever;
-import electricexpansion.common.containers.ContainerInductionSender;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityDistribution;
-import electricexpansion.common.tile.TileEntityInductionReciever;
-import electricexpansion.common.tile.TileEntityInductionSender;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityTransformerT1;
 import electricexpansion.common.tile.TileEntityTransformerT2;
@@ -49,8 +45,6 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityTransformerT2.class, "TileEntityTransformerT2");
 		GameRegistry.registerTileEntity(TileEntityTransformerT3.class, "TileEntityTransformeT3");
 		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
-		GameRegistry.registerTileEntity(TileEntityInductionReciever.class, "TileEntityInductionReciever");
-		GameRegistry.registerTileEntity(TileEntityInductionSender.class, "TileEntityInductionSender");
 	}
 
 	@Override
@@ -74,14 +68,7 @@ public class CommonProxy implements IGuiHandler
 				case 3:
 					return null;
 				case 4:
-				{
-					if (tileEntity.getBlockMetadata() >= 0 && tileEntity.getBlockMetadata() < 4)
-						return new ContainerDistribution(player.inventory, (TileEntityDistribution) tileEntity);
-					if (tileEntity.getBlockMetadata() >= 4 && tileEntity.getBlockMetadata() < 8)
-						return new ContainerInductionSender(player.inventory, (TileEntityInductionSender) tileEntity);
-					if (tileEntity.getBlockMetadata() >= 8 && tileEntity.getBlockMetadata() < 12)
-						return new ContainerInductionReciever(player.inventory, (TileEntityInductionReciever) tileEntity);
-				}
+					return new ContainerDistribution(player.inventory, (TileEntityDistribution) tileEntity);
 			}
 		}
 		return null;
