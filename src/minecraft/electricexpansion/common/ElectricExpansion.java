@@ -71,7 +71,7 @@ import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, useMetadata = true, certificateFingerprint = "b34077d98c710152e788c277173c3d474769c3e6", dependencies = "after:BasicComponents")
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents", certificateFingerprint = "b34077d98c710152e788c277173c3d474769c3e6")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -98,8 +98,8 @@ public class ElectricExpansion
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
 
 	public static final int MAJOR_VERSION = 1;
-	public static final int MINOR_VERSION = 1;
-	public static final int REVISION_VERSION = 1;
+	public static final int MINOR_VERSION = 2;
+	public static final int REVISION_VERSION = 0;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -374,12 +374,5 @@ public class ElectricExpansion
 	public void onWorldLoad(WorldEvent.Load event)
 	{
 		DistributionNetworks.onWorldLoad();
-	}
-	
-	@FingerprintWarning
-	public void badSigniture()
-	{
-		EELogger.severe("Bad signiture on the .jar file. This mod will now refuse to load.");
-		this.hasBadSig = true;
 	}
 }

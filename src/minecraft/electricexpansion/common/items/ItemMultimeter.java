@@ -50,7 +50,7 @@ public class ItemMultimeter extends Item
 				if (tileEntity instanceof IJouleStorage)
 				{
 					IJouleStorage tileStorage = (IJouleStorage) tileEntity;
-					player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/" + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES));
+					player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/" + ElectricInfo.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
 				}
 				if (tileEntity instanceof IVoltage)
 				{
