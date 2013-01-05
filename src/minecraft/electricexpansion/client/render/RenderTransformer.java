@@ -1,5 +1,8 @@
 package electricexpansion.client.render;
 
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -14,16 +17,19 @@ import electricexpansion.common.ElectricExpansion;
 public class RenderTransformer extends TileEntitySpecialRenderer
 {
 	private ModelTransformer model;
+	
+	private RenderFloatingText floating;
 
 	public RenderTransformer()
 	{
 		this.model = new ModelTransformer();
+		this.floating = new RenderFloatingText();
 	}
 
 	public static final int TIER_1_META = 0;
 	public static final int TIER_2_META = 4;
 	public static final int TIER_3_META = 8;
-
+	
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var3, double var4, float var5)
 	{
