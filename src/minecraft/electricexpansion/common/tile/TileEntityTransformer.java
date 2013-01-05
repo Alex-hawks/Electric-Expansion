@@ -29,28 +29,27 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	public boolean stepUp = false;
 
 	public int type;
-	
+
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite()));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
-
-		if(this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= 8)
+		if (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= 8)
 		{
 			this.type = 8;
 		}
-		
+
 		else if (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= 4)
 		{
 			this.type = 4;
 		}
-		
+
 		else
 		{
 			this.type = 0;
 		}
 
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite()));
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
 	}
 
 	@Override
@@ -83,20 +82,22 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 						if (inputNetwork.getProduced().getWatts() > 0)
 						{
 
+							System.out.print("input more than 0");
+
 							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
 							double typeChange;
-							
-							if(this.type == 0)
+
+							if (this.type == 0)
 								typeChange = 60;
-							
-							if(this.type == 4)
+
+							if (this.type == 4)
 								typeChange = 120;
-							
+
 							else
 							{
 								typeChange = 240;
 							}
-							
+
 							double newVoltage = actualEnergy.voltage + typeChange;
 
 							if (!stepUp)
