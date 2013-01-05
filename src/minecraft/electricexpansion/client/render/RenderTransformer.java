@@ -1,7 +1,10 @@
 package electricexpansion.client.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MovingObjectPosition;
 
 import org.lwjgl.opengl.GL11;
 
@@ -39,6 +42,13 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 			status = "Down";
 		}
 
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		
+        MovingObjectPosition movingPosition = player.rayTrace(5D, 1.0F);
+
+        if (movingPosition != null)
+        	
+        	
 		RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));
 
 		int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);

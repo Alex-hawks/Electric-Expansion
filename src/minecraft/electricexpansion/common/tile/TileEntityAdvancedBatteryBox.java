@@ -153,6 +153,9 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 
 				if (outputNetwork != null && inputNetwork != outputNetwork)
 				{
+
+					System.out.println(outputNetwork.getRequest() + " output bat box req");
+
 					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), this.MAX_OUTPUT));
 
 					if (this.getJoules() > 0 && outputWatts > 0)

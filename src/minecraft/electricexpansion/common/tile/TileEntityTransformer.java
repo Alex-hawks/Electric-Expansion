@@ -16,6 +16,7 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -48,6 +49,8 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 			this.type = 0;
 		}
 
+		// System.out.println(type + " type");
+
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite()));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
 	}
@@ -63,10 +66,16 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-
+				
 				// Check if requesting power on output
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2);
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+
+				// System.out.println(outputTile);
+				// System.out.println(inputTile + " input");
+
+				// System.out.println(outputDirection + "output dir");
+				// System.out.println(inputDirection + "input dir");
 
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
@@ -74,26 +83,39 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				if (network != null && inputNetwork != null && network != inputNetwork)
 				{
 
+					System.out.println(network.getRequest());
+					System.out.println(inputNetwork.getRequest() + " input request");
+
 					if (network.getRequest().getWatts() > 0)
 					{
+						System.out.println(network.isRequesting(this) + " input req  uest");
 
 						inputNetwork.startRequesting(this, network.getRequest());
+
+						 System.out.println(inputNetwork.getProduced() + " input");
+						// System.out.println(network.getProduced() + " output");
+						 
+						 
 
 						if (inputNetwork.getProduced().getWatts() > 0)
 						{
 
-							System.out.print("input more than 0");
+							System.out.println("input more than 0");
 
+							
 							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
-							double typeChange;
+							double typeChange = 0;
 
+							System.out.println(actualEnergy + " addda");
+
+							
 							if (this.type == 0)
 								typeChange = 60;
 
 							if (this.type == 4)
 								typeChange = 120;
 
-							else
+							if (this.type == 8)
 							{
 								typeChange = 240;
 							}
@@ -105,6 +127,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 							network.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
 						}
+
 						else
 						{
 							network.stopProducing(this);
@@ -114,10 +137,16 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 					else
 					{
-						network.stopRequesting(this);
+					//	inputNetwork.resetConductors();
+						//System.out.println("stop req");
+						//((IConductor) inputTile).refreshConnectedBlocks();
+						System.out.println(inputNetwork.isRequesting(this));
+						inputNetwork.stopRequesting(this);
 					}
 
 				}
+
+				// System.out.println(stepUp);
 
 				if (!this.worldObj.isRemote)
 				{
@@ -131,7 +160,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.stepUp);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.stepUp, this.type);
 	}
 
 	@Override
@@ -140,6 +169,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 		try
 		{
 			this.stepUp = dataStream.readBoolean();
+			this.type = dataStream.readInt();
 		}
 		catch (Exception e)
 		{
@@ -155,6 +185,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.stepUp = par1NBTTagCompound.getBoolean("stepUp");
+		this.type = par1NBTTagCompound.getInteger("type");
 	}
 
 	/**
@@ -165,6 +196,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setBoolean("stepUp", this.stepUp);
+		par1NBTTagCompound.setInteger("type", this.type);
 	}
 
 	@Override
