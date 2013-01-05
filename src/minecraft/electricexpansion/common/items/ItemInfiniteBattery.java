@@ -3,15 +3,13 @@ package electricexpansion.common.items;
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagFloat;
-import universalelectricity.core.electricity.ElectricInfo;
-import universalelectricity.prefab.ItemElectric;
+import universalelectricity.core.implement.IItemElectric;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
-public class ItemInfiniteBattery extends ItemElectric
+public class ItemInfiniteBattery extends Item implements IItemElectric
 {
 	public ItemInfiniteBattery(int id)
 	{
@@ -88,5 +86,11 @@ public class ItemInfiniteBattery extends ItemElectric
 	public double getJoules(Object... data)
 	{
 		return 10000;
+	}
+
+	@Override
+	public boolean canReceiveElectricity()
+	{
+		return true;
 	}
 }
