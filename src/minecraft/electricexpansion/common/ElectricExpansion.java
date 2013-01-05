@@ -342,6 +342,12 @@ public class ElectricExpansion
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
 		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
+		
+		OreDictionary.registerOre("copperWire", new ItemStack(blockInsulatedWire, 1, 0));
+		OreDictionary.registerOre("tinWire", new ItemStack(blockInsulatedWire, 1, 1));
+		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
+		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
+		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
 
 		MinecraftForge.EVENT_BUS.register(this);
 	}
