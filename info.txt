@@ -52,3 +52,4 @@ x ElectricExpansion_v1.0.7.jar
 * ElectricExpansion_v1.1.0.jar
 * ElectricExpansion_v1.1.1.jar
 * ElectricExpansion_v1.2.0.jar
+* ElectricExpansion_v1.2.1.jar

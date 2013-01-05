@@ -18,7 +18,7 @@ public class DistributionNetworks
 	public static DistributionNetworks instance;
 	private static MinecraftServer server = MinecraftServer.getServer();
 	private static double[] joules = new double[32768];
-	private static final double maxJoules = 50000000;
+	private static final double maxJoules = 5000000;
 
 	public static double getJoules(short frequency)
 	{
