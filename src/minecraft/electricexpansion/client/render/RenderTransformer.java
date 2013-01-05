@@ -18,12 +18,9 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 {
 	private ModelTransformer model;
 	
-	private RenderFloatingText floating;
-
 	public RenderTransformer()
 	{
 		this.model = new ModelTransformer();
-		this.floating = new RenderFloatingText();
 	}
 
 	public static final int TIER_1_META = 0;
@@ -33,7 +30,9 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var3, double var4, float var5)
 	{
-
+		//TODO: I edited this off Github, didn't test. Also, refactor var2 var3... into x,y,z
+		RenderFloatingText.renderFloatingText("Matt Failed", var2, var3, var4, 0);
+		
 		int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 
 		if (metadata >= TIER_3_META)
