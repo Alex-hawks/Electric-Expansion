@@ -174,10 +174,10 @@ public class BlockTransformer extends BlockMachine
 
 				if (!tileEntity.stepUp)
 					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Down Converting");
-				
+
 				return true;
 			}
-			
+
 			else if (metadata >= TIER_2_META)
 			{
 				TileEntityTransformerT2 tileEntity = (TileEntityTransformerT2) par1World.getBlockTileEntity(x, y, z);
@@ -189,7 +189,7 @@ public class BlockTransformer extends BlockMachine
 
 				if (!tileEntity.stepUp)
 					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer toggled to: Down Converting");
-			
+
 				return true;
 			}
 
@@ -204,59 +204,13 @@ public class BlockTransformer extends BlockMachine
 
 				if (!tileEntity.stepUp)
 					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer toggled to: Down Converting");
-			
-				return true;	
+
+				return true;
 			}
 
 		}
 
 		return false;
-	}
-
-	@Override
-	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		int metadata = getDamageValue(par1World, x, y, z);
-
-		if (!par1World.isRemote)
-		{
-			if (metadata >= TIER_3_META)
-			{
-				TileEntityTransformerT3 tileEntity = (TileEntityTransformerT3) par1World.getBlockTileEntity(x, y, z);
-
-				if (tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer is currently up converting");
-
-				if (!tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer is currently down converting");
-				return true;
-			}
-
-			else if (metadata >= TIER_2_META)
-			{
-				TileEntityTransformerT2 tileEntity = (TileEntityTransformerT2) par1World.getBlockTileEntity(x, y, z);
-
-				if (tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer is currently up converting");
-
-				if (!tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer is currently down converting");
-				return true;
-			}
-
-			else
-			{
-				TileEntityTransformerT1 tileEntity = (TileEntityTransformerT1) par1World.getBlockTileEntity(x, y, z);
-
-				if (tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer is currently up converting");
-
-				if (!tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer is currently down converting");
-				return true;
-			}
-		}
-		return true;
 	}
 
 	@Override
@@ -352,5 +306,5 @@ public class BlockTransformer extends BlockMachine
 
 		return new ItemStack(id, 1, metadata);
 	}
-	
+
 }

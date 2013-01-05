@@ -1,8 +1,5 @@
 package electricexpansion.client.render;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -12,12 +9,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.model.ModelTransformer;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.tile.TileEntityTransformerT1;
+import electricexpansion.common.tile.TileEntityTransformerT2;
+import electricexpansion.common.tile.TileEntityTransformerT3;
 
 @SideOnly(Side.CLIENT)
 public class RenderTransformer extends TileEntitySpecialRenderer
 {
 	private ModelTransformer model;
-	
+
 	public RenderTransformer()
 	{
 		this.model = new ModelTransformer();
@@ -26,13 +26,50 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 	public static final int TIER_1_META = 0;
 	public static final int TIER_2_META = 4;
 	public static final int TIER_3_META = 8;
-	
+
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var3, double var4, float var5)
+	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float var5)
 	{
-		//TODO: I edited this off Github, didn't test. Also, refactor var2 var3... into x,y,z
-		RenderFloatingText.renderFloatingText("Matt Failed", var2, var3, var4, 0);
-		
+		String status = "";
+
+		if (tileEntity instanceof TileEntityTransformerT3)
+		{
+			if (((TileEntityTransformerT3) tileEntity).stepUp)
+			{
+				status = "Up";
+			}
+			else
+			{
+				status = "Down";
+			}
+		}
+
+		else if (tileEntity instanceof TileEntityTransformerT2)
+		{
+			if (((TileEntityTransformerT2) tileEntity).stepUp)
+			{
+				status = "Up";
+			}
+			else
+			{
+				status = "Down";
+			}
+		}
+
+		else if (tileEntity instanceof TileEntityTransformerT1)
+		{
+			if (((TileEntityTransformerT1) tileEntity).stepUp)
+			{
+				status = "Up";
+			}
+			if (!((TileEntityTransformerT1) tileEntity).stepUp)
+			{
+				status = "Down";
+			}
+		}
+
+		RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));
+
 		int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 
 		if (metadata >= TIER_3_META)
@@ -51,7 +88,7 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 		}
 
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) var2 + 0.5F, (float) var3 + 1.5F, (float) var4 + 0.5F);
+		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 
 		if (metadata >= TIER_3_META)
 		{
