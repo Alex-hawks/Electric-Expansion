@@ -9,9 +9,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.model.ModelTransformer;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.tile.TileEntityTransformerT1;
-import electricexpansion.common.tile.TileEntityTransformerT2;
-import electricexpansion.common.tile.TileEntityTransformerT3;
+import electricexpansion.common.tile.TileEntityTransformer;
 
 @SideOnly(Side.CLIENT)
 public class RenderTransformer extends TileEntitySpecialRenderer
@@ -32,40 +30,13 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 	{
 		String status = "";
 
-		if (tileEntity instanceof TileEntityTransformerT3)
+		if (((TileEntityTransformer) tileEntity).stepUp)
 		{
-			if (((TileEntityTransformerT3) tileEntity).stepUp)
-			{
-				status = "Up";
-			}
-			else
-			{
-				status = "Down";
-			}
+			status = "Up";
 		}
-
-		else if (tileEntity instanceof TileEntityTransformerT2)
+		else
 		{
-			if (((TileEntityTransformerT2) tileEntity).stepUp)
-			{
-				status = "Up";
-			}
-			else
-			{
-				status = "Down";
-			}
-		}
-
-		else if (tileEntity instanceof TileEntityTransformerT1)
-		{
-			if (((TileEntityTransformerT1) tileEntity).stepUp)
-			{
-				status = "Up";
-			}
-			if (!((TileEntityTransformerT1) tileEntity).stepUp)
-			{
-				status = "Down";
-			}
+			status = "Down";
 		}
 
 		RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));

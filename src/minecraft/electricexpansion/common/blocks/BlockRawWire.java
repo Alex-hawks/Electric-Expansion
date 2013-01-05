@@ -17,7 +17,6 @@ import electricexpansion.api.EnumWireMaterial;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityTransformerT2;
 
 public class BlockRawWire extends BlockConductor
 {

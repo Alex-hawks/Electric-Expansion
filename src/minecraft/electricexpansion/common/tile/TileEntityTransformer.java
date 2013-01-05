@@ -22,18 +22,35 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.blocks.BlockTransformer;
 
-public class TileEntityTransformerT1 extends TileEntityElectricityReceiver implements IRotatable, IPacketReceiver
+public class TileEntityTransformer extends TileEntityElectricityReceiver implements IRotatable, IPacketReceiver
 {
 	// USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP DOWN.
 	public boolean stepUp = false;
 
+	public int type;
+	
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.TIER_1_META + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.TIER_1_META + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite()));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
+
+		if(this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= 8)
+		{
+			this.type = 8;
+		}
+		
+		else if (this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord) >= 4)
+		{
+			this.type = 4;
+		}
+		
+		else
+		{
+			this.type = 0;
+		}
+
 	}
 
 	@Override
@@ -45,11 +62,11 @@ public class TileEntityTransformerT1 extends TileEntityElectricityReceiver imple
 		{
 			if (!this.worldObj.isRemote)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.TIER_1_META + 2).getOpposite();
+				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 				// Check if requesting power on output
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.TIER_1_META + 2);
+				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2);
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
@@ -67,10 +84,23 @@ public class TileEntityTransformerT1 extends TileEntityElectricityReceiver imple
 						{
 
 							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
-							double newVoltage = actualEnergy.voltage + 60;
+							double typeChange;
+							
+							if(this.type == 0)
+								typeChange = 60;
+							
+							if(this.type == 4)
+								typeChange = 120;
+							
+							else
+							{
+								typeChange = 240;
+							}
+							
+							double newVoltage = actualEnergy.voltage + typeChange;
 
 							if (!stepUp)
-								newVoltage = actualEnergy.voltage - 60;
+								newVoltage = actualEnergy.voltage - typeChange;
 
 							network.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
 						}
@@ -90,7 +120,6 @@ public class TileEntityTransformerT1 extends TileEntityElectricityReceiver imple
 
 				if (!this.worldObj.isRemote)
 				{
-					System.out.println(this.stepUp + "stepup server");
 					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 				}
 
@@ -140,7 +169,7 @@ public class TileEntityTransformerT1 extends TileEntityElectricityReceiver imple
 	@Override
 	public ForgeDirection getDirection()
 	{
-		return ForgeDirection.getOrientation(this.getBlockMetadata() - BlockTransformer.TIER_1_META);
+		return ForgeDirection.getOrientation(this.getBlockMetadata() - type);
 	}
 
 	@Override

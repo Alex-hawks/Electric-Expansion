@@ -19,9 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityTransformerT1;
-import electricexpansion.common.tile.TileEntityTransformerT2;
-import electricexpansion.common.tile.TileEntityTransformerT3;
+import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockMachine
 {
@@ -159,55 +157,19 @@ public class BlockTransformer extends BlockMachine
 	@Override
 	public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
-
 		if (!par1World.isRemote)
 		{
-			if (metadata >= TIER_3_META)
-			{
-				TileEntityTransformerT3 tileEntity = (TileEntityTransformerT3) par1World.getBlockTileEntity(x, y, z);
+			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
-				tileEntity.stepUp = !tileEntity.stepUp;
+			tileEntity.stepUp = !tileEntity.stepUp;
 
-				if (tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Up Converting");
+			if (tileEntity.stepUp)
+				par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Up Converting");
 
-				if (!tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Down Converting");
+			if (!tileEntity.stepUp)
+				par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Down Converting");
 
-				return true;
-			}
-
-			else if (metadata >= TIER_2_META)
-			{
-				TileEntityTransformerT2 tileEntity = (TileEntityTransformerT2) par1World.getBlockTileEntity(x, y, z);
-
-				tileEntity.stepUp = !tileEntity.stepUp;
-
-				if (tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer toggled to: Up Converting");
-
-				if (!tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 120 volt transformer toggled to: Down Converting");
-
-				return true;
-			}
-
-			else
-			{
-				TileEntityTransformerT1 tileEntity = (TileEntityTransformerT1) par1World.getBlockTileEntity(x, y, z);
-
-				tileEntity.stepUp = !tileEntity.stepUp;
-
-				if (tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer toggled to: Up Converting");
-
-				if (!tileEntity.stepUp)
-					par5EntityPlayer.sendChatToPlayer("Electric Expansion: 60 volt transformer toggled to: Down Converting");
-
-				return true;
-			}
-
+			return true;
 		}
 
 		return false;
@@ -241,19 +203,7 @@ public class BlockTransformer extends BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
-		if (metadata >= TIER_3_META)
-		{
-			return new TileEntityTransformerT3();
-		}
-		else if (metadata >= TIER_2_META)
-		{
-			return new TileEntityTransformerT2();
-		}
-		else
-		{
-			return new TileEntityTransformerT1();
-		}
-
+		return new TileEntityTransformer();
 	}
 
 	public ItemStack getTier1()

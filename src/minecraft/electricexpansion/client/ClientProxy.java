@@ -30,9 +30,7 @@ import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityDistribution;
 import electricexpansion.common.tile.TileEntityMultimeter;
-import electricexpansion.common.tile.TileEntityTransformerT1;
-import electricexpansion.common.tile.TileEntityTransformerT2;
-import electricexpansion.common.tile.TileEntityTransformerT3;
+import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
 
 @SideOnly(Side.CLIENT)
@@ -57,9 +55,7 @@ public class ClientProxy extends CommonProxy
 		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
 
 		// Mattredsox's Tile entity registrations
-		ClientRegistry.registerTileEntity(TileEntityTransformerT1.class, "TileEntityTransformerT1", new RenderTransformer());
-		ClientRegistry.registerTileEntity(TileEntityTransformerT2.class, "TileEntityTransformerT2", new RenderTransformer());
-		ClientRegistry.registerTileEntity(TileEntityTransformerT3.class, "TileEntityTransformerT3", new RenderTransformer());
+		ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
 		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 
