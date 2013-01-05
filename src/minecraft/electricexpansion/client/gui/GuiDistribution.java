@@ -91,10 +91,10 @@ public class GuiDistribution extends GuiContainer
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
-		if (this.tileEntity.getJoules() > 0)
+		if (this.tileEntity.getJoulesForDisplay() > 0)
 		{
-			int scale = (int) (((double) this.tileEntity.getJoules() / this.tileEntity.getMaxJoules()) * 72);
-			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 24, 176, 0, 23 - scale, 20);
+			int scale = (int) (((double) this.tileEntity.getJoulesForDisplay() / this.tileEntity.getMaxJoules()) * 100);
+			this.drawTexturedModalRect(containerWidth + 59, containerHeight + 51, 0, 169, scale, 5);
 		}
 	}
 
