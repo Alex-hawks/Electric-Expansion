@@ -8,6 +8,7 @@ import net.minecraft.util.MovingObjectPosition;
 
 import org.lwjgl.opengl.GL11;
 
+import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.model.ModelTransformer;
@@ -35,22 +36,25 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 
 		if (((TileEntityTransformer) tileEntity).stepUp)
 		{
-			status = "Up";
+			status = "Step Up";
 		}
 		else
 		{
-			status = "Down";
+			status = "Step Down";
 		}
 
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+
+		MovingObjectPosition movingPosition = player.rayTrace(5, 1f);
+
+		if (movingPosition != null)
+		{
+			if (new Vector3(tileEntity).isEqual(new Vector3(movingPosition)))
+			{
+				RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));
+			}
+		}
 		
-        MovingObjectPosition movingPosition = player.rayTrace(5D, 1.0F);
-
-        if (movingPosition != null)
-        	
-        	
-		RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));
-
 		int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 
 		if (metadata >= TIER_3_META)

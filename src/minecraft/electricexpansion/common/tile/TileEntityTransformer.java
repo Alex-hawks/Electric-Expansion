@@ -49,8 +49,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 			this.type = 0;
 		}
 
-		// System.out.println(type + " type");
-
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2), ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite()));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
 	}
@@ -88,20 +86,16 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 						// System.out.println(inputNetwork.getProduced() + " input");
 						// System.out.println(network.getProduced() + " output");
-						 
-						 
 
 						if (inputNetwork.getProduced().getWatts() > 0)
 						{
 
 						//System.out.println("input more than 0 " + inputNetwork.getProduced());
-
 							
 							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
 							double typeChange = 0;
 
 							System.out.println(actualEnergy + " addda");
-
 							
 							if (this.type == 0)
 								typeChange = 60;
