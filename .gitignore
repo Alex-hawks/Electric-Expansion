@@ -13,8 +13,10 @@ ElectricExpansion
 !/src/minecraft/dan200/
 !/src/minecraft/universalelectricity/
 !/include.bat
+/src/minecraft/electricexpansion/language
+/src/minecraft/electricexpansion/textures
 
 !/resources/
 !/modversion.txt
 !/publish.bat
-!/README
+!/README.md
