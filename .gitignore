@@ -9,7 +9,7 @@ ElectricExpansion
 
 !/src/
 /src/minecraft/*
-!/src/minecraft/atomicscience/
+!/src/minecraft/electricexpansion/
 !/src/minecraft/dan200/
 !/src/minecraft/universalelectricity/
 !/include.bat
