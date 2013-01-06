@@ -5,13 +5,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import electricexpansion.common.tile.TileEntityDistribution;
+import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 
 public class ContainerDistribution extends Container
 {
-	private TileEntityDistribution tileEntity;
+	private TileEntityQuantumBatteryBox tileEntity;
 
-	public ContainerDistribution(InventoryPlayer par1InventoryPlayer, TileEntityDistribution tileEntity2)
+	public ContainerDistribution(InventoryPlayer par1InventoryPlayer, TileEntityQuantumBatteryBox tileEntity2)
 	{
 		this.tileEntity = tileEntity2;
 

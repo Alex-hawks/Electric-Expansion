@@ -114,14 +114,11 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 							network.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
 						}
-
 						else
 						{
 							network.stopProducing(this);
 						}
-
 					}
-
 					else
 					{
 						// inputNetwork.resetConductors();

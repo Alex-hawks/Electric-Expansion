@@ -15,7 +15,7 @@ import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
-import electricexpansion.common.tile.TileEntityDistribution;
+import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
@@ -40,7 +40,7 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 		GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
 		GameRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer");
-		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+		GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class CommonProxy implements IGuiHandler
 				case 3:
 					return null;
 				case 4:
-					return new ContainerDistribution(player.inventory, (TileEntityDistribution) tileEntity);
+					return new ContainerDistribution(player.inventory, (TileEntityQuantumBatteryBox) tileEntity);
 			}
 		}
 		return null;

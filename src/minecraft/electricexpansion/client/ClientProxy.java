@@ -10,7 +10,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.gui.GuiAdvancedBatteryBox;
-import electricexpansion.client.gui.GuiDistribution;
+import electricexpansion.client.gui.GuiQuantumBatteryBox;
 import electricexpansion.client.gui.GuiLogisticsWire;
 import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.client.render.RenderHandler;
@@ -28,7 +28,7 @@ import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
-import electricexpansion.common.tile.TileEntityDistribution;
+import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
@@ -52,7 +52,7 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire", new RenderInsulatedWire());
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
 		GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
-		GameRegistry.registerTileEntity(TileEntityDistribution.class, "TileEntityDistribution");
+		GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
 
 		// Mattredsox's Tile entity registrations
 		ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
@@ -81,7 +81,7 @@ public class ClientProxy extends CommonProxy
 				case 3:
 					return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
 				case 4:
-					return new GuiDistribution(player.inventory, (TileEntityDistribution) tileEntity);
+					return new GuiQuantumBatteryBox(player.inventory, (TileEntityQuantumBatteryBox) tileEntity);
 			}
 		}
 		return null;

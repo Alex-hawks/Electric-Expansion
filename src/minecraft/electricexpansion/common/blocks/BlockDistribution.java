@@ -19,7 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityDistribution;
+import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 
 public class BlockDistribution extends BlockMachine
 {
@@ -88,7 +88,7 @@ public class BlockDistribution extends BlockMachine
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
-		return new TileEntityDistribution();
+		return new TileEntityQuantumBatteryBox();
 	}
 
 	/**
