@@ -71,12 +71,6 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2);
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
-				// System.out.println(outputTile);
-				// System.out.println(inputTile + " input");
-
-				// System.out.println(outputDirection + "output dir");
-				// System.out.println(inputDirection + "input dir");
-
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 
@@ -88,11 +82,11 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 					if (network.getRequest().getWatts() > 0)
 					{
-						System.out.println(network.isRequesting(this) + " input req  uest");
+					//	System.out.println(network.isRequesting(this) + " input req  uest");
 
 						inputNetwork.startRequesting(this, network.getRequest());
 
-						 System.out.println(inputNetwork.getProduced() + " input");
+						// System.out.println(inputNetwork.getProduced() + " input");
 						// System.out.println(network.getProduced() + " output");
 						 
 						 
@@ -100,7 +94,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 						if (inputNetwork.getProduced().getWatts() > 0)
 						{
 
-							System.out.println("input more than 0");
+						//System.out.println("input more than 0 " + inputNetwork.getProduced());
 
 							
 							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
@@ -140,7 +134,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 					//	inputNetwork.resetConductors();
 						//System.out.println("stop req");
 						//((IConductor) inputTile).refreshConnectedBlocks();
-						System.out.println(inputNetwork.isRequesting(this));
+					//	System.out.println(inputNetwork.isRequesting(this));
 						inputNetwork.stopRequesting(this);
 					}
 

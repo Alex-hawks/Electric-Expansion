@@ -164,10 +164,10 @@ public class BlockTransformer extends BlockMachine
 			tileEntity.stepUp = !tileEntity.stepUp;
 
 			if (tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Up Converting");
+				par5EntityPlayer.sendChatToPlayer("Electric Expansion: Transformer is now up converting");
 
 			if (!tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Electric Expansion: 240 volt transformer toggled to: Down Converting");
+				par5EntityPlayer.sendChatToPlayer("Electric Expansion: Transformer is now down converting");
 
 			return true;
 		}
