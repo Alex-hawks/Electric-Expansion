@@ -54,7 +54,7 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 				RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));
 			}
 		}
-		
+
 		int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 
 		if (metadata >= TIER_3_META)

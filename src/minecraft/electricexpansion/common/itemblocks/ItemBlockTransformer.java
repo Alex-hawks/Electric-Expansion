@@ -1,7 +1,5 @@
 package electricexpansion.common.itemblocks;
 
-import electricexpansion.common.blocks.BlockTransformer;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
@@ -31,4 +29,3 @@ public class ItemBlockTransformer extends ItemBlock
 		return i.getItem().getItemName() + "." + name;
 	}
 }
-

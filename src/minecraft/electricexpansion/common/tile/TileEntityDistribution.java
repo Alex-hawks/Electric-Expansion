@@ -16,7 +16,6 @@ import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -152,7 +151,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 			{
 				this.frequency = dataStream.readShort();
 				this.disabledTicks = dataStream.readInt();
-				this.joulesForDisplay  = dataStream.readDouble();
+				this.joulesForDisplay = dataStream.readDouble();
 			}
 			catch (Exception e)
 			{
@@ -231,7 +230,7 @@ public class TileEntityDistribution extends TileEntityElectricityReceiver implem
 	{
 		return this.joulesForDisplay;
 	}
-	
+
 	@Override
 	public int getSizeInventory()
 	{

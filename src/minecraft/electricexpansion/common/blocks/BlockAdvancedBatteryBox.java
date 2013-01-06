@@ -64,8 +64,11 @@ public class BlockAdvancedBatteryBox extends BlockMachine
 		if (tileEntity.getMaxJoules() > 12000000 && tileEntity.getMaxJoules() <= 16000000) { return this.blockIndexInTexture + 7; }
 
 		// Tier 4
-		if (tileEntity.getMaxJoules() > 16000000) { return this.blockIndexInTexture + 9; } // Tier 4 storage ( "...unbeatable end game...")
-																			
+		if (tileEntity.getMaxJoules() > 16000000) { return this.blockIndexInTexture + 9; } // Tier 4
+																							// storage
+																							// (
+																							// "...unbeatable end game...")
+
 		return this.blockIndexInTexture + 1;
 	}
 

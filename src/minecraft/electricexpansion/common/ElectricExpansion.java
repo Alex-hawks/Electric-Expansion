@@ -27,7 +27,6 @@ import universalelectricity.prefab.ore.OreGenerator;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.FingerprintWarning;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
@@ -114,7 +113,8 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new
+	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
@@ -133,8 +133,7 @@ public class ElectricExpansion
 	public static Item itemMultimeter;
 	public static Item itemSilverIngot;
 	public static Item itemInfBat;
-	
-	
+
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
@@ -158,7 +157,8 @@ public class ElectricExpansion
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
-		//blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire", BLOCK_ID_PREFIX + 5).getInt(), 0);
+		// blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire",
+		// BLOCK_ID_PREFIX + 5).getInt(), 0);
 		// +6 public static final Block blockRedstoneWireBlock = new
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
@@ -189,7 +189,7 @@ public class ElectricExpansion
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
-		
+
 		CONFIG.save();
 
 		configLoaded = true;
@@ -228,7 +228,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		if(this.hasBadSig)
+		if (this.hasBadSig)
 			return;
 		UniversalElectricity.register(this, 1, 2, 2, false);
 
@@ -249,7 +249,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
 		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
-		//GameRegistry.registerBlock(blockRedstoneWire, "blockRedstoneWire");
+		// GameRegistry.registerBlock(blockRedstoneWire, "blockRedstoneWire");
 
 		GameRegistry.registerBlock(blockDistribution, "blockDistribution");
 
@@ -342,7 +342,7 @@ public class ElectricExpansion
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
 		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
-		
+
 		OreDictionary.registerOre("copperWire", new ItemStack(blockInsulatedWire, 1, 0));
 		OreDictionary.registerOre("tinWire", new ItemStack(blockInsulatedWire, 1, 1));
 		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));

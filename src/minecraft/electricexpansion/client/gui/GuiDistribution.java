@@ -105,11 +105,11 @@ public class GuiDistribution extends GuiContainer
 	{
 		super.keyTyped(par1, par2);
 		boolean isValidKey = false;
-		if(par1 == '0' || par1 == '1' || par1 == '2' || par1 == '3' || par1 == '4' || par1 == '5' || par1 == '6' || par1 == '7' || par1 == '8' || par1 == '9')
+		if (par1 == '0' || par1 == '1' || par1 == '2' || par1 == '3' || par1 == '4' || par1 == '5' || par1 == '6' || par1 == '7' || par1 == '8' || par1 == '9')
 			isValidKey = true;
-		if(par2 == 14 || par2 == 200 || par2 == 203 || par2 == 205 || par2 == 208 || par2 == 211)
+		if (par2 == 14 || par2 == 200 || par2 == 203 || par2 == 205 || par2 == 208 || par2 == 211)
 			isValidKey = true;
-		if(isValidKey)
+		if (isValidKey)
 			textField.textboxKeyTyped(par1, par2);
 	}
 

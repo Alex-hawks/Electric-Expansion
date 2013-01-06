@@ -2,18 +2,11 @@ package electricexpansion.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
-import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.PacketManager;
-
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityLogisticsWire;
 

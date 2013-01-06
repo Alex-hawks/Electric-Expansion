@@ -2,10 +2,6 @@ package electricexpansion.common.blocks;
 
 import java.util.List;
 
-import universalelectricity.prefab.BlockMachine;
-import universalelectricity.prefab.tile.TileEntityAdvanced;
-
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
@@ -15,14 +11,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.prefab.BlockMachine;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityDistribution;
 
 public class BlockDistribution extends BlockMachine
@@ -67,12 +63,15 @@ public class BlockDistribution extends BlockMachine
 	{
 		return ElectricExpansion.MATT_BLOCK_TEXTURE_FILE;
 	}
-	
+
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
 		// If it is the front side
-		if (side == metadata + 2) { return this.blockIndexInTexture + 3; }
+		if (side == metadata + 2)
+		{
+			return this.blockIndexInTexture + 3;
+		}
 
 		// If it is the back side
 		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
@@ -96,17 +95,17 @@ public class BlockDistribution extends BlockMachine
 	 * Called when the block is right clicked by the player
 	 */
 
-	@Override 
-	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) 
+	@Override
+	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-		if (!par1World.isRemote) 
+		if (!par1World.isRemote)
 		{
-			par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z); 
+			par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
 			return true;
 		}
-		return true; 
+		return true;
 	}
-	
+
 	/**
 	 * Called when the block is placed in the world.
 	 */
@@ -137,7 +136,7 @@ public class BlockDistribution extends BlockMachine
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
-	
+
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
@@ -168,7 +167,7 @@ public class BlockDistribution extends BlockMachine
 
 		return true;
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{

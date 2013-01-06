@@ -44,27 +44,26 @@ public class ItemInfiniteBattery extends Item implements IItemElectric
 
 		par3List.add("\u00a72 Infinite");
 	}
-	
+
 	@Override
 	public double getVoltage()
 	{
 		return 50;
 	}
-	
-	
+
 	@Override
 	public double onReceive(double amps, double voltage, ItemStack itemStack)
 	{
 		return 0;
 	}
-	
+
 	@Override
 	public double onUse(double joulesNeeded, ItemStack itemStack)
 	{
 		double electricityToUse = Math.min(this.getJoules(itemStack), joulesNeeded);
 		return electricityToUse;
 	}
-	
+
 	/**
 	 * This function sets the electriicty. Do not directly call this function. Try to use
 	 * onReceiveElectricity or onUseElectricity instead.
@@ -76,7 +75,7 @@ public class ItemInfiniteBattery extends Item implements IItemElectric
 	{
 
 	}
-	
+
 	/**
 	 * This function is called to get the electricity stored in this item
 	 * 
