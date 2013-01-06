@@ -72,19 +72,18 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 			{
 				if (inputNetwork != null)
 				{
-					if (this.joules >= this.getMaxJoules())
+					if (this.getJoules() >= this.getMaxJoules())
 					{
 						inputNetwork.stopRequesting(this);
 					}
 					else
 					{
-						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 1000) / this.getVoltage(), this.getVoltage());
+						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 10000) / this.getVoltage(), this.getVoltage());
 						ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
 						this.setJoules(this.joules + electricityPack.getWatts());
-
 						if (UniversalElectricity.isVoltageSensitive)
 						{
-							if (electricityPack.voltage > this.getInputVoltage())
+							if (electricityPack.voltage > this.getVoltage())
 							{
 								this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
 							}
@@ -153,9 +152,6 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 
 				if (outputNetwork != null && inputNetwork != outputNetwork)
 				{
-
-					System.out.println(outputNetwork.getRequest() + " output bat box req");
-
 					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), this.MAX_OUTPUT));
 
 					if (this.getJoules() > 0 && outputWatts > 0)

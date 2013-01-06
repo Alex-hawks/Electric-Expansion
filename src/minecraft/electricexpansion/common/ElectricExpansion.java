@@ -42,7 +42,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
-import electricexpansion.common.blocks.BlockDistribution;
+import electricexpansion.common.blocks.BlockQuantumBatteryBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
@@ -166,7 +166,7 @@ public class ElectricExpansion
 		// 10
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt()).setCreativeTab(EETab.INSTANCE).setBlockName("transformer");
-		blockDistribution = new BlockDistribution(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
+		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		// Redstone'd Insulated Cable

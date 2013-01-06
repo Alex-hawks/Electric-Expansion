@@ -162,13 +162,6 @@ public class BlockTransformer extends BlockMachine
 			TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
 
 			tileEntity.stepUp = !tileEntity.stepUp;
-
-			if (tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Electric Expansion: Transformer is now up converting");
-
-			if (!tileEntity.stepUp)
-				par5EntityPlayer.sendChatToPlayer("Electric Expansion: Transformer is now down converting");
-
 			return true;
 		}
 

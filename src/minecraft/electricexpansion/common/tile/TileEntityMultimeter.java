@@ -55,6 +55,7 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 						if (inputTile instanceof IConductor)
 						{
 							this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
+							this.electricityReading.amperes *= 20;
 						}
 						else
 						{

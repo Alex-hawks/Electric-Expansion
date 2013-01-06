@@ -67,70 +67,70 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2);
 				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
-				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 
-				if (network != null && inputNetwork != null && network != inputNetwork)
+				if (outputNetwork != null && inputNetwork == null)
 				{
+					outputNetwork.stopProducing(this);
+				}
+				else if (outputNetwork == null && inputNetwork != null)
+				{
+					inputNetwork.stopRequesting(this);
+				}
 
-					System.out.println(network.getRequest());
-					System.out.println(inputNetwork.getRequest() + " input request");
-
-					if (network.getRequest().getWatts() > 0)
+				if (outputNetwork != null && inputNetwork != null)
+				{
+					if (outputNetwork != inputNetwork)
 					{
-						// System.out.println(network.isRequesting(this) + " input req  uest");
-
-						inputNetwork.startRequesting(this, network.getRequest());
-
-						// System.out.println(inputNetwork.getProduced() + " input");
-						// System.out.println(network.getProduced() + " output");
-
-						if (inputNetwork.getProduced().getWatts() > 0)
+						if (outputNetwork.getRequest().getWatts() > 0)
 						{
-
-							// System.out.println("input more than 0 " +
-							// inputNetwork.getProduced());
-
+							inputNetwork.startRequesting(this, outputNetwork.getRequest());
 							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
-							double typeChange = 0;
 
-							System.out.println(actualEnergy + " addda");
-
-							if (this.type == 0)
-								typeChange = 60;
-
-							if (this.type == 4)
-								typeChange = 120;
-
-							if (this.type == 8)
+							if (actualEnergy.getWatts() > 0)
 							{
-								typeChange = 240;
+								double typeChange = 0;
+
+								if (this.type == 0)
+								{
+									typeChange = 60;
+								}
+								else if (this.type == 4)
+								{
+									typeChange = 120;
+								}
+								else if (this.type == 8)
+								{
+									typeChange = 240;
+								}
+
+								double newVoltage = actualEnergy.voltage + typeChange;
+
+								if (!this.stepUp)
+								{
+									newVoltage = actualEnergy.voltage - typeChange;
+								}
+
+								outputNetwork.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
 							}
-
-							double newVoltage = actualEnergy.voltage + typeChange;
-
-							if (!stepUp)
-								newVoltage = actualEnergy.voltage - typeChange;
-
-							network.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
+							else
+							{
+								outputNetwork.stopProducing(this);
+							}
 						}
 						else
 						{
-							network.stopProducing(this);
+							inputNetwork.stopRequesting(this);
+							outputNetwork.stopProducing(this);
 						}
 					}
 					else
 					{
-						// inputNetwork.resetConductors();
-						// System.out.println("stop req");
-						// ((IConductor) inputTile).refreshConnectedBlocks();
-						// System.out.println(inputNetwork.isRequesting(this));
 						inputNetwork.stopRequesting(this);
+						outputNetwork.stopProducing(this);
 					}
-
 				}
-
-				// System.out.println(stepUp);
 
 				if (!this.worldObj.isRemote)
 				{
