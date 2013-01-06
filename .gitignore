@@ -4,6 +4,9 @@
 LICENSE.txt
 CHANGELOG
 
+ElectricExpansion
+*.exe
+
 !/src/
 /src/minecraft/*
 !/src/minecraft/atomicscience/
