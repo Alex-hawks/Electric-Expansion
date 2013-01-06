@@ -42,10 +42,10 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
-import electricexpansion.common.blocks.BlockQuantumBatteryBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
+import electricexpansion.common.blocks.BlockQuantumBatteryBox;
 import electricexpansion.common.blocks.BlockRawWire;
 import electricexpansion.common.blocks.BlockSilverOre;
 import electricexpansion.common.blocks.BlockSwitchWire;
@@ -98,7 +98,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 2;
-	public static final int REVISION_VERSION = 0;
+	public static final int REVISION_VERSION = 3;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
