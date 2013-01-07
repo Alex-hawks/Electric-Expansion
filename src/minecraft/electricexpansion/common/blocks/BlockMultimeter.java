@@ -36,10 +36,10 @@ public class BlockMultimeter extends BlockMachine
 		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
 
 		// Top and Bottom
-		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
+		if (side == 0 || side == 1) { return this.blockIndexInTexture + 0; }
 
 		// If it is the FRONT side
-		if (side == ForgeDirection.getOrientation(metadata).ordinal()) { return blockIndexInTexture + 5; }
+		if (side == ForgeDirection.getOrientation(metadata).ordinal()) { return blockIndexInTexture + 1; }
 
 		if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal()) { return blockIndexInTexture + 2; }
 		return blockIndexInTexture;

@@ -70,7 +70,7 @@ import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents", certificateFingerprint = "b34077d98c710152e788c277173c3d474769c3e6")
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -98,7 +98,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 2;
-	public static final int REVISION_VERSION = 3;
+	public static final int REVISION_VERSION = 4;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
