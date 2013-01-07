@@ -108,7 +108,7 @@ public class WireMillRecipes
 		}
 		catch (NullPointerException e)
 		{
-			return (Integer) null;
+			return 0;
 		}
 	}
 
@@ -127,11 +127,11 @@ public class WireMillRecipes
 			if (input.stackSize >= recipeToInputQTY.get(recipeID))
 				return (Integer) recipeToTicks.get(recipeID);
 			else
-				return (Integer) null;
+				return 0;
 		}
 		catch (NullPointerException e)
 		{
-			return (Integer) null;
+			return 0;
 		}
 	}
 
@@ -150,7 +150,7 @@ public class WireMillRecipes
 
 	public static ItemStack stackSizeChange(ItemStack i, int j)
 	{
-		if (i != null && j != (Integer) null)
+		 if (i != null && j + "" != "")
 			return new ItemStack(i.itemID, j, i.getItemDamage());
 		else
 			return null;
