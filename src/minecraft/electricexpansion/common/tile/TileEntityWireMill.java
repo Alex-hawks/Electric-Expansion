@@ -44,6 +44,8 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 
 	private int playersUsing = 0;
 	public int orientation;
+	private int targetID = 0;
+	private int targetMeta = 0;
 
 	@Override
 	public void initiate()
@@ -107,8 +109,10 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{
 			// The left slot contains the item to
 			// be processed
-			if (this.inventory[1] != null && this.canDraw() && this.drawingTicks == 0)
+			if (this.inventory[1] != null && this.canDraw() && (this.drawingTicks == 0 || this.targetID != this.inventory[1].itemID || this.targetMeta != this.inventory[1].getItemDamage()))
 			{
+				this.targetID = this.inventory[1].itemID;
+				this.targetMeta = this.inventory[1].getItemDamage();
 				this.drawingTicks = this.getDrawingTime();
 			}
 
