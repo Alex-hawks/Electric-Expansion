@@ -35,14 +35,11 @@ import electricexpansion.common.misc.DistributionNetworks;
 public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral
 {
 	private ItemStack[] containingItems = new ItemStack[2];
-
 	private int playersUsing = 0;
-
-	private short frequency;
-
+	private byte frequency = 0;
 	private boolean isOpen;
-
 	private double joulesForDisplay = 0;
+	private EntityPlayer owningPlayer = null;
 
 	@Override
 	public void initiate()
@@ -51,6 +48,12 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockDistribution.blockID);
 	}
 
+	@Override
+	public void setPlayer(EntityPlayer player)
+	{
+		this.owningPlayer = player;
+	}
+	
 	@Override
 	public void updateEntity()
 	{
@@ -64,7 +67,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 
 			if (!this.worldObj.isRemote)
 			{
-				if (inputNetwork != null)
+				if (inputNetwork != null && this.owningPlayer != null)
 				{
 					if (this.getJoules() >= this.getMaxJoules())
 					{
@@ -150,7 +153,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		{
 			try
 			{
-				this.frequency = dataStream.readShort();
+				this.frequency = dataStream.readByte();
 				this.disabledTicks = dataStream.readInt();
 				this.joulesForDisplay = dataStream.readDouble();
 			}
@@ -188,7 +191,14 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
-		this.frequency = par1NBTTagCompound.getShort("frequency");
+		try
+		{
+			this.frequency = par1NBTTagCompound.getByte("frequency");
+		}
+		catch(Exception e)
+		{
+			this.frequency = 0;
+		}
 	}
 
 	@Override
@@ -200,25 +210,25 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 
 	private void addJoules(double joules)
 	{
-		DistributionNetworks.addJoules(this.frequency, joules);
+		DistributionNetworks.addJoules(this.owningPlayer, this.frequency, joules);
 	}
 
 	@Override
 	public double getJoules(Object... data)
 	{
-		return DistributionNetworks.getJoules(this.frequency);
+		return DistributionNetworks.getJoules(this.owningPlayer, this.frequency);
 	}
 
 	@Override
-	public double removeJoules(double outputWatts)
+	public void removeJoules(double outputWatts)
 	{
-		return DistributionNetworks.removeJoules(this.frequency, outputWatts);
+		DistributionNetworks.removeJoules(this.owningPlayer, this.frequency, outputWatts);
 	}
 
 	@Override
 	public void setJoules(double wattHours, Object... data)
 	{
-		DistributionNetworks.setJoules(this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));
+		DistributionNetworks.setJoules(this.owningPlayer, this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));
 	}
 
 	@Override
@@ -352,13 +362,13 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	}
 
 	@Override
-	public short getFrequency()
+	public byte getFrequency()
 	{
 		return frequency;
 	}
 
 	@Override
-	public void setFrequency(short newFrequency)
+	public void setFrequency(byte newFrequency)
 	{
 		this.frequency = newFrequency;
 		
@@ -370,7 +380,12 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 
 	public void setFrequency(int frequency)
 	{
-		this.setFrequency((short) frequency);
+		this.setFrequency((byte) frequency);
+	}
+	
+	public void setFrequency(short frequency)
+	{
+		this.setFrequency((byte) frequency);
 	}
 
 	private int setFrequency(int frequency, boolean b)

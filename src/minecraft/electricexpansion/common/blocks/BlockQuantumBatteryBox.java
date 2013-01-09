@@ -132,9 +132,14 @@ public class BlockQuantumBatteryBox extends BlockMachine
 				par1World.setBlockMetadata(x, y, z, 0);
 				break;
 		}
+		
+		if (par5EntityLiving instanceof EntityPlayer && ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)) instanceof TileEntityQuantumBatteryBox)
+		{
+			((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).setPlayer((EntityPlayer) par5EntityLiving);
+		}
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);	
 	}
 
 	@Override

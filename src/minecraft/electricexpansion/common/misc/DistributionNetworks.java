@@ -3,8 +3,12 @@ package electricexpansion.common.misc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -17,30 +21,44 @@ public class DistributionNetworks
 {
 	public static DistributionNetworks instance;
 	private static MinecraftServer server = MinecraftServer.getServer();
-	private static double[] joules = new double[32768];
 	private static final double maxJoules = 5000000;
+	public static final byte maxFrequencies = (byte) 128;
+	private static Map<EntityPlayer, double[]> playerFrequencies = new HashMap<EntityPlayer, double[]>();
 
-	public static double getJoules(short frequency)
+	public static double getJoules(EntityPlayer player, byte frequency)
 	{
-		return joules[frequency];
+		try
+		{
+			if(player != null)
+				return playerFrequencies.get(player)[frequency];
+			else return 0;
+		}
+		catch(Exception e)
+		{
+			return 0;
+		}
 	}
 
-	public static double setJoules(short frequency, double newJoules)
+	public static void setJoules(EntityPlayer player, short frequency, double newJoules)
 	{
-		joules[frequency] = newJoules;
-		return joules[frequency];
+			if(player != null)
+				playerFrequencies.get(player)[frequency] = newJoules;
 	}
 
-	public static double addJoules(short frequency, double addedJoules)
+	public static void addJoules(EntityPlayer player, short frequency, double addedJoules)
 	{
-		joules[frequency] = joules[frequency] + addedJoules;
-		return joules[frequency];
+			if(player != null)
+				playerFrequencies.get(player)[frequency] = playerFrequencies.get(player)[frequency] + addedJoules;
 	}
 
-	public static double removeJoules(short frequency, double removedJoules)
+	public static void removeJoules(EntityPlayer player, short frequency, double removedJoules)
 	{
-		joules[frequency] = joules[frequency] - removedJoules;
-		return joules[frequency];
+		try
+		{
+			if(player != null)
+				playerFrequencies.get(player)[frequency] = playerFrequencies.get(player)[frequency] - removedJoules;
+		}
+		catch(Exception e){}
 	}
 
 	public static double getMaxJoules()
@@ -71,27 +89,33 @@ public class DistributionNetworks
 					file.mkdirs();
 				}
 
-				File var3 = new File(file + File.separator + "QuantumStorage_tmp_.dat");
-				File var4 = new File(file + File.separator + "QuantumStorage.dat");
-				File var5 = new File(file + File.separator + "QuantumStorageBackup.dat");
-				NBTTagCompound nbt = new NBTTagCompound();
-				for (int i = 0; i < joules.length; i++)
+				String[] players = new String[playerFrequencies.size()];
+				players = (String[])( playerFrequencies.keySet().toArray( players ) );
+
+				for (int i = 0; i < playerFrequencies.size(); i ++)
 				{
-					if (joules[i] > 0)
+					File var3 = new File(file + File.separator + players[i] + "_tmp.dat");
+					File var4 = new File(file + File.separator + players[i] + ".dat");
+					File var5 = new File(file + File.separator + players[i] + "_Backup.dat");
+					NBTTagCompound nbt = new NBTTagCompound();
+					for (int j = 0; j < playerFrequencies.get(players[i]).length; j++)
 					{
-						nbt.setDouble(i + "", joules[i]);
-						CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(var3));
+						if (playerFrequencies.get(players[i])[j] > 0)
+						{
+							nbt.setDouble(j + "", playerFrequencies.get(players[i])[j]);
+							CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(var3));
+						}
 					}
+					if (var5.exists())
+					{
+						var5.delete();
+					}
+					if (var4.exists())
+					{
+						var4.renameTo(var5);
+					}
+					var3.renameTo(var4);
 				}
-				if (var5.exists())
-				{
-					var5.delete();
-				}
-				if (var4.exists())
-				{
-					var4.renameTo(var5);
-				}
-				var3.renameTo(var4);
 			}
 			catch (Exception e)
 			{
@@ -103,6 +127,38 @@ public class DistributionNetworks
 	@SideOnly(Side.SERVER)
 	public static void onWorldLoad()
 	{
+		try
+		{
+			for(File playerFile : ListSaves())
+			{
+				if (playerFile.exists())
+				{
+					String name = playerFile.getName();
+					if (name.endsWith(".dat"))
+						name = name.substring(0, name.length() - 4);
+
+					for (int i = 0; i < playerFrequencies.get(name).length; i++)
+					{
+						try
+						{
+							playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getDouble(i + "");
+						}
+						catch (Exception e)
+						{
+							playerFrequencies.get(name)[i] = 0;
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			ElectricExpansion.EELogger.severe("Failed to load the Quantum Battery Box Electricity Storage Data!");
+		}
+	}
+
+	public static File[] ListSaves() 
+	{		
 		String folder = "";
 		if (server.isDedicatedServer())
 		{
@@ -113,28 +169,10 @@ public class DistributionNetworks
 			folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName();
 		}
 
-		try
-		{
-			File var2 = new File(folder + File.separator + "ElectricExpansion", "QuantumStorage.dat");
+		String files;
+		File folderToUse = new File(folder);
+		File[] listOfFiles = folderToUse.listFiles(); 
 
-			if (var2.exists())
-			{
-				for (int i = 0; i < joules.length; i++)
-				{
-					try
-					{
-						joules[i] = CompressedStreamTools.readCompressed(new FileInputStream(var2)).getDouble(i + "");
-					}
-					catch (Exception e)
-					{
-						joules[i] = 0;
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			ElectricExpansion.EELogger.severe("Failed to load the Quantum Battery Box Electricity Storage Data!");
-		}
+		return listOfFiles;
 	}
 }
