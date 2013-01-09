@@ -163,7 +163,7 @@ public class WireMillRecipes
 		// requiredEnergy = ticks required * 500 (TileEntityWireMill.WATTS_PER_TICK
 		for (int i = 0; i < recipeToInput.size(); i++)
 		{
-			ItemStack input = stackSizeChange(recipeToInput.get(i), getInputQTY(recipeToInput.get(i)));
+			ItemStack input = stackSizeChange(recipeToInput.get(i), recipeToInputQTY.get(i));
 			int[] output = { recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i)) };
 			recipes.put(input, output);
 		}
