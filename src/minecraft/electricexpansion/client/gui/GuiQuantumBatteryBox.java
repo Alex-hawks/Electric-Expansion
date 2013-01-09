@@ -11,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
+import universalelectricity.prefab.network.PacketManager;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
@@ -26,6 +28,8 @@ public class GuiQuantumBatteryBox extends GuiContainer
 
 	private int containerWidth;
 	private int containerHeight;
+	
+	private short frequency;
 
 	public GuiQuantumBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityQuantumBatteryBox tileEntity)
 	{
@@ -45,6 +49,10 @@ public class GuiQuantumBatteryBox extends GuiContainer
 		this.textFieldFrequency = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
 		this.textFieldFrequency.setMaxStringLength(5);
 		this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
+
+		this.controlList.clear();
+
+		this.controlList.add(new GuiButton(0, var1 + 6, var2 + 60, 50, 20, "Set"));
 	}
 
 	/**
@@ -104,10 +112,21 @@ public class GuiQuantumBatteryBox extends GuiContainer
 		try
 		{
 			short newFrequency = (short) Math.max(Short.parseShort(this.textFieldFrequency.getText()), 0);
-			this.tileEntity.setFrequency(newFrequency);
+			this.frequency = newFrequency;
 		}
 		catch (Exception e)
 		{
+		}
+	}
+
+	public void actionPerformed(GuiButton button)
+	{
+		switch (button.id)
+		{
+			case 0:
+				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, this.frequency));
+				break;
+			default:
 		}
 	}
 
