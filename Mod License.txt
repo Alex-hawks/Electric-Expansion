@@ -7,4 +7,5 @@ Under the license, there exist the following conditions:
 4:	If you do include this mod in your modpack, you must only include Recomended Builds, or Official Releases.
 5:	Do NOT decompile the mod. You do not need to. Just visit the Github repo of the mod.
 6:	Unless otherwise stated above, you do not need permission for any use of this mod, except making money, in which case permission can be made public, but only requires a mutually trusted third party to be informed.
-7:	If not explicitly stated above, refer to the Universal Electricity license.
+7:	Permission to use this mod in your modpack may be revoked if the modpack is generating a bad response in our community.
+8:	If not explicitly stated above, refer to the Universal Electricity license. 
