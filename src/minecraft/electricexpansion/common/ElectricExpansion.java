@@ -1,14 +1,18 @@
 package electricexpansion.common;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Random;
 import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -280,6 +284,7 @@ public class ElectricExpansion
 		EETab.setItemStack(new ItemStack(this.blockTransformer));
 
 		int languages = 0;
+		
 
 		/**
 		 * Load all languages.
@@ -311,8 +316,9 @@ public class ElectricExpansion
 
 			languages++;
 		}
+		int unofficialLanguages = langLoad();
 
-		System.out.println(NAME + ": Loaded " + languages + " languages.");
+		System.out.println(NAME + ": Loaded " + languages + " Official and " +  unofficialLanguages + " unofficial languages");
 
 		UniversalElectricity.isVoltageSensitive = true;
 
@@ -378,4 +384,39 @@ public class ElectricExpansion
 	{
 		DistributionNetworks.onWorldLoad();
 	}
+	
+	public static File[] ListLanguages() 
+	{		
+		String folder = Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages";
+
+		String files;
+		File folderToUse = new File(folder);
+		File[] listOfFiles = folderToUse.listFiles(); 
+
+		return listOfFiles;
+	}
+
+	public static int langLoad()
+	{
+		int unofficialLanguages = 0;
+		try
+		{
+			for(File langFile : ListLanguages())
+			{
+				if (langFile.exists())
+				{
+					String name = langFile.getName();
+					if(name.endsWith(".lang"))
+					{
+						String lang = name.substring(0, name.length() - 4);
+						LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
+						unofficialLanguages++;
+					}
+				}
+			}
+		}
+		catch (Exception e)	{}
+		return unofficialLanguages;
+	}
+
 }

@@ -139,18 +139,21 @@ public class DistributionNetworks
 				if (playerFile.exists())
 				{
 					String name = playerFile.getName();
-					if (name.endsWith(".dat"))
-						name = name.substring(0, name.length() - 4);
-
-					for (int i = 0; i < playerFrequencies.get(name).length; i++)
+					if(!name.contains("_Backup"))
 					{
-						try
+						if (name.endsWith(".dat"))
+							name = name.substring(0, name.length() - 4);
+						
+						for (int i = 0; i < playerFrequencies.get(name).length; i++)
 						{
-							playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getDouble(i + "");
-						}
-						catch (Exception e)
-						{
-							playerFrequencies.get(name)[i] = 0;
+							try
+							{
+								playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getDouble(i + "");
+							}
+							catch (Exception e)
+							{
+								playerFrequencies.get(name)[i] = 0;
+							}
 						}
 					}
 				}
