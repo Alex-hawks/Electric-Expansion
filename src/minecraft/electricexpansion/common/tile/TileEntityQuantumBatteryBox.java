@@ -39,7 +39,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	private byte frequency = 0;
 	private boolean isOpen;
 	private double joulesForDisplay = 0;
-	private EntityPlayer owningPlayer = null;
+	private String owningPlayer = null;
 
 	@Override
 	public void initiate()
@@ -51,7 +51,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	@Override
 	public void setPlayer(EntityPlayer player)
 	{
-		this.owningPlayer = player;
+		this.owningPlayer = player.username;
 	}
 	
 	@Override
@@ -143,7 +143,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules());
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), this.owningPlayer);
 	}
 
 	@Override
@@ -156,6 +156,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 				this.frequency = dataStream.readByte();
 				this.disabledTicks = dataStream.readInt();
 				this.joulesForDisplay = dataStream.readDouble();
+				this.owningPlayer = dataStream.readUTF();
 			}
 			catch (Exception e)
 			{
@@ -192,13 +193,14 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		try
-		{
-			this.frequency = par1NBTTagCompound.getByte("frequency");
-		}
+		{ this.frequency = par1NBTTagCompound.getByte("frequency"); }
 		catch(Exception e)
-		{
-			this.frequency = 0;
-		}
+		{ this.frequency = 0; }
+		
+		try
+		{ this.owningPlayer = par1NBTTagCompound.getString("owner"); }
+		catch(Exception e)
+		{ this.owningPlayer = null; }
 	}
 
 	@Override
@@ -206,6 +208,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setShort("frequency", this.frequency);
+		par1NBTTagCompound.setString("owner", this.owningPlayer);
 	}
 
 	private void addJoules(double joules)
@@ -399,6 +402,11 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		return this.frequency;
 	}
 
+	public String getOwningPlayer()
+	{
+		return owningPlayer;
+	}
+
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException
 	{
@@ -407,6 +415,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		final int getJoules = 3;
 		final int getFrequency = 4;
 		final int setFrequency = 5;
+		final int getPlayer = 6;
 		int arg0 = 0;
 		try
 		{
@@ -428,7 +437,9 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 				case getFrequency:
 					return new Object[] { getFrequency() };
 				case setFrequency:
-					return new Object[] { setFrequency((short) arg0, true) };
+					return new Object[] { setFrequency((byte) arg0, true) };
+				case getPlayer:
+					return new Object[] { getOwningPlayer() };
 				default:
 					throw new IllegalArgumentException("Function unimplemented");
 			}

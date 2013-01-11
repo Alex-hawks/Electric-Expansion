@@ -68,6 +68,10 @@ public class GuiQuantumBatteryBox extends GuiContainer
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 42, 6, 4210752);
 		this.fontRenderer.drawString("Current Frequency: " + tileEntity.getFrequency(), 10, 20, 4210752);
 		this.fontRenderer.drawString("Current Storage: " + displayJoules, 10, 30, 4210752);
+		if(tileEntity.getOwningPlayer() != null)
+			this.fontRenderer.drawString("Player: " + tileEntity.getOwningPlayer(), 65, 66, 4210752);
+		else
+			this.fontRenderer.drawString("I have no owner. BUG!", 62, 66, 4210752);
 	}
 
 	/**

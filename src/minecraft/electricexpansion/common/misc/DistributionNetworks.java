@@ -23,35 +23,40 @@ public class DistributionNetworks
 	private static MinecraftServer server = MinecraftServer.getServer();
 	private static final double maxJoules = 5000000;
 	public static final byte maxFrequencies = (byte) 128;
-	private static Map<EntityPlayer, double[]> playerFrequencies = new HashMap<EntityPlayer, double[]>();
+	private static Map<String, double[]> playerFrequencies = new HashMap<String, double[]>();
 
-	public static double getJoules(EntityPlayer player, byte frequency)
+	public static double getJoules(String player, byte frequency)
 	{
-		try
+		if(player != null)
 		{
-			if(player != null)
-				return playerFrequencies.get(player)[frequency];
-			else return 0;
+			if(!playerFrequencies.containsKey(player))
+				playerFrequencies.put(player, new double[128]);
+			return playerFrequencies.get(player)[frequency];
 		}
-		catch(Exception e)
+		return 0;
+	}
+
+	public static void setJoules(String player, short frequency, double newJoules)
+	{
+		if(player != null)
 		{
-			return 0;
+			if(!playerFrequencies.containsKey(player))
+				playerFrequencies.put(player, new double[128]);
+			playerFrequencies.get(player)[frequency] = newJoules;
 		}
 	}
 
-	public static void setJoules(EntityPlayer player, short frequency, double newJoules)
+	public static void addJoules(String player, short frequency, double addedJoules)
 	{
-			if(player != null)
-				playerFrequencies.get(player)[frequency] = newJoules;
+		if(player != null)
+		{
+			if(!playerFrequencies.containsKey(player))
+				playerFrequencies.put(player, new double[128]);
+			playerFrequencies.get(player)[frequency] = playerFrequencies.get(player)[frequency] + addedJoules;
+		}
 	}
 
-	public static void addJoules(EntityPlayer player, short frequency, double addedJoules)
-	{
-			if(player != null)
-				playerFrequencies.get(player)[frequency] = playerFrequencies.get(player)[frequency] + addedJoules;
-	}
-
-	public static void removeJoules(EntityPlayer player, short frequency, double removedJoules)
+	public static void removeJoules(String player, short frequency, double removedJoules)
 	{
 		try
 		{
