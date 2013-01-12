@@ -386,12 +386,13 @@ public class ElectricExpansion
 	}
 	
 	public static File[] ListLanguages() 
-	{		
-		String folder = Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages";
-
+	{
+		File folder = new File(Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages");
+		if(!folder.exists())
+			folder.mkdirs();
+		
 		String files;
-		File folderToUse = new File(folder);
-		File[] listOfFiles = folderToUse.listFiles(); 
+		File[] listOfFiles = folder.listFiles(); 
 
 		return listOfFiles;
 	}
