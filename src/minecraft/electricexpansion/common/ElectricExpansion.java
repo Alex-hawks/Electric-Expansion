@@ -1,14 +1,18 @@
 package electricexpansion.common;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.Random;
 import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -98,7 +102,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 2;
-	public static final int REVISION_VERSION = 7;
+	public static final int REVISION_VERSION = 6;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -140,7 +144,6 @@ public class ElectricExpansion
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
-	private boolean hasBadSig = false;
 
 	@Instance("ElectricExpansion")
 	public static ElectricExpansion instance;
@@ -228,8 +231,6 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		if (this.hasBadSig)
-			return;
 		UniversalElectricity.register(this, 1, 2, 2, false);
 
 		if (!configLoaded)
@@ -283,6 +284,7 @@ public class ElectricExpansion
 		EETab.setItemStack(new ItemStack(this.blockTransformer));
 
 		int languages = 0;
+		
 
 		/**
 		 * Load all languages.
@@ -314,8 +316,9 @@ public class ElectricExpansion
 
 			languages++;
 		}
+		int unofficialLanguages = langLoad();
 
-		System.out.println(NAME + ": Loaded " + languages + " languages.");
+		System.out.println(NAME + ": Loaded " + languages + " Official and " +  unofficialLanguages + " unofficial languages");
 
 		UniversalElectricity.isVoltageSensitive = true;
 
@@ -381,4 +384,40 @@ public class ElectricExpansion
 	{
 		DistributionNetworks.onWorldLoad();
 	}
+	
+	public static File[] ListLanguages() 
+	{
+		File folder = new File(Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages");
+		if(!folder.exists())
+			folder.mkdirs();
+		
+		String files;
+		File[] listOfFiles = folder.listFiles(); 
+
+		return listOfFiles;
+	}
+
+	public static int langLoad()
+	{
+		int unofficialLanguages = 0;
+		try
+		{
+			for(File langFile : ListLanguages())
+			{
+				if (langFile.exists())
+				{
+					String name = langFile.getName();
+					if(name.endsWith(".lang"))
+					{
+						String lang = name.substring(0, name.length() - 4);
+						LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
+						unofficialLanguages++;
+					}
+				}
+			}
+		}
+		catch (Exception e)	{}
+		return unofficialLanguages;
+	}
+
 }
