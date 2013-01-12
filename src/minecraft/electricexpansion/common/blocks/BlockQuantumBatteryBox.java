@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.prefab.BlockMachine;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
@@ -100,10 +101,15 @@ public class BlockQuantumBatteryBox extends BlockMachine
 	{
 		if (!par1World.isRemote)
 		{
-			par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
-			return true;
+			boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
+			if(par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).getOwningPlayer() || isPlayerOp)
+			{
+				par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
+				return true;
+			}
+			return false;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -132,9 +138,14 @@ public class BlockQuantumBatteryBox extends BlockMachine
 				par1World.setBlockMetadata(x, y, z, 0);
 				break;
 		}
+		
+		if (par5EntityLiving instanceof EntityPlayer && ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)) instanceof TileEntityQuantumBatteryBox)
+		{
+			((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).setPlayer((EntityPlayer) par5EntityLiving);
+		}
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);	
 	}
 
 	@Override

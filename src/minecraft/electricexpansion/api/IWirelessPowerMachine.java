@@ -1,10 +1,12 @@
 package electricexpansion.api;
 
+import net.minecraft.entity.player.EntityPlayer;
+
 public interface IWirelessPowerMachine
 {
-	public short getFrequency();
+	public byte getFrequency();
 
-	public void setFrequency(short newFrequency);
+	public void setFrequency(byte newFrequency);
 
 	public double getJoules(Object... data);
 
@@ -12,5 +14,7 @@ public interface IWirelessPowerMachine
 
 	public String getType();
 
-	double removeJoules(double outputWatts);
+	void removeJoules(double outputWatts);
+	
+	void setPlayer(EntityPlayer player);
 }
