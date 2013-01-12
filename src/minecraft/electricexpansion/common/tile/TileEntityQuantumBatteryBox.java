@@ -167,7 +167,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		{
 			try
 			{
-				this.setFrequency(dataStream.readShort());
+				this.setFrequency(dataStream.readByte());
 			}
 			catch (Exception e)
 			{

@@ -29,7 +29,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
 	private int containerWidth;
 	private int containerHeight;
 	
-	private short frequency;
+	private byte frequency;
 
 	public GuiQuantumBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityQuantumBatteryBox tileEntity)
 	{
@@ -47,7 +47,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
 		int var1 = (this.width - this.xSize) / 2;
 		int var2 = (this.height - this.ySize) / 2;
 		this.textFieldFrequency = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
-		this.textFieldFrequency.setMaxStringLength(5);
+		this.textFieldFrequency.setMaxStringLength(3);
 		this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
 
 		this.controlList.clear();
@@ -115,7 +115,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
 
 		try
 		{
-			short newFrequency = (short) Math.max(Short.parseShort(this.textFieldFrequency.getText()), 0);
+			byte newFrequency = (byte) Math.max(Byte.parseByte(this.textFieldFrequency.getText()), 0);
 			this.frequency = newFrequency;
 		}
 		catch (Exception e)
