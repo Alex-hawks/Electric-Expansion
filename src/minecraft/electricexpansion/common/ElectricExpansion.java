@@ -141,6 +141,9 @@ public class ElectricExpansion
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
+	
+	public static boolean useLeatherForWires;
+	public static boolean useWoolForWires;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -192,6 +195,9 @@ public class ElectricExpansion
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
+
+		useLeatherForWires = CONFIG.get("General", "Use_Leather_In_Wires", true).getBoolean(true);
+		useWoolForWires = CONFIG.get("General", "Use_Wool_In_Wires", false).getBoolean(false);
 
 		CONFIG.save();
 
