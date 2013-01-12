@@ -32,7 +32,7 @@ public class RecipeRegistery
 
 	public static void crafting()
 	{
-		if(ElectricExpansion.useLeatherForWires)
+		if(ElectricExpansion.useLeatherForWires || !ElectricExpansion.useWoolForWires)
 		{
 			// Insulated Wire Recipes (From insulation, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Item.leather });
