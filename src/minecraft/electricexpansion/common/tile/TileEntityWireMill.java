@@ -391,7 +391,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	}
 
 	@Override
-	public double getVoltage()
+	public double getVoltage(Object... data)
 	{
 		return 120;
 	}

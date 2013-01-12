@@ -403,7 +403,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 	}
 
 	@Override
-	public double getVoltage()
+	public double getVoltage(Object... data)
 	{
 		return 240 * this.getVoltageModifier("VoltageModifier");
 	}

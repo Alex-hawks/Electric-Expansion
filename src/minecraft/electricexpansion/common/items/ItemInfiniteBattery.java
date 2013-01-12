@@ -46,7 +46,7 @@ public class ItemInfiniteBattery extends Item implements IItemElectric
 	}
 
 	@Override
-	public double getVoltage()
+	public double getVoltage(Object... data)
 	{
 		return 50;
 	}
