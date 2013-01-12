@@ -203,7 +203,6 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapelessOreRecipe(ElectricExpansion.transformer3, new Object[] { ElectricExpansion.transformer1, "advancedCircuit", "eliteCircuit" }));
 
 		// Upgrades
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object[] { "$!$", "!@!", "#!#", '!', "battery", '@', new ItemStack(blockInsulatedWire, 1, 0), '#', "basicCircuit", '$', "plateBronze" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object[] { "$!$", "!@!", "#!#", '!', ElectricExpansion.itemAdvBat.getUncharged(), '@', new ItemStack(itemUpgrade, 1, 0), '#', "advancedCircuit", '$', "plateSteel" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object[] { "#!#", "!@!", "#!#", '!', ElectricExpansion.itemEliteBat.getUncharged(), '@', new ItemStack(itemUpgrade, 1, 1), '#', "eliteCircuit" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 3), new Object[] { "#!#", "!@!", "#!#", '!', "antimatterMilligram", '@', ElectricExpansion.itemEliteBat.getUncharged(), '#', "eliteCircuit" }));

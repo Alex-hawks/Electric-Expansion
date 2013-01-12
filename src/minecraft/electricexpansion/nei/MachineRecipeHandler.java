@@ -1,4 +1,4 @@
-package electricexpansion.nei;
+/*package electricexpansion.nei;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
@@ -76,13 +76,13 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 		guimanager.drawTexturedModalRect(20, 0, 25, 11, 120, 65);
 	}
 
-/*	public void drawExtras(GuiContainerManager gui, int recipe)
+	public void drawExtras(GuiContainerManager gui, int recipe)
 	{
 		CachedBinaryRecipe recipeA = (CachedBinaryRecipe) this.arecipes.get(recipe);
 
 		gui.drawTextCentered(Integer.toString(recipeA.outputA[3]), 110, 9, -8355712, false);
 	}
-*/
+
 	public void loadTransferRects()
 	{
 		this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(54, 24, 25, 16), getRecipeId(), new Object[0]));
@@ -129,4 +129,4 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 			}
 		}
 	}
-}
+}*/
