@@ -27,7 +27,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 
 		if (metadata != -1)
 		{
-			if (blockID == ElectricExpansion.blockInsulatedWire.blockID || blockID == ElectricExpansion.blockLogisticsWire.blockID)
+			if (blockID == ElectricExpansion.blockInsulatedWire.blockID)
 			{
 				if (metadata == 0)
 					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedCopperWire.png";
@@ -39,6 +39,30 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedHVWire.png";
 				else if (metadata == 4)
 					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedSCWire.png";
+			}
+
+			else if (blockID == ElectricExpansion.blockLogisticsWire.blockID)
+			{
+
+				switch (metadata)
+				{
+					case 0:
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "CopperLogisticsWire.png";
+						break;
+					case 1:
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "TinLogisticsWire.png";
+						break;
+					case 2:
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SilverLogisticsWire.png";
+						break;
+					case 3:
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "HVLogisticsWire.png";
+						break;
+					case 4:
+						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SCLogisticsWire.png";
+						break;
+				}
+
 			}
 
 			else if (blockID == ElectricExpansion.blockSwitchWire.blockID)
