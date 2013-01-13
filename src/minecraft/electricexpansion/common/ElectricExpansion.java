@@ -138,9 +138,9 @@ public class ElectricExpansion
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
-
-	public static boolean useLeatherForWires;
-	public static boolean useWoolForWires;
+	
+	static boolean useWoolForWires;
+	static boolean useLeatherForWires;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -234,7 +234,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 2, 2, false);
+		UniversalElectricity.register(this, 1, 2, 3, false);
 
 		if (!configLoaded)
 		{

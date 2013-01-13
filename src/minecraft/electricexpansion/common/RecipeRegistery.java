@@ -16,6 +16,7 @@ import electricexpansion.common.misc.WireMillRecipes;
 public class RecipeRegistery
 {
 	private static final Block blockSwitchWire = ElectricExpansion.blockSwitchWire;
+	private static final Block blockLogisticsWire = ElectricExpansion.blockLogisticsWire;
 	private static final Block blockSwitchWireBlock = ElectricExpansion.blockSwitchWireBlock;
 	private static final Block blockBatBox = ElectricExpansion.blockAdvBatteryBox;
 	private static final Block blockWireMill = ElectricExpansion.blockWireMill;
@@ -69,6 +70,7 @@ public class RecipeRegistery
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), Item.leather, Block.stone, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(Item.leather, 3), Block.stone, Block.lever });
 		}
+
 		if (ElectricExpansion.useWoolForWires)
 		{
 			// Insulated Wire Recipes (From insulation, and the corresponding Uninsulated Wire)
@@ -118,7 +120,14 @@ public class RecipeRegistery
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 2), new Object[] { new ItemStack(blockInsulatedWire, 1, 2), Block.lever });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 3), new Object[] { new ItemStack(blockInsulatedWire, 1, 3), Block.lever });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 4), new Object[] { new ItemStack(blockInsulatedWire, 1, 4), Block.lever });
-
+		
+		//Logistics Wire Recipes
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 0), new Object[] { new ItemStack(blockSwitchWire, 1, 0), "advancedCircuit" }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 1), new Object[] { new ItemStack(blockSwitchWire, 1, 1), "advancedCircuit" }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 2), new Object[] { new ItemStack(blockSwitchWire, 1, 2), "advancedCircuit" }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 3), new Object[] { new ItemStack(blockSwitchWire, 1, 3), "advancedCircuit" }));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockSwitchWire, 1, 4), "advancedCircuit" }));
+		
 		if (OreDictionary.getOres("battery").size() > 0)
 		{
 
