@@ -1,7 +1,6 @@
 package electricexpansion.common;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -11,7 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -74,7 +72,7 @@ import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies="after:BasicComponents;after:AtomicScience")
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -101,8 +99,8 @@ public class ElectricExpansion
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
 
 	public static final int MAJOR_VERSION = 1;
-	public static final int MINOR_VERSION = 2;
-	public static final int REVISION_VERSION = 6;
+	public static final int MINOR_VERSION = 3;
+	public static final int REVISION_VERSION = 1;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -117,8 +115,7 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new
-	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
@@ -141,7 +138,7 @@ public class ElectricExpansion
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
-	
+
 	public static boolean useLeatherForWires;
 	public static boolean useWoolForWires;
 
@@ -190,7 +187,7 @@ public class ElectricExpansion
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
 
-		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable();
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable(CONFIG);
 
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
@@ -290,7 +287,6 @@ public class ElectricExpansion
 		EETab.setItemStack(new ItemStack(this.blockTransformer));
 
 		int languages = 0;
-		
 
 		/**
 		 * Load all languages.
@@ -322,9 +318,10 @@ public class ElectricExpansion
 
 			languages++;
 		}
-		int unofficialLanguages = langLoad();
+		int unofficialLanguages = 0;
+		unofficialLanguages = langLoad();
 
-		System.out.println(NAME + ": Loaded " + languages + " Official and " +  unofficialLanguages + " unofficial languages");
+		System.out.println(NAME + ": Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
 
 		UniversalElectricity.isVoltageSensitive = true;
 
@@ -390,40 +387,49 @@ public class ElectricExpansion
 	{
 		DistributionNetworks.onWorldLoad();
 	}
-	
-	public static File[] ListLanguages() 
-	{
-		File folder = new File(Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages");
-		if(!folder.exists())
-			folder.mkdirs();
-		
-		String files;
-		File[] listOfFiles = folder.listFiles(); 
 
-		return listOfFiles;
+	public static File[] ListLanguages() 
+	{		
+		String folderDir = "";
+		if (MinecraftServer.getServer().isDedicatedServer())
+		{
+			folderDir = "mods" + File.separator + "ElectricExpansionLanguages";
+		}
+		else if (!MinecraftServer.getServer().isDedicatedServer())
+		{
+			folderDir = Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages";
+		}
+
+		File folder = new File(folderDir);
+
+		if (!folder.exists()) 
+			folder.mkdirs();
+
+		String files; File[] listOfFiles = folder.listFiles();
+
+		return listOfFiles; 
 	}
 
-	public static int langLoad()
-	{
-		int unofficialLanguages = 0;
-		try
-		{
-			for(File langFile : ListLanguages())
-			{
-				if (langFile.exists())
-				{
-					String name = langFile.getName();
-					if(name.endsWith(".lang"))
-					{
+	public static int langLoad() 
+	{ 
+		int unofficialLanguages = 0; 
+		try 
+		{ 
+			for (File langFile : ListLanguages()) 
+			{ 
+				if (langFile.exists()) 
+				{ 
+					String name = langFile.getName(); 
+					if (name.endsWith(".lang")) 
+					{ 
 						String lang = name.substring(0, name.length() - 4);
 						LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
-						unofficialLanguages++;
-					}
-				}
-			}
-		}
-		catch (Exception e)	{}
-		return unofficialLanguages;
+						unofficialLanguages++; 
+					} 
+				} 
+			} 
+		} 
+		catch (Exception e) {} 
+		return unofficialLanguages; 
 	}
-
 }

@@ -56,72 +56,64 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 	{
 		super.updateEntity();
 
-		if (this.ticks % 20 == 0)
+		if (!this.worldObj.isRemote)
 		{
-			if (!this.worldObj.isRemote)
+			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite();
+			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+
+			// Check if requesting power on output
+			ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2);
+			TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+
+			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+
+			if (outputNetwork != null && inputNetwork == null)
 			{
-				ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+				outputNetwork.stopProducing(this);
+			}
+			else if (outputNetwork == null && inputNetwork != null)
+			{
+				inputNetwork.stopRequesting(this);
+			}
 
-				// Check if requesting power on output
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - type + 2);
-				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
-
-				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
-				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
-
-				if (outputNetwork != null && inputNetwork == null)
+			if (outputNetwork != null && inputNetwork != null)
+			{
+				if (outputNetwork != inputNetwork)
 				{
-					outputNetwork.stopProducing(this);
-				}
-				else if (outputNetwork == null && inputNetwork != null)
-				{
-					inputNetwork.stopRequesting(this);
-				}
-
-				if (outputNetwork != null && inputNetwork != null)
-				{
-					if (outputNetwork != inputNetwork)
+					if (outputNetwork.getRequest().getWatts() > 0)
 					{
-						if (outputNetwork.getRequest().getWatts() > 0)
+						inputNetwork.startRequesting(this, outputNetwork.getRequest());
+						ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
+
+						if (actualEnergy.getWatts() > 0)
 						{
-							inputNetwork.startRequesting(this, outputNetwork.getRequest());
-							ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
+							double typeChange = 0;
 
-							if (actualEnergy.getWatts() > 0)
+							if (this.type == 0)
 							{
-								double typeChange = 0;
-
-								if (this.type == 0)
-								{
-									typeChange = 60;
-								}
-								else if (this.type == 4)
-								{
-									typeChange = 120;
-								}
-								else if (this.type == 8)
-								{
-									typeChange = 240;
-								}
-
-								double newVoltage = actualEnergy.voltage + typeChange;
-
-								if (!this.stepUp)
-								{
-									newVoltage = actualEnergy.voltage - typeChange;
-								}
-
-								outputNetwork.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
+								typeChange = 60;
 							}
-							else
+							else if (this.type == 4)
 							{
-								outputNetwork.stopProducing(this);
+								typeChange = 120;
 							}
+							else if (this.type == 8)
+							{
+								typeChange = 240;
+							}
+
+							double newVoltage = actualEnergy.voltage + typeChange;
+
+							if (!this.stepUp)
+							{
+								newVoltage = actualEnergy.voltage - typeChange;
+							}
+
+							outputNetwork.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
 						}
 						else
 						{
-							inputNetwork.stopRequesting(this);
 							outputNetwork.stopProducing(this);
 						}
 					}
@@ -131,13 +123,18 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 						outputNetwork.stopProducing(this);
 					}
 				}
-
-				if (!this.worldObj.isRemote)
+				else
 				{
-					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+					inputNetwork.stopRequesting(this);
+					outputNetwork.stopProducing(this);
 				}
-
 			}
+
+			if (!this.worldObj.isRemote)
+			{
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+			}
+
 		}
 	}
 

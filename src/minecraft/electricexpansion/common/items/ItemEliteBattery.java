@@ -33,7 +33,7 @@ public class ItemEliteBattery extends ItemElectric
 	}
 
 	@Override
-	public double getVoltage()
+	public double getVoltage(Object... data)
 	{
 		return 45;
 	}
