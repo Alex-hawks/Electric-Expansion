@@ -107,9 +107,9 @@ public class BlockQuantumBatteryBox extends BlockMachine
 				par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
 				return true;
 			}
-			return false;
+			return true;
 		}
-		return false;
+		return true;
 	}
 
 	/**

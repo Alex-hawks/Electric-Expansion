@@ -137,6 +137,9 @@ public class ElectricExpansion
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
+	
+	public static boolean useLeatherForWires;
+	public static boolean useWoolForWires;
 
 	public static boolean useLeatherForWires;
 	public static boolean useWoolForWires;
