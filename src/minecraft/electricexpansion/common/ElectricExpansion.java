@@ -141,9 +141,6 @@ public class ElectricExpansion
 	public static boolean useLeatherForWires;
 	public static boolean useWoolForWires;
 
-	public static boolean useLeatherForWires;
-	public static boolean useWoolForWires;
-
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
 
