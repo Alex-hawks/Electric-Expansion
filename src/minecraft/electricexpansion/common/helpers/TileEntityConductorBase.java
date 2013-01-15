@@ -104,10 +104,8 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			if (tileEntity instanceof TileEntityInsulatedWire)
 			{
 				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
-
-				TileEntityInsulatedWire tileEntityThis = (TileEntityInsulatedWire) this.worldObj.getBlockTileEntity(xCoord, yCoord, zCoord);
 				{
-					if (tileEntity != null && tileEntityIns.colorField == tileEntityThis.colorField && tileEntityIns.getWireMaterial(tileEntityIns.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) == tileEntityThis.getWireMaterial(this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)))
+					if (tileEntity != null && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
 					{
 						if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
 						{
@@ -167,13 +165,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			{
 				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
 
-				TileEntityInsulatedWire tileEntityThis = (TileEntityInsulatedWire) this.worldObj.getBlockTileEntity(xCoord, yCoord, zCoord);
-
-				System.out.println(tileEntityIns.getWireMaterial(tileEntityIns.worldObj.getBlockMetadata(tileEntityIns.xCoord, tileEntityIns.yCoord, tileEntityIns.zCoord)) + " input stats");
-				
-				System.out.println(tileEntityThis.getWireMaterial(this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) + " this stats");
-				
-				if (tileEntity != null && tileEntityIns.colorField == tileEntityThis.colorField && tileEntityIns.getWireMaterial(tileEntityIns.worldObj.getBlockMetadata(tileEntityIns.xCoord, tileEntityIns.yCoord, tileEntityIns.zCoord)) == tileEntityThis.getWireMaterial(this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord)))
+				if (tileEntity != null && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
 
 				{
 					if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
