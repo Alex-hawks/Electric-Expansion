@@ -6,9 +6,11 @@ import java.util.logging.Logger;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -113,8 +115,7 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new
-	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
@@ -138,8 +139,8 @@ public class ElectricExpansion
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
 	
-	public static boolean useLeatherForWires;
-	public static boolean useWoolForWires;
+	static boolean useWoolForWires;
+	static boolean useLeatherForWires;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -317,11 +318,10 @@ public class ElectricExpansion
 
 			languages++;
 		}
+		int unofficialLanguages = 0;
+		unofficialLanguages = langLoad();
 
-		// int unofficialLanguages = langLoad();
-
-		// System.out.println(NAME + ": Loaded " + languages + " Official and " +
-		// unofficialLanguages + " unofficial languages");
+		System.out.println(NAME + ": Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
 
 		UniversalElectricity.isVoltageSensitive = true;
 
@@ -388,20 +388,48 @@ public class ElectricExpansion
 		DistributionNetworks.onWorldLoad();
 	}
 
-	/*
-	 * public static File[] ListLanguages() { File folder = new File(Minecraft.getMinecraftDir() +
-	 * File.separator + "mods" + File.separator + "ElectricExpansionLanguages"); if
-	 * (!folder.exists()) folder.mkdirs();
-	 * 
-	 * String files; File[] listOfFiles = folder.listFiles();
-	 * 
-	 * return listOfFiles; }
-	 * 
-	 * public static int langLoad() { int unofficialLanguages = 0; try { for (File langFile :
-	 * ListLanguages()) { if (langFile.exists()) { String name = langFile.getName(); if
-	 * (name.endsWith(".lang")) { String lang = name.substring(0, name.length() - 4);
-	 * LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
-	 * unofficialLanguages++; } } } } catch (Exception e) { } return unofficialLanguages; }
-	 */
+	public static File[] ListLanguages() 
+	{		
+		String folderDir = "";
+		if (MinecraftServer.getServer().isDedicatedServer())
+		{
+			folderDir = "mods" + File.separator + "ElectricExpansionLanguages";
+		}
+		else if (!MinecraftServer.getServer().isDedicatedServer())
+		{
+			folderDir = Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator + "ElectricExpansionLanguages";
+		}
 
+		File folder = new File(folderDir);
+
+		if (!folder.exists()) 
+			folder.mkdirs();
+
+		String files; File[] listOfFiles = folder.listFiles();
+
+		return listOfFiles; 
+	}
+
+	public static int langLoad() 
+	{ 
+		int unofficialLanguages = 0; 
+		try 
+		{ 
+			for (File langFile : ListLanguages()) 
+			{ 
+				if (langFile.exists()) 
+				{ 
+					String name = langFile.getName(); 
+					if (name.endsWith(".lang")) 
+					{ 
+						String lang = name.substring(0, name.length() - 4);
+						LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
+						unofficialLanguages++; 
+					} 
+				} 
+			} 
+		} 
+		catch (Exception e) {} 
+		return unofficialLanguages; 
+	}
 }

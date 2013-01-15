@@ -49,24 +49,21 @@ public class RecipeRegistery
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 2), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotSilver" }));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotAluminium" }));
 
-			// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated
-			// Wire)
+			// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Item.leather, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), Item.leather, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), Item.leather, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), Item.leather, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(Item.leather, 3), Block.stone });
 
-			// Switch Wire Recipes (From insulation, a lever, and the corresponding Uninsulated
-			// Wire)
+			// Switch Wire Recipes (From insulation, a lever, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Item.leather, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), Item.leather, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), Item.leather, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), Item.leather, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(Item.leather, 3), Block.lever });
 
-			// Switch Wire Block Recipes (From insulation, Block.stone, Block.lever and the
-			// corresponding Uninsulated Wire)
+			// Switch Wire Block Recipes (From insulation, Block.stone, Block.lever and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Item.leather, Block.stone, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), Item.leather, Block.stone, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), Item.leather, Block.stone, Block.lever });
@@ -89,24 +86,21 @@ public class RecipeRegistery
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 2), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotSilver" }));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotAluminium" }));
 
-			// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated
-			// Wire)
+			// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), Block.cloth, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), Block.cloth, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), Block.cloth, Block.stone });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(Block.cloth, 3), Block.stone });
 
-			// Switch Wire Recipes (From insulation, a lever, and the corresponding Uninsulated
-			// Wire)
+			// Switch Wire Recipes (From insulation, a lever, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), Block.cloth, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), Block.cloth, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), Block.cloth, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(Block.cloth, 3), Block.lever });
 
-			// Switch Wire Block Recipes (From insulation, Block.stone, Block.lever and the
-			// corresponding Uninsulated Wire)
+			// Switch Wire Block Recipes (From insulation, Block.stone, Block.lever and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.stone, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), Block.cloth, Block.stone, Block.lever });
 			GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), Block.cloth, Block.stone, Block.lever });
@@ -133,10 +127,8 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 2), new Object[] { new ItemStack(blockSwitchWire, 1, 2), "advancedCircuit" }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 3), new Object[] { new ItemStack(blockSwitchWire, 1, 3), "advancedCircuit" }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockSwitchWire, 1, 4), "advancedCircuit" }));
-
 		
 		if (OreDictionary.getOres("battery").size() > 0)
-
 		{
 
 			for (int i = 0; i < OreDictionary.getOres("battery").size(); i++)
@@ -163,9 +155,7 @@ public class RecipeRegistery
 
 		// Recipes for supporting other UE add-ons, the slack way...
 		if (OreDictionary.getOres("copperWire").size() > 0)
-		{
 			GameRegistry.addShapelessRecipe(OreDictionary.getOres("copperWire").get(0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0) });
-		}
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockInsulatedWire, 1, 0), new Object[] { "copperWire" }));
 
 		// Wire Block Recipes (From Block.stone, and the corresponding Insulated Wire)
@@ -175,8 +165,7 @@ public class RecipeRegistery
 		GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 3), new Object[] { new ItemStack(blockInsulatedWire, 1, 3), Block.stone });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 4), new Object[] { new ItemStack(blockInsulatedWire, 1, 4), Block.stone });
 
-		// Switch Wire Block Recipes (From Block.stone, Block,lever and the corresponding Insulated
-		// Wire)
+		// Switch Wire Block Recipes (From Block.stone, Block,lever and the corresponding Insulated Wire)
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0), Block.stone, Block.lever });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 1), new Object[] { new ItemStack(blockInsulatedWire, 1, 1), Block.stone, Block.lever });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 2), new Object[] { new ItemStack(blockInsulatedWire, 1, 2), Block.stone, Block.lever });
