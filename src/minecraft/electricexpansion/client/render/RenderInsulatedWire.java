@@ -186,7 +186,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			GL11.glScalef(1.0F, -1F, -1F);
 			
 			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "WirePaintOverlay.png");
-			GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.0f);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1f);
 
 			if (connectedSides[0])
 			{
