@@ -186,7 +186,44 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			GL11.glScalef(1.0F, -1F, -1F);
 			
 			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "WirePaintOverlay.png");
-			GL11.glColor4f(0.0F, 0.0F, 0.0F, 0.0f);
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1f);
+
+			if (connectedSides[0])
+			{
+				model.renderBottom();
+			}
+			if (connectedSides[1])
+			{
+				model.renderTop();
+			}
+			if (connectedSides[2])
+			{
+				model.renderBack();
+			}
+			if (connectedSides[3])
+			{
+				model.renderFront();
+			}
+			if (connectedSides[4])
+			{
+				model.renderLeft();
+			}
+			if (connectedSides[5])
+			{
+				model.renderRight();
+			}
+			
+			model.renderMiddle();
+			GL11.glPopMatrix();
+		}
+		
+		else
+		{
+			GL11.glPushMatrix();
+			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+			GL11.glScalef(1.0F, -1F, -1F);
+			
+			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "WirePaintOverlay.png");
 
 			if (connectedSides[0])
 			{
