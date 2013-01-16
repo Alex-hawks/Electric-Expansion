@@ -28,7 +28,7 @@ public class GuiLogisticsWire extends GuiScreen
 	{
 		drawDefaultBackground();
 
-		int var4 = this.mc.renderEngine.getTexture(ElectricExpansion.MATT_TEXTURE_PATH + "Logistics.png");
+		int var4 = this.mc.renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "Logistics.png");
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 

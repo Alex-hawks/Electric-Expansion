@@ -59,17 +59,17 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 
 		if (metadata >= TIER_3_META)
 		{
-			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "transformer3.png");
+			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "transformer3.png");
 		}
 
 		else if (metadata >= TIER_2_META)
 		{
-			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "transformer2.png");
+			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "transformer2.png");
 		}
 
 		else
 		{
-			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "transformer1.png");
+			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "transformer1.png");
 		}
 
 		GL11.glPushMatrix();

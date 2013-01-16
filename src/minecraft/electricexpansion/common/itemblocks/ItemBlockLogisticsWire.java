@@ -11,6 +11,6 @@ public class ItemBlockLogisticsWire extends ItemBlockCableHelper
 
 	public int getIconFromDamage(int i)
 	{
-		return i + 48;
+		return i + 128;
 	}
 }

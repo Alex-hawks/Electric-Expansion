@@ -18,7 +18,7 @@ public class ItemInfiniteBattery extends Item implements IItemElectric
 		this.setNoRepair();
 		this.setCreativeTab(EETab.INSTANCE);
 		this.iconIndex = 3;
-		this.setTextureFile(ElectricExpansion.MATT_ITEM_TEXTURE_FILE);
+		this.setTextureFile(ElectricExpansion.ITEM_FILE);
 	}
 
 	@Override

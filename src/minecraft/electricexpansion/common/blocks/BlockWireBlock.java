@@ -25,7 +25,7 @@ public class BlockWireBlock extends BlockConductor
 		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		this.setCreativeTab(EETab.INSTANCE);
+//		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class BlockWireBlock extends BlockConductor
 
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE;
+		return ElectricExpansion.BLOCK_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

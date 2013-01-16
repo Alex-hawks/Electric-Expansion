@@ -62,7 +62,7 @@ public class BlockQuantumBatteryBox extends BlockMachine
 
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MATT_BLOCK_TEXTURE_FILE;
+		return ElectricExpansion.BLOCK_FILE;
 	}
 
 	@Override

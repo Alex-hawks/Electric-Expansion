@@ -30,15 +30,15 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			if (blockID == ElectricExpansion.blockInsulatedWire.blockID)
 			{
 				if (metadata == 0)
-					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedCopperWire.png";
+					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedCopperWire.png";
 				else if (metadata == 1)
-					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedTinWire.png";
+					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedTinWire.png";
 				else if (metadata == 2)
-					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedSilverWire.png";
+					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedSilverWire.png";
 				else if (metadata == 3)
-					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedHVWire.png";
+					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedHVWire.png";
 				else if (metadata == 4)
-					textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "InsulatedSCWire.png";
+					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedSCWire.png";
 			}
 
 			else if (blockID == ElectricExpansion.blockLogisticsWire.blockID)
@@ -47,19 +47,19 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				switch (metadata)
 				{
 					case 0:
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "CopperLogisticsWire.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "CopperLogisticsWire.png";
 						break;
 					case 1:
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "TinLogisticsWire.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "TinLogisticsWire.png";
 						break;
 					case 2:
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SilverLogisticsWire.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "SilverLogisticsWire.png";
 						break;
 					case 3:
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "HVLogisticsWire.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "HVLogisticsWire.png";
 						break;
 					case 4:
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SCLogisticsWire.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "SCLogisticsWire.png";
 						break;
 				}
 
@@ -72,19 +72,19 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					switch (metadata)
 					{
 						case 0:
-							textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "CopperSwitchWireOn.png";
+							textureToUse = ElectricExpansion.TEXTURE_PATH + "CopperSwitchWireOn.png";
 							break;
 						case 1:
-							textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "TinSwitchWireOn.png";
+							textureToUse = ElectricExpansion.TEXTURE_PATH + "TinSwitchWireOn.png";
 							break;
 						case 2:
-							textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SilverSwitchWireOn.png";
+							textureToUse = ElectricExpansion.TEXTURE_PATH + "SilverSwitchWireOn.png";
 							break;
 						case 3:
-							textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "HVSwitchWireOn.png";
+							textureToUse = ElectricExpansion.TEXTURE_PATH + "HVSwitchWireOn.png";
 							break;
 						case 4:
-							textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SCSwitchWireOn.png";
+							textureToUse = ElectricExpansion.TEXTURE_PATH + "SCSwitchWireOn.png";
 							break;
 					}
 				}
@@ -92,15 +92,15 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				else
 				{
 					if (metadata == 0)
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "CopperSwitchWireOff.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "CopperSwitchWireOff.png";
 					else if (metadata == 1)
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "TinSwitchWireOff.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "TinSwitchWireOff.png";
 					else if (metadata == 2)
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SilverSwitchWireOff.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "SilverSwitchWireOff.png";
 					else if (metadata == 3)
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "HVSwitchWireOff.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "HVSwitchWireOff.png";
 					else if (metadata == 4)
-						textureToUse = ElectricExpansion.ALEX_TEXTURE_PATH + "SCSwitchWireOff.png";
+						textureToUse = ElectricExpansion.TEXTURE_PATH + "SCSwitchWireOff.png";
 				}
 			}
 		}
@@ -179,7 +179,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		model.renderMiddle();
 		GL11.glPopMatrix();
 		
-		if (tileEntity instanceof TileEntityInsulatedWire)
+	/*	if (tileEntity instanceof TileEntityInsulatedWire)
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
@@ -253,7 +253,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			model.renderMiddle();
 			GL11.glPopMatrix();
 		}
-	}
+*/	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8)

@@ -29,7 +29,7 @@ public class ItemEliteBattery extends ItemElectric
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.MATT_ITEM_TEXTURE_FILE;
+		return ElectricExpansion.ITEM_FILE;
 	}
 
 	@Override

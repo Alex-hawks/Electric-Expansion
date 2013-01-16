@@ -7,11 +7,10 @@ public class ItemBlockSwitchWire extends ItemBlockCableHelper
 	public ItemBlockSwitchWire(int id)
 	{
 		super(id);
-		this.setIconIndex(32);
 	}
 
 	public int getIconFromDamage(int i)
 	{
-		return i + this.iconIndex;
+		return i + 112;
 	}
 }

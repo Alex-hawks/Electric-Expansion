@@ -58,12 +58,6 @@ public class ClientProxy extends CommonProxy
 		ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
 		ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
-
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
-
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.MATT_ITEM_TEXTURE_FILE);
 	}
 
 	@Override

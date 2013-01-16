@@ -14,7 +14,7 @@ public class BlockSilverOre extends Block
 		this.setBlockName("silverore");
 		this.setHardness(2f);
 		this.blockIndexInTexture = 8;
-		this.setTextureFile(ElectricExpansion.MATT_BLOCK_TEXTURE_FILE);
+		this.setTextureFile(ElectricExpansion.BLOCK_FILE);
 	}
 
 }

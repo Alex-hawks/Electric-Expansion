@@ -87,14 +87,8 @@ public class ElectricExpansion
 	public static final String RESOURCE_PATH = "/electricexpansion/";
 	public static final String LANGUAGE_PATH = RESOURCE_PATH + "language/";
 	public static final String TEXTURE_PATH = RESOURCE_PATH + "textures/";
-	// Mattredsox's Textures
-	public static final String MATT_TEXTURE_PATH = TEXTURE_PATH + "mattredsox/";
-	public static final String MATT_BLOCK_TEXTURE_FILE = MATT_TEXTURE_PATH + "blocks.png";
-	public static final String MATT_ITEM_TEXTURE_FILE = MATT_TEXTURE_PATH + "items.png";
-	// Alex Textures
-	public static final String ALEX_TEXTURE_PATH = TEXTURE_PATH + "alex_hawks/";
-	public static final String ALEX_ITEMS_TEXTURE_FILE = ALEX_TEXTURE_PATH + "items.png";
-	public static final String ALEX_BLOCK_TEXTURE_FILE = ALEX_TEXTURE_PATH + "block.png";
+	public static final String ITEM_FILE = TEXTURE_PATH + "items.png";
+	public static final String BLOCK_FILE = TEXTURE_PATH + "blocks.png";
 
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
 
@@ -170,7 +164,7 @@ public class ElectricExpansion
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt()).setCreativeTab(EETab.INSTANCE).setBlockName("transformer");
 		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
-		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.ALEX_BLOCK_TEXTURE_FILE);
+		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		// Redstone'd Insulated Cable
 		// Redstone'd Cable Blocks

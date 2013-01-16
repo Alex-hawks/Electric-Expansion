@@ -121,7 +121,7 @@ public class BlockSwitchWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
+		return ElectricExpansion.ITEM_FILE;
 	}
 
 	@Override

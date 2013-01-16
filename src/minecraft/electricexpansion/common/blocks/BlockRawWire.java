@@ -79,7 +79,7 @@ public class BlockRawWire extends BlockConductor
 	@Override
 	public String getTextureFile()
 	{
-		return ElectricExpansion.ALEX_ITEMS_TEXTURE_FILE;
+		return ElectricExpansion.ITEM_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -12,6 +12,6 @@ public class ItemBlockRawWire extends ItemBlockCableHelper
 
 	public int getIconFromDamage(int i)
 	{
-		return i;
+		return i + 80;
 	}
 }

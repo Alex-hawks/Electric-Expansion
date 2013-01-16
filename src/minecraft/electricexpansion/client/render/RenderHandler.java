@@ -28,7 +28,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 
 		if (block.blockID == ElectricExpansion.blockWireMill.blockID)
 		{
-			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.ALEX_TEXTURE_PATH + "wiremill.png"));
+			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "wiremill.png"));
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.5F, .8F, 0.5F);
 			// GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
@@ -39,11 +39,11 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 		if (block.blockID == ElectricExpansion.blockTransformer.blockID)
 		{
 			if (metadata >= 8)
-				GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MATT_TEXTURE_PATH + "transformer3.png"));
+				GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "transformer3.png"));
 			else if (metadata >= 4)
-				GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MATT_TEXTURE_PATH + "transformer2.png"));
+				GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "transformer2.png"));
 			else
-				GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MATT_TEXTURE_PATH + "transformer1.png"));
+				GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "transformer1.png"));
 
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.5F, .8F, 0.5F);
