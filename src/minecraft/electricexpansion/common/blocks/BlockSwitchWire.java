@@ -78,7 +78,7 @@ public class BlockSwitchWire extends BlockConductor
 						}
 						catch (Exception e)
 						{
-							FMLLog.severe("Failed to update switch wire");
+							ElectricExpansion.EELogger.severe("Failed to update switch wire");
 							e.printStackTrace();
 						}
 					}
