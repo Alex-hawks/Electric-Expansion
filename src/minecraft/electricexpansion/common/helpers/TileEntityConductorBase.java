@@ -101,13 +101,33 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	{
 		if (!this.worldObj.isRemote)
 		{
-			if (tileEntity instanceof TileEntityInsulatedWire)
+			if (tileEntity instanceof IAdvancedConductor)
 			{
-				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
+				IAdvancedConductor tileEntityWire = (IAdvancedConductor) tileEntity;
+
 				{
-					if (tileEntity != null && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
+
+					if (tileEntity != null && tileEntityWire.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
 					{
-						if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
+						if (tileEntity instanceof TileEntityInsulatedWire)
+						{
+							TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
+
+							 if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
+								{
+									this.connectedBlocks[side.ordinal()] = tileEntity;
+									this.visuallyConnected[side.ordinal()] = true;
+
+									if (tileEntity instanceof IConductor)
+									{
+										Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+									}
+
+									return;
+								}
+						}
+
+						else if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
 						{
 							this.connectedBlocks[side.ordinal()] = tileEntity;
 							this.visuallyConnected[side.ordinal()] = true;
