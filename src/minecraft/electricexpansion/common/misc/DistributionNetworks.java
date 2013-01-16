@@ -161,7 +161,8 @@ public class DistributionNetworks
 		}
 		catch (Exception e)
 		{
-			ElectricExpansion.EELogger.severe("Failed to load the Quantum Battery Box Electricity Storage Data!");
+			ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
+			ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
 		}
 	}
 

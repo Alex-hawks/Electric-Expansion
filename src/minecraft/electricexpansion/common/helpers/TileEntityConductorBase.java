@@ -42,22 +42,11 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	@Override
 	public double getMaxAmps()
 	{
+		//Amps, not Volts or Watts
 		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		switch (meta)
-		{
-			case 0:
-				return 500;
-			case 1:
-				return 60; // Bit less than a basic Coal-Generator. #Cruel
-			case 2:
-				return 200;
-			case 3:
-				return 4800; // HV
-			case 4:
-				return 1500;
-			default:
-				return 500;
-		}
+		if (meta < EnumWireMaterial.values().length - 1)
+			return EnumWireMaterial.values()[meta].maxAmps;
+		else return EnumWireMaterial.UNKNOWN.maxAmps;
 	}
 
 	@Override
@@ -69,7 +58,9 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	@Override
 	public EnumWireMaterial getWireMaterial(int metadata)
 	{
-		return EnumWireMaterial.values()[metadata];
+		if (metadata < EnumWireMaterial.values().length - 1)
+			return EnumWireMaterial.values()[metadata];
+		else return EnumWireMaterial.UNKNOWN;
 	}
 
 	@Override

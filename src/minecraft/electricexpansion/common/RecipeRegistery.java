@@ -31,9 +31,23 @@ public class RecipeRegistery
 	private static final Item itemMultimeter = ElectricExpansion.itemMultimeter;
 
 	private static Block basicCompWire;
+	private static ItemStack HVIngot;
 
 	public static void crafting()
 	{
+		if (OreDictionary.getOres("ingotAluminium").size() > 0)
+		{
+			HVIngot = OreDictionary.getOres("ingotAluminium").get(0);
+		}
+		else
+		{
+			HVIngot = new ItemStack(itemParts, 1, 4);
+			FurnaceRecipes.smelting().addSmelting(itemParts.itemID, 3, new ItemStack(itemParts, 4, 4), 0);
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 3), new Object[] { "!#!", "#@#", "!#!", '!', Item.ingotIron, '#', "ingotSilver", '@', Item.eyeOfEnder }));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 3), new Object[] { "!#!", "#@#", "!#!", '#', Item.ingotIron, '!', "ingotSilver", '@', Item.eyeOfEnder }));
+		}
+
+		
 		if (ElectricExpansion.useLeatherForWires || !ElectricExpansion.useWoolForWires)
 		{
 			// Insulated Wire Recipes (From insulation, and the corresponding Uninsulated Wire)
@@ -47,7 +61,7 @@ public class RecipeRegistery
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 0), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotCopper" }));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 1), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotTin" }));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 2), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotSilver" }));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', "ingotAluminium" }));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Item.leather, '@', HVIngot }));
 
 			// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Item.leather, Block.stone });
@@ -84,7 +98,7 @@ public class RecipeRegistery
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 0), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotCopper" }));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 1), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotTin" }));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 2), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotSilver" }));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', "ingotAluminium" }));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulatedWire, 6, 3), new Object[] { "#@#", "#@#", "#@#", '#', Block.cloth, '@', HVIngot }));
 
 			// Wire Block Recipes (From insulation, Block.stone, and the corresponding Uninsulated Wire)
 			GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[] { new ItemStack(blockRawWire, 1, 0), Block.cloth, Block.stone });
@@ -112,7 +126,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 0), new Object[] { " @ ", " @ ", " @ ", '@', "ingotCopper" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 1), new Object[] { " @ ", " @ ", " @ ", '@', "ingotTin" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 2), new Object[] { " @ ", " @ ", " @ ", '@', "ingotSilver" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 3), new Object[] { " @ ", " @ ", " @ ", '@', "ingotAluminium" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRawWire, 6, 3), new Object[] { " @ ", " @ ", " @ ", '@', HVIngot }));
 
 		// Switch Wire Recipes (From a lever and the corresponding Insulated Wire)
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0), Block.lever });
@@ -251,7 +265,7 @@ public class RecipeRegistery
 		WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 60);
 		WireMillRecipes.addDrawing("ingotTin", new ItemStack(blockRawWire, 3, 1), 60);
 		WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 60);
-		WireMillRecipes.addDrawing("ingotAluminium", new ItemStack(blockRawWire, 3, 3), 60);
+		WireMillRecipes.addDrawing(HVIngot, new ItemStack(blockRawWire, 3, 3), 60);
 		WireMillRecipes.addDrawing(new ItemStack(itemParts, 64, 2), new ItemStack(blockRawWire, 64, 4), 24000);
 
 		for (int i = 0; i < 16; i++)
