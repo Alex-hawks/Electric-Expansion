@@ -179,13 +179,13 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		model.renderMiddle();
 		GL11.glPopMatrix();
 		
-	/*	if (tileEntity instanceof TileEntityInsulatedWire)
+		if (tileEntity instanceof TileEntityInsulatedWire)
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 			GL11.glScalef(1.0F, -1F, -1F);
 			
-			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "WirePaintOverlay.png");
+			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "WirePaintOverlay.png");
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1f);
 
 			if (connectedSides[0])
@@ -223,7 +223,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 			GL11.glScalef(1.0F, -1F, -1F);
 			
-			bindTextureByName(ElectricExpansion.MATT_TEXTURE_PATH + "WirePaintOverlay.png");
+			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "WirePaintOverlay.png");
 
 			if (connectedSides[0])
 			{
@@ -253,7 +253,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			model.renderMiddle();
 			GL11.glPopMatrix();
 		}
-*/	}
+	}
 
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8)
