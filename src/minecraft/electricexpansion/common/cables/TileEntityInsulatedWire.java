@@ -3,6 +3,7 @@ package electricexpansion.common.cables;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.PacketManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -21,7 +22,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	 * 14 - orange 15 - white
 	 */
 
-	public double colordouble;
+	public byte colorbyte;
 
 	// everything is in the helper class.
 	// this class MUST remain existent...
@@ -35,7 +36,6 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 			{
 				int id = dataStream.readInt();
 
-				
 				if (id == 1)
 				{
 					this.visuallyConnected[0] = dataStream.readBoolean();
@@ -48,8 +48,8 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 
 				if (id == 0)
 				{
-					this.colordouble = dataStream.readDouble();
-					System.out.println("Recieved Dye Color Packet! " + this.colordouble);
+					this.colorbyte = dataStream.readByte();
+					System.out.println("Recieved Dye Color Packet! " + this.colorbyte);
 				}
 			}
 			catch (Exception e)
@@ -59,11 +59,26 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 
 		}
 	}
-	
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt)
+	{
+		super.readFromNBT(nbt);
+		this.colorbyte = nbt.getByte("colorByte");
+
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbt)
+	{
+		super.writeToNBT(nbt);
+		nbt.setByte("colorByte", this.colorbyte);
+	}
+
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colordouble);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorbyte);
 	}
 
 }

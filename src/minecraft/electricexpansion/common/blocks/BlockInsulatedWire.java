@@ -101,25 +101,23 @@ public class BlockInsulatedWire extends BlockConductor
 
 					int dyeColor = par5EntityPlayer.inventory.getCurrentItem().getItemDamageForDisplay();
 
-					tileEntity.colordouble = (double) dyeColor;
+					tileEntity.colorbyte = (byte) dyeColor;
 
 					par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory.getCurrentItem().stackSize - 1;
 
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colordouble));
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colorbyte));
 
 					System.out.println("Sending Dye Color to Clients!");
 
-					this.updateWireSwitch(par1World, par2, par3, par4);
-					
+					// this.updateWireSwitch(par1World, par2, par3, par4);
+
 					return true;
 
 				}
 
 			}
-			
-			
 
-			System.out.println("Current wire color: " + tileEntity.colordouble);
+			System.out.println("Current wire color: " + tileEntity.colorbyte);
 
 		}
 
@@ -131,76 +129,50 @@ public class BlockInsulatedWire extends BlockConductor
 	public void onNeighborBlockChange(World world, int x, int y, int z, int par5)
 	{
 		super.onNeighborBlockChange(world, x, y, z, par5);
-		this.updateWireSwitch(world, x, y, z);
+		// this.updateWireSwitch(world, x, y, z);
 	}
-	
-	private void updateWireSwitch(World world, int x, int y, int z)
-	{
-		TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
 
-		if (!world.isRemote && tileEntity != null)
-		{
-
-			if (world.getBlockTileEntity(x + 1, y, z) instanceof TileEntityInsulatedWire)
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.EAST));
-			}
-
-			if (world.getBlockTileEntity(x - 1, y, z) instanceof TileEntityInsulatedWire)
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.WEST));
-			}
-
-			if (world.getBlockTileEntity(x, y + 1, z) instanceof TileEntityInsulatedWire)
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UP));
-			}
-
-			if (world.getBlockTileEntity(x, y - 1, z) instanceof TileEntityInsulatedWire)
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.DOWN));
-			}
-
-			if (world.getBlockTileEntity(x, y, z + 1) instanceof TileEntityInsulatedWire)
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.EAST));
-			}
-
-			if (world.getBlockTileEntity(x, y, z - 1) instanceof TileEntityInsulatedWire)
-
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
-			}
-
-			else
-			{
-				ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UNKNOWN));
-			}
-
-			for (int i = 0; i < 6; i++)
-			{
-				ForgeDirection direction = ForgeDirection.getOrientation(i);
-
-				Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)];
-
-				if (block != null)
-				{
-					if (block.blockID != this.blockID)
-					{
-						try
-						{
-							block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, this.blockID);
-						}
-						catch (Exception e)
-						{
-							ElectricExpansion.EELogger.severe("Failed to update switch wire");
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-		}
-	}
+	/*
+	 * private void updateWireSwitch(World world, int x, int y, int z) { TileEntityInsulatedWire
+	 * tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
+	 * 
+	 * if (!world.isRemote && tileEntity != null) {
+	 * 
+	 * if (world.getBlockTileEntity(x + 1, y, z) instanceof TileEntityInsulatedWire) {
+	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.EAST)); }
+	 * 
+	 * if (world.getBlockTileEntity(x - 1, y, z) instanceof TileEntityInsulatedWire) {
+	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.WEST)); }
+	 * 
+	 * if (world.getBlockTileEntity(x, y + 1, z) instanceof TileEntityInsulatedWire) {
+	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UP)); }
+	 * 
+	 * if (world.getBlockTileEntity(x, y - 1, z) instanceof TileEntityInsulatedWire) {
+	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.DOWN)); }
+	 * 
+	 * if (world.getBlockTileEntity(x, y, z + 1) instanceof TileEntityInsulatedWire) {
+	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.EAST)); }
+	 * 
+	 * if (world.getBlockTileEntity(x, y, z - 1) instanceof TileEntityInsulatedWire)
+	 * 
+	 * { ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN,
+	 * ForgeDirection.EAST)); }
+	 * 
+	 * else { ElectricityConnections.registerConnector(tileEntity,
+	 * EnumSet.of(ForgeDirection.UNKNOWN)); }
+	 * 
+	 * for (int i = 0; i < 6; i++) { ForgeDirection direction = ForgeDirection.getOrientation(i);
+	 * 
+	 * Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY,
+	 * z + direction.offsetZ)];
+	 * 
+	 * if (block != null) { if (block.blockID != this.blockID) { try {
+	 * block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z +
+	 * direction.offsetZ, this.blockID); } catch (Exception e) {
+	 * ElectricExpansion.EELogger.severe("Failed to update switch wire"); e.printStackTrace(); } } }
+	 * }
+	 * 
+	 * } }
+	 */
 
 }
