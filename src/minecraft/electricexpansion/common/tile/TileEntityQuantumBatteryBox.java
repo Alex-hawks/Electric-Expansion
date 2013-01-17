@@ -332,38 +332,6 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
-	/**
-	 * COMPUTERCRAFT FUNCTIONS
-	 */
-
-	@Override
-	public String getType()
-	{
-		return "BatteryBox";
-	}
-
-	@Override
-	public String[] getMethodNames()
-	{
-		return new String[] { "getVoltage", "getJoules", "isFull" };
-	}
-
-	@Override
-	public boolean canAttachToSide(int side)
-	{
-		return true;
-	}
-
-	@Override
-	public void attach(IComputerAccess computer)
-	{
-	}
-
-	@Override
-	public void detach(IComputerAccess computer)
-	{
-	}
-
 	@Override
 	public byte getFrequency()
 	{
@@ -407,15 +375,47 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		return owningPlayer;
 	}
 
+	/**
+	 * COMPUTERCRAFT FUNCTIONS
+	 */
+
+	@Override
+	public String getType()
+	{
+		return "BatteryBox";
+	}
+
+	@Override
+	public String[] getMethodNames()
+	{
+		return new String[] { "getVoltage", "isFull", "getJoules", "getFrequency", "setFrequency", "getPlayer" };
+	}
+
+	@Override
+	public boolean canAttachToSide(int side)
+	{
+		return true;
+	}
+
+	@Override
+	public void attach(IComputerAccess computer)
+	{
+	}
+
+	@Override
+	public void detach(IComputerAccess computer)
+	{
+	}
+
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException
 	{
-		final int getWattage = 1;
-		final int isFull = 2;
-		final int getJoules = 3;
-		final int getFrequency = 4;
-		final int setFrequency = 5;
-		final int getPlayer = 6;
+		final int getVoltage = 0;
+		final int isFull = 1;
+		final int getJoules = 2;
+		final int getFrequency = 3;
+		final int setFrequency = 4;
+		final int getPlayer = 5;
 		int arg0 = 0;
 		try
 		{
@@ -430,8 +430,8 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		{
 			switch (method)
 			{
-				case getWattage:
-					return new Object[] { ElectricInfo.getWatts(getJoules((Object) null)) };
+				case getVoltage:
+					return new Object[] { getVoltage() };
 				case getJoules:
 					return new Object[] { getJoules() };
 				case getFrequency:
