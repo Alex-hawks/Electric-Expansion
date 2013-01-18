@@ -22,7 +22,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	 * 14 - orange 15 - white
 	 */
 
-	public byte colorbyte;
+	public byte colorByte = -1;
 
 	// everything is in the helper class.
 	// this class MUST remain existent...
@@ -48,8 +48,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 
 				if (id == 0)
 				{
-					this.colorbyte = dataStream.readByte();
-					System.out.println("Recieved Dye Color Packet! " + this.colorbyte);
+					this.colorByte = dataStream.readByte();
 				}
 			}
 			catch (Exception e)
@@ -64,7 +63,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
-		this.colorbyte = nbt.getByte("colorByte");
+		this.colorByte = nbt.getByte("colorByte");
 
 	}
 
@@ -72,13 +71,31 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	public void writeToNBT(NBTTagCompound nbt)
 	{
 		super.writeToNBT(nbt);
-		nbt.setByte("colorByte", this.colorbyte);
+		nbt.setByte("colorByte", this.colorByte);
 	}
 
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorbyte);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorByte);
+	}
+	
+	@Override
+	public void updateEntity()
+	{
+		super.updateEntity();
+
+		if (!this.worldObj.isRemote)
+		{
+			if (this.ticks % 15 == 0)
+			{
+				if (this.colorByte != -1)
+				{
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 0, this.colorByte), this.worldObj, new Vector3(this), 12);
+				}
+			}
+		}
+
 	}
 
 }

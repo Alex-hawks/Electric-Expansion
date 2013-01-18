@@ -101,13 +101,11 @@ public class BlockInsulatedWire extends BlockConductor
 
 					int dyeColor = par5EntityPlayer.inventory.getCurrentItem().getItemDamageForDisplay();
 
-					tileEntity.colorbyte = (byte) dyeColor;
+					tileEntity.colorByte = (byte) dyeColor;
 
 					par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory.getCurrentItem().stackSize - 1;
 
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colorbyte));
-
-					System.out.println("Sending Dye Color to Clients!");
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colorByte));
 
 					// this.updateWireSwitch(par1World, par2, par3, par4);
 
@@ -117,7 +115,7 @@ public class BlockInsulatedWire extends BlockConductor
 
 			}
 
-			System.out.println("Current wire color: " + tileEntity.colorbyte);
+			System.out.println("Current wire color: " + tileEntity.colorByte);
 
 		}
 
