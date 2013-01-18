@@ -1,5 +1,8 @@
 package electricexpansion.common.cables;
 
+import universalelectricity.core.electricity.Electricity;
+import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.PacketManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,6 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -79,7 +84,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	{
 		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorByte);
 	}
-	
+
 	@Override
 	public void updateEntity()
 	{

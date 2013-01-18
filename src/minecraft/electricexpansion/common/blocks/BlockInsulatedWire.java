@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.network.PacketManager;
@@ -83,13 +84,30 @@ public class BlockInsulatedWire extends BlockConductor
 			par3List.add(new ItemStack(par1, 1, var4));
 	}
 
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z)
+	{
+		super.onBlockAdded(world, x, y, z);
+
+		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+
+		if (tileEntity != null)
+		{
+			if (tileEntity instanceof IConductor)
+			{
+				((IConductor) tileEntity).refreshConnectedBlocks();
+			}
+		}
+
+	}
+
 	/**
 	 * Called when the block is right clicked by the player
 	 */
 	@Override
-	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
-		TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) par1World.getBlockTileEntity(par2, par3, par4);
+		TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) par1World.getBlockTileEntity(x, y, z);
 
 		if (!par1World.isRemote)
 		{
@@ -107,7 +125,7 @@ public class BlockInsulatedWire extends BlockConductor
 
 					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colorByte));
 
-					// this.updateWireSwitch(par1World, par2, par3, par4);
+					((IConductor) tileEntity).refreshConnectedBlocks();
 
 					return true;
 
@@ -122,55 +140,5 @@ public class BlockInsulatedWire extends BlockConductor
 		return false;
 
 	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int par5)
-	{
-		super.onNeighborBlockChange(world, x, y, z, par5);
-		// this.updateWireSwitch(world, x, y, z);
-	}
-
-	/*
-	 * private void updateWireSwitch(World world, int x, int y, int z) { TileEntityInsulatedWire
-	 * tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
-	 * 
-	 * if (!world.isRemote && tileEntity != null) {
-	 * 
-	 * if (world.getBlockTileEntity(x + 1, y, z) instanceof TileEntityInsulatedWire) {
-	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.EAST)); }
-	 * 
-	 * if (world.getBlockTileEntity(x - 1, y, z) instanceof TileEntityInsulatedWire) {
-	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.WEST)); }
-	 * 
-	 * if (world.getBlockTileEntity(x, y + 1, z) instanceof TileEntityInsulatedWire) {
-	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.UP)); }
-	 * 
-	 * if (world.getBlockTileEntity(x, y - 1, z) instanceof TileEntityInsulatedWire) {
-	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.DOWN)); }
-	 * 
-	 * if (world.getBlockTileEntity(x, y, z + 1) instanceof TileEntityInsulatedWire) {
-	 * ElectricityConnections.registerConnector(tileEntity, EnumSet.of(ForgeDirection.EAST)); }
-	 * 
-	 * if (world.getBlockTileEntity(x, y, z - 1) instanceof TileEntityInsulatedWire)
-	 * 
-	 * { ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN,
-	 * ForgeDirection.EAST)); }
-	 * 
-	 * else { ElectricityConnections.registerConnector(tileEntity,
-	 * EnumSet.of(ForgeDirection.UNKNOWN)); }
-	 * 
-	 * for (int i = 0; i < 6; i++) { ForgeDirection direction = ForgeDirection.getOrientation(i);
-	 * 
-	 * Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY,
-	 * z + direction.offsetZ)];
-	 * 
-	 * if (block != null) { if (block.blockID != this.blockID) { try {
-	 * block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z +
-	 * direction.offsetZ, this.blockID); } catch (Exception e) {
-	 * ElectricExpansion.EELogger.severe("Failed to update switch wire"); e.printStackTrace(); } } }
-	 * }
-	 * 
-	 * } }
-	 */
 
 }

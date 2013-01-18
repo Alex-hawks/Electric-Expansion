@@ -42,11 +42,12 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	@Override
 	public double getMaxAmps()
 	{
-		//Amps, not Volts or Watts
+		// Amps, not Volts or Watts
 		int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
 		if (meta < EnumWireMaterial.values().length - 1)
 			return EnumWireMaterial.values()[meta].maxAmps;
-		else return EnumWireMaterial.UNKNOWN.maxAmps;
+		else
+			return EnumWireMaterial.UNKNOWN.maxAmps;
 	}
 
 	@Override
@@ -60,7 +61,8 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	{
 		if (metadata < EnumWireMaterial.values().length - 1)
 			return EnumWireMaterial.values()[metadata];
-		else return EnumWireMaterial.UNKNOWN;
+		else
+			return EnumWireMaterial.UNKNOWN;
 	}
 
 	@Override
@@ -92,30 +94,50 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	{
 		if (!this.worldObj.isRemote)
 		{
-			if (tileEntity instanceof IAdvancedConductor)
+
+			if (tileEntity instanceof TileEntityInsulatedWire)
+			{
+				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
+
+				if (tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1)
+				{
+					if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
+					{
+						this.connectedBlocks[side.ordinal()] = tileEntity;
+						this.visuallyConnected[side.ordinal()] = true;
+
+						if (tileEntity instanceof IConductor)
+						{
+							Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+						}
+
+						return;
+
+					}
+				}
+			}
+
+			else if (tileEntity instanceof IAdvancedConductor)
 			{
 				IAdvancedConductor tileEntityWire = (IAdvancedConductor) tileEntity;
 
 				{
 
-					if (tileEntity != null && tileEntityWire.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
+					if (tileEntityWire.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
 					{
-						if (tileEntity instanceof TileEntityInsulatedWire)
+
+						if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
 						{
-							TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
+							this.connectedBlocks[side.ordinal()] = tileEntity;
+							this.visuallyConnected[side.ordinal()] = true;
 
-							 if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
-								{
-									this.connectedBlocks[side.ordinal()] = tileEntity;
-									this.visuallyConnected[side.ordinal()] = true;
+							if (tileEntity instanceof IConductor)
+							{
+								Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+							}
 
-									if (tileEntity instanceof IConductor)
-									{
-										Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
-									}
+							return;
 
-									return;
-								}
 						}
 
 						else if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
@@ -176,8 +198,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			{
 				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
 
-				if (tileEntity != null && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
-
+				if (tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1)
 				{
 					if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
 					{
@@ -191,6 +212,32 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 
 						return;
 					}
+
+				}
+
+				this.connectedBlocks[side.ordinal()] = null;
+				this.visuallyConnected[side.ordinal()] = false;
+			}
+
+			else if (tileEntity instanceof IAdvancedConductor)
+			{
+				IAdvancedConductor tileEntityWire = (IAdvancedConductor) tileEntity;
+
+				if (tileEntityWire.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(getBlockMetadata()))
+				{
+					if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
+					{
+						this.connectedBlocks[side.ordinal()] = tileEntity;
+						this.visuallyConnected[side.ordinal()] = true;
+
+						if (tileEntity instanceof IConductor)
+						{
+							Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
+						}
+
+						return;
+					}
+
 				}
 
 				this.connectedBlocks[side.ordinal()] = null;
@@ -198,6 +245,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 			}
 
 		}
+
 		else
 		{
 			if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
