@@ -43,51 +43,8 @@ public class BlockLogisticsWire extends BlockConductor
 	public void onBlockAdded(World world, int x, int y, int z)
 	{
 		super.onBlockAdded(world, x, y, z);
-		this.updateWireSwitch(world, x, y, z);
 	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int par5)
-	{
-		super.onNeighborBlockChange(world, x, y, z, par5);
-		this.updateWireSwitch(world, x, y, z);
-	}
-
-	private void updateWireSwitch(World world, int x, int y, int z)
-	{
-		TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) world.getBlockTileEntity(x, y, z);
-
-		if (!world.isRemote && tileEntity != null)
-		{
-
-			ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
-
-			for (int i = 0; i < 6; i++)
-			{
-				ForgeDirection direction = ForgeDirection.getOrientation(i);
-
-				Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)];
-
-				if (block != null)
-				{
-					if (block.blockID != this.blockID)
-					{
-						try
-						{
-							block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, this.blockID);
-						}
-						catch (Exception e)
-						{
-							FMLLog.severe("Failed to update switch wire");
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-		}
-	}
-
+	
 	@Override
 	public boolean isOpaqueCube()
 	{

@@ -96,6 +96,7 @@ public class BlockInsulatedWire extends BlockConductor
 			if (tileEntity instanceof IConductor)
 			{
 				((IConductor) tileEntity).refreshConnectedBlocks();
+				this.updateWireSwitch(world, x, y, z);
 			}
 		}
 
@@ -127,13 +128,13 @@ public class BlockInsulatedWire extends BlockConductor
 
 					((IConductor) tileEntity).refreshConnectedBlocks();
 
+					this.updateWireSwitch(par1World, x, y, z);
+
 					return true;
 
 				}
 
 			}
-
-			System.out.println("Current wire color: " + tileEntity.colorByte);
 
 		}
 
@@ -141,4 +142,47 @@ public class BlockInsulatedWire extends BlockConductor
 
 	}
 
+	private void updateWireSwitch(World world, int x, int y, int z)
+	{
+		TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
+
+		TileEntity tileEntity1;
+		
+		if (!world.isRemote && tileEntity != null)
+		{
+
+			for (byte i = 0; i < 6; i++)
+			{
+				switch (i)
+				{
+					case 0:
+						tileEntity1 = world.getBlockTileEntity(x + 1, y, z);
+						break;
+					case 1:
+						tileEntity1 = world.getBlockTileEntity(x - 1, y, z);
+						break;
+					case 2:
+						tileEntity1 = world.getBlockTileEntity(x, y + 1, z);
+						break;
+					case 3:
+						tileEntity1 = world.getBlockTileEntity(x, y - 1, z);
+						break;
+					case 4:
+						tileEntity1 = world.getBlockTileEntity(x, y, z + 1);
+						break;
+					case 5:
+						tileEntity1 = world.getBlockTileEntity(x, y, z - 1);
+						break;
+					default:
+						tileEntity1 = world.getBlockTileEntity(x, y, z);
+				}
+				
+				if(tileEntity1 instanceof IConductor)
+				{
+					((IConductor) tileEntity1).refreshConnectedBlocks();
+				}
+			}
+
+		}
+	}
 }
