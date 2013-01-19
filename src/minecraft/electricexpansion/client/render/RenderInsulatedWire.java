@@ -104,10 +104,10 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				}
 			}
 		}
-		
+
 		TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
 		boolean[] connectedSides = tileEntity.visuallyConnected;
-	
+
 		if (textureToUse != null)
 		{
 			bindTextureByName(textureToUse);
@@ -116,7 +116,6 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GL11.glScalef(1.0F, -1F, -1F);
-
 
 		if (tileEntity instanceof TileEntityInsulatedWire || tileEntity instanceof TileEntityLogisticsWire)
 		{
@@ -178,15 +177,71 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		}
 		model.renderMiddle();
 		GL11.glPopMatrix();
-		
+
 		if (tileEntity instanceof TileEntityInsulatedWire)
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 			GL11.glScalef(1.0F, -1F, -1F);
-			
+
 			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "WirePaintOverlay.png");
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1f);
+
+			byte colorByte = ((TileEntityInsulatedWire) tileEntity).colorByte;
+
+			switch (colorByte)
+			{
+				case -1:
+					GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.8f);
+					break;
+				case 0:
+					GL11.glColor4f(0.1F, 0.1F, 0.1F, 1f);
+					break;
+				case 1:
+					GL11.glColor4f(1F, 0F, 0F, 1f);
+					break;
+				case 2:
+					GL11.glColor4f(0F, 0.2F, 0F, 1f);
+					break;
+				case 3:
+					GL11.glColor4f(0.2F, 0F, 0F, 1f);
+					break;
+				case 4:
+					GL11.glColor4f(0F, 0F, 1.0F, 1f);
+					break;
+				case 5:
+					GL11.glColor4f(0.6F, 0F, 0.4F, 1f);
+					break;
+				case 6:
+					GL11.glColor4f(0.2F, 0.8F, 1.0F, 1f);
+					break;
+				case 7:
+					GL11.glColor4f(0.6F, 0.6F, 0.6F, 1f);
+					break;
+				case 8:
+					GL11.glColor4f(0.4F, 0.4F, 0.4F, 1f);
+					break;
+				case 9:
+					GL11.glColor4f(1.0F, 0.2F, 0.6F, 1f);
+					break;
+				case 10:
+					GL11.glColor4f(0.0F, 1F, 0.0F, 0.2f);
+					break;
+				case 11:
+					GL11.glColor4f(1.0F, 1.0F, 0F, 1f);
+					break;
+				case 12:
+					GL11.glColor4f(0.3F, 0.3F, 0.8F, 1f);
+					break;
+				case 13:
+					GL11.glColor4f(0.8F, 0.2F, 0.4F, 1f);
+					break;
+				case 14:
+					GL11.glColor4f(0.8F, 0.3F, 0F, 1f);
+					break;
+				case 15:
+					GL11.glColor4f(1F, 1F, 1F, 1f);
+					break;
+			}
 
 			if (connectedSides[0])
 			{
@@ -212,17 +267,17 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			{
 				model.renderRight();
 			}
-			
+
 			model.renderMiddle();
 			GL11.glPopMatrix();
 		}
-		
+
 		else
 		{
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 			GL11.glScalef(1.0F, -1F, -1F);
-			
+
 			bindTextureByName(ElectricExpansion.TEXTURE_PATH + "WirePaintOverlay.png");
 
 			if (connectedSides[0])
@@ -249,7 +304,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			{
 				model.renderRight();
 			}
-			
+
 			model.renderMiddle();
 			GL11.glPopMatrix();
 		}
