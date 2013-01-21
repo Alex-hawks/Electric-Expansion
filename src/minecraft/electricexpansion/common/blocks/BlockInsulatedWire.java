@@ -1,9 +1,7 @@
 package electricexpansion.common.blocks;
 
-import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,20 +9,13 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.network.PacketManager;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
-import electricexpansion.common.cables.TileEntityLogisticsWire;
-import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.misc.EETab;
 
 public class BlockInsulatedWire extends BlockConductor
@@ -124,7 +115,7 @@ public class BlockInsulatedWire extends BlockConductor
 
 					par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory.getCurrentItem().stackSize - 1;
 
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colorByte));
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 0, tileEntity.colorByte));
 
 					((IConductor) tileEntity).refreshConnectedBlocks();
 

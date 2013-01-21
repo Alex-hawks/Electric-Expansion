@@ -169,11 +169,17 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityReceiver 
 
 		// Energy Loss
 		this.setJoules(this.joules - 0.0005);
-
+		
+		byte ticks = 0;
+		
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			this.ticks++;
+
+			if (ticks == 20)
 			{
+				ticks = 0;
+
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 			}
 		}

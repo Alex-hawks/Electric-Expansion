@@ -55,7 +55,7 @@ public class GuiLogisticsWire extends GuiScreen
 	{
 		super.onGuiClosed();
 
-		PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) 7, false));
+		PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) 7, false));
 	}
 
 	public void actionPerformed(GuiButton button)
@@ -64,15 +64,15 @@ public class GuiLogisticsWire extends GuiScreen
 		{
 			case 0:
 				this.tileEntity.buttonStatus0 = !this.tileEntity.buttonStatus0;
-				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) -1, tileEntity.buttonStatus0));
+				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) -1, tileEntity.buttonStatus0));
 				break;
 			case 1:
 				this.tileEntity.buttonStatus1 = !this.tileEntity.buttonStatus1;
-				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) 0, tileEntity.buttonStatus1));
+				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) 0, tileEntity.buttonStatus1));
 				break;
 			case 2:
 				this.tileEntity.buttonStatus2 = !this.tileEntity.buttonStatus2;
-				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (int) 1, tileEntity.buttonStatus2));
+				PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) 1, tileEntity.buttonStatus2));
 				break;
 		}
 	}

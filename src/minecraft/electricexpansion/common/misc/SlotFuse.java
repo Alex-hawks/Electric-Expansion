@@ -1,9 +1,9 @@
 package electricexpansion.common.misc;
 
-import electricexpansion.api.IItemFuse;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import electricexpansion.api.IItemFuse;
 
 /**
  * This slot should be used by any container that needs the slot for an electric items only.

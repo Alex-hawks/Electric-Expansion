@@ -1,9 +1,7 @@
 package electricexpansion.common.blocks;
 
-import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,12 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -104,12 +100,12 @@ public class BlockLogisticsWire extends BlockConductor
 
 		if (!par1World.isRemote)
 		{
-			PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
+			PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
 
 		}
 		else
 		{
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 7, true));
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 7, true));
 
 			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
 			return true;

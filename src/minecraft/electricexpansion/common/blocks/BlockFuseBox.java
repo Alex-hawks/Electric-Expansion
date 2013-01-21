@@ -5,7 +5,6 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
@@ -20,7 +19,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityFuseBox;
-import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockFuseBox extends BlockMachine
 {

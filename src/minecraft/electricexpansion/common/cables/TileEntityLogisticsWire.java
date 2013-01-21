@@ -33,7 +33,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 		{
 			try
 			{
-				int id = dataStream.readInt();
+				byte id = dataStream.readByte();
 
 				if (id == 5)
 				{
@@ -176,9 +176,11 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(this.channel, this, (int) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
+		return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
 	}
 
+	private byte tick = 0;
+	
 	@Override
 	public void updateEntity()
 	{
@@ -186,8 +188,12 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 15 == 0)
+			this.tick++;
+
+			if (tick == 20)
 			{
+				tick = 0;
+				
 				if (this.getNetwork().getProduced().getWatts() > 0)
 				{
 					this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, ElectricExpansion.blockLogisticsWire.blockID);

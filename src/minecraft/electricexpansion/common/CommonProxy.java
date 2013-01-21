@@ -15,8 +15,8 @@ import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
-import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityMultimeter;
+import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
 

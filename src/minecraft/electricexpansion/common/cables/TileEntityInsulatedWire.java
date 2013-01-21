@@ -1,17 +1,12 @@
 package electricexpansion.common.cables;
 
-import universalelectricity.core.electricity.Electricity;
-import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.network.PacketManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.vector.Vector3;
+import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -39,7 +34,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 		{
 			try
 			{
-				int id = dataStream.readInt();
+				byte id = dataStream.readByte();
 
 				if (id == 1)
 				{
@@ -82,8 +77,10 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorByte);
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (byte) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorByte);
 	}
+
+	public byte tick = 0;
 
 	@Override
 	public void updateEntity()
@@ -92,15 +89,18 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 15 == 0)
+			this.tick++;
+
+			if (tick == 20)
 			{
+				tick = 0;
+
 				if (this.colorByte != -1)
 				{
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 0, this.colorByte), this.worldObj, new Vector3(this), 12);
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (byte) 0, this.colorByte), this.worldObj, new Vector3(this), 12);
 				}
 			}
 		}
 
 	}
-
 }
