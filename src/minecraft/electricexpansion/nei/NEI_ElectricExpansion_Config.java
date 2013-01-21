@@ -1,4 +1,4 @@
-/*package electricexpansion.nei;
+package electricexpansion.nei;
 
 import codechicken.nei.api.IConfigureNEI;
 import codechicken.nei.api.API;
@@ -20,4 +20,3 @@ public class NEI_ElectricExpansion_Config implements IConfigureNEI {
 		return "(1.0)";
 	}
 }
-*/

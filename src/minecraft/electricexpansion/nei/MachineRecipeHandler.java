@@ -1,19 +1,31 @@
-/*package electricexpansion.nei;
+package electricexpansion.nei;
 
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.forge.GuiContainerManager;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
+
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Random;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
+
+import electricexpansion.common.ElectricExpansion;
+
+import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricInfo.ElectricUnit;
 
 public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 {
@@ -23,6 +35,8 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 		public ArrayList<PositionedStack> fuels;
 		public PositionedStack output;
 		int[] outputA;
+
+		int energy;
 
 		public PositionedStack getIngredient()
 		{
@@ -45,6 +59,8 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 			this.input = new PositionedStack(recipe.getKey(), 50, 14);
 
 			this.outputA = recipe.getValue();
+
+			this.energy = this.outputA[3] * 500;
 
 			ItemStack outputIS = new ItemStack(outputA[0], outputA[1], outputA[2]);
 
@@ -76,11 +92,26 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 		guimanager.drawTexturedModalRect(20, 0, 25, 11, 120, 65);
 	}
 
-	public void drawExtras(GuiContainerManager gui, int recipe)
+	@Override
+	public void drawExtras(GuiContainerManager guimanager, int i)
 	{
-		CachedBinaryRecipe recipeA = (CachedBinaryRecipe) this.arecipes.get(recipe);
+		Integer time = ((CachedBinaryRecipe) this.arecipes.get(i)).energy;
+		
+		//Fix to weird wool not showing watts
+		if (((CachedBinaryRecipe) this.arecipes.get(i)).outputA[0] == Item.silk.itemID)
+		{
+			time = 300 * 500;
+		}
+		
+		//Fix to weird supercondcuctor not showing watts
+		if (((CachedBinaryRecipe) this.arecipes.get(i)).outputA[0] == ElectricExpansion.blockRawWire.blockID && ((CachedBinaryRecipe) this.arecipes.get(i)).outputA[2] == 4)
+		{
+			time = 24000 * 500;
 
-		gui.drawTextCentered(Integer.toString(recipeA.outputA[3]), 110, 9, -8355712, false);
+		}
+
+		guimanager.drawText(72, 35, "Energy Needed:");
+		guimanager.drawText(82, 45, ElectricInfo.getDisplay((double) time, ElectricUnit.WATT));
 	}
 
 	public void loadTransferRects()
@@ -129,4 +160,4 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 			}
 		}
 	}
-}*/
+}

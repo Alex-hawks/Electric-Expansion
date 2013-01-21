@@ -27,6 +27,13 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 	private int playersUsing = 0;
 
+	@Override
+	public void initiate()
+	{
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
+		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+	}
+	
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		if (this.worldObj.isRemote)
@@ -190,11 +197,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 			if (tick == 20)
 			{
 				tick = 0;
-
-				if (playersUsing >= 1)
-				{
-					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
-				}
 
 				if (this.getNetwork().getProduced().getWatts() > 0)
 				{

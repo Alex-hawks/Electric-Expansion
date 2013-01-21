@@ -94,7 +94,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 3;
-	public static final int REVISION_VERSION = 5;
+	public static final int REVISION_VERSION = 6;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -276,6 +276,9 @@ public class ElectricExpansion
 			StartLog("Init");
 		}
 		proxy.init();
+		
+		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
+
 		RecipeRegistery.crafting();
 		RecipeRegistery.drawing();
 		EETab.setItemStack(new ItemStack(this.blockTransformer));
@@ -331,6 +334,7 @@ public class ElectricExpansion
 		{
 			StartLog("postInit");
 		}
+		
 		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("blockLead", this.blockLead);
 		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
@@ -341,7 +345,6 @@ public class ElectricExpansion
 		OreDictionary.registerOre("wireMill", this.blockWireMill);
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
-		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
 
 		OreDictionary.registerOre("copperWire", new ItemStack(blockInsulatedWire, 1, 0));
 		OreDictionary.registerOre("tinWire", new ItemStack(blockInsulatedWire, 1, 1));
