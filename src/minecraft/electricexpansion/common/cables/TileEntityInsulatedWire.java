@@ -28,6 +28,13 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	// this class MUST remain existent...
 
 	@Override
+	public void initiate()
+	{
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
+		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+	}
+	
+	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		if (this.worldObj.isRemote)
@@ -44,6 +51,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 					this.visuallyConnected[3] = dataStream.readBoolean();
 					this.visuallyConnected[4] = dataStream.readBoolean();
 					this.visuallyConnected[5] = dataStream.readBoolean();
+					this.colorByte = dataStream.readByte();
 				}
 
 				if (id == 0)
@@ -80,27 +88,4 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (byte) 1, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.colorByte);
 	}
 
-	public byte tick = 0;
-
-	@Override
-	public void updateEntity()
-	{
-		super.updateEntity();
-
-		if (!this.worldObj.isRemote)
-		{
-			this.tick++;
-
-			if (tick == 20)
-			{
-				tick = 0;
-
-				if (this.colorByte != -1)
-				{
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (byte) 0, this.colorByte), this.worldObj, new Vector3(this), 12);
-				}
-			}
-		}
-
-	}
 }

@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class TileEntityAdvanced extends TileEntity
 {
-	protected byte ticks = 0;
+	protected long ticks = 0;
 
 	@Override
 	public void updateEntity()
@@ -21,9 +21,9 @@ public abstract class TileEntityAdvanced extends TileEntity
 			this.initiate();
 		}
 
-		if (this.ticks == 20)
+		if (this.ticks >= Long.MAX_VALUE)
 		{
-			this.ticks = 0;
+			this.ticks = 1;
 		}
 
 		this.ticks++;

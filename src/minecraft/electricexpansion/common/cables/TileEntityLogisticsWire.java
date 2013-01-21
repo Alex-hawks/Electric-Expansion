@@ -43,10 +43,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 					this.visuallyConnected[3] = dataStream.readBoolean();
 					this.visuallyConnected[4] = dataStream.readBoolean();
 					this.visuallyConnected[5] = dataStream.readBoolean();
-				}
-
-				if (id == 3)
-				{
+					
 					this.buttonStatus0 = dataStream.readBoolean();
 					this.buttonStatus1 = dataStream.readBoolean();
 					this.buttonStatus2 = dataStream.readBoolean();
@@ -63,7 +60,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 		{
 			try
 			{
-				int id = dataStream.readInt();
+				byte id = dataStream.readByte();
 				if (id == -1)
 				{
 					this.buttonStatus0 = dataStream.readBoolean();
@@ -176,11 +173,11 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
+		return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1, this.buttonStatus2);
 	}
 
 	private byte tick = 0;
-	
+
 	@Override
 	public void updateEntity()
 	{
@@ -193,11 +190,15 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 			if (tick == 20)
 			{
 				tick = 0;
-				
+
+				if (playersUsing >= 1)
+				{
+					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				}
+
 				if (this.getNetwork().getProduced().getWatts() > 0)
 				{
 					this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, ElectricExpansion.blockLogisticsWire.blockID);
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (int) 3, this.buttonStatus0, this.buttonStatus1, this.buttonStatus2), this.worldObj, new Vector3(this), 12);
 				}
 			}
 		}
