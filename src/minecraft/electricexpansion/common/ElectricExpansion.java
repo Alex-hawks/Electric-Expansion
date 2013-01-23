@@ -94,7 +94,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 3;
-	public static final int REVISION_VERSION = 6;
+	public static final int REVISION_VERSION = 7;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -181,8 +181,7 @@ public class ElectricExpansion
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
 
-		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable(CONFIG);
-
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, "pickaxe", 2).enable(CONFIG);
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
@@ -228,7 +227,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 2, 3, false);
+		UniversalElectricity.register(this, 1, 2, 4, false);
 
 		if (!configLoaded)
 		{
