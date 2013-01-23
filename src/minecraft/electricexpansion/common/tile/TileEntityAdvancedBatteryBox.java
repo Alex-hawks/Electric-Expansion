@@ -87,6 +87,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 				}
 			}
 
+
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
