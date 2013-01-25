@@ -122,8 +122,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			// the item.
 			if (this.canDraw() && this.drawingTicks > 0)
 			{
-				this.drawingTicks--;
-
 				// When the item is finished
 				// drawing
 				if (this.drawingTicks < 1)
@@ -131,6 +129,8 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 					this.drawItem();
 					this.drawingTicks = 0;
 				}
+
+				this.drawingTicks--;
 				this.joulesStored -= this.WATTS_PER_TICK;
 			}
 			else
@@ -208,11 +208,11 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				String output2 = (String) (WireMillRecipes.stackSizeToOne(outputSlot) + "");
 				int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(), inputSlot.getMaxStackSize()) - WireMillRecipes.drawing().getDrawingResult(inputSlot).stackSize;
 
-				if ((result.equals(output2)) && !(outputSlot.stackSize < maxSpaceForSuccess))
+				if ((result.equals(output2)) && !(outputSlot.stackSize <= maxSpaceForSuccess))
 				{
 					canWork = false;
 				}
-				else if ((result.equals(output2)) && (outputSlot.stackSize < maxSpaceForSuccess))
+				else if ((result.equals(output2)) && (outputSlot.stackSize <= maxSpaceForSuccess))
 				{
 					canWork = true;
 				}
