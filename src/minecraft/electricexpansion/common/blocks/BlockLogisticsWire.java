@@ -1,9 +1,7 @@
 package electricexpansion.common.blocks;
 
-import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,12 +10,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -43,51 +39,8 @@ public class BlockLogisticsWire extends BlockConductor
 	public void onBlockAdded(World world, int x, int y, int z)
 	{
 		super.onBlockAdded(world, x, y, z);
-		this.updateWireSwitch(world, x, y, z);
 	}
-
-	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, int par5)
-	{
-		super.onNeighborBlockChange(world, x, y, z, par5);
-		this.updateWireSwitch(world, x, y, z);
-	}
-
-	private void updateWireSwitch(World world, int x, int y, int z)
-	{
-		TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) world.getBlockTileEntity(x, y, z);
-
-		if (!world.isRemote && tileEntity != null)
-		{
-
-			ElectricityConnections.registerConnector(tileEntity, EnumSet.range(ForgeDirection.DOWN, ForgeDirection.EAST));
-
-			for (int i = 0; i < 6; i++)
-			{
-				ForgeDirection direction = ForgeDirection.getOrientation(i);
-
-				Block block = Block.blocksList[world.getBlockId(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ)];
-
-				if (block != null)
-				{
-					if (block.blockID != this.blockID)
-					{
-						try
-						{
-							block.onNeighborBlockChange(world, x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, this.blockID);
-						}
-						catch (Exception e)
-						{
-							FMLLog.severe("Failed to update switch wire");
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-
-		}
-	}
-
+	
 	@Override
 	public boolean isOpaqueCube()
 	{
@@ -147,12 +100,12 @@ public class BlockLogisticsWire extends BlockConductor
 
 		if (!par1World.isRemote)
 		{
-			PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
+			PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj, new Vector3(tileEntity), 12);
 
 		}
 		else
 		{
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 7, true));
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 7, true));
 
 			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
 			return true;

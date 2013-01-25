@@ -94,7 +94,7 @@ public class ElectricExpansion
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 3;
-	public static final int REVISION_VERSION = 1;
+	public static final int REVISION_VERSION = 7;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -164,7 +164,7 @@ public class ElectricExpansion
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt()).setCreativeTab(EETab.INSTANCE).setBlockName("transformer");
 		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
-		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 255, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
+		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 11, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		// Redstone'd Insulated Cable
 		// Redstone'd Cable Blocks
@@ -180,9 +180,8 @@ public class ElectricExpansion
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
-
-		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 0, 0, 36, 18, 3, "pickaxe", 2).enable(CONFIG);
-
+		
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 36, 30, 2).enable(CONFIG);
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
@@ -228,7 +227,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 2, 3, false);
+		UniversalElectricity.register(this, 1, 2, 4, false);
 
 		if (!configLoaded)
 		{
@@ -276,6 +275,9 @@ public class ElectricExpansion
 			StartLog("Init");
 		}
 		proxy.init();
+		
+		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
+
 		RecipeRegistery.crafting();
 		RecipeRegistery.drawing();
 		EETab.setItemStack(new ItemStack(this.blockTransformer));
@@ -331,6 +333,7 @@ public class ElectricExpansion
 		{
 			StartLog("postInit");
 		}
+		
 		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("blockLead", this.blockLead);
 		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
@@ -341,7 +344,6 @@ public class ElectricExpansion
 		OreDictionary.registerOre("wireMill", this.blockWireMill);
 		OreDictionary.registerOre("multimeter", this.blockMultimeter);
 		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
-		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
 
 		OreDictionary.registerOre("copperWire", new ItemStack(blockInsulatedWire, 1, 0));
 		OreDictionary.registerOre("tinWire", new ItemStack(blockInsulatedWire, 1, 1));

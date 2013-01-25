@@ -6,7 +6,6 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.tile.TileEntityConductor;
 import electricexpansion.api.EnumWireMaterial;
 import electricexpansion.api.EnumWireType;

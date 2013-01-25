@@ -1,4 +1,4 @@
-/*package electricexpansion.nei;
+package electricexpansion.nei;
 
 import java.util.Set;
 import java.util.Map;
@@ -31,7 +31,7 @@ public class WireMillRecipeHandler extends MachineRecipeHandler
 
 	public String getGuiTexture()
 	{
-		return "/electricexpansion/textures/alex_hawks/WireMillGUI.png";
+		return "/electricexpansion/textures/WireMillGUI.png";
 	}
 
 	public String getOverlayIdentifier()
@@ -49,4 +49,4 @@ public class WireMillRecipeHandler extends MachineRecipeHandler
 		return new ItemStack[] {new ItemStack(ElectricExpansion.itemAdvBat, 1), new ItemStack(ElectricExpansion.itemEliteBat, 1)};
 	}
 
-}*/
+}

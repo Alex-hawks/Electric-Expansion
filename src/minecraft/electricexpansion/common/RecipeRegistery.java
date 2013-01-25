@@ -155,7 +155,7 @@ public class RecipeRegistery
 
 				{
 
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!$!", '!', ItemElectric.getUncharged(BCBattery), '@', new ItemStack(blockInsulatedWire, 1, 0), '$', "eliteCircuit" }));
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!$!", '!', ItemElectric.getUncharged(BCBattery), '@', new ItemStack(blockInsulatedWire, 1, 0), '$', "advancedCircuit" }));
 
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object[] { "$!$", "!@!", "#!#", '!', ItemElectric.getUncharged(BCBattery), '@', new ItemStack(blockInsulatedWire, 1, 0), '#', "basicCircuit", '$', "plateBronze" }));
 

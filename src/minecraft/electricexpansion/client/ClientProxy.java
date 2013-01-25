@@ -10,8 +10,8 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.gui.GuiAdvancedBatteryBox;
-import electricexpansion.client.gui.GuiQuantumBatteryBox;
 import electricexpansion.client.gui.GuiLogisticsWire;
+import electricexpansion.client.gui.GuiQuantumBatteryBox;
 import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.client.render.RenderHandler;
 import electricexpansion.client.render.RenderInsulatedWire;
@@ -28,8 +28,8 @@ import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
-import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityMultimeter;
+import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -44,6 +44,10 @@ public class ClientProxy extends CommonProxy
 		RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new RenderHandler());
 
+        MinecraftForgeClient.preloadTexture(ElectricExpansion.BLOCK_FILE);
+        MinecraftForgeClient.preloadTexture(ElectricExpansion.ITEM_FILE);
+
+		
 		// Alex's Tile Entity Renderer registrations
 		ClientRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill", new RenderWireMill());
 		ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());

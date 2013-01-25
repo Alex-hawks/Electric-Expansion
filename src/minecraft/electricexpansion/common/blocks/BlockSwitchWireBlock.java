@@ -13,7 +13,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
-import electricexpansion.common.misc.EETab;
 
 public class BlockSwitchWireBlock extends BlockConductor
 {

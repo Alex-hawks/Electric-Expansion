@@ -1,9 +1,7 @@
 package electricexpansion.common.blocks;
 
-import java.util.EnumSet;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,20 +9,13 @@ import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.implement.IConductor;
-import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.BlockConductor;
 import universalelectricity.prefab.network.PacketManager;
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
-import electricexpansion.common.cables.TileEntityLogisticsWire;
-import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.misc.EETab;
 
 public class BlockInsulatedWire extends BlockConductor
@@ -96,6 +87,7 @@ public class BlockInsulatedWire extends BlockConductor
 			if (tileEntity instanceof IConductor)
 			{
 				((IConductor) tileEntity).refreshConnectedBlocks();
+				this.updateWireSwitch(world, x, y, z);
 			}
 		}
 
@@ -123,9 +115,11 @@ public class BlockInsulatedWire extends BlockConductor
 
 					par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory.getCurrentItem().stackSize - 1;
 
-					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (int) 0, tileEntity.colorByte));
+					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 0, tileEntity.colorByte));
 
 					((IConductor) tileEntity).refreshConnectedBlocks();
+
+					this.updateWireSwitch(par1World, x, y, z);
 
 					return true;
 
@@ -133,12 +127,53 @@ public class BlockInsulatedWire extends BlockConductor
 
 			}
 
-			System.out.println("Current wire color: " + tileEntity.colorByte);
-
 		}
 
 		return false;
 
 	}
 
+	private void updateWireSwitch(World world, int x, int y, int z)
+	{
+		TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
+
+		TileEntity tileEntity1;
+		
+		if (!world.isRemote && tileEntity != null)
+		{
+
+			for (byte i = 0; i < 6; i++)
+			{
+				switch (i)
+				{
+					case 0:
+						tileEntity1 = world.getBlockTileEntity(x + 1, y, z);
+						break;
+					case 1:
+						tileEntity1 = world.getBlockTileEntity(x - 1, y, z);
+						break;
+					case 2:
+						tileEntity1 = world.getBlockTileEntity(x, y + 1, z);
+						break;
+					case 3:
+						tileEntity1 = world.getBlockTileEntity(x, y - 1, z);
+						break;
+					case 4:
+						tileEntity1 = world.getBlockTileEntity(x, y, z + 1);
+						break;
+					case 5:
+						tileEntity1 = world.getBlockTileEntity(x, y, z - 1);
+						break;
+					default:
+						tileEntity1 = world.getBlockTileEntity(x, y, z);
+				}
+				
+				if(tileEntity1 instanceof IConductor)
+				{
+					((IConductor) tileEntity1).refreshConnectedBlocks();
+				}
+			}
+
+		}
+	}
 }
