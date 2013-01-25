@@ -47,7 +47,7 @@ public class RecipeRegistery
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 3), new Object[] { "!#!", "#@#", "!#!", '#', Item.ingotIron, '!', "ingotSilver", '@', Item.eyeOfEnder }));
 		}
 
-		
+
 		if (ElectricExpansion.useLeatherForWires || !ElectricExpansion.useWoolForWires)
 		{
 			// Insulated Wire Recipes (From insulation, and the corresponding Uninsulated Wire)
@@ -134,14 +134,14 @@ public class RecipeRegistery
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 2), new Object[] { new ItemStack(blockInsulatedWire, 1, 2), Block.lever });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 3), new Object[] { new ItemStack(blockInsulatedWire, 1, 3), Block.lever });
 		GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 4), new Object[] { new ItemStack(blockInsulatedWire, 1, 4), Block.lever });
-		
+
 		//Logistics Wire Recipes
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 0), new Object[] { new ItemStack(blockSwitchWire, 1, 0), "advancedCircuit" }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 1), new Object[] { new ItemStack(blockSwitchWire, 1, 1), "advancedCircuit" }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 2), new Object[] { new ItemStack(blockSwitchWire, 1, 2), "advancedCircuit" }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 3), new Object[] { new ItemStack(blockSwitchWire, 1, 3), "advancedCircuit" }));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockSwitchWire, 1, 4), "advancedCircuit" }));
-		
+
 		if (OreDictionary.getOres("battery").size() > 0)
 		{
 
@@ -262,13 +262,28 @@ public class RecipeRegistery
 
 	public static void drawing()
 	{
-		WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 60);
-		WireMillRecipes.addDrawing("ingotTin", new ItemStack(blockRawWire, 3, 1), 60);
-		WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 60);
-		WireMillRecipes.addDrawing(HVIngot, new ItemStack(blockRawWire, 3, 3), 60);
-		WireMillRecipes.addDrawing(new ItemStack(itemParts, 64, 2), new ItemStack(blockRawWire, 64, 4), 24000);
+		if(!ElectricExpansion.debugRecipes)
+		{
+			WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 60);
+			WireMillRecipes.addDrawing("ingotTin", new ItemStack(blockRawWire, 3, 1), 60);
+			WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 60);
+			WireMillRecipes.addDrawing(HVIngot, new ItemStack(blockRawWire, 3, 3), 60);
+			WireMillRecipes.addDrawing(new ItemStack(itemParts, 64, 2), new ItemStack(blockRawWire, 64, 4), 24000);
 
-		for (int i = 0; i < 16; i++)
-			WireMillRecipes.addDrawing(new ItemStack(Block.cloth, 10, i), new ItemStack(Item.silk, 40), 300);
+			for (int i = 0; i < 16; i++)
+				WireMillRecipes.addDrawing(new ItemStack(Block.cloth, 10, i), new ItemStack(Item.silk, 40), 300);
+		}
+		if(ElectricExpansion.debugRecipes)
+		{
+			WireMillRecipes.addDrawing("ingotCopper", new ItemStack(blockRawWire, 3, 0), 20);
+			WireMillRecipes.addDrawing("ingotTin", new ItemStack(blockRawWire, 3, 1), 20);
+			WireMillRecipes.addDrawing("ingotSilver", new ItemStack(blockRawWire, 3, 2), 20);
+			WireMillRecipes.addDrawing(HVIngot, new ItemStack(blockRawWire, 3, 3), 20);
+			WireMillRecipes.addDrawing(new ItemStack(itemParts, 64, 2), new ItemStack(blockRawWire, 64, 4), 20);
+
+			for (int i = 0; i < 16; i++)
+				WireMillRecipes.addDrawing(new ItemStack(Block.cloth, 10, i), new ItemStack(Item.silk, 40), 30);
+		}
+
 	}
 }

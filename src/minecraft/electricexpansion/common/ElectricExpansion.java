@@ -135,6 +135,7 @@ public class ElectricExpansion
 	
 	static boolean useWoolForWires;
 	static boolean useLeatherForWires;
+	static boolean debugRecipes;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -189,6 +190,7 @@ public class ElectricExpansion
 
 		useLeatherForWires = CONFIG.get("General", "Use_Leather_In_Wires", true).getBoolean(true);
 		useWoolForWires = CONFIG.get("General", "Use_Wool_In_Wires", false).getBoolean(false);
+		debugRecipes = CONFIG.get("General", "Debug_Recipes", false).getBoolean(false);
 
 		CONFIG.save();
 
