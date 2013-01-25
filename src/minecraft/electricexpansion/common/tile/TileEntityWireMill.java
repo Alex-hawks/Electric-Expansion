@@ -122,6 +122,8 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			// the item.
 			if (this.canDraw() && this.drawingTicks > 0)
 			{
+				this.drawingTicks--;
+				
 				// When the item is finished
 				// drawing
 				if (this.drawingTicks < 1)
@@ -129,8 +131,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 					this.drawItem();
 					this.drawingTicks = 0;
 				}
-
-				this.drawingTicks--;
 				this.joulesStored -= this.WATTS_PER_TICK;
 			}
 			else
