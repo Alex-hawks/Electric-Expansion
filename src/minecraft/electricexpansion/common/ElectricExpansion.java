@@ -181,7 +181,8 @@ public class ElectricExpansion
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
 		
-		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre), 36, 30, 2).enable(CONFIG);
+		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 70, 20, 4).enable(CONFIG);
+		//silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 10, 30, 36, 2, "pickaxe", 2).enable(CONFIG);
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
@@ -256,6 +257,25 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
 		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
 		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire");
+		
+		OreDictionary.registerOre("ingotLead", this.itemLead);
+		OreDictionary.registerOre("blockLead", this.blockLead);
+		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
+		OreDictionary.registerOre("eliteBattery", this.itemEliteBat);
+		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
+		OreDictionary.registerOre("transformer", this.blockTransformer);
+		OreDictionary.registerOre("coil", this.itemCoil);
+		OreDictionary.registerOre("wireMill", this.blockWireMill);
+		OreDictionary.registerOre("multimeter", this.blockMultimeter);
+		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
+
+		OreDictionary.registerOre("copperWire", new ItemStack(blockInsulatedWire, 1, 0));
+		OreDictionary.registerOre("tinWire", new ItemStack(blockInsulatedWire, 1, 1));
+		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
+		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
+		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
+		
+
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -334,23 +354,6 @@ public class ElectricExpansion
 			StartLog("postInit");
 		}
 		
-		OreDictionary.registerOre("ingotLead", this.itemLead);
-		OreDictionary.registerOre("blockLead", this.blockLead);
-		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
-		OreDictionary.registerOre("eliteBattery", this.itemEliteBat);
-		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
-		OreDictionary.registerOre("transformer", this.blockTransformer);
-		OreDictionary.registerOre("coil", this.itemCoil);
-		OreDictionary.registerOre("wireMill", this.blockWireMill);
-		OreDictionary.registerOre("multimeter", this.blockMultimeter);
-		OreDictionary.registerOre("itemMultimeter", this.itemMultimeter);
-
-		OreDictionary.registerOre("copperWire", new ItemStack(blockInsulatedWire, 1, 0));
-		OreDictionary.registerOre("tinWire", new ItemStack(blockInsulatedWire, 1, 1));
-		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
-		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
-		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
-
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
