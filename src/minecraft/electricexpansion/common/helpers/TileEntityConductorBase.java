@@ -94,7 +94,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 		if (!this.worldObj.isRemote)
 		{
 
-			if (tileEntity instanceof TileEntityInsulatedWire)
+			if (tileEntity instanceof TileEntityInsulatedWire && this instanceof TileEntityInsulatedWire)
 			{
 				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
 
