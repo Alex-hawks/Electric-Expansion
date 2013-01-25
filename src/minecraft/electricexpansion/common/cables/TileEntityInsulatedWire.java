@@ -30,7 +30,7 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 	@Override
 	public void initiate()
 	{
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
+		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockInsulatedWire.blockID);
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 	}
 	
