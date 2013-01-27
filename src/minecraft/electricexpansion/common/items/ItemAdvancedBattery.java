@@ -17,7 +17,7 @@ public class ItemAdvancedBattery extends ItemElectric
 	@Override
 	public double getMaxJoules(Object... data)
 	{
-		return 300000;
+		return 2000000;
 	}
 
 	@Override
