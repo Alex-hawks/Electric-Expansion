@@ -231,7 +231,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '!', Item.ingotGold, '#', "ingotSilver", '@', Item.eyeOfEnder }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '#', Item.ingotGold, '!', "ingotSilver", '@', Item.eyeOfEnder }));
 		FurnaceRecipes.smelting().addSmelting(itemParts.itemID, 1, new ItemStack(itemParts, 4, 2), 0);
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemCoil), new Object[] { "AAA", "ASA", "AAA", 'A', "plateCopper", 'B', new ItemStack(blockRawWire, 1, 0) }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansion.itemCoil), new Object[] { "AAA", "ABA", "AAA", 'B', Item.ingotIron, 'A', new ItemStack(blockInsulatedWire, 1, 0) }));
 
 		// Silver Ore Smelting
 		GameRegistry.addSmelting(ElectricExpansion.blockSilverOre.blockID, new ItemStack(ElectricExpansion.itemSilverIngot), 0.8F);
