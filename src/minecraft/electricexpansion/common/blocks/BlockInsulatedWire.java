@@ -171,6 +171,7 @@ public class BlockInsulatedWire extends BlockConductor
 				if(tileEntity1 instanceof IConductor)
 				{
 					((IConductor) tileEntity1).refreshConnectedBlocks();
+					tileEntity1.worldObj.markBlockForUpdate(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord);
 				}
 			}
 

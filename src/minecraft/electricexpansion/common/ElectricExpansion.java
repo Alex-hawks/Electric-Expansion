@@ -230,7 +230,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 2, 4, false);
+		UniversalElectricity.register(this, 1, 2, 5, false);
 
 		if (!configLoaded)
 		{
