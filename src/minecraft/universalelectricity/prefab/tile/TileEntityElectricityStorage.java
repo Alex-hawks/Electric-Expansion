@@ -16,7 +16,7 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectricity
 	 * The amount of joules stored within this machine. Use get and set functions instead of
 	 * referencing to this variable.
 	 */
-	private double joules = 0;
+	protected double joules = 0;
 
 	public double prevJoules = 0;
 
