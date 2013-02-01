@@ -1,5 +1,12 @@
 package electricexpansion.common.tile;
 
+import ic2.api.Direction;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileSourceEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergySource;
+
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,9 +19,12 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import net.minecraftforge.common.MinecraftForge;
+import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IItemElectric;
 import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.vector.Vector3;
@@ -26,11 +36,12 @@ import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.Loader;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IJouleStorage, IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IJouleStorage, IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
 	private ItemStack[] containingItems = new ItemStack[5];
 
@@ -43,6 +54,25 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
+
+		if (Loader.isModLoaded("IC2"))
+		{
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		}
+	}
+
+	@Override
+	public void invalidate()
+	{
+		super.invalidate();
+
+		if (this.ticks > 0)
+		{
+			if (Loader.isModLoaded("IC2"))
+			{
+				MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			}
+		}
 	}
 
 	@Override
@@ -87,7 +117,6 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 				}
 			}
 
-
 			if (!this.worldObj.isRemote)
 			{
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
@@ -111,6 +140,22 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 						outputNetwork.stopProducing(this);
 					}
 				}
+				
+	
+			}
+			
+			if(this.joules > 0)
+			{
+				if(Loader.isModLoaded("IC2"))
+				{
+					if(joules >= 128 * UniversalElectricity.TO_IC2_RATIO)
+					{
+						EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, 128);
+						MinecraftForge.EVENT_BUS.post(event);
+						setJoules(this.joules - (128 - event.amount));
+					}
+				}
+				
 			}
 		}
 
@@ -124,6 +169,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				
 			}
 		}
 	}
@@ -424,5 +470,65 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	public void detach(IComputerAccess computer)
 	{
 	}
+
+	// IC2 Functions
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
+	{
+		return this.getConsumingSides().contains(direction.toForgeDirection());
+	}
+
+	@Override
+	public boolean isAddedToEnergyNet()
+	{
+		return this.ticks > 0;
+	}
+
+	@Override
+	public int demandsEnergy()
+	{
+		return (int) (this.getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
+	}
+
+	@Override
+	public int injectEnergy(Direction direction, int i)
+	{
+		double givenElectricity = i * UniversalElectricity.IC2_RATIO;
+		double rejects = 0;
+
+		if (givenElectricity > this.getRequest().getWatts())
+		{
+			rejects = givenElectricity - this.getRequest().getWatts();
+		}
+
+		this.onReceive(new ElectricityPack(givenElectricity / this.getVoltage(), this.getVoltage()));
+
+		return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
+	}
+
+	@Override
+	public int getMaxSafeInput()
+	{
+		return 2048;
+	}
+
+	@Override
+	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
+	{
+		return this.getConsumingSides().contains(direction.toForgeDirection().getOpposite());
+	}
+
+	@Override
+	public int getMaxEnergyOutput()
+	{
+		return 100;
+	}
+	
+	  public int sendEnergy(int send)
+	  {
+	    EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
+	    MinecraftForge.EVENT_BUS.post(event);
+	    return event.amount;
+	  }
 
 }

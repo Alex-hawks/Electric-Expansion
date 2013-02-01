@@ -1,5 +1,11 @@
 package electricexpansion.common.tile;
 
+import ic2.api.Direction;
+import ic2.api.energy.event.EnergyTileLoadEvent;
+import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.tile.IEnergySink;
+import ic2.api.energy.tile.IEnergyTile;
+
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +19,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.electricity.ElectricityNetwork;
@@ -26,10 +33,11 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.common.Loader;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage
+public class TileEntityWireMill extends TileEntityElectricityReceiver implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyTile, IEnergySink
 {
 	public final double WATTS_PER_TICK = 500;
 	public final double TRANSFER_LIMIT = 1250;
@@ -47,11 +55,34 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	private int targetID = 0;
 	private int targetMeta = 0;
 
+	private boolean initialized;
+
 	@Override
 	public void initiate()
 	{
 		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2)));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockWireMill.blockID);
+
+		this.initialized = true;
+
+		if (Loader.isModLoaded("IC2"))
+		{
+			MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		}
+	}
+
+	@Override
+	public void invalidate()
+	{
+		super.invalidate();
+
+		if (initialized)
+		{
+			if (Loader.isModLoaded("IC2"))
+			{
+				MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			}
+		}
 	}
 
 	@Override
@@ -123,7 +154,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 			if (this.canDraw() && this.drawingTicks > 0)
 			{
 				this.drawingTicks--;
-				
+
 				// When the item is finished
 				// drawing
 				if (this.drawingTicks < 1)
@@ -429,5 +460,58 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	public double getMaxJoules(Object... data)
 	{
 		return this.maxJoules;
+	}
+
+	@Override
+	public boolean isAddedToEnergyNet()
+	{
+		return initialized;
+	}
+
+	@Override
+	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
+	{
+
+		if (direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() + 2))
+		{
+			return true;
+		}
+
+		else
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public int demandsEnergy()
+	{
+		return (int) ((this.getMaxJoules() - this.joulesStored) * UniversalElectricity.TO_IC2_RATIO);
+	}
+
+	@Override
+	public int injectEnergy(Direction direction, int i)
+	{
+		double givenEnergy = i * UniversalElectricity.IC2_RATIO;
+		double rejects = 0;
+		double neededEnergy = this.getMaxJoules() - this.joulesStored;
+
+		if (givenEnergy < neededEnergy)
+		{
+			this.joulesStored += givenEnergy;
+		}
+		else if (givenEnergy > neededEnergy)
+		{
+			this.joulesStored += neededEnergy;
+			rejects = givenEnergy - neededEnergy;
+		}
+
+		return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
+	}
+
+	@Override
+	public int getMaxSafeInput()
+	{
+		return 2048;
 	}
 }
