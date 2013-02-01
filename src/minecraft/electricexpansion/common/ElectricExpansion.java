@@ -68,6 +68,7 @@ import electricexpansion.common.items.ItemEliteBattery;
 import electricexpansion.common.items.ItemInfiniteBattery;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
+import electricexpansion.common.items.ItemUltimateBattery;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
@@ -123,6 +124,7 @@ public class ElectricExpansion
 	public static Item itemUpgrade;
 	public static ItemElectric itemEliteBat;
 	public static ItemElectric itemAdvBat;
+	public static ItemElectric itemUltimateBat;
 	public static Item itemLead;
 	public static Item itemCoil;
 	public static Item itemMultimeter;
@@ -155,8 +157,7 @@ public class ElectricExpansion
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
-		// blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire",
-		// BLOCK_ID_PREFIX + 5).getInt(), 0);
+		// blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire", BLOCK_ID_PREFIX + 5).getInt(), 0);
 		// +6 public static final Block blockRedstoneWireBlock = new
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
@@ -172,7 +173,7 @@ public class ElectricExpansion
 
 		itemUpgrade = new ItemUpgrade(CONFIG.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0).setItemName("Upgrade");
 		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
-		// 2
+		itemUltimateBat = new ItemUltimateBattery(CONFIG.getItem("Ultimate_Battery", ITEM_ID_PREFIX + 2).getInt());
 		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
 		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(EETab.INSTANCE).setItemName("LeadIngot");
 		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
@@ -276,8 +277,8 @@ public class ElectricExpansion
 		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
 		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
 		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
+		OreDictionary.registerOre("plateGold", new ItemStack(itemParts, 1, 3));		
 		
-
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
