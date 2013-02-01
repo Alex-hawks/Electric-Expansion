@@ -191,7 +191,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			switch (colorByte)
 			{
 				case -1:
-					GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.8f);
+					GL11.glColor4f(0.2F, 0.2F, 0.2F, 1f);
 					break;
 				case 0:
 					GL11.glColor4f(0.1F, 0.1F, 0.1F, 1f);
@@ -224,7 +224,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					GL11.glColor4f(1.0F, 0.2F, 0.6F, 1f);
 					break;
 				case 10:
-					GL11.glColor4f(0.0F, 1F, 0.0F, 0.2f);
+					GL11.glColor4f(0.0F, 1F, 0.0F, 1f);
 					break;
 				case 11:
 					GL11.glColor4f(1.0F, 1.0F, 0F, 1f);

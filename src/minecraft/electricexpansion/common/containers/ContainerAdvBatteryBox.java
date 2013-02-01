@@ -17,8 +17,8 @@ public class ContainerAdvBatteryBox extends Container
 	public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox AdvBatteryBox)
 	{
 		this.tileEntity = AdvBatteryBox;
-		this.addSlotToContainer(new SlotElectricItem(AdvBatteryBox, 0, 11, 24)); // Top slot
-		this.addSlotToContainer(new SlotElectricItem(AdvBatteryBox, 1, 11, 48)); // Bottom slot
+		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, 11, 24)); // Top slot
+		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, 11, 48)); // Bottom slot
 
 		this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 2, 149, 7)); // 1st Upgrade slot
 		this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 3, 149, 31)); // 2nd Upgrade slot

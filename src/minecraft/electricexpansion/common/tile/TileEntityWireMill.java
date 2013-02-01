@@ -1,6 +1,8 @@
 package electricexpansion.common.tile;
 
 import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.IElectricItem;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -132,6 +134,16 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 				{
 					double joulesReceived = electricItem.onUse(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT), this.inventory[0]);
 					this.setJoules(this.joulesStored + joulesReceived);
+				}
+			}
+
+			else if (inventory[0].getItem() instanceof IElectricItem)
+			{
+				IElectricItem item = (IElectricItem) inventory[0].getItem();
+				if (item.canProvideEnergy())
+				{
+					double gain = ElectricItem.discharge(inventory[0], (int) ((int) (getMaxJoules() - getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+					this.setJoules(getJoules() + gain);
 				}
 			}
 		}

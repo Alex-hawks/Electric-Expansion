@@ -1,6 +1,8 @@
 package electricexpansion.common.tile;
 
 import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.IElectricItem;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileSourceEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
@@ -98,6 +100,12 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 						this.setJoules(this.getJoules() - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
 					}
 				}
+
+				else if (this.containingItems[0].getItem() instanceof IElectricItem)
+				{
+					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+					this.setJoules(joules - sent);
+				}
 			}
 
 			/**
@@ -113,6 +121,16 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 					{
 						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
 						this.setJoules(this.getJoules() + joulesReceived);
+					}
+				}
+
+				else if (containingItems[1].getItem() instanceof IElectricItem)
+				{
+					IElectricItem item = (IElectricItem) containingItems[1].getItem();
+					if (item.canProvideEnergy())
+					{
+						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - joules) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+						this.setJoules(joules + gain);
 					}
 				}
 			}
@@ -140,22 +158,21 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 						outputNetwork.stopProducing(this);
 					}
 				}
-				
-	
+
 			}
-			
-			if(this.joules > 0)
+
+			if (this.joules > 0)
 			{
-				if(Loader.isModLoaded("IC2"))
+				if (Loader.isModLoaded("IC2"))
 				{
-					if(joules >= 128 * UniversalElectricity.IC2_RATIO)
+					if (joules >= 128 * UniversalElectricity.IC2_RATIO)
 					{
 						EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, 128);
 						MinecraftForge.EVENT_BUS.post(event);
 						setJoules(this.joules - (128 * UniversalElectricity.IC2_RATIO - event.amount * UniversalElectricity.IC2_RATIO));
 					}
 				}
-				
+
 			}
 		}
 
@@ -169,7 +186,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 			if (this.ticks % 3 == 0 && this.playersUsing > 0)
 			{
 				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
-				
+
 			}
 		}
 	}
@@ -261,9 +278,9 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	@Override
 	public int getStartInventorySide(ForgeDirection side)
 	{
-		if (side == side.DOWN) { return 1; }
+		if (side == ForgeDirection.DOWN) { return 1; }
 
-		if (side == side.UP) { return 1; }
+		if (side == ForgeDirection.UP) { return 1; }
 
 		return 0;
 	}
@@ -523,12 +540,12 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	{
 		return 128;
 	}
-	
-	  public int sendEnergy(int send)
-	  {
-	    EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
-	    MinecraftForge.EVENT_BUS.post(event);
-	    return event.amount;
-	  }
+
+	public int sendEnergy(int send)
+	{
+		EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
+		MinecraftForge.EVENT_BUS.post(event);
+		return event.amount;
+	}
 
 }

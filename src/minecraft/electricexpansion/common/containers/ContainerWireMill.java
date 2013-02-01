@@ -17,7 +17,7 @@ public class ContainerWireMill extends Container
 	public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
 	{
 		this.tileEntity = tileEntity;
-		this.addSlotToContainer(new universalelectricity.prefab.SlotElectricItem(tileEntity, 0, 55, 49)); // Electric
+		this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
 																											// Input
 																											// Slot
 		this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be drawn into wire

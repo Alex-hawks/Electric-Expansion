@@ -140,7 +140,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 			}
 		}
 	}
-	
+
 	/**
 	 * Called right after electricity is transmitted to the TileEntity. Override this if you wish to
 	 * have another effect for a voltage overcharge.
