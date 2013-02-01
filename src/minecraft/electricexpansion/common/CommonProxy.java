@@ -13,8 +13,10 @@ import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
+import electricexpansion.common.containers.ContainerInsulationMachine;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
+import electricexpansion.common.tile.TileEntityInsulatingMachine;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 import electricexpansion.common.tile.TileEntityTransformer;
@@ -24,7 +26,6 @@ public class CommonProxy implements IGuiHandler
 {
 	public void init()
 	{
-		// Alex_hawks' Tile entity registrations
 		GameRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire");
 		GameRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire");
 		GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
@@ -33,14 +34,12 @@ public class CommonProxy implements IGuiHandler
 		GameRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire");
 		GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
 		// GameRegistry.registerTileEntity(TileEntityRedstoneWire.class, "TileEntityRedstoneWire");
-		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class,
-		// "TileEntityRedstoneWireBlock");
-
-		// Mattredsox's Tile entity registrations
+		// GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
 		GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
 		GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
 		GameRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer");
 		GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
+		GameRegistry.registerTileEntity(TileEntityInsulatingMachine.class, "TileEntityInsulatingMachine");
 	}
 
 	@Override
@@ -61,10 +60,10 @@ public class CommonProxy implements IGuiHandler
 					return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvancedBatteryBox) tileEntity));
 				case 2:
 					return new ContainerWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-				case 3:
-					return null;
 				case 4:
 					return new ContainerDistribution(player.inventory, (TileEntityQuantumBatteryBox) tileEntity);
+				case 5:
+					return new ContainerInsulationMachine(player.inventory, (TileEntityInsulatingMachine) tileEntity);
 			}
 		}
 		return null;

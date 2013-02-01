@@ -57,6 +57,12 @@ public class ItemParts extends Item
 			case 4:
 				name = "HVAlloyIngot";
 				break;
+			case 5:
+				name = "GoldPlate";
+				break;
+			case 6:
+				name = "Insulation";
+				break;
 		}
 		return i.getItem().getItemName() + "." + name;
 	}
@@ -64,7 +70,7 @@ public class ItemParts extends Item
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int var4 = 0; var4 < 5; var4++)
+		for (int var4 = 0; var4 < 6; var4++)
 			par3List.add(new ItemStack(this, 1, var4));
 	}
 }

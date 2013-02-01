@@ -45,6 +45,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
+import electricexpansion.common.blocks.BlockInsulationMachine;
 import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockQuantumBatteryBox;
@@ -68,11 +69,12 @@ import electricexpansion.common.items.ItemEliteBattery;
 import electricexpansion.common.items.ItemInfiniteBattery;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
+import electricexpansion.common.items.ItemUltimateBattery;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience", modExclusionList = "BukkitForge")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -118,11 +120,13 @@ public class ElectricExpansion
 	public static Block blockDistribution;
 	public static Block blockLead;
 	public static Block blockSilverOre;
+	public static Block blockInsulationMachine;
 	// Items
 	public static Item itemParts;
 	public static Item itemUpgrade;
 	public static ItemElectric itemEliteBat;
 	public static ItemElectric itemAdvBat;
+	public static ItemElectric itemUltimateBat;
 	public static Item itemLead;
 	public static Item itemCoil;
 	public static Item itemMultimeter;
@@ -155,28 +159,25 @@ public class ElectricExpansion
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
-		// blockRedstoneWire = new BlockRedstoneWire(CONFIG.getBlock("Redstone_Wire",
-		// BLOCK_ID_PREFIX + 5).getInt(), 0);
-		// +6 public static final Block blockRedstoneWireBlock = new
+// +5
+// +6
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
-		// 10
+		blockInsulationMachine = new BlockInsulationMachine(CONFIG.getBlock("Insulation_Refiner", BLOCK_ID_PREFIX + 10).getInt()).setBlockName("insulator");
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt()).setBlockName("wiremill");
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt()).setCreativeTab(EETab.INSTANCE).setBlockName("transformer");
 		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 11, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
-		// Redstone'd Insulated Cable
-		// Redstone'd Cable Blocks
 
 		itemUpgrade = new ItemUpgrade(CONFIG.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0).setItemName("Upgrade");
 		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
-		// 2
+		itemUltimateBat = new ItemUltimateBattery(CONFIG.getItem("Ultimate_Battery", ITEM_ID_PREFIX + 2).getInt());
 		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
 		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(EETab.INSTANCE).setItemName("LeadIngot");
 		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
-		// 6
+// +6
 		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(EETab.INSTANCE).setItemName("coil");
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
@@ -245,6 +246,7 @@ public class ElectricExpansion
 
 		GameRegistry.registerBlock(blockAdvBatteryBox, "blockAdvBatteryBox");
 		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
+		GameRegistry.registerBlock(blockInsulationMachine, "blockInsulationMachine");
 		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
@@ -276,8 +278,8 @@ public class ElectricExpansion
 		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
 		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
 		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
+		OreDictionary.registerOre("plateGold", new ItemStack(itemParts, 1, 3));		
 		
-
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -375,18 +377,22 @@ public class ElectricExpansion
 		}
 	}
 
-	@SideOnly(Side.SERVER)
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
 	{
-		DistributionNetworks.onWorldSave(event.world);
+		DistributionNetworks.onWorldSave(event);
 	}
-
-	@SideOnly(Side.SERVER)
+	
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load event)
 	{
 		DistributionNetworks.onWorldLoad();
+	}
+	
+	@ForgeSubscribe
+	public void onWorldUnload(WorldEvent.Unload event)
+	{
+		DistributionNetworks.onWorldSave(event);
 	}
 
 	public static File[] ListLanguages() 

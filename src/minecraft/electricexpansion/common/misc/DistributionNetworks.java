@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
@@ -68,21 +69,20 @@ public class DistributionNetworks
 	{
 		return maxJoules;
 	}
-
-	@SideOnly(Side.SERVER)
-	public static void onWorldSave(World world)
+	
+	public static void onWorldSave(WorldEvent event)
 	{
 		String folder = "";
 		if (server.isDedicatedServer())
 		{
 			folder = server.getFolderName();
 		}
-		else if (!world.isRemote)
+		else
 		{
 			folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName();
 		}
 
-		if (!world.isRemote)
+		if (!event.world.isRemote)
 		{
 			try
 			{
@@ -127,9 +127,9 @@ public class DistributionNetworks
 		}
 	}
 
-	@SideOnly(Side.SERVER)
 	public static void onWorldLoad()
 	{
+		playerFrequencies.clear();
 		try
 		{
 			for(File playerFile : ListSaves())
@@ -142,7 +142,8 @@ public class DistributionNetworks
 						if (name.endsWith(".dat"))
 							name = name.substring(0, name.length() - 4);
 						
-						for (int i = 0; i < playerFrequencies.get(name).length; i++)
+						playerFrequencies.put(name, new double[128]);
+						for (int i = 0; i < 128; i++)
 						{
 							try
 							{
@@ -161,6 +162,7 @@ public class DistributionNetworks
 		{
 			ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
 			ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
+			e.printStackTrace();
 		}
 	}
 
