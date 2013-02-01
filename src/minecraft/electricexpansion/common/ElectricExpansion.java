@@ -92,7 +92,7 @@ public class ElectricExpansion
 	public static final String ITEM_FILE = TEXTURE_PATH + "items.png";
 	public static final String BLOCK_FILE = TEXTURE_PATH + "blocks.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 3;
