@@ -60,6 +60,9 @@ public class ItemParts extends Item
 			case 5:
 				name = "GoldPlate";
 				break;
+			case 6:
+				name = "Insulation";
+				break;
 		}
 		return i.getItem().getItemName() + "." + name;
 	}
