@@ -148,11 +148,11 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 			{
 				if(Loader.isModLoaded("IC2"))
 				{
-					if(joules >= 128 * UniversalElectricity.TO_IC2_RATIO)
+					if(joules >= 128 * UniversalElectricity.IC2_RATIO)
 					{
 						EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, 128);
 						MinecraftForge.EVENT_BUS.post(event);
-						setJoules(this.joules - (128 - event.amount));
+						setJoules(this.joules - (128 * UniversalElectricity.IC2_RATIO - event.amount * UniversalElectricity.IC2_RATIO));
 					}
 				}
 				
@@ -521,7 +521,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	@Override
 	public int getMaxEnergyOutput()
 	{
-		return 100;
+		return 128;
 	}
 	
 	  public int sendEnergy(int send)
