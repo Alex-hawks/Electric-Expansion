@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.Electricity;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRedstoneProvider;
@@ -25,6 +26,8 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	public boolean buttonStatus1 = false;
 	public boolean buttonStatus2 = false;
 
+	private double networkProduced = 0;
+
 	private int playersUsing = 0;
 
 	@Override
@@ -33,7 +36,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
 		PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
 	}
-	
+
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		if (this.worldObj.isRemote)
@@ -50,7 +53,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 					this.visuallyConnected[3] = dataStream.readBoolean();
 					this.visuallyConnected[4] = dataStream.readBoolean();
 					this.visuallyConnected[5] = dataStream.readBoolean();
-					
+
 					this.buttonStatus0 = dataStream.readBoolean();
 					this.buttonStatus1 = dataStream.readBoolean();
 					this.buttonStatus2 = dataStream.readBoolean();
@@ -192,16 +195,20 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 		if (!this.worldObj.isRemote)
 		{
-			this.tick++;
+
+			tick++;
 
 			if (tick == 20)
 			{
 				tick = 0;
 
-				if (this.getNetwork().getProduced().getWatts() > 0)
-				{
+				if (this.networkProduced == 0 && this.getNetwork().getProduced().getWatts() != 0)
 					this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, ElectricExpansion.blockLogisticsWire.blockID);
-				}
+
+				if (this.networkProduced != 0 && this.getNetwork().getProduced().getWatts() == 0)
+					this.worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, ElectricExpansion.blockLogisticsWire.blockID);
+
+				this.networkProduced = this.getNetwork().getProduced().getWatts();
 			}
 		}
 
