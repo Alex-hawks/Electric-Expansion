@@ -33,6 +33,7 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStopped;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -92,7 +93,7 @@ public class ElectricExpansion
 	public static final String ITEM_FILE = TEXTURE_PATH + "items.png";
 	public static final String BLOCK_FILE = TEXTURE_PATH + "blocks.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US"/*, "pl_PL" */};
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 3;
@@ -140,6 +141,8 @@ public class ElectricExpansion
 	static boolean useWoolForWires;
 	static boolean useLeatherForWires;
 	static boolean debugRecipes;
+	
+	public static DistributionNetworks DistributionNetworksInstance;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
 	public static boolean[] startLogLogged = { false, false, false, false };
@@ -246,7 +249,7 @@ public class ElectricExpansion
 
 		GameRegistry.registerBlock(blockAdvBatteryBox, "blockAdvBatteryBox");
 		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
-		GameRegistry.registerBlock(blockInsulationMachine, "blockInsulationMachine");
+		//GameRegistry.registerBlock(blockInsulationMachine, "blockInsulationMachine");
 		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
@@ -380,19 +383,20 @@ public class ElectricExpansion
 	@ForgeSubscribe
 	public void onWorldSave(WorldEvent.Save event)
 	{
-		DistributionNetworks.onWorldSave(event);
+		DistributionNetworksInstance.onWorldSave(event);
 	}
 	
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load event)
 	{
-		DistributionNetworks.onWorldLoad();
+		DistributionNetworksInstance = new DistributionNetworks();
+		DistributionNetworksInstance.onWorldLoad();
 	}
 	
 	@ForgeSubscribe
 	public void onWorldUnload(WorldEvent.Unload event)
 	{
-		DistributionNetworks.onWorldSave(event);
+		DistributionNetworksInstance.onWorldSave(event);
 	}
 
 	public static File[] ListLanguages() 

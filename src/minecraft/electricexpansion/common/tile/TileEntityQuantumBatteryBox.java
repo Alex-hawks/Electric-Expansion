@@ -259,25 +259,25 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 
 	private void addJoules(double joules)
 	{
-		DistributionNetworks.addJoules(this.owningPlayer, this.frequency, joules);
+		ElectricExpansion.DistributionNetworksInstance.addJoules(this.owningPlayer, this.frequency, joules);
 	}
 
 	@Override
 	public double getJoules(Object... data)
 	{
-		return DistributionNetworks.getJoules(this.owningPlayer, this.frequency);
+		return ElectricExpansion.DistributionNetworksInstance.getJoules(this.owningPlayer, this.frequency);
 	}
 
 	@Override
 	public void removeJoules(double outputWatts)
 	{
-		DistributionNetworks.removeJoules(this.owningPlayer, this.frequency, outputWatts);
+		ElectricExpansion.DistributionNetworksInstance.removeJoules(this.owningPlayer, this.frequency, outputWatts);
 	}
 
 	@Override
 	public void setJoules(double wattHours, Object... data)
 	{
-		DistributionNetworks.setJoules(this.owningPlayer, this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));
+		ElectricExpansion.DistributionNetworksInstance.setJoules(this.owningPlayer, this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));
 	}
 
 	@Override

@@ -87,8 +87,8 @@ public class GuiQuantumBatteryBox extends GuiContainer
 
 		if (this.tileEntity.getJoulesForDisplay() > 0)
 		{
-			int scale = (int) (((double) this.tileEntity.getJoulesForDisplay() / this.tileEntity.getMaxJoules()) * 100);
-			this.drawTexturedModalRect(containerWidth + 59, containerHeight + 51, 0, 169, scale, 5);
+			int scale = (int) (((double) this.tileEntity.getJoulesForDisplay() / this.tileEntity.getMaxJoules()) * 72);
+			this.drawTexturedModalRect(containerWidth + 70, containerHeight + 51, 0, 166, scale, 5);
 		}
 	}
 
