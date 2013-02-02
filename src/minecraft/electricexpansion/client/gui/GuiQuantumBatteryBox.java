@@ -109,6 +109,8 @@ public class GuiQuantumBatteryBox extends GuiContainer
 	protected void keyTyped(char par1, int par2)
 	{
 		super.keyTyped(par1, par2);
+		if(par2 == 28)
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, this.frequency));
 		this.textFieldFrequency.textboxKeyTyped(par1, par2);
 
 		try
