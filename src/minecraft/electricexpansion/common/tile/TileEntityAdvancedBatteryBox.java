@@ -103,8 +103,8 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 
 				else if (this.containingItems[0].getItem() instanceof IElectricItem)
 				{
-					double sent = ElectricItem.charge(containingItems[0], (int) (joules * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-					this.setJoules(joules - sent);
+					double sent = ElectricItem.charge(containingItems[0], (int) (this.getJoules() * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+					this.setJoules(this.getJoules() - sent);
 				}
 			}
 
@@ -129,8 +129,8 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 					IElectricItem item = (IElectricItem) containingItems[1].getItem();
 					if (item.canProvideEnergy())
 					{
-						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - joules) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-						this.setJoules(joules + gain);
+						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+						this.setJoules(this.getJoules() + gain);
 					}
 				}
 			}
@@ -161,15 +161,15 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 
 			}
 
-			if (this.joules > 0)
+			if (this.getJoules() > 0)
 			{
 				if (Loader.isModLoaded("IC2"))
 				{
-					if (joules >= 128 * UniversalElectricity.IC2_RATIO)
+					if (this.getJoules() >= 128 * UniversalElectricity.IC2_RATIO)
 					{
 						EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, 128);
 						MinecraftForge.EVENT_BUS.post(event);
-						setJoules(this.joules - (128 * UniversalElectricity.IC2_RATIO - event.amount * UniversalElectricity.IC2_RATIO));
+						setJoules(this.getJoules() - (128 * UniversalElectricity.IC2_RATIO - event.amount * UniversalElectricity.IC2_RATIO));
 					}
 				}
 

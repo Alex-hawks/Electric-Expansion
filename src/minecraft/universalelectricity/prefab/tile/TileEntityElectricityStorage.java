@@ -16,7 +16,7 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectricity
 	 * The amount of joules stored within this machine. Use get and set functions instead of
 	 * referencing to this variable.
 	 */
-	protected double joules = 0;
+	private double joules = 0;
 
 	public double prevJoules = 0;
 
@@ -56,7 +56,7 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectricity
 	 */
 	public ElectricityPack getRequest()
 	{
-		return new ElectricityPack((this.getMaxJoules() - this.joules) / this.getVoltage(), this.getVoltage());
+		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
 	}
 
 	/**
@@ -79,7 +79,7 @@ public abstract class TileEntityElectricityStorage extends TileEntityElectricity
 			}
 		}
 
-		this.setJoules(Math.ceil(this.getJoules() + electricityPack.getWatts()));
+		this.setJoules(this.getJoules() + electricityPack.getWatts());
 	}
 
 	@Override
