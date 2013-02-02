@@ -93,7 +93,7 @@ public class ElectricExpansion
 	public static final String ITEM_FILE = TEXTURE_PATH + "items.png";
 	public static final String BLOCK_FILE = TEXTURE_PATH + "blocks.png";
 
-	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US"/*, "pl_PL" */};
+	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
 
 	public static final int MAJOR_VERSION = 1;
 	public static final int MINOR_VERSION = 4;
@@ -187,7 +187,6 @@ public class ElectricExpansion
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
 		
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 36, 10, 3).enable(CONFIG);
-		//silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 10, 30, 36, 2, "pickaxe", 2).enable(CONFIG);
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
