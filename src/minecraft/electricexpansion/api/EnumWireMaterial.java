@@ -9,7 +9,7 @@ package electricexpansion.api;
 
 public enum EnumWireMaterial
 {
-	COPPER("Copper", 0.03f, 3, 360), 
+	COPPER("Copper", 0.05f, 3, 360), 
 	TIN("Tin", 0.04f, 2, 60), 
 	SILVER("Silver", 0.02f, 1, 600), 
 	ALUMINUM("Aluminum", 0.1f, 8, 20), 

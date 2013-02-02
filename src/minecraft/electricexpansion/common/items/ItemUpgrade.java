@@ -3,6 +3,7 @@ package electricexpansion.common.items;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import universalelectricity.prefab.modifier.IModifier;
@@ -91,5 +92,39 @@ public class ItemUpgrade extends Item implements IModifier
 		if (itemstack.getItemDamage() == 6) { return 20; }
 
 		return 0;
+	}
+
+	/**
+	 * Allows items to add custom lines of information to the mouseover description. If you want to
+	 * add more information to your item, you can super.addInformation() to keep the electiricty
+	 * info in the item info bar.
+	 */
+	@Override
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
+	{
+		switch (itemstack.getItemDamage())
+		{
+			case 0:
+				par3List.add("\u00a72Increases Capacity by 1 Mj");
+				break;
+			case 1:
+				par3List.add("\u00a72Increases Capacity by 2 Mj");
+				break;
+			case 2:
+				par3List.add("\u00a72Increases Capacity by 3 Mj");
+				break;
+			case 3:
+				par3List.add("\u00a72Increases Capacity by 5 Mj");
+				break;
+			case 4:
+				par3List.add("\u00a72Decreases Voltage by Half");
+				break;
+			case 5:
+				par3List.add("\u00a72Multiplies Voltage by 20");
+				break;
+			case 6:
+				par3List.add("\u00a72Multiplies Input Voltage Acceptance by 20");
+				break;
+		}
 	}
 }
