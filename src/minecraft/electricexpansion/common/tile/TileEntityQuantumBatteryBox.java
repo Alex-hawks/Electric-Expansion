@@ -1,10 +1,5 @@
 package electricexpansion.common.tile;
 
-import ic2.api.Direction;
-import ic2.api.energy.event.EnergyTileSourceEvent;
-import ic2.api.energy.tile.IEnergySink;
-import ic2.api.energy.tile.IEnergySource;
-
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +11,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricInfo;
 import universalelectricity.core.electricity.ElectricityConnections;
@@ -38,7 +32,7 @@ import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
-public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral, IEnergySink, IEnergySource
+public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral
 {
 	private ItemStack[] containingItems = new ItemStack[2];
 	private int playersUsing = 0;
@@ -141,29 +135,6 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		}
 	}
 
-	/**
-	 * Called right after electricity is transmitted to the TileEntity. Override this if you wish to
-	 * have another effect for a voltage overcharge.
-	 * 
-	 * @param electricityPack
-	 */
-	public void onReceive(ElectricityPack electricityPack)
-	{
-		/**
-		 * Creates an explosion if the voltage is too high.
-		 */
-		if (UniversalElectricity.isVoltageSensitive)
-		{
-			if (electricityPack.voltage > this.getVoltage())
-			{
-				this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 1.5f, true);
-				return;
-			}
-		}
-
-		this.addJoules(electricityPack.getWatts());
-	}
-
 	public void sendPacket()
 	{
 		PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj);
@@ -215,15 +186,6 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	public void closeChest()
 	{
 		this.playersUsing--;
-	}
-
-	/**
-	 * Returns the amount of energy being requested this tick. Return an empty ElectricityPack if no
-	 * electricity is desired.
-	 */
-	public ElectricityPack getRequest()
-	{
-		return new ElectricityPack((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getVoltage());
 	}
 
 	@Override
@@ -378,11 +340,6 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 
-	protected EnumSet<ForgeDirection> getConsumingSides()
-	{
-		return EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite());
-	}
-
 	@Override
 	public byte getFrequency()
 	{
@@ -497,65 +454,6 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 		}
 		else
 			return new Object[] { "Please wait for the EMP to run out." };
-	}
-
-	@Override
-	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
-	{
-		return this.getConsumingSides().contains(direction.toForgeDirection());
-	}
-
-	@Override
-	public boolean isAddedToEnergyNet()
-	{
-		return this.ticks > 0;
-	}
-
-	@Override
-	public int demandsEnergy()
-	{
-		return (int) (this.getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
-	}
-
-	@Override
-	public int injectEnergy(Direction direction, int i)
-	{
-		double givenElectricity = i * UniversalElectricity.IC2_RATIO;
-		double rejects = 0;
-
-		if (givenElectricity > this.getRequest().getWatts())
-		{
-			rejects = givenElectricity - this.getRequest().getWatts();
-		}
-
-		this.onReceive(new ElectricityPack(givenElectricity / this.getVoltage(), this.getVoltage()));
-
-		return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
-	}
-
-	@Override
-	public int getMaxSafeInput()
-	{
-		return 2048;
-	}
-
-	@Override
-	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
-	{
-		return this.getConsumingSides().contains(direction.toForgeDirection().getOpposite());
-	}
-
-	@Override
-	public int getMaxEnergyOutput()
-	{
-		return 100;
-	}
-
-	public int sendEnergy(int send)
-	{
-		EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
-		MinecraftForge.EVENT_BUS.post(event);
-		return event.amount;
 	}
 
 }
