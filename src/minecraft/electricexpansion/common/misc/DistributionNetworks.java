@@ -18,13 +18,12 @@ import electricexpansion.common.ElectricExpansion;
 
 public class DistributionNetworks
 {
-	public static DistributionNetworks instance;
-	private static MinecraftServer server = MinecraftServer.getServer();
+	private MinecraftServer server = MinecraftServer.getServer();
 	private static final double maxJoules = 5000000;
 	public static final byte maxFrequencies = (byte) 128;
-	private static Map<String, double[]> playerFrequencies = new HashMap<String, double[]>();
+	private Map<String, double[]> playerFrequencies = new HashMap<String, double[]>();
 
-	public static double getJoules(String player, byte frequency)
+	public double getJoules(String player, byte frequency)
 	{
 		if(player != null)
 		{
@@ -35,7 +34,7 @@ public class DistributionNetworks
 		return 0;
 	}
 
-	public static void setJoules(String player, short frequency, double newJoules)
+	public void setJoules(String player, short frequency, double newJoules)
 	{
 		if(player != null)
 		{
@@ -45,7 +44,7 @@ public class DistributionNetworks
 		}
 	}
 
-	public static void addJoules(String player, short frequency, double addedJoules)
+	public void addJoules(String player, short frequency, double addedJoules)
 	{
 		if(player != null)
 		{
@@ -55,7 +54,7 @@ public class DistributionNetworks
 		}
 	}
 
-	public static void removeJoules(String player, short frequency, double removedJoules)
+	public void removeJoules(String player, short frequency, double removedJoules)
 	{
 		try
 		{
@@ -70,7 +69,7 @@ public class DistributionNetworks
 		return maxJoules;
 	}
 	
-	public static void onWorldSave(WorldEvent event)
+	public void onWorldSave(WorldEvent event)
 	{
 		String folder = "";
 		if (server.isDedicatedServer())
@@ -125,11 +124,12 @@ public class DistributionNetworks
 				ElectricExpansion.EELogger.severe("Failed to save the Quantum Battery Box Electricity Storage Data!");
 			}
 		}
+		if (event instanceof WorldEvent.Unload)
+			playerFrequencies.clear();
 	}
 
-	public static void onWorldLoad()
+	public void onWorldLoad()
 	{
-		playerFrequencies.clear();
 		try
 		{
 			for(File playerFile : ListSaves())
@@ -162,20 +162,26 @@ public class DistributionNetworks
 		{
 			ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
 			ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
-			e.printStackTrace();
 		}
-	}
+/*		Debug code
+		String[] players = new String[playerFrequencies.size()];
+		players = (String[])( playerFrequencies.keySet().toArray( players ) );
+		String playerString = "";
+		for(int i =0; i < players.length; i++)
+			playerString = playerString + ", " + players[i];
+		ElectricExpansion.EELogger.warning(playerString);
+*/	}
 
-	public static File[] ListSaves() 
+	public File[] ListSaves() 
 	{		
 		String folder = "";
 		if (server.isDedicatedServer())
 		{
-			folder = server.getFolderName();
+			folder = server.getFolderName() + File.separator + "ElectricExpansion";
 		}
 		else if (!server.isDedicatedServer())
 		{
-			folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName();
+			folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName() + File.separator + "ElectricExpansion";
 		}
 
 		String files;
