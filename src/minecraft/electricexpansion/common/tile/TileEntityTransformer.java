@@ -110,7 +110,7 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 								newVoltage = actualEnergy.voltage - typeChange;
 							}
 
-							outputNetwork.startProducing(this, inputNetwork.getProduced().getWatts() / newVoltage, newVoltage);
+							outputNetwork.startProducing(this, actualEnergy.getWatts() / newVoltage, newVoltage);
 						}
 						else
 						{
