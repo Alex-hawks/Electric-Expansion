@@ -2,9 +2,10 @@ package universalelectricity.core;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import universalelectricity.core.electricity.Electricity;
-import universalelectricity.core.electricity.ElectricityConnections;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 
@@ -62,6 +63,13 @@ public class UELoader
 	public void onWorldUnload(Unload event)
 	{
 		Electricity.instance = new Electricity();
-		ElectricityConnections.clearAll();
+		Electricity.instance.cleanUpNetworks();
+	}
+
+	@ForgeSubscribe
+	public void onWorldLoad(Load event)
+	{
+		Electricity.instance = new Electricity();
+		Electricity.instance.cleanUpNetworks();
 	}
 }
