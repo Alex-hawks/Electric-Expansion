@@ -416,7 +416,7 @@
 /* 466 */     return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
 /*     */   }
 /*     */ 
-/*     */   public double getVoltage(Object[] data)
+/*     */   public double getVoltage(Object... data)
 /*     */   {
 /* 472 */     return 120.0D;
 /*     */   }
@@ -435,17 +435,17 @@
 /* 489 */     return this.drawingTicks;
 /*     */   }
 /*     */ 
-/*     */   public double getJoules(Object[] data)
+/*     */   public double getJoules(Object... data)
 /*     */   {
 /* 495 */     return this.joulesStored;
 /*     */   }
 /*     */ 
-/*     */   public void setJoules(double joules, Object[] data)
+/*     */   public void setJoules(double joules, Object... data)
 /*     */   {
 /* 501 */     this.joulesStored = joules;
 /*     */   }
 /*     */ 
-/*     */   public double getMaxJoules(Object[] data)
+/*     */   public double getMaxJoules(Object... data)
 /*     */   {
 /* 507 */     return maxJoules;
 /*     */   }

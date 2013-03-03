@@ -389,20 +389,14 @@ public class ElectricExpansion
 			}
 		}
 	}
-	
-/*
-	@ForgeSubscribe
-	public void onWorldLoad(WorldEvent.Load event)
-	{
-		DistributionNetworksInstance = new DistributionNetworks();
-		DistributionNetworksInstance.onWorldLoad();
-	}
 
-	@ForgeSubscribe
-	public void onWorldUnload(WorldEvent.Unload event)
-	{
-		DistributionNetworksInstance.onWorldSave(event);
-	}*/
+	/*
+	 * @ForgeSubscribe public void onWorldLoad(WorldEvent.Load event) { DistributionNetworksInstance
+	 * = new DistributionNetworks(); DistributionNetworksInstance.onWorldLoad(); }
+	 * 
+	 * @ForgeSubscribe public void onWorldUnload(WorldEvent.Unload event) {
+	 * DistributionNetworksInstance.onWorldSave(event); }
+	 */
 
 	public static File[] ListLanguages()
 	{

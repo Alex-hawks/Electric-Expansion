@@ -368,7 +368,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 		/* 410 */return 1;
 	}
 
-	public double getMaxJoules(Object[] data)
+	public double getMaxJoules(Object... data)
 	{
 		/* 416 */int slot1 = 0;
 		int slot2 = 0;
@@ -400,7 +400,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 		/* 443 */return isPoweringTo(side);
 	}
 
-	public double getVoltage(Object[] data)
+	public double getVoltage(Object... data)
 	{
 		/* 450 */return 120.0D * getVoltageModifier("VoltageModifier");
 	}
