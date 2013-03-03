@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
@@ -35,10 +34,12 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -363,6 +364,12 @@ public class ElectricExpansion
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@ServerStarting
+	public void onServerStarting(FMLServerStartingEvent event)
+	{
+		this.DistributionNetworksInstance = new DistributionNetworks();
+	}
+
 	@ForgeSubscribe
 	public void onEntityDropItems(LivingDropsEvent event)
 	{
@@ -382,12 +389,7 @@ public class ElectricExpansion
 			}
 		}
 	}
-
-	@ForgeSubscribe
-	public void onWorldSave(WorldEvent.Save event)
-	{
-		DistributionNetworksInstance.onWorldSave(event);
-	}
+	
 /*
 	@ForgeSubscribe
 	public void onWorldLoad(WorldEvent.Load event)
@@ -395,13 +397,12 @@ public class ElectricExpansion
 		DistributionNetworksInstance = new DistributionNetworks();
 		DistributionNetworksInstance.onWorldLoad();
 	}
-*/
-	
+
 	@ForgeSubscribe
 	public void onWorldUnload(WorldEvent.Unload event)
 	{
 		DistributionNetworksInstance.onWorldSave(event);
-	}
+	}*/
 
 	public static File[] ListLanguages()
 	{

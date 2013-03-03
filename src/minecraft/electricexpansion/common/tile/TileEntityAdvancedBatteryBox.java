@@ -35,6 +35,10 @@ import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
+import buildcraft.api.power.IPowerProvider;
+import buildcraft.api.power.IPowerReceptor;
+import buildcraft.api.power.PowerFramework;
+import buildcraft.api.power.PowerProvider;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -43,18 +47,27 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IJouleStorage, IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IJouleStorage, IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource, IPowerReceptor
 {
 	private ItemStack[] containingItems = new ItemStack[5];
 
 	private boolean isFull = false;
 
 	private int playersUsing = 0;
+	public IPowerProvider powerProvider;
 
-	@Override
+	public TileEntityAdvancedBatteryBox()
+	{
+		if (PowerFramework.currentFramework != null)
+		{
+			this.powerProvider = PowerFramework.currentFramework.createPowerProvider();
+			this.powerProvider.configure(0, 0, 100, 0, (int) (getMaxJoules(new Object[0]) * UniversalElectricity.TO_BC_RATIO));
+		}
+	}
+
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2), ForgeDirection.getOrientation(getBlockMetadata() + 2).getOpposite()));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
 
 		if (Loader.isModLoaded("IC2"))
@@ -63,12 +76,11 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 		}
 	}
 
-	@Override
 	public void invalidate()
 	{
 		super.invalidate();
 
-		if (this.ticks > 0)
+		if (this.ticks > 0L)
 		{
 			if (Loader.isModLoaded("IC2"))
 			{
@@ -77,475 +89,489 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 		}
 	}
 
-	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
 
-		if (!this.isDisabled())
+		if (!isDisabled())
 		{
-			/**
-			 * Recharges the battery box via batteries
-			 */
-			if (this.containingItems[0] != null && this.getJoules() > 0)
+			if (this.powerProvider != null)
 			{
-				if (this.containingItems[0].getItem() instanceof IItemElectric)
-				{
-					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
-
-					if (electricItem.canProduceElectricity())
-					{
-						double ampsToGive = Math.min(ElectricInfo.getAmps(Math.min(electricItem.getMaxJoules(this.containingItems[0]) * 0.005, this.getJoules()), this.getVoltage()), this.getJoules());
-						double joules = electricItem.onReceive(ampsToGive, this.getVoltage(), this.containingItems[0]);
-						this.setJoules(this.getJoules() - (ElectricInfo.getJoules(ampsToGive, this.getVoltage(), 1) - joules));
-					}
-				}
-
-				else if (this.containingItems[0].getItem() instanceof IElectricItem)
-				{
-					double sent = ElectricItem.charge(containingItems[0], (int) (this.getJoules() * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-					this.setJoules(this.getJoules() - sent);
-				}
+				int received = (int) (this.powerProvider.useEnergy(0.0F, (float) ((getMaxJoules(new Object[0]) - getJoules(new Object[0])) * UniversalElectricity.TO_BC_RATIO), true) * UniversalElectricity.BC3_RATIO);
+				setJoules(getJoules(new Object[0]) + received, new Object[0]);
 			}
 
-			/**
-			 * Output Electricity
-			 */
-			if (this.containingItems[1] != null && this.getJoules() < this.getMaxJoules())
+			if ((this.containingItems[0] != null) && (getJoules(new Object[0]) > 0.0D))
 			{
-				if (this.containingItems[1].getItem() instanceof IItemElectric)
+				if ((this.containingItems[0].getItem() instanceof IItemElectric))
+				{
+					IItemElectric electricItem = (IItemElectric) this.containingItems[0].getItem();
+					double ampsToGive = Math.min(ElectricInfo.getAmps(Math.min(electricItem.getMaxJoules(new Object[] { this.containingItems[0] }) * 0.005D, getJoules(new Object[0])), getVoltage(new Object[0])), getJoules(new Object[0]));
+					double rejects = electricItem.onReceive(ampsToGive, getVoltage(new Object[0]), this.containingItems[0]);
+					setJoules(getJoules(new Object[0]) - (ElectricInfo.getJoules(ampsToGive, getVoltage(new Object[0]), 1.0D) - rejects), new Object[0]);
+				}
+				else if ((this.containingItems[0].getItem() instanceof IElectricItem))
+				{
+					double sent = ElectricItem.charge(this.containingItems[0], (int) (getJoules(new Object[0]) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+					setJoules(getJoules(new Object[0]) - sent, new Object[0]);
+				}
+
+			}
+
+			if ((this.containingItems[1] != null) && (getJoules(new Object[0]) < getMaxJoules(new Object[0])))
+			{
+				if ((this.containingItems[1].getItem() instanceof IItemElectric))
 				{
 					IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
 
 					if (electricItem.canProduceElectricity())
 					{
-						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(this.containingItems[1]) * 0.005, this.containingItems[1]);
-						this.setJoules(this.getJoules() + joulesReceived);
+						double joulesReceived = electricItem.onUse(electricItem.getMaxJoules(new Object[] { this.containingItems[1] }) * 0.005D, this.containingItems[1]);
+						setJoules(getJoules(new Object[0]) + joulesReceived, new Object[0]);
 					}
-				}
 
-				else if (containingItems[1].getItem() instanceof IElectricItem)
+				}
+				else if ((this.containingItems[1].getItem() instanceof IElectricItem))
 				{
-					IElectricItem item = (IElectricItem) containingItems[1].getItem();
+					IElectricItem item = (IElectricItem) this.containingItems[1].getItem();
 					if (item.canProvideEnergy())
 					{
-						double gain = ElectricItem.discharge(containingItems[1], (int) ((int) (getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-						this.setJoules(this.getJoules() + gain);
+						double gain = ElectricItem.discharge(this.containingItems[1], (int) ((int) (getMaxJoules(new Object[0]) - getJoules(new Object[0])) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
+						setJoules(getJoules(new Object[0]) + gain, new Object[0]);
 					}
 				}
 			}
 
-			if (!this.worldObj.isRemote)
+			/* 156 */ForgeDirection outputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2);
+			TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+
+			/* 159 */if (!this.worldObj.isRemote)
 			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
-				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+				/* 161 */TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
 
-				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
-				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+				/* 163 */ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+				/* 164 */ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
 
-				if (outputNetwork != null && inputNetwork != outputNetwork)
+				/* 166 */if ((outputNetwork != null) && (inputNetwork != outputNetwork))
 				{
-					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), 10000));
+					/* 168 */double outputWatts = Math.min(outputNetwork.getRequest(new TileEntity[] { this }).getWatts(), Math.min(getJoules(new Object[0]), 10000.0D));
 
-					if (this.getJoules() > 0 && outputWatts > 0)
+					/* 170 */if ((getJoules(new Object[0]) > 0.0D) && (outputWatts > 0.0D))
 					{
-						outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
-						this.setJoules(this.getJoules() - outputWatts);
+						/* 172 */outputNetwork.startProducing(this, outputWatts / getVoltage(new Object[0]), getVoltage(new Object[0]));
+						/* 173 */setJoules(getJoules(new Object[0]) - outputWatts, new Object[0]);
 					}
 					else
 					{
-						outputNetwork.stopProducing(this);
+						/* 177 */outputNetwork.stopProducing(this);
 					}
 				}
 
 			}
 
-			if (this.getJoules() > 0)
+			/* 183 */if (getJoules(new Object[0]) > 0.0D)
 			{
-				if (Loader.isModLoaded("IC2"))
+				/* 185 */if (Loader.isModLoaded("IC2"))
 				{
-					if (this.getJoules() >= 128 * UniversalElectricity.IC2_RATIO)
+					/* 187 */if (getJoules(new Object[0]) >= 128.0D * UniversalElectricity.IC2_RATIO)
 					{
-						EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, 128);
-						MinecraftForge.EVENT_BUS.post(event);
-						setJoules(this.getJoules() - (128 * UniversalElectricity.IC2_RATIO - event.amount * UniversalElectricity.IC2_RATIO));
+						/* 189 */EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, 128);
+						/* 190 */MinecraftForge.EVENT_BUS.post(event);
+						/* 191 */setJoules(getJoules(new Object[0]) - (128.0D * UniversalElectricity.IC2_RATIO - event.amount * UniversalElectricity.IC2_RATIO), new Object[0]);
 					}
 				}
 
+				/* 195 */if (isPowerReceptor(outputTile))
+				{
+					/* 197 */IPowerReceptor receptor = (IPowerReceptor) outputTile;
+					/* 198 */double electricityNeeded = Math.min(receptor.powerRequest(), receptor.getPowerProvider().getMaxEnergyStored() - receptor.getPowerProvider().getEnergyStored()) * UniversalElectricity.BC3_RATIO;
+					/* 199 */float transferEnergy = (float) Math.min(getJoules(new Object[0]), Math.min(electricityNeeded, 100.0D));
+					/* 200 */receptor.getPowerProvider().receiveEnergy((float) (transferEnergy * UniversalElectricity.TO_BC_RATIO), outputDirection.getOpposite());
+					/* 201 */setJoules(getJoules(new Object[0]) - transferEnergy, new Object[0]);
+				}
+
 			}
+
 		}
 
-		/**
-		 * Gradually lose energy.
-		 */
-		this.setJoules(this.getJoules() - 0.0001);
+		/* 210 */setJoules(getJoules(new Object[0]) - 0.0001D, new Object[0]);
 
-		if (!this.worldObj.isRemote)
+		/* 212 */if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			/* 214 */if ((this.ticks % 3L == 0L) && (this.playersUsing > 0))
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
-
+				/* 216 */PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
 			}
 		}
 	}
 
-	@Override
-	protected EnumSet<ForgeDirection> getConsumingSides()
+	protected EnumSet getConsumingSides()
 	{
-		return EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite());
+		/* 225 */return EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2).getOpposite());
 	}
 
-	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getJoules(), this.disabledTicks);
+		/* 231 */return PacketManager.getPacket("ElecEx", this, new Object[] { Double.valueOf(getJoules(new Object[0])), Integer.valueOf(this.disabledTicks) });
 	}
 
-	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		try
 		{
-			this.setJoules(dataStream.readDouble());
-			this.disabledTicks = dataStream.readInt();
+			/* 239 */setJoules(dataStream.readDouble(), new Object[0]);
+			/* 240 */this.disabledTicks = dataStream.readInt();
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			/* 244 */e.printStackTrace();
 		}
 	}
 
-	@Override
 	public void openChest()
 	{
-		this.playersUsing++;
+		/* 251 */this.playersUsing += 1;
 	}
 
-	@Override
 	public void closeChest()
 	{
-		this.playersUsing--;
+		/* 257 */this.playersUsing -= 1;
 	}
 
-	/**
-	 * Reads a tile entity from NBT.
-	 */
-	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
-		super.readFromNBT(par1NBTTagCompound);
+		/* 266 */super.readFromNBT(par1NBTTagCompound);
 
-		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
-		this.containingItems = new ItemStack[this.getSizeInventory()];
+		/* 268 */NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
+		/* 269 */this.containingItems = new ItemStack[getSizeInventory()];
 
-		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
+		/* 271 */for (int var3 = 0; var3 < var2.tagCount(); var3++)
 		{
-			NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
-			byte var5 = var4.getByte("Slot");
+			/* 273 */NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
+			/* 274 */byte var5 = var4.getByte("Slot");
 
-			if (var5 >= 0 && var5 < this.containingItems.length)
+			/* 276 */if ((var5 >= 0) && (var5 < this.containingItems.length))
 			{
-				this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
+				/* 278 */this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
 			}
+		}
+
+		/* 282 */if (PowerFramework.currentFramework != null)
+		{
+			/* 284 */PowerFramework.currentFramework.loadPowerProvider(this, par1NBTTagCompound);
 		}
 	}
 
-	/**
-	 * Writes a tile entity to NBT.
-	 */
-	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
-		super.writeToNBT(par1NBTTagCompound);
-		NBTTagList var2 = new NBTTagList();
+		/* 294 */super.writeToNBT(par1NBTTagCompound);
+		/* 295 */NBTTagList var2 = new NBTTagList();
 
-		for (int var3 = 0; var3 < this.containingItems.length; ++var3)
+		/* 297 */for (int var3 = 0; var3 < this.containingItems.length; var3++)
 		{
-			if (this.containingItems[var3] != null)
+			/* 299 */if (this.containingItems[var3] != null)
 			{
-				NBTTagCompound var4 = new NBTTagCompound();
-				var4.setByte("Slot", (byte) var3);
-				this.containingItems[var3].writeToNBT(var4);
-				var2.appendTag(var4);
+				/* 301 */NBTTagCompound var4 = new NBTTagCompound();
+				/* 302 */var4.setByte("Slot", (byte) var3);
+				/* 303 */this.containingItems[var3].writeToNBT(var4);
+				/* 304 */var2.appendTag(var4);
 			}
 		}
 
-		par1NBTTagCompound.setTag("Items", var2);
+		/* 308 */par1NBTTagCompound.setTag("Items", var2);
+
+		/* 310 */if (PowerFramework.currentFramework != null)
+		{
+			/* 312 */PowerFramework.currentFramework.savePowerProvider(this, par1NBTTagCompound);
+		}
 	}
 
-	@Override
 	public int getStartInventorySide(ForgeDirection side)
 	{
-		if (side == ForgeDirection.DOWN) { return 1; }
+		/* 319 */if (side == ForgeDirection.DOWN)
+			return 1;
 
-		if (side == ForgeDirection.UP) { return 1; }
+		/* 321 */if (side == ForgeDirection.UP)
+			return 1;
 
-		return 0;
+		/* 323 */return 0;
 	}
 
-	@Override
 	public int getSizeInventorySide(ForgeDirection side)
 	{
-		return 1;
+		/* 329 */return 1;
 	}
 
-	@Override
 	public int getSizeInventory()
 	{
-		return this.containingItems.length;
+		/* 335 */return this.containingItems.length;
 	}
 
-	@Override
 	public ItemStack getStackInSlot(int par1)
 	{
-		return this.containingItems[par1];
+		/* 341 */return this.containingItems[par1];
 	}
 
-	@Override
 	public ItemStack decrStackSize(int par1, int par2)
 	{
-		if (this.containingItems[par1] != null)
+		/* 347 */if (this.containingItems[par1] != null)
 		{
-			ItemStack var3;
-
-			if (this.containingItems[par1].stackSize <= par2)
+			/* 351 */if (this.containingItems[par1].stackSize <= par2)
 			{
-				var3 = this.containingItems[par1];
-				this.containingItems[par1] = null;
-				return var3;
+				/* 353 */ItemStack var3 = this.containingItems[par1];
+				/* 354 */this.containingItems[par1] = null;
+				/* 355 */return var3;
 			}
-			else
+
+			/* 359 */ItemStack var3 = this.containingItems[par1].splitStack(par2);
+
+			/* 361 */if (this.containingItems[par1].stackSize == 0)
 			{
-				var3 = this.containingItems[par1].splitStack(par2);
-
-				if (this.containingItems[par1].stackSize == 0)
-				{
-					this.containingItems[par1] = null;
-				}
-
-				return var3;
+				/* 363 */this.containingItems[par1] = null;
 			}
+
+			/* 366 */return var3;
 		}
-		else
-		{
-			return null;
-		}
+
+		/* 371 */return null;
 	}
 
-	@Override
 	public ItemStack getStackInSlotOnClosing(int par1)
 	{
-		if (this.containingItems[par1] != null)
+		/* 378 */if (this.containingItems[par1] != null)
 		{
-			ItemStack var2 = this.containingItems[par1];
-			this.containingItems[par1] = null;
-			return var2;
+			/* 380 */ItemStack var2 = this.containingItems[par1];
+			/* 381 */this.containingItems[par1] = null;
+			/* 382 */return var2;
 		}
-		else
-		{
-			return null;
-		}
+
+		/* 386 */return null;
 	}
 
-	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
-		this.containingItems[par1] = par2ItemStack;
+		/* 393 */this.containingItems[par1] = par2ItemStack;
 
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
+		/* 395 */if ((par2ItemStack != null) && (par2ItemStack.stackSize > getInventoryStackLimit()))
 		{
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+			/* 397 */par2ItemStack.stackSize = getInventoryStackLimit();
 		}
 	}
 
-	@Override
 	public String getInvName()
 	{
-		return "Advanced Battery Box";
+		/* 404 */return "Advanced Battery Box";
 	}
 
-	@Override
 	public int getInventoryStackLimit()
 	{
-		return 1;
+		/* 410 */return 1;
 	}
 
-	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules(Object[] data)
 	{
-		int slot1 = 0, slot2 = 0, slot3 = 0;
+		/* 416 */int slot1 = 0;
+		int slot2 = 0;
+		int slot3 = 0;
 
-		if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "Capacity")
-			slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
-		if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "Capacity")
-			slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
-		if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Capacity")
-			slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
-
-		return 5000000 + slot1 + slot2 + slot3;
+		/* 418 */if ((this.containingItems[2] != null) && ((this.containingItems[2].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "Capacity"))
+			/* 419 */slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
+		/* 420 */if ((this.containingItems[3] != null) && ((this.containingItems[3].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "Capacity"))
+			/* 421 */slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
+		/* 422 */if ((this.containingItems[4] != null) && ((this.containingItems[4].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Capacity"))
+		{
+			/* 423 */slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
+		}
+		/* 425 */return 5000000 + slot1 + slot2 + slot3;
 	}
 
-	@Override
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
-		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+		/* 431 */return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
 	}
 
-	@Override
 	public boolean isPoweringTo(ForgeDirection side)
 	{
-		return this.isFull;
+		/* 437 */return this.isFull;
 	}
 
-	@Override
 	public boolean isIndirectlyPoweringTo(ForgeDirection side)
 	{
-		return isPoweringTo(side);
+		/* 443 */return isPoweringTo(side);
 	}
 
-	@Override
-	public double getVoltage(Object... data)
+	public double getVoltage(Object[] data)
 	{
-		return 240 * this.getVoltageModifier("VoltageModifier");
+		/* 450 */return 120.0D * getVoltageModifier("VoltageModifier");
+	}
+
+	public void onReceive(ElectricityPack electricityPack)
+	{
+		/* 465 */if (UniversalElectricity.isVoltageSensitive)
+		{
+			/* 467 */if (electricityPack.voltage > getInputVoltage())
+			{
+				/* 469 */this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 1.5F, true);
+				/* 470 */return;
+			}
+		}
+
+		/* 474 */setJoules(getJoules(new Object[0]) + electricityPack.getWatts(), new Object[0]);
 	}
 
 	public double getInputVoltage()
 	{
-		return Math.max(this.getVoltage(), Math.max(240, this.getVoltageModifier("InputVoltageModifier") * 240));
+		/* 479 */return Math.max(getVoltage(new Object[0]), Math.max(120.0D, getVoltageModifier("InputVoltageModifier") * 240.0D));
 	}
 
 	private double getVoltageModifier(String type)
 	{
-		double slot1 = 1, slot2 = 1, slot3 = 1;
+		/* 484 */double slot1 = 1.0D;
+		double slot2 = 1.0D;
+		double slot3 = 1.0D;
 
-		if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == type)
-			slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
-		if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == type)
-			slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
-		if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == type)
-			slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
-		if (slot1 < 0)
-			slot1 = 1 / (slot1 * -1);
-		if (slot2 < 0)
-			slot2 = 1 / (slot2 * -1);
-		if (slot3 < 0)
-			slot3 = 1 / (slot3 * -1);
-		return slot1 * slot2 * slot3;
+		/* 486 */if ((this.containingItems[2] != null) && ((this.containingItems[2].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == type))
+			/* 487 */slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
+		/* 488 */if ((this.containingItems[3] != null) && ((this.containingItems[3].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == type))
+			/* 489 */slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
+		/* 490 */if ((this.containingItems[4] != null) && ((this.containingItems[4].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == type))
+			/* 491 */slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
+		/* 492 */if (slot1 < 0.0D)
+			/* 493 */slot1 = 1.0D / (slot1 * -1.0D);
+		/* 494 */if (slot2 < 0.0D)
+			/* 495 */slot2 = 1.0D / (slot2 * -1.0D);
+		/* 496 */if (slot3 < 0.0D)
+		{
+			/* 497 */slot3 = 1.0D / (slot3 * -1.0D);
+		}
+		/* 499 */return slot1 * slot2 * slot3;
 	}
 
-	/**
-	 * COMPUTERCRAFT FUNCTIONS
-	 */
-
-	@Override
 	public String getType()
 	{
-		return "BatteryBox";
+		/* 509 */return "BatteryBox";
 	}
 
-	@Override
 	public String[] getMethodNames()
 	{
-		return new String[] { "getVoltage", "getWattage", "isFull" };
+		/* 515 */return new String[] { "getVoltage", "getWattage", "isFull" };
 	}
 
-	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception
 	{
+		/* 522 */int getVoltage = 0;
+		/* 523 */int getWattage = 1;
+		/* 524 */int isFull = 2;
 
-		final int getVoltage = 0;
-		final int getWattage = 1;
-		final int isFull = 2;
-
-		switch (method)
+		/* 526 */switch (method)
 		{
-			case getVoltage:
-				return new Object[] { getVoltage() };
-			case getWattage:
-				return new Object[] { ElectricInfo.getWatts(this.getJoules()) };
-			case isFull:
-				return new Object[] { isFull };
-			default:
-				throw new Exception("Function unimplemented");
+			case 0:
+				/* 529 */return new Object[] { Double.valueOf(getVoltage(new Object[0])) };
+			case 1:
+				/* 531 */return new Object[] { Double.valueOf(ElectricInfo.getWatts(getJoules(new Object[0]))) };
+			case 2:
+				/* 533 */return new Object[] { Integer.valueOf(2) };
 		}
+		/* 535 */throw new Exception("Function unimplemented");
 	}
 
-	@Override
 	public boolean canAttachToSide(int side)
 	{
-		return true;
+		/* 542 */return true;
 	}
 
-	@Override
 	public void attach(IComputerAccess computer)
 	{
 	}
 
-	@Override
 	public void detach(IComputerAccess computer)
 	{
 	}
 
-	// IC2 Functions
-	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
 	{
-		return this.getConsumingSides().contains(direction.toForgeDirection());
+		/* 559 */return getConsumingSides().contains(direction.toForgeDirection());
 	}
 
-	@Override
 	public boolean isAddedToEnergyNet()
 	{
-		return this.ticks > 0;
+		/* 565 */return this.ticks > 0L;
 	}
 
-	@Override
 	public int demandsEnergy()
 	{
-		return (int) (this.getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
+		/* 571 */return (int) (getRequest().getWatts() * UniversalElectricity.TO_IC2_RATIO);
 	}
 
-	@Override
 	public int injectEnergy(Direction direction, int i)
 	{
-		double givenElectricity = i * UniversalElectricity.IC2_RATIO;
-		double rejects = 0;
+		/* 577 */double givenElectricity = i * UniversalElectricity.IC2_RATIO;
+		/* 578 */double rejects = 0.0D;
 
-		if (givenElectricity > this.getRequest().getWatts())
+		/* 580 */if (givenElectricity > getRequest().getWatts())
 		{
-			rejects = givenElectricity - this.getRequest().getWatts();
+			/* 582 */rejects = givenElectricity - getRequest().getWatts();
 		}
 
-		this.onReceive(new ElectricityPack(givenElectricity / this.getVoltage(), this.getVoltage()));
+		/* 585 */onReceive(new ElectricityPack(givenElectricity / getVoltage(new Object[0]), getVoltage(new Object[0])));
 
-		return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
+		/* 587 */return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
 	}
 
-	@Override
 	public int getMaxSafeInput()
 	{
-		return 2048;
+		/* 593 */return 2048;
 	}
 
-	@Override
 	public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
 	{
-		return this.getConsumingSides().contains(direction.toForgeDirection().getOpposite());
+		/* 599 */return getConsumingSides().contains(direction.toForgeDirection().getOpposite());
 	}
 
-	@Override
 	public int getMaxEnergyOutput()
 	{
-		return 128;
+		/* 605 */return 128;
 	}
 
 	public int sendEnergy(int send)
 	{
-		EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
-		MinecraftForge.EVENT_BUS.post(event);
-		return event.amount;
+		/* 610 */EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
+		/* 611 */MinecraftForge.EVENT_BUS.post(event);
+		/* 612 */return event.amount;
 	}
 
+	public void setPowerProvider(IPowerProvider provider)
+	{
+		/* 619 */this.powerProvider = provider;
+	}
+
+	public IPowerProvider getPowerProvider()
+	{
+		/* 625 */return this.powerProvider;
+	}
+
+	public int powerRequest()
+	{
+		/* 631 */return (int) (getMaxJoules(new Object[0]) - getJoules(new Object[0]));
+	}
+
+	public void doWork()
+	{
+	}
+
+	public boolean isPowerReceptor(TileEntity tileEntity)
+	{
+		/* 647 */if ((tileEntity instanceof IPowerReceptor))
+		{
+			/* 649 */IPowerReceptor receptor = (IPowerReceptor) tileEntity;
+			/* 650 */IPowerProvider provider = receptor.getPowerProvider();
+			/* 651 */return (provider != null) && (provider.getClass().getSuperclass().equals(PowerProvider.class));
+		}
+		/* 653 */return false;
+	}
 }
+
+/*
+ * Location: C:\Users\Matt\Downloads\ElectricExpansion_v1.4.7.zip Qualified Name:
+ * electricexpansion.common.tile.TileEntityAdvancedBatteryBox JD-Core Version: 0.6.2
+ */

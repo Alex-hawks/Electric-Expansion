@@ -212,6 +212,12 @@ public class RecipeRegistery
 		// Tools
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%', "advancedCircuit", '^', Block.glass, '@', Item.stick }));
 
+		//Insulation
+		GameRegistry.addShapelessRecipe(new ItemStack(itemParts, 1, 6), new Object[] { Block.cloth });
+		GameRegistry.addShapelessRecipe(new ItemStack(itemParts, 4, 6), new Object[] { Item.leather });
+
+		
+		
 		// Reflection to get Basic Components Wire
 		if (Loader.isModLoaded("BasicComponents"))
 		{
