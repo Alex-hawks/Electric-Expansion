@@ -1,14 +1,18 @@
 package electricexpansion.common.tile;
 
+import com.google.common.io.ByteArrayDataInput;
+import electricexpansion.common.ElectricExpansion;
 import java.util.EnumSet;
-
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
+import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.implement.IConductor;
 import universalelectricity.core.vector.Vector3;
@@ -17,45 +21,39 @@ import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 
-import com.google.common.io.ByteArrayDataInput;
-
-import electricexpansion.common.ElectricExpansion;
-
-public class TileEntityMultimeter extends TileEntityElectricityReceiver implements IPacketReceiver, IRotatable
+public class TileEntityMultimeter extends TileEntityElectricityReceiver 
+	implements IPacketReceiver, IRotatable
 {
 	public ElectricityPack electricityReading = new ElectricityPack();
 	private ElectricityPack lastReading = new ElectricityPack();
 
-	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite()));
+		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2)));
 		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockMultimeter.blockID);
 	}
 
-	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
 
-		if (this.ticks % 20 == 0)
+		if (this.ticks % 20L == 0L)
 		{
 			this.lastReading = this.electricityReading;
 
 			if (!this.worldObj.isRemote)
 			{
-				if (!this.isDisabled())
+				if (!isDisabled())
 				{
-
-					ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata()).getOpposite();
+					ForgeDirection inputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2);
 					TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 					if (inputTile != null)
 					{
-						if (inputTile instanceof IConductor)
+						if ((inputTile instanceof IConductor))
 						{
-							this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced();
-							this.electricityReading.amperes *= 20;
+							this.electricityReading = ((IConductor)inputTile).getNetwork().getProduced(new TileEntity[0]);
+							this.electricityReading.amperes *= 20.0D;
 						}
 						else
 						{
@@ -70,20 +68,17 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 
 				if (this.electricityReading.amperes != this.lastReading.amperes)
 				{
-					PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20);
+					PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 20.0D);
 				}
 			}
 		}
 	}
 
-	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.electricityReading.amperes, this.electricityReading.voltage);
-
+		return PacketManager.getPacket("ElecEx", this, new Object[] { Double.valueOf(this.electricityReading.amperes), Double.valueOf(this.electricityReading.voltage) });
 	}
 
-	@Override
 	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
 		if (this.worldObj.isRemote)
@@ -92,7 +87,6 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 			{
 				this.electricityReading.amperes = dataStream.readDouble();
 				this.electricityReading.voltage = dataStream.readDouble();
-
 			}
 			catch (Exception e)
 			{
@@ -106,13 +100,11 @@ public class TileEntityMultimeter extends TileEntityElectricityReceiver implemen
 		return "Multimeter";
 	}
 
-	@Override
 	public ForgeDirection getDirection()
 	{
-		return ForgeDirection.getOrientation(this.getBlockMetadata());
+		return ForgeDirection.getOrientation(getBlockMetadata());
 	}
 
-	@Override
 	public void setDirection(ForgeDirection facingDirection)
 	{
 		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, facingDirection.ordinal());

@@ -92,22 +92,22 @@ public class TileEntityTransformer extends TileEntityElectricityReceiver impleme
 
 							if (this.type == 0)
 							{
-								typeChange = 60;
+								typeChange = 2;
 							}
 							else if (this.type == 4)
 							{
-								typeChange = 120;
+								typeChange = 4;
 							}
 							else if (this.type == 8)
 							{
-								typeChange = 240;
+								typeChange = 8;
 							}
 
-							double newVoltage = actualEnergy.voltage + typeChange;
+							double newVoltage = actualEnergy.voltage * typeChange;
 
 							if (!this.stepUp)
 							{
-								newVoltage = actualEnergy.voltage - typeChange;
+								newVoltage = actualEnergy.voltage / typeChange;
 							}
 
 							outputNetwork.startProducing(this, actualEnergy.getWatts() / newVoltage, newVoltage);

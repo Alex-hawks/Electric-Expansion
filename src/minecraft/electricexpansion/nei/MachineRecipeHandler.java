@@ -119,7 +119,7 @@ public abstract class MachineRecipeHandler extends TemplateRecipeHandler
 		this.transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(54, 24, 25, 16), getRecipeId(), new Object[0]));
 	}
 
-	public void loadCraftingRecipes(String outputId, Object[] results)
+	public void loadCraftingRecipes(String outputId, Object... results)
 	{
 		if (outputId.equals(getRecipeId()))
 		{

@@ -25,9 +25,9 @@ public class DistributionNetworks
 
 	public double getJoules(String player, byte frequency)
 	{
-		if(player != null)
+		if (player != null)
 		{
-			if(!playerFrequencies.containsKey(player))
+			if (!playerFrequencies.containsKey(player))
 				playerFrequencies.put(player, new double[128]);
 			return playerFrequencies.get(player)[frequency];
 		}
@@ -36,9 +36,9 @@ public class DistributionNetworks
 
 	public void setJoules(String player, short frequency, double newJoules)
 	{
-		if(player != null)
+		if (player != null)
 		{
-			if(!playerFrequencies.containsKey(player))
+			if (!playerFrequencies.containsKey(player))
 				playerFrequencies.put(player, new double[128]);
 			playerFrequencies.get(player)[frequency] = newJoules;
 		}
@@ -46,9 +46,9 @@ public class DistributionNetworks
 
 	public void addJoules(String player, short frequency, double addedJoules)
 	{
-		if(player != null)
+		if (player != null)
 		{
-			if(!playerFrequencies.containsKey(player))
+			if (!playerFrequencies.containsKey(player))
 				playerFrequencies.put(player, new double[128]);
 			playerFrequencies.get(player)[frequency] = playerFrequencies.get(player)[frequency] + addedJoules;
 		}
@@ -58,17 +58,19 @@ public class DistributionNetworks
 	{
 		try
 		{
-			if(player != null)
+			if (player != null)
 				playerFrequencies.get(player)[frequency] = playerFrequencies.get(player)[frequency] - removedJoules;
 		}
-		catch(Exception e){}
+		catch (Exception e)
+		{
+		}
 	}
 
 	public static double getMaxJoules()
 	{
 		return maxJoules;
 	}
-	
+
 	public void onWorldSave(WorldEvent event)
 	{
 		String folder = "";
@@ -92,9 +94,9 @@ public class DistributionNetworks
 				}
 
 				String[] players = new String[playerFrequencies.size()];
-				players = (String[])( playerFrequencies.keySet().toArray( players ) );
+				players = (String[]) (playerFrequencies.keySet().toArray(players));
 
-				for (int i = 0; i < playerFrequencies.size(); i ++)
+				for (int i = 0; i < playerFrequencies.size(); i++)
 				{
 					File var3 = new File(file + File.separator + players[i] + "_tmp.dat");
 					File var4 = new File(file + File.separator + players[i] + ".dat");
@@ -132,16 +134,16 @@ public class DistributionNetworks
 	{
 		try
 		{
-			for(File playerFile : ListSaves())
+			for (File playerFile : ListSaves())
 			{
 				if (playerFile.exists())
 				{
 					String name = playerFile.getName();
-					if(!name.contains("_Backup"))
+					if (!name.contains("_Backup"))
 					{
 						if (name.endsWith(".dat"))
 							name = name.substring(0, name.length() - 4);
-						
+
 						playerFrequencies.put(name, new double[128]);
 						for (int i = 0; i < 128; i++)
 						{
@@ -163,17 +165,16 @@ public class DistributionNetworks
 			ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
 			ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
 		}
-/*		Debug code
 		String[] players = new String[playerFrequencies.size()];
-		players = (String[])( playerFrequencies.keySet().toArray( players ) );
+		players = (String[]) (playerFrequencies.keySet().toArray(players));
 		String playerString = "";
-		for(int i =0; i < players.length; i++)
+		for (int i = 0; i < players.length; i++)
 			playerString = playerString + ", " + players[i];
 		ElectricExpansion.EELogger.warning(playerString);
-*/	}
+	}
 
-	public File[] ListSaves() 
-	{		
+	public File[] ListSaves()
+	{
 		String folder = "";
 		if (server.isDedicatedServer())
 		{
@@ -186,7 +187,7 @@ public class DistributionNetworks
 
 		String files;
 		File folderToUse = new File(folder);
-		File[] listOfFiles = folderToUse.listFiles(); 
+		File[] listOfFiles = folderToUse.listFiles();
 
 		return listOfFiles;
 	}

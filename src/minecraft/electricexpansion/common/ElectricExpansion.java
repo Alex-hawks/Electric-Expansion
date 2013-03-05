@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
@@ -33,11 +34,12 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStopped;
+import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -74,6 +76,7 @@ import electricexpansion.common.items.ItemUltimateBattery;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
+
 
 @Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
@@ -112,7 +115,8 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new
+	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
@@ -137,11 +141,9 @@ public class ElectricExpansion
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
 	public static ItemStack transformer3;
-	
-	static boolean useWoolForWires;
-	static boolean useLeatherForWires;
+
 	static boolean debugRecipes;
-	
+
 	public static DistributionNetworks DistributionNetworksInstance;
 
 	public static Logger EELogger = Logger.getLogger("ElectricExpansion");
@@ -162,8 +164,8 @@ public class ElectricExpansion
 		blockWireBlock = new BlockWireBlock(CONFIG.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
 		blockSwitchWire = new BlockSwitchWire(CONFIG.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
 		blockSwitchWireBlock = new BlockSwitchWireBlock(CONFIG.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
-// +5
-// +6
+		// +5
+		// +6
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0).setCreativeTab(EETab.INSTANCE);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0).setBlockName("multimeter");
 		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
@@ -180,19 +182,17 @@ public class ElectricExpansion
 		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
 		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(EETab.INSTANCE).setItemName("LeadIngot");
 		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
-// +6
+		// +6
 		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(EETab.INSTANCE).setItemName("coil");
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
 		itemInfBat = new ItemInfiniteBattery(CONFIG.getItem("Infinite_Battery", ITEM_ID_PREFIX + 10).getInt()).setItemName("infinitebattery");
-		
+
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 36, 10, 3).enable(CONFIG);
 		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
 		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
 
-		useLeatherForWires = CONFIG.get("General", "Use_Leather_In_Wires", true).getBoolean(true);
-		useWoolForWires = CONFIG.get("General", "Use_Wool_In_Wires", false).getBoolean(false);
 		debugRecipes = CONFIG.get("General", "Debug_Recipes", false).getBoolean(false);
 
 		CONFIG.save();
@@ -248,7 +248,7 @@ public class ElectricExpansion
 
 		GameRegistry.registerBlock(blockAdvBatteryBox, "blockAdvBatteryBox");
 		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
-		//GameRegistry.registerBlock(blockInsulationMachine, "blockInsulationMachine");
+		// GameRegistry.registerBlock(blockInsulationMachine, "blockInsulationMachine");
 		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
 		GameRegistry.registerBlock(blockLead, "blockLead");
 		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
@@ -263,7 +263,7 @@ public class ElectricExpansion
 		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
 		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
 		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire");
-		
+
 		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("blockLead", this.blockLead);
 		OreDictionary.registerOre("advancedBattery", this.itemAdvBat);
@@ -280,8 +280,7 @@ public class ElectricExpansion
 		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
 		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
 		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
-		OreDictionary.registerOre("plateGold", new ItemStack(itemParts, 1, 3));		
-		
+		OreDictionary.registerOre("plateGold", new ItemStack(itemParts, 1, 3));
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -301,7 +300,7 @@ public class ElectricExpansion
 			StartLog("Init");
 		}
 		proxy.init();
-		
+
 		OreDictionary.registerOre("ingotSilver", this.itemSilverIngot);
 
 		RecipeRegistery.crafting();
@@ -359,12 +358,18 @@ public class ElectricExpansion
 		{
 			StartLog("postInit");
 		}
-		
+
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@ServerStarting
+	public void onServerStarting(FMLServerStartingEvent event)
+	{
+		this.DistributionNetworksInstance = new DistributionNetworks();
+	}
+
 	@ForgeSubscribe
-	public void onEntityDeath(LivingDeathEvent event)
+	public void onEntityDropItems(LivingDropsEvent event)
 	{
 		if (event.entity != null)
 		{
@@ -374,6 +379,10 @@ public class ElectricExpansion
 					Random dropNumber = new Random();
 					int numberOfDrops = dropNumber.nextInt(4);
 					event.entity.dropItem(itemLead.itemID, numberOfDrops);
+
+					ItemStack leadIS = new ItemStack(this.itemLead, numberOfDrops);
+
+					event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));
 				}
 			}
 		}
@@ -401,8 +410,8 @@ public class ElectricExpansion
 		DistributionNetworksInstance.onWorldSave(event);
 	}
 
-	public static File[] ListLanguages() 
-	{		
+	public static File[] ListLanguages()
+	{
 		String folderDir = "";
 		if (MinecraftServer.getServer().isDedicatedServer())
 		{
@@ -415,34 +424,37 @@ public class ElectricExpansion
 
 		File folder = new File(folderDir);
 
-		if (!folder.exists()) 
+		if (!folder.exists())
 			folder.mkdirs();
 
-		String files; File[] listOfFiles = folder.listFiles();
+		String files;
+		File[] listOfFiles = folder.listFiles();
 
-		return listOfFiles; 
+		return listOfFiles;
 	}
 
-	public static int langLoad() 
-	{ 
-		int unofficialLanguages = 0; 
-		try 
-		{ 
-			for (File langFile : ListLanguages()) 
-			{ 
-				if (langFile.exists()) 
-				{ 
-					String name = langFile.getName(); 
-					if (name.endsWith(".lang")) 
-					{ 
+	public static int langLoad()
+	{
+		int unofficialLanguages = 0;
+		try
+		{
+			for (File langFile : ListLanguages())
+			{
+				if (langFile.exists())
+				{
+					String name = langFile.getName();
+					if (name.endsWith(".lang"))
+					{
 						String lang = name.substring(0, name.length() - 4);
 						LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
-						unofficialLanguages++; 
-					} 
-				} 
-			} 
-		} 
-		catch (Exception e) {} 
-		return unofficialLanguages; 
+						unofficialLanguages++;
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+		}
+		return unofficialLanguages;
 	}
 }
