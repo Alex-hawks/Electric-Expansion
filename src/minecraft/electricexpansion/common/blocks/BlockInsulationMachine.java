@@ -22,8 +22,10 @@ public class BlockInsulationMachine extends BlockMachine
 {
 	public BlockInsulationMachine(int id)
 	{
-		super("blockInsulationMachine", id, UniversalElectricity.machine, EETab.INSTANCE);
+		super(id, UniversalElectricity.machine);
+		this.setBlockName("blockInsulationMachine");
 		this.setStepSound(soundMetalFootstep);
+		this.setCreativeTab(EETab.INSTANCE);
 		this.setRequiresSelfNotify();
 	}
 
@@ -100,7 +102,7 @@ public class BlockInsulationMachine extends BlockMachine
 	{
 		if (!par1World.isRemote)
 		{
-			par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, x, y, z);
+			par5EntityPlayer.openGui(ElectricExpansion.instance, 5, par1World, x, y, z);
 			return true;
 		}
 
@@ -123,7 +125,6 @@ public class BlockInsulationMachine extends BlockMachine
 	public TileEntity createNewTileEntity(World var1, int metadata)
 	{
 		return new TileEntityInsulatingMachine();
-
 	}
 
 	@Override

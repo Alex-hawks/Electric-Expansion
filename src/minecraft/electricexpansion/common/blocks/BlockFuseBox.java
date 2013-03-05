@@ -24,7 +24,9 @@ public class BlockFuseBox extends BlockMachine
 {
 	public BlockFuseBox(int id)
 	{
-		super("FuseBox", id, UniversalElectricity.machine, EETab.INSTANCE);
+		super(id, UniversalElectricity.machine);
+		this.setBlockName("FuseBox");
+		this.setCreativeTab(EETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
 		this.setRequiresSelfNotify();
 	}
@@ -101,7 +103,7 @@ public class BlockFuseBox extends BlockMachine
 	@Override
 	public boolean isOpaqueCube()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
@@ -110,17 +112,17 @@ public class BlockFuseBox extends BlockMachine
 		return true;
 	}
 
-	@SideOnly(Side.CLIENT)
+/*	@SideOnly(Side.CLIENT)
 	@Override
 	public int getRenderType()
 	{
 		return ClientProxy.RENDER_ID;
 	}
-
+*/
 	@Override
 	public boolean renderAsNormalBlock()
 	{
-		return false;
+		return true;
 	}
 
 	@Override
@@ -144,5 +146,10 @@ public class BlockFuseBox extends BlockMachine
 
 		return new ItemStack(id, 1, 0);
 	}
-
+	
+	@Override
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+    {
+        return false;
+    }
 }

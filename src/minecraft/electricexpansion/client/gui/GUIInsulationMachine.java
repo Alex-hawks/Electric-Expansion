@@ -16,14 +16,14 @@ import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityInsulatingMachine;
 
 @SideOnly(Side.CLIENT)
-public class GUIInsulationMachine extends GuiContainer
+public class GuiInsulationMachine extends GuiContainer
 {
 	private TileEntityInsulatingMachine tileEntity;
 
 	private int containerWidth;
 	private int containerHeight;
 
-	public GUIInsulationMachine(InventoryPlayer par1InventoryPlayer, TileEntityInsulatingMachine tileEntity)
+	public GuiInsulationMachine(InventoryPlayer par1InventoryPlayer, TileEntityInsulatingMachine tileEntity)
 	{
 		super(new ContainerInsulationMachine(par1InventoryPlayer, tileEntity));
 		this.tileEntity = tileEntity;
@@ -70,11 +70,12 @@ public class GUIInsulationMachine extends GuiContainer
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
 
-		if (this.tileEntity.getProcessTimeLeft() > 0)
+		if (this.tileEntity.getProcessTimeLeft() >= 0)
 		{
-			int scale = (int) (((double) this.tileEntity.getProcessTimeLeft() / this.tileEntity.getProcessTimeLeft()) * 23);
+			int scale = (int) (((double) this.tileEntity.getProcessTimeLeft() / this.tileEntity.getProcessingTime()) * 23);
 			this.drawTexturedModalRect(containerWidth + 77, containerHeight + 27, 176, 0, 23 - scale, 13);
 		}
+		
 
 		if (this.tileEntity.getJoules() >= 0)
 		{

@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.Configuration;
@@ -47,6 +48,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
+import electricexpansion.common.blocks.BlockFuseBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockInsulationMachine;
 import electricexpansion.common.blocks.BlockLogisticsWire;
@@ -78,10 +80,11 @@ import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
+@Mod(modid = ElectricExpansion.MOD_ID, name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
+	public static final String MOD_ID = "ElectricExpansion";
 
 	private static final int BLOCK_ID_PREFIX = 3980;
 	private static final int ITEM_ID_PREFIX = 15970;
@@ -115,8 +118,7 @@ public class ElectricExpansion
 	public static Block blockSwitchWireBlock;
 	public static Block blockLogisticsWire;
 	// public static final Block blockRedstoneWire = new BlockRedstoneWire(redstoneWire, 0);
-	// public static final Block blockRedstoneWireBlock = new
-	// BlockRedstoneWireBlock(redstoneWireBlock, 0);
+	// public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
 
 	public static Block blockAdvBatteryBox;
 	public static Block blockMultimeter;
@@ -126,6 +128,7 @@ public class ElectricExpansion
 	public static Block blockLead;
 	public static Block blockSilverOre;
 	public static Block blockInsulationMachine;
+	public static Block blockFuseBox;
 	// Items
 	public static Item itemParts;
 	public static Item itemUpgrade;
@@ -143,6 +146,7 @@ public class ElectricExpansion
 	public static ItemStack transformer3;
 
 	static boolean debugRecipes;
+	public static boolean useHashCodes;
 
 	public static DistributionNetworks DistributionNetworksInstance;
 
@@ -175,6 +179,7 @@ public class ElectricExpansion
 		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 11, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
+		blockFuseBox = new BlockFuseBox(CONFIG.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
 
 		itemUpgrade = new ItemUpgrade(CONFIG.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0).setItemName("Upgrade");
 		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
@@ -194,6 +199,7 @@ public class ElectricExpansion
 		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
 
 		debugRecipes = CONFIG.get("General", "Debug_Recipes", false).getBoolean(false);
+		useHashCodes = CONFIG.get("General", "Use_Hashcodes", true).getBoolean(true);
 
 		CONFIG.save();
 
@@ -233,7 +239,7 @@ public class ElectricExpansion
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event)
 	{
-		UniversalElectricity.register(this, 1, 2, 5, false);
+//		UniversalElectricity.register(this, this.MAJOR_VERSION, this.MINOR_VERSION, this.REVISION_VERSION, false);
 
 		if (!configLoaded)
 		{
@@ -246,23 +252,24 @@ public class ElectricExpansion
 
 		UpdateNotifier.INSTANCE.checkUpdate("Electric Expansion", VERSION, "http://www.calclavia.com/downloads/ee/updatebuild.txt");
 
-		GameRegistry.registerBlock(blockAdvBatteryBox, "blockAdvBatteryBox");
-		GameRegistry.registerBlock(blockWireMill, "blockWireMill");
-		// GameRegistry.registerBlock(blockInsulationMachine, "blockInsulationMachine");
-		GameRegistry.registerBlock(blockMultimeter, "blockMultimeter");
-		GameRegistry.registerBlock(blockLead, "blockLead");
-		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer");
-		GameRegistry.registerBlock(blockSilverOre, "blockSilverOre");
-		// GameRegistry.registerBlock(blockRedstoneWire, "blockRedstoneWire");
+		GameRegistry.registerBlock(blockAdvBatteryBox, ItemBlock.class, "blockAdvBatteryBox", this.MOD_ID);
+		GameRegistry.registerBlock(blockWireMill, ItemBlock.class, "blockWireMill", this.MOD_ID);
+		GameRegistry.registerBlock(blockInsulationMachine, ItemBlock.class, "blockInsulationMachine", this.MOD_ID);
+		GameRegistry.registerBlock(blockMultimeter, ItemBlock.class, "blockMultimeter", this.MOD_ID);
+		GameRegistry.registerBlock(blockLead, ItemBlock.class, "blockLead", this.MOD_ID);
+		GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer", this.MOD_ID);
+		GameRegistry.registerBlock(blockSilverOre, ItemBlock.class, "blockSilverOre", this.MOD_ID);
+//		GameRegistry.registerBlock(blockRedstoneWire, ItemBlock.class, "blockRedstoneWire", this.MOD_ID);
 
-		GameRegistry.registerBlock(blockDistribution, "blockDistribution");
+		GameRegistry.registerBlock(blockDistribution, ItemBlock.class, "blockDistribution", this.MOD_ID);
+		GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
 
-		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class, "blockRawWire");
-		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire");
-		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire");
-		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock");
-		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock");
-		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire");
+		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class, "blockRawWire", this.MOD_ID);
+		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire", this.MOD_ID);
+		GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire", this.MOD_ID);
+		GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock", this.MOD_ID);
+		GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock", this.MOD_ID);
+		GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire", this.MOD_ID);
 
 		OreDictionary.registerOre("ingotLead", this.itemLead);
 		OreDictionary.registerOre("blockLead", this.blockLead);
@@ -280,7 +287,6 @@ public class ElectricExpansion
 		OreDictionary.registerOre("silverWire", new ItemStack(blockInsulatedWire, 1, 2));
 		OreDictionary.registerOre("aluminumWire", new ItemStack(blockInsulatedWire, 1, 3));
 		OreDictionary.registerOre("superconductor", new ItemStack(blockInsulatedWire, 1, 4));
-		OreDictionary.registerOre("plateGold", new ItemStack(itemParts, 1, 3));
 
 		NetworkRegistry.instance().registerGuiHandler(this, this.proxy);
 
@@ -305,6 +311,7 @@ public class ElectricExpansion
 
 		RecipeRegistery.crafting();
 		RecipeRegistery.drawing();
+		RecipeRegistery.insulation();
 		EETab.setItemStack(new ItemStack(this.blockTransformer));
 
 		int languages = 0;
@@ -324,7 +331,7 @@ public class ElectricExpansion
 
 					for (String child : children)
 					{
-						if (child != "" || child != null)
+						if (child != "" && child != null)
 						{
 							LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", child, false);
 							languages++;
@@ -336,8 +343,6 @@ public class ElectricExpansion
 					e.printStackTrace();
 				}
 			}
-
-			languages++;
 		}
 		int unofficialLanguages = 0;
 		unofficialLanguages = langLoad();

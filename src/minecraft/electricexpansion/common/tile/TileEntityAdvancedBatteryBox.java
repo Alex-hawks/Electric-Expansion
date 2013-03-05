@@ -553,7 +553,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 
 	public int powerRequest()
 	{
-		return (int) (getMaxJoules(new Object[0]) - getJoules(new Object[0]));
+		return (int) (getMaxJoules() - getJoules());
 	}
 
 	public void doWork()

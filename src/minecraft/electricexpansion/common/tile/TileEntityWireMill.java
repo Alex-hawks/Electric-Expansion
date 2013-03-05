@@ -295,7 +295,6 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	{
 		super.readFromNBT(par1NBTTagCompound);
 		this.drawingTicks = par1NBTTagCompound.getInteger("drawingTicks");
-		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		this.inventory = new ItemStack[this.getSizeInventory()];
 		try
 		{
@@ -305,6 +304,7 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 		{
 		}
 
+		NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3)
 		{
 			NBTTagCompound var4 = (NBTTagCompound) var2.tagAt(var3);
@@ -323,8 +323,9 @@ public class TileEntityWireMill extends TileEntityElectricityReceiver implements
 	{
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("drawingTicks", this.drawingTicks);
-		NBTTagList var2 = new NBTTagList();
 		par1NBTTagCompound.setDouble("joulesStored", this.getJoules());
+
+		NBTTagList var2 = new NBTTagList();
 
 		for (int var3 = 0; var3 < this.inventory.length; ++var3)
 		{

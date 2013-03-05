@@ -44,6 +44,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 	public final double TRANSFER_LIMIT = 1250.0D;
 	private int processTicks = 0;
 	private double joulesStored = 0.0D;
+	private int recipeTicks = 0;
 	public static double maxJoules = 150000.0D;
 
 	private ItemStack[] inventory = new ItemStack[3];
@@ -116,7 +117,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 
 		}
 
-		if ((this.inventory[0] != null) && (this.joulesStored < getMaxJoules(new Object[0])))
+		if ((this.inventory[0] != null) && (this.joulesStored < getMaxJoules()))
 		{
 			if ((this.inventory[0].getItem() instanceof IItemElectric))
 			{
@@ -125,27 +126,28 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 				if (electricItem.canProduceElectricity())
 				{
 					double joulesReceived = electricItem.onUse(Math.max(electricItem.getMaxJoules(new Object[] { this.inventory[0] }) * 0.005D, 1250.0D), this.inventory[0]);
-					setJoules(this.joulesStored + joulesReceived, new Object[0]);
+					setJoules(this.joulesStored + joulesReceived);
 				}
 			}
 		}
 
-		getClass(); if ((this.joulesStored >= 500.0D - 50.0D) && (!isDisabled()))
+		if ((this.joulesStored >= this.WATTS_PER_TICK - 50.0D) && (!this.isDisabled()))
 		{
-			if ((this.inventory[1] != null) && (canDraw()) && ((this.processTicks == 0) || (this.baseID != this.inventory[1].itemID) || (this.baseMeta != this.inventory[1].getItemDamage())))
+			if ((this.inventory[1] != null) && (canProcess()) && ((this.processTicks == 0) || (this.baseID != this.inventory[1].itemID) || (this.baseMeta != this.inventory[1].getItemDamage())))
 			{
 				this.baseID = this.inventory[1].itemID;
 				this.baseMeta = this.inventory[1].getItemDamage();
-				this.processTicks = getDrawingTime();
+				this.processTicks = getProcessingTime();
+				this.recipeTicks = getProcessingTime();
 			}
 
-			if ((canDraw()) && (this.processTicks > 0))
+			if ((canProcess()) && (this.processTicks > 0))
 			{
 				this.processTicks -= 1;
 
 				if (this.processTicks < 1)
 				{
-					drawItem();
+					processItem();
 					this.processTicks = 0;
 				}
 				getClass(); this.joulesStored -= 500.0D;
@@ -170,7 +172,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket("ElecEx", this, new Object[] { Integer.valueOf(this.processTicks), Integer.valueOf(this.disabledTicks), Double.valueOf(this.joulesStored) });
+		return PacketManager.getPacket("ElecEx", this, new Object[] { Integer.valueOf(this.processTicks), Integer.valueOf(this.disabledTicks), Double.valueOf(this.joulesStored), Integer.valueOf(this.recipeTicks) });
 	}
 
 	public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
@@ -180,6 +182,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 			this.processTicks = dataStream.readInt();
 			this.disabledTicks = dataStream.readInt();
 			this.joulesStored = dataStream.readDouble();
+			this.recipeTicks = dataStream.readInt();
 		}
 		catch (Exception e)
 		{
@@ -199,14 +202,14 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 		this.playersUsing -= 1;
 	}
 
-	public boolean canDraw()
+	public boolean canProcess()
 	{
 		boolean canWork = false;
 		ItemStack inputSlot = this.inventory[1];
-		ItemStack outputSlot = this.inventory[2];
+		int outputSlot = (this.inventory[2] != null) ? this.inventory[2].stackSize : 0;
 		if (inputSlot != null)
 		{
-			if ((InsulationRecipes.getProcessing().getProcessResult(inputSlot) > 0) && (InsulationRecipes.getProcessing().getProcessResult(inputSlot) + this.inventory[2].stackSize <= 64))
+			if ((InsulationRecipes.getProcessing().getProcessResult(inputSlot) > 0) && (InsulationRecipes.getProcessing().getProcessResult(inputSlot) + outputSlot <= 64))
 			{
 				canWork = true;
 			}
@@ -215,9 +218,9 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 		return canWork;
 	}
 
-	public void drawItem()
+	public void processItem()
 	{
-		if (canDraw())
+		if (canProcess())
 		{
 			int result = InsulationRecipes.getProcessing().getProcessResult(this.inventory[1]);
 
@@ -362,13 +365,14 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 		return 120.0D;
 	}
 
-	public int getDrawingTime()
+	public int getProcessingTime()
 	{
 		if (this.inventory[1] != null)
 		{
 			if (InsulationRecipes.getProcessing().getProcessResult(this.inventory[1]) != 0)
 			{
-				InsulationRecipes.getProcessing(); return InsulationRecipes.getProcessTicks(this.inventory[1]).intValue();
+				InsulationRecipes.getProcessing(); 
+				return InsulationRecipes.getProcessTicks(this.inventory[1]).intValue();
 			}
 		}
 		return -1;

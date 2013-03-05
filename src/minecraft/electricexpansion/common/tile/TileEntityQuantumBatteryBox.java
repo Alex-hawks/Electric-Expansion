@@ -143,8 +143,11 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityReceiver i
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), this.owningPlayer);
-	}
+		if (ElectricExpansion.useHashCodes)
+			return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
+		else 
+			return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), this.owningPlayer);
+}
 
 	@Override
 	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)

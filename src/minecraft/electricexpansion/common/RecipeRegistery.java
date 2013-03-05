@@ -11,6 +11,7 @@ import universalelectricity.prefab.ItemElectric;
 import universalelectricity.prefab.RecipeHelper;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
+import electricexpansion.common.misc.InsulationRecipes;
 import electricexpansion.common.misc.WireMillRecipes;
 
 public class RecipeRegistery
@@ -259,6 +260,11 @@ public class RecipeRegistery
 			for (int i = 0; i < 16; i++)
 				WireMillRecipes.addDrawing(new ItemStack(Block.cloth, 10, i), new ItemStack(Item.silk, 40), 30);
 		}
-
+	}
+	
+	public static void insulation()
+	{
+		InsulationRecipes.getProcessing().addProcessing(new ItemStack(Block.cloth), 1, 20);
+		InsulationRecipes.getProcessing().addProcessing(new ItemStack(Item.leather), 3, 20);
 	}
 }
