@@ -75,7 +75,7 @@ import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 
-@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience"/*, modExclusionList = "BukkitForge"*/)
+@Mod(modid = "ElectricExpansion", name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -380,12 +380,14 @@ public class ElectricExpansion
 	}
 
 	@ForgeSubscribe
+	@SideOnly(Side.SERVER)
 	public void onWorldSave(WorldEvent.Save event)
 	{
 		DistributionNetworksInstance.onWorldSave(event);
 	}
 	
 	@ForgeSubscribe
+	@SideOnly(Side.SERVER)
 	public void onWorldLoad(WorldEvent.Load event)
 	{
 		DistributionNetworksInstance = new DistributionNetworks();
@@ -393,6 +395,7 @@ public class ElectricExpansion
 	}
 	
 	@ForgeSubscribe
+	@SideOnly(Side.SERVER)
 	public void onWorldUnload(WorldEvent.Unload event)
 	{
 		DistributionNetworksInstance.onWorldSave(event);
