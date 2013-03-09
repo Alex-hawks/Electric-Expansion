@@ -28,7 +28,7 @@ public class GuiLogisticsWire extends GuiScreen
 	{
 		drawDefaultBackground();
 
-		int var4 = this.mc.renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "Logistics.png");
+		int var4 = this.mc.renderEngine.getTexture(this.getTexture());
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -42,12 +42,6 @@ public class GuiLogisticsWire extends GuiScreen
 		this.fontRenderer.drawString("Logistics Wire", posX + xSizeOfTexture / 2 - 35, posY + 4, 4210752);
 
 		super.drawScreen(x, y, f);
-	}
-
-	@Override
-	public void initGui()
-	{
-
 	}
 
 	@Override
@@ -77,12 +71,6 @@ public class GuiLogisticsWire extends GuiScreen
 		}
 	}
 
-	@Override
-	public boolean doesGuiPauseGame()
-	{
-		return false;
-	}
-
 	/**
 	 * Called from the main game loop to update the screen.
 	 */
@@ -104,5 +92,10 @@ public class GuiLogisticsWire extends GuiScreen
 		{
 			this.mc.thePlayer.closeScreen();
 		}
+	}
+
+	public static String getTexture()
+	{
+		return ElectricExpansion.GUI_PATH + "GuiLogistics.png";
 	}
 }

@@ -21,7 +21,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 
 	public void renderAModelAt(TileEntity t, double x, double y, double z, float f)
 	{
-		String textureToUse = null;
+		String textureToUse = ElectricExpansion.WIRE_PATH;
 		int blockID = t.worldObj.getBlockId(t.xCoord, t.yCoord, t.zCoord);
 		int metadata = t.worldObj.getBlockMetadata(t.xCoord, t.yCoord, t.zCoord);
 
@@ -29,16 +29,26 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		{
 			if (blockID == ElectricExpansion.blockInsulatedWire.blockID)
 			{
-				if (metadata == 0)
-					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedCopperWire.png";
-				else if (metadata == 1)
-					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedTinWire.png";
-				else if (metadata == 2)
-					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedSilverWire.png";
-				else if (metadata == 3)
-					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedHVWire.png";
-				else if (metadata == 4)
-					textureToUse = ElectricExpansion.TEXTURE_PATH + "InsulatedSCWire.png";
+				System.out.print("Insulated Wire: ");
+				switch (metadata)
+				{
+					case 0:
+						textureToUse = textureToUse +  "InsulatedCopperWire.png";
+						break;
+					case 1:
+						textureToUse = textureToUse +  "InsulatedTinWire.png";
+						break;
+					case 2:
+						textureToUse = textureToUse +  "InsulatedSilverWire.png";
+						break;
+					case 3:
+						textureToUse = textureToUse +  "InsulatedHVWire.png";
+						break;
+					case 4:
+						textureToUse = textureToUse +  "InsulatedSCWire.png";
+						break;
+				}
+				System.out.println(textureToUse);
 			}
 
 			else if (blockID == ElectricExpansion.blockLogisticsWire.blockID)
@@ -47,19 +57,19 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				switch (metadata)
 				{
 					case 0:
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "CopperLogisticsWire.png";
+						textureToUse = textureToUse +  "CopperLogisticsWire.png";
 						break;
 					case 1:
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "TinLogisticsWire.png";
+						textureToUse = textureToUse +  "TinLogisticsWire.png";
 						break;
 					case 2:
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "SilverLogisticsWire.png";
+						textureToUse = textureToUse +  "SilverLogisticsWire.png";
 						break;
 					case 3:
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "HVLogisticsWire.png";
+						textureToUse = textureToUse +  "HVLogisticsWire.png";
 						break;
 					case 4:
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "SCLogisticsWire.png";
+						textureToUse = textureToUse +  "SCLogisticsWire.png";
 						break;
 				}
 
@@ -72,35 +82,43 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					switch (metadata)
 					{
 						case 0:
-							textureToUse = ElectricExpansion.TEXTURE_PATH + "CopperSwitchWireOn.png";
+							textureToUse = textureToUse +  "CopperSwitchWireOn.png";
 							break;
 						case 1:
-							textureToUse = ElectricExpansion.TEXTURE_PATH + "TinSwitchWireOn.png";
+							textureToUse = textureToUse +  "TinSwitchWireOn.png";
 							break;
 						case 2:
-							textureToUse = ElectricExpansion.TEXTURE_PATH + "SilverSwitchWireOn.png";
+							textureToUse = textureToUse +  "SilverSwitchWireOn.png";
 							break;
 						case 3:
-							textureToUse = ElectricExpansion.TEXTURE_PATH + "HVSwitchWireOn.png";
+							textureToUse = textureToUse +  "HVSwitchWireOn.png";
 							break;
 						case 4:
-							textureToUse = ElectricExpansion.TEXTURE_PATH + "SCSwitchWireOn.png";
+							textureToUse = textureToUse +  "SCSwitchWireOn.png";
 							break;
 					}
 				}
 
 				else
 				{
-					if (metadata == 0)
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "CopperSwitchWireOff.png";
-					else if (metadata == 1)
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "TinSwitchWireOff.png";
-					else if (metadata == 2)
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "SilverSwitchWireOff.png";
-					else if (metadata == 3)
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "HVSwitchWireOff.png";
-					else if (metadata == 4)
-						textureToUse = ElectricExpansion.TEXTURE_PATH + "SCSwitchWireOff.png";
+					switch (metadata)
+					{
+						case 0:
+							textureToUse = textureToUse + "CopperSwitchWireOff.png";
+							break;
+						case 1:
+							textureToUse = textureToUse + "TinSwitchWireOff.png";
+							break;
+						case 2:
+							textureToUse = textureToUse + "SilverSwitchWireOff.png";
+							break;
+						case 3:
+							textureToUse = textureToUse + "HVSwitchWireOff.png";
+							break;
+						case 4:
+							textureToUse = textureToUse + "SCSwitchWireOff.png";
+							break;
+					}
 				}
 			}
 		}

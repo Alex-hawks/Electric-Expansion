@@ -71,6 +71,7 @@ import electricexpansion.common.itemblocks.ItemBlockWireBlock;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemBase;
 import electricexpansion.common.items.ItemEliteBattery;
+import electricexpansion.common.items.ItemFuse;
 import electricexpansion.common.items.ItemInfiniteBattery;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
@@ -93,17 +94,20 @@ public class ElectricExpansion
 
 	public static final String NAME = "Electric Expansion";
 
-	public static final String RESOURCE_PATH = "/electricexpansion/";
-	public static final String LANGUAGE_PATH = RESOURCE_PATH + "language/";
-	public static final String TEXTURE_PATH = RESOURCE_PATH + "textures/";
-	public static final String ITEM_FILE = TEXTURE_PATH + "items.png";
-	public static final String BLOCK_FILE = TEXTURE_PATH + "blocks.png";
+	public static final String RESOURCE_PATH 	= "/electricexpansion/";
+	public static final String LANGUAGE_PATH 	= RESOURCE_PATH + "language/";
+	public static final String TEXTURE_PATH 	= RESOURCE_PATH + "textures/";
+	public static final String ITEM_FILE 		= TEXTURE_PATH + "items.png";
+	public static final String BLOCK_FILE 		= TEXTURE_PATH + "blocks.png";
+	public static final String GUI_PATH			= TEXTURE_PATH + "gui/";
+	public static final String MACHINE_PATH		= TEXTURE_PATH + "machine/";
+	public static final String WIRE_PATH		= TEXTURE_PATH + "wire/";
 
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
 
 	public static final int MAJOR_VERSION = 1;
-	public static final int MINOR_VERSION = 4;
-	public static final int REVISION_VERSION = 1;
+	public static final int MINOR_VERSION = 5;
+	public static final int REVISION_VERSION = 0;
 	public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVISION_VERSION;
 
 	public static OreGenBase silverOreGeneration;
@@ -128,7 +132,7 @@ public class ElectricExpansion
 	public static Block blockLead;
 	public static Block blockSilverOre;
 	public static Block blockInsulationMachine;
-	public static Block blockFuseBox;
+//	public static Block blockFuseBox;
 	// Items
 	public static Item itemParts;
 	public static Item itemUpgrade;
@@ -140,6 +144,7 @@ public class ElectricExpansion
 	public static Item itemMultimeter;
 	public static Item itemSilverIngot;
 	public static Item itemInfBat;
+	public static Item itemFuse;
 
 	public static ItemStack transformer1;
 	public static ItemStack transformer2;
@@ -179,7 +184,7 @@ public class ElectricExpansion
 		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
 		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), 11, Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setBlockName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
-		blockFuseBox = new BlockFuseBox(CONFIG.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
+//		blockFuseBox = new BlockFuseBox(CONFIG.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
 
 		itemUpgrade = new ItemUpgrade(CONFIG.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0).setItemName("Upgrade");
 		itemEliteBat = new ItemEliteBattery(CONFIG.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
@@ -187,7 +192,7 @@ public class ElectricExpansion
 		itemParts = new ItemParts(CONFIG.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
 		itemLead = new ItemBase(CONFIG.getItem("Lead_Ingot", ITEM_ID_PREFIX + 4).getInt(), 0).setCreativeTab(EETab.INSTANCE).setItemName("LeadIngot");
 		itemAdvBat = new ItemAdvancedBattery(CONFIG.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
-		// +6
+		itemFuse = new ItemFuse(CONFIG.getItem("Fuses", ITEM_ID_PREFIX + 6).getInt());
 		itemCoil = new ItemBase(CONFIG.getItem("Coil", ITEM_ID_PREFIX + 7).getInt(), 10).setCreativeTab(EETab.INSTANCE).setItemName("coil");
 		itemMultimeter = new ItemMultimeter(CONFIG.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt()).setCreativeTab(EETab.INSTANCE).setItemName("itemMultimeter");
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), 2).setItemName("silveringot");
@@ -262,7 +267,7 @@ public class ElectricExpansion
 //		GameRegistry.registerBlock(blockRedstoneWire, ItemBlock.class, "blockRedstoneWire", this.MOD_ID);
 
 		GameRegistry.registerBlock(blockDistribution, ItemBlock.class, "blockDistribution", this.MOD_ID);
-		GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
+//		GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
 
 		GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class, "blockRawWire", this.MOD_ID);
 		GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire", this.MOD_ID);
@@ -420,7 +425,7 @@ public class ElectricExpansion
 		String folderDir = "";
 		if (MinecraftServer.getServer().isDedicatedServer())
 		{
-			folderDir = "mods" + File.separator + "ElectricExpansionLanguages";
+			folderDir = "mods/" + "ElectricExpansionLanguages";
 		}
 		else if (!MinecraftServer.getServer().isDedicatedServer())
 		{

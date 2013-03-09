@@ -14,6 +14,7 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
@@ -28,7 +29,7 @@ import universalelectricity.prefab.tile.TileEntityElectricityReceiver;
 public class TileEntityFuseBox extends TileEntityElectricityReceiver
 implements IRotatable, IPacketReceiver, IInventory
 {
-	private ItemStack[] inventory = new ItemStack[1];
+	public ItemStack[] inventory = new ItemStack[1];
 	private int playersUsing = 0;
 
 	public void initiate()
@@ -43,7 +44,7 @@ implements IRotatable, IPacketReceiver, IInventory
 
 		if (!this.worldObj.isRemote)
 		{
-			if (hasFuse())
+			if (this.hasFuse())
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2).getOpposite();
 				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
@@ -63,14 +64,17 @@ implements IRotatable, IPacketReceiver, IInventory
 
 					outputNetwork.startProducing(this, recieved);
 
-					if (recieved.voltage > ((IItemFuse)this.inventory[0].getItem()).getMaxVolts(this.inventory[0]))
+					if (recieved.amperes > ((IItemFuse)this.inventory[0].getItem()).getMaxVolts(this.inventory[0]))
 					{
 						((IItemFuse)this.inventory[0].getItem()).onFuseTrip(this.inventory[0]);
 					}
 				}
-				else
+				else if (outputNetwork != null && inputNetwork == null)
 				{
 					outputNetwork.stopProducing(this);
+				}
+				else if (outputNetwork == null && inputNetwork != null)
+				{
 					inputNetwork.stopRequesting(this);
 				}
 			}
@@ -136,7 +140,7 @@ implements IRotatable, IPacketReceiver, IInventory
 
 	public boolean hasFuse()
 	{
-		if (this.inventory != null)
+		if (this.inventory[0] != null)
 		{
 			if ((this.inventory[0].getItem() instanceof IItemFuse))
 			{
@@ -149,7 +153,7 @@ implements IRotatable, IPacketReceiver, IInventory
 	@Override
 	public String getInvName()
 	{
-		return "Fuse Box";
+		return StatCollector.translateToLocal("container.FuseBox");
 	}
 
 	@Override
@@ -187,7 +191,8 @@ implements IRotatable, IPacketReceiver, IInventory
 	@Override
 	public void setInventorySlotContents(int var1, ItemStack var2)
 	{
-		this.inventory[var1] = var2;
+		if (var1 < this.inventory.length)
+			this.inventory[var1] = var2;
 	}
 
 	@Override

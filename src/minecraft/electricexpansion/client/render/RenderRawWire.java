@@ -24,20 +24,20 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 
 	public void renderAModelAt(TileEntityRawWire t, double x, double y, double z, float f)
 	{
-		String textureToUse = null;
+		String textureToUse = ElectricExpansion.WIRE_PATH;
 		int meta = t.getBlockMetadata();
 		if (meta != -1)
 		{
 			if (meta == 0)
-				textureToUse = ElectricExpansion.TEXTURE_PATH + "RawCopperWire.png";
+				textureToUse += "RawCopperWire.png";
 			else if (meta == 1)
-				textureToUse = ElectricExpansion.TEXTURE_PATH + "RawTinWire.png";
+				textureToUse += "RawTinWire.png";
 			else if (meta == 2)
-				textureToUse = ElectricExpansion.TEXTURE_PATH + "RawSilverWire.png";
+				textureToUse += "RawSilverWire.png";
 			else if (meta == 3)
-				textureToUse = ElectricExpansion.TEXTURE_PATH + "RawHVWire.png";
+				textureToUse += "RawHVWire.png";
 			else if (meta == 4)
-				textureToUse = ElectricExpansion.TEXTURE_PATH + "RawSCWire.png";
+				textureToUse += "RawSCWire.png";
 		}
 
 		// Texture file

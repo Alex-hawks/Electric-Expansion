@@ -2,6 +2,7 @@ package electricexpansion.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import net.minecraft.client.Minecraft;
@@ -49,7 +50,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
-		int var4 = this.mc.renderEngine.getTexture("electricexpansiontexturesBatBox.png");
+		int var4 = this.mc.renderEngine.getTexture(this.getTexture());
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(var4);
 
@@ -58,5 +59,10 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
 		int scale = (int)(this.tileEntity.getJoules(new Object[0]) / this.tileEntity.getMaxJoules(new Object[0]) * 72.0D);
 		drawTexturedModalRect(this.containerWidth + 64, this.containerHeight + 46, 176, 0, scale, 20);
+	}
+	
+	public static String getTexture()
+	{
+		return ElectricExpansion.GUI_PATH + "GuiBatBox.png";
 	}
 }

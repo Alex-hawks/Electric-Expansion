@@ -13,9 +13,11 @@ import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.containers.ContainerAdvBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
+import electricexpansion.common.containers.ContainerFuseBox;
 import electricexpansion.common.containers.ContainerInsulationMachine;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
+import electricexpansion.common.tile.TileEntityFuseBox;
 import electricexpansion.common.tile.TileEntityInsulatingMachine;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
@@ -58,12 +60,18 @@ public class CommonProxy implements IGuiHandler
 			{
 				case 0:
 					return new ContainerAdvBatteryBox(player.inventory, ((TileEntityAdvancedBatteryBox) tileEntity));
+				case 1:
+					break;  //	What's this used for?
 				case 2:
 					return new ContainerWireMill(player.inventory, (TileEntityWireMill) tileEntity);
+				case 3:
+					break;	//	Logistics Wire
 				case 4:
 					return new ContainerDistribution(player.inventory, (TileEntityQuantumBatteryBox) tileEntity);
 				case 5:
 					return new ContainerInsulationMachine(player.inventory, (TileEntityInsulatingMachine) tileEntity);
+				case 6:
+					return new ContainerFuseBox(player.inventory, (TileEntityFuseBox) tileEntity);
 			}
 		}
 		return null;

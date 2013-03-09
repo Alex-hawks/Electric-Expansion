@@ -76,6 +76,8 @@ public class ClientProxy extends CommonProxy
 			{
 				case 0:
 					return new GuiAdvancedBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
+				case 1:
+					break; 	//	What's this used for?
 				case 2:
 					return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
 				case 3:

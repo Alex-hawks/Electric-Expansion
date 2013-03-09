@@ -17,6 +17,7 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.ClientProxy;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityFuseBox;
 
@@ -148,8 +149,14 @@ public class BlockFuseBox extends BlockMachine
 	}
 	
 	@Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+	public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
-        return false;
+		if (!par1World.isRemote)
+		{
+			par5EntityPlayer.openGui(ElectricExpansion.instance, 6, par1World, x, y, z);
+			return true;
+		}
+
+		return true;
     }
 }

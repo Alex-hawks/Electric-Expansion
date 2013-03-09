@@ -16,10 +16,6 @@ public class ModelInsulatedWire extends ModelBase
 	ModelRenderer Front;
 	ModelRenderer Top;
 	ModelRenderer Bottom;
-	ModelRenderer PanelBack;
-	ModelRenderer PanelLeft;
-	ModelRenderer PanelRight;
-	ModelRenderer PanelFront;
 
 	public ModelInsulatedWire()
 	{
@@ -68,30 +64,6 @@ public class ModelInsulatedWire extends ModelBase
 		Bottom.setTextureSize(64, 32);
 		Bottom.mirror = true;
 		setRotation(Bottom, 0F, 0F, 0F);
-		PanelBack = new ModelRenderer(this, 0, 10);
-		PanelBack.addBox(0F, 0F, 0F, 4, 4, 6);
-		PanelBack.setRotationPoint(-2F, 20F, 2F);
-		PanelBack.setTextureSize(64, 32);
-		PanelBack.mirror = true;
-		setRotation(PanelBack, 0F, 0F, 0F);
-		PanelLeft = new ModelRenderer(this, 44, 0);
-		PanelLeft.addBox(0F, 0F, 0F, 6, 4, 4);
-		PanelLeft.setRotationPoint(-8F, 20F, -2F);
-		PanelLeft.setTextureSize(64, 32);
-		PanelLeft.mirror = true;
-		setRotation(PanelLeft, 0F, 0F, 0F);
-		PanelRight = new ModelRenderer(this, 22, 0);
-		PanelRight.addBox(0F, 0F, 0F, 6, 4, 4);
-		PanelRight.setRotationPoint(2F, 20F, -2F);
-		PanelRight.setTextureSize(64, 32);
-		PanelRight.mirror = true;
-		setRotation(PanelRight, 0F, 0F, 0F);
-		PanelFront = new ModelRenderer(this, 0, 22);
-		PanelFront.addBox(0F, 0F, 0F, 4, 4, 6);
-		PanelFront.setRotationPoint(-2F, 20F, -8F);
-		PanelFront.setTextureSize(64, 32);
-		PanelFront.mirror = true;
-		setRotation(PanelFront, 0F, 0F, 0F);
 	}
 
 	public void renderMiddle()
@@ -127,26 +99,6 @@ public class ModelInsulatedWire extends ModelBase
 	public void renderFront()
 	{
 		Front.render(0.0625F);
-	}
-
-	public void renderPanelLeft()
-	{
-		PanelLeft.render(0.0625F);
-	}
-
-	public void renderPanelRight()
-	{
-		PanelRight.render(0.0625F);
-	}
-
-	public void renderPanelBack()
-	{
-		PanelBack.render(0.0625F);
-	}
-
-	public void renderPanelFront()
-	{
-		PanelFront.render(0.0625F);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)

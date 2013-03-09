@@ -84,6 +84,6 @@ public class GuiWireMill extends GuiContainer
 
 	public static String getTexture()
 	{
-		return ElectricExpansion.TEXTURE_PATH + "WireMillGUI.png";
+		return ElectricExpansion.GUI_PATH + "GuiEEMachine.png";
 	}
 }

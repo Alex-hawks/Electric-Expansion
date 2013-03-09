@@ -15,11 +15,6 @@ public class ModelRawWire extends ModelBase
 	ModelRenderer Front;
 	ModelRenderer Bottom;
 	ModelRenderer Top;
-	ModelRenderer PanelRight;
-	ModelRenderer PanelFront;
-	ModelRenderer PanelBack;
-	ModelRenderer PanelLeft;
-	ModelRenderer Panel;
 
 	public ModelRawWire()
 	{
@@ -68,36 +63,6 @@ public class ModelRawWire extends ModelBase
 		Top.setTextureSize(64, 32);
 		Top.mirror = true;
 		setRotation(Top, 0F, 0F, 0F);
-		PanelRight = new ModelRenderer(this, 22, 0);
-		PanelRight.addBox(0F, 0F, 0F, 7, 2, 2);
-		PanelRight.setRotationPoint(1F, 21F, -1F);
-		PanelRight.setTextureSize(64, 32);
-		PanelRight.mirror = true;
-		setRotation(PanelRight, 0F, 0F, 0F);
-		PanelFront = new ModelRenderer(this, 0, 22);
-		PanelFront.addBox(0F, 0F, 0F, 2, 2, 7);
-		PanelFront.setRotationPoint(-1F, 21F, -8F);
-		PanelFront.setTextureSize(64, 32);
-		PanelFront.mirror = true;
-		setRotation(PanelFront, 0F, 0F, 0F);
-		PanelBack = new ModelRenderer(this, 0, 10);
-		PanelBack.addBox(0F, 0F, 0F, 2, 2, 7);
-		PanelBack.setRotationPoint(-1F, 21F, 1F);
-		PanelBack.setTextureSize(64, 32);
-		PanelBack.mirror = true;
-		setRotation(PanelBack, 0F, 0F, 0F);
-		PanelLeft = new ModelRenderer(this, 44, 0);
-		PanelLeft.addBox(0F, 0F, 0F, 7, 2, 2);
-		PanelLeft.setRotationPoint(-8F, 21F, -1F);
-		PanelLeft.setTextureSize(64, 32);
-		PanelLeft.mirror = true;
-		setRotation(PanelLeft, 0F, 0F, 0F);
-		Panel = new ModelRenderer(this, 22, 10);
-		Panel.addBox(0F, 0F, 0F, 2, 6, 2);
-		Panel.setRotationPoint(-1F, 17F, -1F);
-		Panel.setTextureSize(64, 32);
-		Panel.mirror = true;
-		setRotation(Panel, 0F, 0F, 0F);
 	}
 
 	public void renderMiddle()
@@ -133,31 +98,6 @@ public class ModelRawWire extends ModelBase
 	public void renderFront()
 	{
 		Front.render(0.0625F);
-	}
-
-	public void renderPanel()
-	{
-		Panel.render(0.0625F);
-	}
-
-	public void renderPanelRight()
-	{
-		PanelRight.render(0.0625F);
-	}
-
-	public void renderPanelFront()
-	{
-		PanelFront.render(0.0625F);
-	}
-
-	public void renderPanelBack()
-	{
-		PanelBack.render(0.0625F);
-	}
-
-	public void renderPanelLeft()
-	{
-		PanelLeft.render(0.0625F);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z)

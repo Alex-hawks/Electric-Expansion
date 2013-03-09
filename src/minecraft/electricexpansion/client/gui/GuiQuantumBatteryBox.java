@@ -140,4 +140,9 @@ public class GuiQuantumBatteryBox extends GuiContainer
 		if (!this.textFieldFrequency.isFocused())
 			this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
 	}
+
+	public static String getTexture()
+	{
+		return ElectricExpansion.GUI_PATH + "GuiLogistics.png";
+	}
 }
