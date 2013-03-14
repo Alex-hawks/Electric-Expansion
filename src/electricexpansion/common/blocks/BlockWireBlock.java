@@ -3,28 +3,33 @@ package electricexpansion.common.blocks;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityWireBlock;
+import electricexpansion.common.helpers.TileEntityConductorBase;
+import electricexpansion.common.misc.EETab;
 
 public class BlockWireBlock extends BlockConductor
 {
 	public BlockWireBlock(int id, int meta)
 	{
 		super(id, Material.rock);
-		this.setBlockName("HiddenWire");
+		this.setUnlocalizedName("HiddenWire");
 		this.setStepSound(soundStoneFootstep);
 		this.setResistance(0.2F);
-		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-//		this.setCreativeTab(EETab.INSTANCE);
+		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override
@@ -56,22 +61,32 @@ public class BlockWireBlock extends BlockConductor
 		return new TileEntityWireBlock();
 	}
 
-	public int getBlockTextureFromSideAndMetadata(int side, int meta)
-	{
-		int texture = 0;
-		texture = meta + 0;
-		return texture;
-	}
-
-	public String getTextureFile()
-	{
-		return ElectricExpansion.BLOCK_FILE;
-	}
-
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int var4 = 0; var4 < 5; ++var4)
 			par3List.add(new ItemStack(par1, 1, var4));
+	}
+
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+    {
+        return (((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null) ? this.field_94336_cN : ((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack.getIconIndex();
+    }
+	
+	@Override
+	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) 
+	{
+		if (world.getBlockTileEntity(x, y, z) instanceof TileEntityConductorBase)
+			((TileEntityConductorBase)world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory.getCurrentItem();
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister par1IconRegister)
+	{
+		this.field_94336_cN = par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "CamoWire");
 	}
 }

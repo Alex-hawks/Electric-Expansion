@@ -23,12 +23,11 @@ public class BlockInsulatedWire extends BlockConductor
 	public BlockInsulatedWire(int id, int meta)
 	{
 		super(id, Material.cloth);
-		this.setBlockName("InsulatedWire");
+		this.setUnlocalizedName("InsulatedWire");
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setHardness(0.1F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
-		this.setRequiresSelfNotify();
 		this.setCreativeTab(EETab.INSTANCE);
 	}
 
@@ -62,12 +61,6 @@ public class BlockInsulatedWire extends BlockConductor
 		return new TileEntityInsulatedWire();
 	}
 
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.ITEM_FILE;
-	}
-
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
@@ -86,7 +79,7 @@ public class BlockInsulatedWire extends BlockConductor
 		{
 			if (tileEntity instanceof IConductor)
 			{
-				((IConductor) tileEntity).refreshConnectedBlocks();
+				((IConductor) tileEntity).updateAdjacentConnections();
 				this.updateWireSwitch(world, x, y, z);
 			}
 		}
@@ -117,7 +110,7 @@ public class BlockInsulatedWire extends BlockConductor
 
 					PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 0, tileEntity.colorByte));
 
-					((IConductor) tileEntity).refreshConnectedBlocks();
+					((IConductor) tileEntity).updateAdjacentConnections();
 
 					this.updateWireSwitch(par1World, x, y, z);
 
@@ -170,7 +163,7 @@ public class BlockInsulatedWire extends BlockConductor
 				
 				if(tileEntity1 instanceof IConductor)
 				{
-					((IConductor) tileEntity1).refreshConnectedBlocks();
+					((IConductor) tileEntity1).updateAdjacentConnections();
 					tileEntity1.worldObj.markBlockForUpdate(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord);
 				}
 			}

@@ -48,9 +48,6 @@ public class ClientProxy extends CommonProxy
 		RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(new RenderHandler());
 		
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.BLOCK_FILE);
-		MinecraftForgeClient.preloadTexture(ElectricExpansion.ITEM_FILE);
-		
 		ClientRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill", new RenderWireMill());
 		ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
 		ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", new RenderInsulatedWire());

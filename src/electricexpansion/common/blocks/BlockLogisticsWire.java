@@ -26,12 +26,11 @@ public class BlockLogisticsWire extends BlockConductor
 	public BlockLogisticsWire(int id, int meta)
 	{
 		super(id, Material.cloth);
-		this.setBlockName("LogisticsWire");
+		this.setUnlocalizedName("LogisticsWire");
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setHardness(0.1F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
-		this.setRequiresSelfNotify();
 		this.setCreativeTab(EETab.INSTANCE);
 	}
 
@@ -72,12 +71,6 @@ public class BlockLogisticsWire extends BlockConductor
 	}
 
 	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.ITEM_FILE;
-	}
-
-	@Override
 	public boolean canProvidePower()
 	{
 		return true;
@@ -90,9 +83,6 @@ public class BlockLogisticsWire extends BlockConductor
 			par3List.add(new ItemStack(par1, 1, var4));
 	}
 
-	/**
-	 * Called when the block is right clicked by the player
-	 */
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
@@ -115,29 +105,25 @@ public class BlockLogisticsWire extends BlockConductor
 
 	}
 
-	/**
-	 * Is this block powering the block on the specified side
-	 */
 	@Override
-	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
 	{
 		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+		if (tileEntity instanceof IRedstoneProvider)
+			return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
 
-		return false;
+		return 0;
 	}
 
-	/**
-	 * Is this block indirectly powering the block on the specified side
-	 */
 	@Override
-	public boolean isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
 	{
 		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)); }
+		if (tileEntity instanceof IRedstoneProvider)
+			return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
 
-		return false;
+		return 0;
 	}
 }

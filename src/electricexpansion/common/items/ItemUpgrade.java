@@ -2,17 +2,30 @@ package electricexpansion.common.items;
 
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import universalelectricity.prefab.modifier.IModifier;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-	private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade", "HVInputUpgrade" };
+	private String[] names = new String[] { 
+			"Storage1", 	"Storage2", 	"Storage3", 		"Storage4", 
+			"HalfVoltage", 	"HVUpgrade", 	"HVInputUpgrade", 	"DoubleVoltage",
+			"Unlimiter1", 	"Unlimiter2", 	"Unlimiter3", 		"Unlimiter4" 
+			};
+	
+	private Icon[] icons = new Icon[names.length];
+	private Icon defaultIcon;
 
 	public ItemUpgrade(int id, int texture)
 	{
@@ -31,29 +44,17 @@ public class ItemUpgrade extends Item implements IModifier
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack)
+	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return getItemName() + "." + names[itemstack.getItemDamage()];
+		return this.getUnlocalizedName() + "." + names[itemstack.getItemDamage()];
 	}
 
 	@Override
-	public int getIconFromDamage(int i)
+	public Icon getIconFromDamage(int i)
 	{
-		if (i == 0) { return this.iconIndex + 0; }
-		if (i == 1) { return this.iconIndex + 1; }
-		if (i == 2) { return this.iconIndex + 2; }
-		if (i == 3) { return this.iconIndex + 3; }
-		if (i == 4) { return this.iconIndex + 4; }
-		if (i == 5) { return this.iconIndex + 5; }
-		if (i == 6) { return this.iconIndex + 6; }
-		return 6;
-
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.ITEM_FILE;
+		if (i <= this.icons.length)
+			return this.icons[i];
+		return this.defaultIcon;
 	}
 
 	@Override
@@ -68,30 +69,43 @@ public class ItemUpgrade extends Item implements IModifier
 	@Override
 	public String getName(ItemStack itemstack)
 	{
-		if (itemstack.getItemDamage() == 0) { return "Capacity"; }
-		if (itemstack.getItemDamage() == 1) { return "Capacity"; }
-		if (itemstack.getItemDamage() == 2) { return "Capacity"; }
-		if (itemstack.getItemDamage() == 3) { return "Capacity"; }
-		if (itemstack.getItemDamage() == 4) { return "VoltageModifier"; }
-		if (itemstack.getItemDamage() == 5) { return "VoltageModifier"; }
-		if (itemstack.getItemDamage() == 6) { return "InputVoltageModifier"; }
-
-		return null;
+		switch (itemstack.getItemDamage())
+		{
+			case 0:	
+			case 1:	
+			case 2:	
+			case 3:		return "Capacity";
+			case 4:	
+			case 5:		return "VoltageModifier";
+			case 6:		return "InputVoltageModifier";
+			case 7:		return "VoltageModifier";		//	Seperate because it was added at a later point in time
+			case 8:	
+			case 9:	
+			case 10:
+			case 11:	return "Unlimiter";
+			default:	return "Unknown";
+		}
 	}
 
 	@Override
 	public int getEffectiveness(ItemStack itemstack)
 	{
-		if (itemstack.getItemDamage() == 0) { return 1000000; }
-		if (itemstack.getItemDamage() == 1) { return 2000000; }
-		if (itemstack.getItemDamage() == 2) { return 3000000; }
-		if (itemstack.getItemDamage() == 3) { return 5000000; } // Tier 4 storage upgrade(
-																// "...unbeatable end game..." )
-		if (itemstack.getItemDamage() == 4) { return -2; }
-		if (itemstack.getItemDamage() == 5) { return 20; }
-		if (itemstack.getItemDamage() == 6) { return 20; }
-
-		return 0;
+		switch (itemstack.getItemDamage())
+		{
+			case 0:		return 1000000;
+			case 1:		return 2000000;
+			case 2:		return 3000000;
+			case 3:		return 5000000;
+			case 4:		return -2;
+			case 5:		return 20;
+			case 6:		return 20;
+			case 7:		return 2;
+			case 8:		return 5;
+			case 9:		return 10;
+			case 10:	return 20;
+			case 11:	return 40;
+			default:	return 0;
+		}
 	}
 
 	/**
@@ -102,29 +116,20 @@ public class ItemUpgrade extends Item implements IModifier
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
 	{
-		switch (itemstack.getItemDamage())
+		String strength = "";
+		int effectiveness = this.getEffectiveness(itemstack);
+		if (effectiveness < 0)
 		{
-			case 0:
-				par3List.add("\u00a72Increases Capacity by 1 Mj");
-				break;
-			case 1:
-				par3List.add("\u00a72Increases Capacity by 2 Mj");
-				break;
-			case 2:
-				par3List.add("\u00a72Increases Capacity by 3 Mj");
-				break;
-			case 3:
-				par3List.add("\u00a72Increases Capacity by 5 Mj");
-				break;
-			case 4:
-				par3List.add("\u00a72Decreases Voltage by Half");
-				break;
-			case 5:
-				par3List.add("\u00a72Multiplies Voltage by 20");
-				break;
-			case 6:
-				par3List.add("\u00a72Multiplies Input Voltage Acceptance by 20");
-				break;
+			strength = " 1/" + String.valueOf(effectiveness * -1);
 		}
+		par3List.add("\u00a72" + StatCollector.translateToLocal("upgrades.description." + this.getName(itemstack)).replaceAll("<>", strength));
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94581_a(IconRegister iconRegister)
+	{
+		for (int i = 0; i < this.names.length; i++)
+			this.icons[i] = iconRegister.func_94245_a((this.getUnlocalizedName() + "." + i).replace("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
 	}
 }

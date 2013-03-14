@@ -28,17 +28,11 @@ public class BlockWireMill extends BlockAdvanced
 		this.setCreativeTab(EETab.INSTANCE);
 	}
 
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.BLOCK_FILE;
-	}
-
 	/**
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
 
@@ -48,16 +42,16 @@ public class BlockWireMill extends BlockAdvanced
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockMetadata(x, y, z, 1);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
 				break;
 			case 1:
-				par1World.setBlockMetadata(x, y, z, 2);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
 				break;
 			case 2:
-				par1World.setBlockMetadata(x, y, z, 0);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
 				break;
 			case 3:
-				par1World.setBlockMetadata(x, y, z, 3);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
 				break;
 		}
 
@@ -89,7 +83,7 @@ public class BlockWireMill extends BlockAdvanced
 				break;
 		}
 
-		par1World.setBlockMetadata(x, y, z, change);
+		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
@@ -121,7 +115,7 @@ public class BlockWireMill extends BlockAdvanced
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int metadata)
+	public TileEntity createTileEntity(World var1, int metadata)
 	{
 		return new TileEntityWireMill();
 

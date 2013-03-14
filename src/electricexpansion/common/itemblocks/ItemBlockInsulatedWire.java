@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import electricexpansion.common.helpers.ItemBlockCableHelper;
 
 public class ItemBlockInsulatedWire extends ItemBlockCableHelper
@@ -12,17 +13,7 @@ public class ItemBlockInsulatedWire extends ItemBlockCableHelper
 	{
 		super(id);
 	}
-
-	public int getIconFromDamage(int i)
-	{
-		return i + 96;
-	}
 	
-	/**
-	 * Allows items to add custom lines of information to the mouseover description. If you want to
-	 * add more information to your item, you can super.addInformation() to keep the electiricty
-	 * info in the item info bar.
-	 */
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{

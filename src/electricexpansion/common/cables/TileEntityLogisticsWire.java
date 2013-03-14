@@ -26,6 +26,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	private double networkProduced = 0;
 
 	private int playersUsing = 0;
+	private byte tick = 0;
 
 	@Override
 	public void initiate()
@@ -100,64 +101,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	}
 
 	@Override
-	public void updateConnection(TileEntity tileEntity, ForgeDirection side)
-	{
-		if (!this.worldObj.isRemote)
-		{
-			if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
-			{
-				this.connectedBlocks[side.ordinal()] = tileEntity;
-				this.visuallyConnected[side.ordinal()] = true;
-
-				if (tileEntity instanceof IConductor)
-				{
-					Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
-				}
-
-				return;
-			}
-
-			if (this.connectedBlocks[side.ordinal()] != null)
-			{
-				if (this.connectedBlocks[side.ordinal()] instanceof IConductor)
-				{
-					Electricity.instance.splitConnection(this, (IConductor) this.getConnectedBlocks()[side.ordinal()]);
-				}
-
-				this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
-				this.getNetwork().stopRequesting(this.connectedBlocks[side.ordinal()]);
-			}
-
-			this.connectedBlocks[side.ordinal()] = null;
-			this.visuallyConnected[side.ordinal()] = false;
-		}
-	}
-
-	@Override
-	public void updateConnectionWithoutSplit(TileEntity tileEntity, ForgeDirection side)
-	{
-		if (!this.worldObj.isRemote)
-		{
-			if (ElectricityConnections.canConnect(tileEntity, side.getOpposite()))
-			{
-				this.connectedBlocks[side.ordinal()] = tileEntity;
-				this.visuallyConnected[side.ordinal()] = true;
-
-				if (tileEntity instanceof IConductor)
-				{
-					Electricity.instance.mergeConnection(this.getNetwork(), ((IConductor) tileEntity).getNetwork());
-				}
-
-				return;
-
-			}
-
-			this.connectedBlocks[side.ordinal()] = null;
-			this.visuallyConnected[side.ordinal()] = false;
-		}
-	}
-
-	@Override
 	public void readFromNBT(NBTTagCompound nbt)
 	{
 		super.readFromNBT(nbt);
@@ -174,7 +117,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 		nbt.setBoolean("buttonStatus0", this.buttonStatus0);
 		nbt.setBoolean("buttonStatus1", this.buttonStatus1);
 		nbt.setBoolean("buttonStatus2", this.buttonStatus2);
-
 	}
 
 	@Override
@@ -182,8 +124,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 	{
 		return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1, this.buttonStatus2);
 	}
-
-	private byte tick = 0;
 
 	@Override
 	public void updateEntity()

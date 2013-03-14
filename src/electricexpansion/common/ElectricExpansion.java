@@ -46,6 +46,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.blocks.BlockAdvancedBatteryBox;
+import electricexpansion.common.blocks.BlockBasic;
 import electricexpansion.common.blocks.BlockFuseBox;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockInsulationMachine;
@@ -53,7 +54,6 @@ import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockQuantumBatteryBox;
 import electricexpansion.common.blocks.BlockRawWire;
-import electricexpansion.common.blocks.BlockSilverOre;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
 import electricexpansion.common.blocks.BlockTransformer;
@@ -94,11 +94,13 @@ public class ElectricExpansion
 	public static final String RESOURCE_PATH 	= "/mods/electricexpansion/";
 	public static final String LANGUAGE_PATH 	= RESOURCE_PATH + "language/";
 	public static final String TEXTURE_PATH 	= RESOURCE_PATH + "textures/";
-	public static final String ITEM_FILE 		= TEXTURE_PATH + "items.png";
-	public static final String BLOCK_FILE 		= TEXTURE_PATH + "blocks.png";
+	public static final String ITEM_PATH 		= TEXTURE_PATH + "items/";
+	public static final String BLOCK_PATH		= TEXTURE_PATH + "blocks/";
 	public static final String GUI_PATH			= TEXTURE_PATH + "gui/";
 	public static final String MACHINE_PATH		= TEXTURE_PATH + "machine/";
 	public static final String WIRE_PATH		= TEXTURE_PATH + "wire/";
+	
+	public static final String TEXTURE_NAME_PREFIX = "electricexpansion";
 
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
 
@@ -143,10 +145,6 @@ public class ElectricExpansion
 	public static Item itemInfBat;
 	public static Item itemFuse;
 
-	public static ItemStack transformer1;
-	public static ItemStack transformer2;
-	public static ItemStack transformer3;
-
 	static boolean debugRecipes;
 	public static boolean useHashCodes;
 
@@ -174,12 +172,12 @@ public class ElectricExpansion
 		// +6
 		blockAdvBatteryBox = new BlockAdvancedBatteryBox(CONFIG.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0);
 		blockMultimeter = new BlockMultimeter(CONFIG.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0);
-		blockSilverOre = new BlockSilverOre(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt());
+		blockSilverOre = new BlockBasic(CONFIG.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt(), Material.rock, EETab.INSTANCE, 2F, "SilverOre");
 		blockInsulationMachine = new BlockInsulationMachine(CONFIG.getBlock("Insulation_Refiner", BLOCK_ID_PREFIX + 10).getInt());
 		blockWireMill = new BlockWireMill(CONFIG.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt());
 		blockTransformer = new BlockTransformer(CONFIG.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt());
 		blockDistribution = new BlockQuantumBatteryBox(CONFIG.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
-		blockLead = new Block(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron).setCreativeTab(EETab.INSTANCE).setHardness(2F).setUnlocalizedName("LeadBlock").setTextureFile(ElectricExpansion.BLOCK_FILE);
+		blockLead = new BlockBasic(CONFIG.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE, 2F, "LeadBlock");
 		blockLogisticsWire = new BlockLogisticsWire(CONFIG.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
 		blockFuseBox = new BlockFuseBox(CONFIG.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
 
@@ -195,9 +193,6 @@ public class ElectricExpansion
 		itemSilverIngot = new ItemBase(CONFIG.getItem("Silver_Ingot", ITEM_ID_PREFIX + 9).getInt(), "silveringot");
 
 		silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 36, 10, 3).enable(CONFIG);
-		transformer1 = ((BlockTransformer) blockTransformer).getTier1();
-		transformer2 = ((BlockTransformer) blockTransformer).getTier2();
-		transformer3 = ((BlockTransformer) blockTransformer).getTier3();
 
 		debugRecipes = CONFIG.get("General", "Debug_Recipes", false).getBoolean(false);
 		useHashCodes = CONFIG.get("General", "Use_Hashcodes", true).getBoolean(true);

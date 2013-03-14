@@ -1,16 +1,25 @@
 package electricexpansion.common.helpers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import electricexpansion.api.EnumWireMaterial;
+import electricexpansion.api.EnumWireType;
+import electricexpansion.common.ElectricExpansion;
 
 public class ItemBlockCableHelper extends ItemBlock
 {
+	protected HashMap<String, Icon> icons = new HashMap<String, Icon>();
+	
 	public ItemBlockCableHelper(int id)
 	{
 		super(id);
@@ -30,11 +39,6 @@ public class ItemBlockCableHelper extends ItemBlock
 		return this.getUnlocalizedName() + "." + EnumWireMaterial.values()[itemStack.getItemDamage()].name;
 	}
 
-	/**
-	 * Allows items to add custom lines of information to the mouseover description. If you want to
-	 * add more information to your item, you can super.addInformation() to keep the electiricty
-	 * info in the item info bar.
-	 */
 	@Override
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
 	{
@@ -42,4 +46,17 @@ public class ItemBlockCableHelper extends ItemBlock
 		par3List.add("Max Amps: " + ElectricityDisplay.getDisplay(EnumWireMaterial.values()[itemstack.getItemDamage()].maxAmps, ElectricUnit.AMPERE));
 	}
 
+	@Override
+	public void func_94581_a(IconRegister par1IconRegister)
+	{
+		String s;
+		for (EnumWireMaterial material : EnumWireMaterial.values())
+		{
+			for (EnumWireType type : EnumWireType.values())
+			{
+				s = material.name() + "." + type.name();
+				this.icons.put(s, par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + s));
+			}
+		}
+	}
 }

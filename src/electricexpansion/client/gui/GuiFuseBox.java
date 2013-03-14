@@ -50,7 +50,7 @@ public class GuiFuseBox extends GuiContainer
 			ItemStack fuseStack = this.tileEntity.getStackInSlot(0);
 			IItemFuse fuse = ((IItemFuse) fuseStack.getItem());
 			this.fontRenderer.drawString(this.tileEntity.getStackInSlot(0).getItemName(), 30, 18, 4210752);
-			this.fontRenderer.drawString(StatCollector.translateToLocal(fuse.getItemNameIS(fuseStack)), 30, 18, 4210752);
+			this.fontRenderer.drawString(StatCollector.translateToLocal(fuse.getUnlocalizedName(fuseStack)), 30, 18, 4210752);
 		}
 	}
 	

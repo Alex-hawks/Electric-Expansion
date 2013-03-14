@@ -1,14 +1,21 @@
 package electricexpansion.common.blocks;
 
+import java.util.HashMap;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
@@ -16,10 +23,13 @@ import universalelectricity.prefab.block.BlockAdvanced;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
+import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityFuseBox;
 
 public class BlockFuseBox extends BlockAdvanced
 {
+	private HashMap<String, Icon> icons = new HashMap<String, Icon>();
+	
 	public BlockFuseBox(int id)
 	{
 		super(id, UniversalElectricity.machine);
@@ -27,36 +37,63 @@ public class BlockFuseBox extends BlockAdvanced
 		this.setCreativeTab(EETab.INSTANCE);
 		this.setStepSound(soundMetalFootstep);
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
+	{
+		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
+		TileEntityFuseBox tileEntity = (TileEntityFuseBox) iBlockAccess.getBlockTileEntity(x, y, z);
+
+		if (side == 0 || side == 1)
+			return this.icons.get("top");
+		else if (side == metadata + 2)
+			return this.icons.get("output");
+		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
+			return this.icons.get("input");
+		else 
+			return this.icons.get("side");
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister par1IconRegister)
+	{
+		this.icons.put("top", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
+		this.icons.put("side", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
+	}
 
 	/**
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving player, ItemStack itemStack)
 	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
+		int metadata = world.getBlockMetadata(x, y, z);
 
-		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int angle = MathHelper.floor_double((player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
 
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockMetadata(x, y, z, 3);
+				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
 				break;
 			case 1:
-				par1World.setBlockMetadata(x, y, z, 1);
+				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
 				break;
 			case 2:
-				par1World.setBlockMetadata(x, y, z, 2);
+				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
 				break;
 			case 3:
-				par1World.setBlockMetadata(x, y, z, 0);
+				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
 				break;
 		}
 
-		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
+		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
 
 	@Override
@@ -84,7 +121,7 @@ public class BlockFuseBox extends BlockAdvanced
 				break;
 		}
 
-		par1World.setBlockMetadata(x, y, z, change);
+		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
@@ -108,14 +145,7 @@ public class BlockFuseBox extends BlockAdvanced
 	{
 		return true;
 	}
-
-/*	@SideOnly(Side.CLIENT)
-	@Override
-	public int getRenderType()
-	{
-		return ClientProxy.RENDER_ID;
-	}
-*/
+	
 	@Override
 	public boolean renderAsNormalBlock()
 	{
@@ -123,7 +153,7 @@ public class BlockFuseBox extends BlockAdvanced
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int metadata)
+	public TileEntity createTileEntity(World var1, int metadata)
 	{
 		return new TileEntityFuseBox();
 	}

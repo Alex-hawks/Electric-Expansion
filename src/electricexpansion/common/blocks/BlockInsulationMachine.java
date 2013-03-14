@@ -1,13 +1,18 @@
 package electricexpansion.common.blocks;
 
+import java.util.HashMap;
+
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.block.BlockAdvanced;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
@@ -19,27 +24,21 @@ import electricexpansion.common.tile.TileEntityInsulatingMachine;
 
 public class BlockInsulationMachine extends BlockAdvanced
 {
+	private HashMap<String, Icon> icons = new HashMap<String, Icon>();
+	
 	public BlockInsulationMachine(int id)
 	{
 		super(id, UniversalElectricity.machine);
-		this.setBlockName("blockInsulationMachine");
 		this.setStepSound(soundMetalFootstep);
 		this.setCreativeTab(EETab.INSTANCE);
-		this.setRequiresSelfNotify();
-		this.setBlockName("insulator");
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.BLOCK_FILE;
+		this.setUnlocalizedName("insulator");
 	}
 
 	/**
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
 
@@ -49,16 +48,16 @@ public class BlockInsulationMachine extends BlockAdvanced
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockMetadata(x, y, z, 1);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
 				break;
 			case 1:
-				par1World.setBlockMetadata(x, y, z, 2);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
 				break;
 			case 2:
-				par1World.setBlockMetadata(x, y, z, 0);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
 				break;
 			case 3:
-				par1World.setBlockMetadata(x, y, z, 3);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
 				break;
 		}
 
@@ -90,7 +89,7 @@ public class BlockInsulationMachine extends BlockAdvanced
 				break;
 		}
 
-		par1World.setBlockMetadata(x, y, z, change);
+		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
@@ -122,7 +121,7 @@ public class BlockInsulationMachine extends BlockAdvanced
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int metadata)
+	public TileEntity createTileEntity(World var1, int metadata)
 	{
 		return new TileEntityInsulatingMachine();
 	}
@@ -152,5 +151,25 @@ public class BlockInsulationMachine extends BlockAdvanced
 	{
 		return 0;
 	}
-
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister par1IconRegister)
+	{
+		this.icons.put("top", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
+		this.icons.put("insulator", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "insulator"));
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+	{
+		if (side == 0 || side == 1)
+			return this.icons.get("top");
+		else if (side == metadata + 2)
+			return this.icons.get("input");
+		else
+			return this.icons.get("insulator");
+	}
 }

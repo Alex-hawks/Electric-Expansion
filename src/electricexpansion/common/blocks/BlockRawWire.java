@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import universalelectricity.prefab.CustomDamageSource;
 import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -22,12 +23,11 @@ public class BlockRawWire extends BlockConductor
 	public BlockRawWire(int id, int meta)
 	{
 		super(id, Material.cloth);
-		this.setBlockName("RawWire");
+		this.setUnlocalizedName("RawWire");
 		this.setStepSound(soundClothFootstep);
 		this.setResistance(0.2F);
 		this.setHardness(0.1F);
 		this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
-		this.setRequiresSelfNotify();
 		this.setCreativeTab(EETab.INSTANCE);
 	}
 
@@ -64,7 +64,7 @@ public class BlockRawWire extends BlockConductor
 
 			if (tileEntity.getNetwork().getProduced().getWatts() > 0)
 			{
-				((EntityLiving) entity).attackEntityFrom(UEDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
+				((EntityLiving) entity).attackEntityFrom(CustomDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
 			}
 		}
 	}
@@ -73,12 +73,6 @@ public class BlockRawWire extends BlockConductor
 	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntityRawWire();
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.ITEM_FILE;
 	}
 
 	@SideOnly(Side.CLIENT)

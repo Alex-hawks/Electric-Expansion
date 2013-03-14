@@ -1,14 +1,17 @@
 package electricexpansion.common.blocks;
 
+import java.util.HashMap;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
@@ -24,78 +27,72 @@ import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 
 public class BlockQuantumBatteryBox extends BlockAdvanced
 {
+	private HashMap<String, Icon> icons = new HashMap<String, Icon>();
+	
 	public BlockQuantumBatteryBox(int id)
 	{
 		super(id, Material.iron);
-		this.setBlockName("Distribution");
+		this.setUnlocalizedName("Distribution");
 		this.setStepSound(soundMetalFootstep);
-		this.setRequiresSelfNotify();
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setCreativeTab(EETab.INSTANCE);
-		this.blockIndexInTexture = 16;
 	}
-
+	
 	@Override
 	public boolean isOpaqueCube()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public int damageDropped(int i)
 	{
 		return 0;
 	}
-
+	
 	@Override
 	public boolean renderAsNormalBlock()
 	{
 		return true;
 	}
-
+	
 	@Override
-	public int getRenderType()
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-		return 0;
-	}
-
-	public String getTextureFile()
-	{
-		return ElectricExpansion.BLOCK_FILE;
-	}
-
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata)
-	{
-		// If it is the front side
 		if (side == metadata + 2)
-		{
-			return this.blockIndexInTexture + 3;
-		}
-
-		// If it is the back side
-		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal()) { return this.blockIndexInTexture + 2; }
-
-		return this.blockIndexInTexture + 0;
+			return this.icons.get("output");
+		else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
+			return this.icons.get("input");
+		else
+			return this.icons.get("default");
 	}
-
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister par1IconRegister)
+	{
+		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
+		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
+		this.icons.put("default", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachine"));
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(new ItemStack(par1, 1, 0));
 	}
-
+	
 	@Override
-	public TileEntity createNewTileEntity(World var1)
+	public TileEntity createTileEntity(World var1, int meta)
 	{
 		return new TileEntityQuantumBatteryBox();
 	}
-
+	
 	/**
 	 * Called when the block is right clicked by the player
 	 */
-
+	
 	@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
 	{
@@ -111,31 +108,31 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving)
+	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
-
+		
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 3;
-
+		
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockMetadata(x, y, z, 3);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
 				break;
 			case 1:
-				par1World.setBlockMetadata(x, y, z, 1);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
 				break;
 			case 2:
-				par1World.setBlockMetadata(x, y, z, 2);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
 				break;
 			case 3:
-				par1World.setBlockMetadata(x, y, z, 0);
+				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
 				break;
 		}
 		
@@ -143,18 +140,18 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 		{
 			((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).setPlayer((EntityPlayer) par5EntityLiving);
 		}
-
+		
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);	
 	}
-
+	
 	@Override
 	public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
 	{
 		int metadata = par1World.getBlockMetadata(x, y, z);
-
+		
 		int change = 0;
-
+		
 		// Re-orient the block
 		switch (metadata)
 		{
@@ -171,24 +168,24 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 				change = 0;
 				break;
 		}
-
-		par1World.setBlockMetadata(x, y, z, change);
-
+		
+		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
+		
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-
+		
 		return true;
 	}
-
+	
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
 	{
 		int id = idPicked(world, x, y, z);
-
+		
 		if (id == 0) { return null; }
-
+		
 		Item item = Item.itemsList[id];
 		if (item == null) { return null; }
-
+		
 		return new ItemStack(id, 1, 0);
 	}
 }

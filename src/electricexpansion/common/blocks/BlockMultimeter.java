@@ -1,8 +1,13 @@
 package electricexpansion.common.blocks;
 
+import java.util.HashMap;
+
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -19,48 +24,42 @@ import electricexpansion.common.tile.TileEntityMultimeter;
 
 public class BlockMultimeter extends BlockAdvanced
 {
+	private HashMap<String, Icon> icons = new HashMap<String, Icon>();
+	
 	public BlockMultimeter(int id, int textureIndex)
 	{
-		super("multimeter", id, UniversalElectricity.machine, EETab.INSTANCE);
-		this.blockIndexInTexture = textureIndex;
+		super(id, UniversalElectricity.machine);
 		this.setStepSound(this.soundMetalFootstep);
-		this.setTextureFile(ElectricExpansion.BLOCK_FILE);
 		this.setCreativeTab(EETab.INSTANCE);
 		this.setUnlocalizedName("multimeter");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
-
-		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
-
-		// Top and Bottom
-		if (side == 0 || side == 1) { return this.blockIndexInTexture + 0; }
-
-		// If it is the FRONT side
-		if (side == ForgeDirection.getOrientation(metadata).ordinal()) { return blockIndexInTexture + 1; }
-
-		if (side == ForgeDirection.getOrientation(metadata).getOpposite().ordinal()) { return blockIndexInTexture + 2; }
-		return blockIndexInTexture;
+		if (side == 0 || side == 1)
+			return this.icons.get("top");
+		else if (side == metadata)
+			return this.icons.get("output");
+		else
+			return this.icons.get("machine");
 	}
-
+	
 	@Override
-	public int getBlockTextureFromSide(int side)
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister par1IconRegister)
 	{
-		if (side == 0 || side == 1) { return this.blockIndexInTexture; }
-
-		if (side == 3) { return this.blockIndexInTexture + 5; }
-
-		return this.blockIndexInTexture;
+		this.icons.put("top", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+		this.icons.put("machine", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
 	}
 
 	/**
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving)
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int change = 2;
@@ -81,7 +80,7 @@ public class BlockMultimeter extends BlockAdvanced
 				break;
 
 		}
-		world.setBlockMetadata(x, y, z, change);
+		world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
 		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
 		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
@@ -108,7 +107,7 @@ public class BlockMultimeter extends BlockAdvanced
 				break;
 		}
 
-		world.setBlockMetadata(x, y, z, change);
+		world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
 		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
 		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 		return true;
@@ -118,13 +117,14 @@ public class BlockMultimeter extends BlockAdvanced
 	 * Is this block powering the block on the specified side
 	 */
 	@Override
-	public boolean isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
 	{
 		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
 
-		if (tileEntity instanceof IRedstoneProvider) { return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)); }
+		if (tileEntity instanceof IRedstoneProvider)
+			return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
 
-		return false;
+		return 0;
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class BlockMultimeter extends BlockAdvanced
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int metadata)
+	public TileEntity createTileEntity(World var1, int metadata)
 	{
 		return new TileEntityMultimeter();
 	}

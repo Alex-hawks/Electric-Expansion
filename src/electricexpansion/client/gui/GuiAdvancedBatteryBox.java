@@ -32,9 +32,9 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	{
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 22, 6, 4210752);
 		String displayJoules = ElectricityDisplay.getDisplay(this.tileEntity.getJoules(), ElectricUnit.JOULES);
-		String displayMaxJoules = ElectricityDisplay.getDisplay(this.tileEntity.getMaxJoules(new Object[0]), ElectricUnit.JOULES);
+		String displayMaxJoules = ElectricityDisplay.getDisplay(this.tileEntity.getMaxJoules(), ElectricUnit.JOULES);
 		String displayInputVoltage = ElectricityDisplay.getDisplay(this.tileEntity.getInputVoltage(), ElectricUnit.VOLTAGE);
-		String displayOutputVoltage = ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(new Object[0]), ElectricUnit.VOLTAGE);
+		String displayOutputVoltage = ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
 
 		if (this.tileEntity.isDisabled())
 		{
@@ -56,7 +56,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.containerWidth = ((this.width - this.xSize) / 2);
 		this.containerHeight = ((this.height - this.ySize) / 2);
 		drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
-		int scale = (int)(this.tileEntity.getJoules() / this.tileEntity.getMaxJoules(new Object[0]) * 72.0D);
+		int scale = (int)(this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
 		drawTexturedModalRect(this.containerWidth + 64, this.containerHeight + 46, 176, 0, scale, 20);
 	}
 	

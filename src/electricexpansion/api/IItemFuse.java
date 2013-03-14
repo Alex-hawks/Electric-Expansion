@@ -12,13 +12,7 @@ public interface IItemFuse
 	 * </br>	{@link IItemFuse#onFuseTrip} will not be called if the amps does not go above this.
 	 */
 	public double getMaxVolts(ItemStack itemStack);
-	
-	/**
-	 * @param itemStack 	The ItemStack, to provide the metadata to the method.
-	 * @return				The Fuse-box will render the returned texture over the model returned from {@link IItemFuse#getModelForRenderInFuseBox}
-	 */
-	public String getTextureForRender(ItemStack itemStack);
-	
+		
 	/**
 	 *	Called when the fuse is tripped by amperage.
 	 *	@param itemStack 	The ItemStack, to provide the metadata to the method.
@@ -31,13 +25,7 @@ public interface IItemFuse
 	 * @return	false if this is a bad fuse. Useful for circuit-breakers, so that you only need one ID
 	 */
 	public boolean isValidFuse(ItemStack itemStack);
-	
-	/**
-	 * @param itemStack The ItemStack, to provide the metadata to the method.
-	 * @return	The model that will be rendered as the fuse in the middle of the Fuse Box.
-	 */
-	public Class<? extends ModelBase> getModelForRenderInFuseBox(ItemStack itemStack);
-	
+		
 	/**
 	 * @param itemStack	The ItemStack, to provide the metadata to the method.
 	 * @return 
@@ -54,8 +42,8 @@ public interface IItemFuse
 	public ItemStack onReset(ItemStack itemStack);
 	
 	/**
-	 * 			This is a copy of {@link net.minecraft.item.Item#getItemNameIS(ItemStack)}
+	 * 			This is a copy of {@link net.minecraft.item.Item#getUnlocalizedName(ItemStack)}
 	 * </br>	It is just for convenience in my code.
 	 */
-    public String getItemNameIS(ItemStack itemStack);
+    public String getUnlocalizedName(ItemStack itemStack);
 }
