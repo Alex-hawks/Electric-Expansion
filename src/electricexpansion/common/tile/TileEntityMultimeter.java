@@ -1,16 +1,17 @@
 package electricexpansion.common.tile;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -18,19 +19,11 @@ import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
-import electricexpansion.common.ElectricExpansion;
-
 public class TileEntityMultimeter extends TileEntityElectrical 
 	implements IPacketReceiver, IRotatable
 {
 	public ElectricityPack electricityReading = new ElectricityPack();
 	private ElectricityPack lastReading = new ElectricityPack();
-
-	public void initiate()
-	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2)));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockMultimeter.blockID);
-	}
 
 	public void updateEntity()
 	{
@@ -45,7 +38,7 @@ public class TileEntityMultimeter extends TileEntityElectrical
 				if (!isDisabled())
 				{
 					ForgeDirection inputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2);
-					TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+					TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 					if (inputTile != null)
 					{
@@ -96,16 +89,26 @@ public class TileEntityMultimeter extends TileEntityElectrical
 
 	public String getInvName()
 	{
-		return "Multimeter";
+		return StatCollector.translateToLocal("tile.multimeter.name");
 	}
 
-	public ForgeDirection getDirection()
+	@Override
+	public boolean canConnect(ForgeDirection direction)
 	{
-		return ForgeDirection.getOrientation(getBlockMetadata());
+		return direction.ordinal() - 2 == this.getBlockMetadata();
 	}
 
-	public void setDirection(ForgeDirection facingDirection)
+	@Override
+	public ForgeDirection getDirection(World world, int x, int y, int z)
 	{
-		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, facingDirection.ordinal());
+		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z) + 2);
+	}
+
+	@Override
+	public void setDirection(World world, int x, int y, int z,
+			ForgeDirection facingDirection)
+	{
+		// TODO Auto-generated method stub
+		this.worldObj.setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal(), 0);
 	}
 }

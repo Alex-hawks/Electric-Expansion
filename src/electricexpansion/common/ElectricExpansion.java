@@ -91,16 +91,9 @@ public class ElectricExpansion
 
 	public static final String NAME = "Electric Expansion";
 
-	public static final String RESOURCE_PATH 	= "/mods/electricexpansion/";
-	public static final String LANGUAGE_PATH 	= RESOURCE_PATH + "language/";
-	public static final String TEXTURE_PATH 	= RESOURCE_PATH + "textures/";
-	public static final String ITEM_PATH 		= TEXTURE_PATH + "items/";
-	public static final String BLOCK_PATH		= TEXTURE_PATH + "blocks/";
-	public static final String GUI_PATH			= TEXTURE_PATH + "gui/";
-	public static final String MACHINE_PATH		= TEXTURE_PATH + "machine/";
-	public static final String WIRE_PATH		= TEXTURE_PATH + "wire/";
+	public static final String LANGUAGE_PATH 	= "/mods/electricexpansion/language/";
 	
-	public static final String TEXTURE_NAME_PREFIX = "electricexpansion";
+	public static final String TEXTURE_NAME_PREFIX = "electricexpansion:";
 
 	private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
 

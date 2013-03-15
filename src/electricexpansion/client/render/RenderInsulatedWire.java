@@ -21,7 +21,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 
 	public void renderAModelAt(TileEntity t, double x, double y, double z, float f)
 	{
-		String textureToUse = ElectricExpansion.WIRE_PATH;
+		String textureToUse = ElectricExpansion.TEXTURE_NAME_PREFIX;
 		int blockID = t.worldObj.getBlockId(t.xCoord, t.yCoord, t.zCoord);
 		int metadata = t.worldObj.getBlockMetadata(t.xCoord, t.yCoord, t.zCoord);
 
@@ -126,7 +126,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
 		boolean[] connectedSides = tileEntity.visuallyConnected;
 
-		if (textureToUse != null)
+		if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.TEXTURE_NAME_PREFIX)
 		{
 			bindTextureByName(textureToUse);
 		}
@@ -202,7 +202,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 			GL11.glScalef(1.0F, -1F, -1F);
 
-			this.bindTextureByName(ElectricExpansion.TEXTURE_PATH + "WirePaintOverlay.png");
+			this.bindTextureByName(ElectricExpansion.TEXTURE_NAME_PREFIX + "WirePaintOverlay.png");
 
 			byte colorByte = ((TileEntityInsulatedWire) tileEntity).colorByte;
 

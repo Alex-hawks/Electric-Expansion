@@ -16,7 +16,7 @@ import electricexpansion.api.EnumWireMaterial;
 import electricexpansion.api.EnumWireType;
 import electricexpansion.common.ElectricExpansion;
 
-public class ItemBlockCableHelper extends ItemBlock
+public abstract class ItemBlockCableHelper extends ItemBlock
 {
 	protected HashMap<String, Icon> icons = new HashMap<String, Icon>();
 	
@@ -49,14 +49,16 @@ public class ItemBlockCableHelper extends ItemBlock
 	@Override
 	public void func_94581_a(IconRegister par1IconRegister)
 	{
-		String s;
-		for (EnumWireMaterial material : EnumWireMaterial.values())
+		for (int i = 0; i < EnumWireMaterial.values().length - 1; i++)
 		{
-			for (EnumWireType type : EnumWireType.values())
-			{
-				s = material.name() + "." + type.name();
-				this.icons.put(s, par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + s));
-			}
+			icons.put(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)), par1IconRegister.func_94245_a(
+					this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)).replaceAll("tile.", ElectricExpansion.TEXTURE_NAME_PREFIX)));
 		}
+	}
+	
+	@Override
+	public Icon getIconFromDamage(int meta)
+	{
+		return this.icons.get(this.getUnlocalizedName(new ItemStack(this.itemID, 1, meta)));
 	}
 }

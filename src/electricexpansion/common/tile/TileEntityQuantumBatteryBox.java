@@ -1,7 +1,5 @@
 package electricexpansion.common.tile;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,10 +9,10 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.electricity.ElectricityNetworkHelper;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -29,7 +27,8 @@ import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
-public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage implements IWirelessPowerMachine, IJouleStorage, IPacketReceiver, IInventory, IPeripheral
+public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
+implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 {
 	private ItemStack[] containingItems = new ItemStack[2];
 	private int playersUsing = 0;
@@ -37,13 +36,6 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
 	private boolean isOpen;
 	private double joulesForDisplay = 0;
 	private String owningPlayer = null;
-
-	@Override
-	public void initiate()
-	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2), ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite()));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockDistribution.blockID);
-	}
 
 	@Override
 	public void setPlayer(EntityPlayer player)
@@ -58,76 +50,39 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
 
 		if (!this.isDisabled())
 		{
-			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
-			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			ForgeDirection outputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2);
+			TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
 			if (!this.worldObj.isRemote)
 			{
-				if (inputNetwork != null && this.owningPlayer != null)
+				TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
+
+				IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+				IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
+
+				if ((outputNetwork != null) && (inputNetwork != outputNetwork))
 				{
-					if (this.getJoules() >= this.getMaxJoules())
+					double outputWatts = Math.min(outputNetwork.getRequest(new TileEntity[] { this }).getWatts(), Math.min(getJoules(), 10000));
+
+					if ((this.getJoules() > 0.0D) && (outputWatts > 0.0D))
 					{
-						inputNetwork.stopRequesting(this);
-					}
-					else
-					{
-						inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), 10000) / this.getVoltage(), this.getVoltage());
-						ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
-						this.addJoules(electricityPack.getWatts());
-
-						if (UniversalElectricity.isVoltageSensitive)
-						{
-							if (electricityPack.voltage > this.getVoltage())
-							{
-								this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
-							}
-						}
-					}
-				}
-			}
-
-			// Power redstone if the battery box is full
-			boolean isFullThisCheck = false;
-
-			if (this.getJoules() >= this.getMaxJoules())
-			{
-				isFullThisCheck = true;
-			}
-
-			/**
-			 * Output Electricity
-			 */
-
-			if (!this.worldObj.isRemote)
-			{
-				ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
-
-				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
-
-				if (outputNetwork != null && inputNetwork != outputNetwork)
-				{
-					double outputWatts = Math.min(outputNetwork.getRequest().getWatts(), Math.min(this.getJoules(), 10000));
-
-					if (this.getJoules() > 0 && outputWatts > 0)
-					{
-						outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
-						this.removeJoules(outputWatts);
+						outputNetwork.startProducing(this, outputWatts / getVoltage(), getVoltage());
+						this.setJoules(this.getJoules() - outputWatts);
 					}
 					else
 					{
 						outputNetwork.stopProducing(this);
 					}
 				}
+
 			}
 		}
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 3 == 0 && this.playersUsing > 0)
+			if ((this.ticks % 3L == 0L) && (this.playersUsing > 0))
 			{
-				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+				PacketManager.sendPacketToClients(getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
 			}
 		}
 	}
@@ -225,7 +180,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
 	}
 
 	@Override
-	public double getJoules(Object... data)
+	public double getJoules()
 	{
 		return ElectricExpansion.DistributionNetworksInstance.getJoules(this.owningPlayer, this.frequency);
 	}
@@ -237,13 +192,13 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
 	}
 
 	@Override
-	public void setJoules(double wattHours, Object... data)
+	public void setJoules(double joules)
 	{
-		ElectricExpansion.DistributionNetworksInstance.setJoules(this.owningPlayer, this.frequency, ElectricInfo.getJoules(ElectricInfo.getWatts(wattHours), 1));
+		ElectricExpansion.DistributionNetworksInstance.setJoules(this.owningPlayer, this.frequency, joules);
 	}
 
 	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules()
 	{
 		return DistributionNetworks.getMaxJoules();
 	}
@@ -390,7 +345,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
 	@Override
 	public String getType()
 	{
-		return "BatteryBox";
+		return "QuantumBatteryBox";
 	}
 
 	@Override
@@ -439,21 +394,41 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
 			switch (method)
 			{
 				case getVoltage:
-					return new Object[] { getVoltage() };
+					return new Object[] { this.getVoltage() };
 				case getJoules:
-					return new Object[] { getJoules() };
+					return new Object[] { this.getJoules() };
 				case getFrequency:
-					return new Object[] { getFrequency() };
+					return new Object[] { this.getFrequency() };
 				case setFrequency:
-					return new Object[] { setFrequency((byte) arg0, true) };
+					return new Object[] { this.setFrequency((byte) arg0, true) };
 				case getPlayer:
-					return new Object[] { getOwningPlayer() };
+					return new Object[] { this.getOwningPlayer() };
 				default:
-					throw new IllegalArgumentException("Function unimplemented");
+					return new Object[] { "Function unimplemented" };
 			}
 		}
 		else
 			return new Object[] { "Please wait for the EMP to run out." };
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2) || direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+	}
+
+	@Override
+	public boolean func_94042_c()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

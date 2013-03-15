@@ -31,38 +31,38 @@ public class BlockSwitchWireBlock extends BlockConductor
 		this.setResistance(10.0F);
 		this.setCreativeTab(EETab.INSTANCE);
 	}
-
+	
 	@Override
 	public boolean isOpaqueCube()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public boolean renderAsNormalBlock()
 	{
 		return true;
 	}
-
+	
 	@Override
 	public int damageDropped(int i)
 	{
 		return i;
 	}
-
+	
 	@Override
 	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntitySwitchWireBlock();
 	}
-
+	
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int var4 = 0; var4 < 5; ++var4)
 			par3List.add(new ItemStack(par1, 1, var4));
 	}
-
+	
 	@Override
 	public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
 	{
@@ -70,17 +70,31 @@ public class BlockSwitchWireBlock extends BlockConductor
 	}
 	
 	@Override
-    @SideOnly(Side.CLIENT)
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        return (((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null) ? this.field_94336_cN : ((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack.getIconIndex();
-    }
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+	{
+		return (((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null) ? this.field_94336_cN : ((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack.getIconIndex();
+	}
 	
 	@Override
-	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) 
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
 	{
 		if (world.getBlockTileEntity(x, y, z) instanceof TileEntityConductorBase)
-			((TileEntityConductorBase)world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory.getCurrentItem();
+		{
+			if (player.inventory.getCurrentItem().itemID != this.blockID)
+			{
+				((TileEntityConductorBase)world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory.getCurrentItem();
+				world.markBlockForRenderUpdate(x, y, z);
+				return true;
+			}
+			else
+			{
+				((TileEntityConductorBase)world.getBlockTileEntity(x, y, z)).textureItemStack = null;
+				world.markBlockForRenderUpdate(x, y, z);
+				return true;	
+			}
+		}
+		else return false;
 	}
 	
 	@Override

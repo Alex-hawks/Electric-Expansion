@@ -38,13 +38,24 @@ public class BlockMultimeter extends BlockAdvanced
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
 	{
+		if (side == 3)
+			return this.icons.get("front");
+		else
+			return this.icons.get("top");
+	}
+	
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+    {
+    	int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
+    	
 		if (side == 0 || side == 1)
 			return this.icons.get("top");
 		else if (side == metadata)
 			return this.icons.get("output");
 		else
 			return this.icons.get("machine");
-	}
+    }
+
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -53,6 +64,7 @@ public class BlockMultimeter extends BlockAdvanced
 		this.icons.put("top", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
 		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
 		this.icons.put("machine", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
+		this.icons.put("front", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
 	}
 
 	/**

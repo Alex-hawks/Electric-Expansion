@@ -3,9 +3,11 @@ package electricexpansion.common.items;
 import java.util.List;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.IItemFuse;
@@ -14,15 +16,13 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemFuse extends Item implements IItemFuse
 {
+	private Icon[] icons = new Icon[20];
 	public ItemFuse(int par1)
 	{
 		super(par1);
 		this.setHasSubtypes(true);
-		this.setItemName("fuse");
-		this.setCreativeTab(EETab.INSTANCE);
-		this.setMaxStackSize(64);
-		this.setIconIndex(160);
-		this.setTextureFile(ElectricExpansion.ITEM_FILE);
+		this.setUnlocalizedName("fuse");
+//		this.setCreativeTab(EETab.INSTANCE);
 	}
 
 	@Override
@@ -58,12 +58,6 @@ public class ItemFuse extends Item implements IItemFuse
 	}
 	
 	@Override
-	public String getTextureForRender(ItemStack itemStack)
-	{
-		return null;
-	}
-	
-	@Override
 	public ItemStack onFuseTrip(ItemStack itemStack)
 	{
 		ItemStack toReturn = itemStack.copy();
@@ -75,12 +69,6 @@ public class ItemFuse extends Item implements IItemFuse
 	public boolean isValidFuse(ItemStack itemStack)
 	{
 		return itemStack.getItemDamage() % 2 == 0;
-	}
-	
-	@Override
-	public Class<? extends ModelBase> getModelForRenderInFuseBox(ItemStack itemStack)
-	{
-		return null;
 	}
 	
 	@Override
@@ -102,17 +90,17 @@ public class ItemFuse extends Item implements IItemFuse
 	}
 	
 	@Override
-	public String getItemNameIS(ItemStack itemStack)
+	public String getUnlocalizedName(ItemStack itemStack)
 	{
 		double volts = this.getMaxVolts(itemStack);
 		String type = this.canReset(itemStack) ? (this.isValidFuse(itemStack)? "+cb" : "-cb") : (this.isValidFuse(itemStack)? "+f" : "-f");
-		return this.getItemName() + "." + type + "." + ((int)volts);
+		return this.getUnlocalizedName() + "." + type + "." + ((int)volts);
 	}
 	
 	@Override
-	public int getIconFromDamage(int meta)
+	public Icon getIconFromDamage(int meta)
 	{
-		return this.iconIndex + meta;
+		return this.icons[meta];
 	}
 
 	@Override
@@ -121,10 +109,19 @@ public class ItemFuse extends Item implements IItemFuse
 		return meta;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int var4 = 0; var4 < 20; var4++)
 			par3List.add(new ItemStack(this, 1, var4));
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94581_a(IconRegister par1IconRegister)
+	{
+		for (int i = 0; i < this.icons.length; i++)
+			this.icons[i] = par1IconRegister.func_94245_a(this.getUnlocalizedName(new ItemStack(this.itemID, 0, i)).replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
 	}
 }

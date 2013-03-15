@@ -19,11 +19,11 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -44,8 +44,10 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
+implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
+	private static final double BASE_OUTPUT = 10_000;
 	private ItemStack[] containingItems = new ItemStack[5];
 	private int playersUsing = 0;
 
@@ -313,7 +315,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	@Override
 	public String getInvName()
 	{
-		return "Advanced Battery Box";
+		return StatCollector.translateToLocal("tile.advbatbox.name");
 	}
 
 	@Override
@@ -405,9 +407,9 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 
 	private double getOutputCap()
 	{
-		double slot1 = 1.0D;
-		double slot2 = 1.0D;
-		double slot3 = 1.0D;
+		double slot1 = 0;
+		double slot2 = 0;
+		double slot3 = 0;
 
 		if ((this.containingItems[2] != null) && ((this.containingItems[2].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "Unlimiter"))
 			slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
@@ -415,13 +417,8 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 			slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
 		if ((this.containingItems[4] != null) && ((this.containingItems[4].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Unlimiter"))
 			slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
-		if (slot1 < 0.0D)
-			slot1 = 1.0D / (slot1 * -1.0D);
-		if (slot2 < 0.0D)
-			slot2 = 1.0D / (slot2 * -1.0D);
-		if (slot3 < 0.0D)
-			slot3 = 1.0D / (slot3 * -1.0D);
-		return slot1 * slot2 * slot3;
+		
+		return ((100 + slot1) * (100 + slot2) * (100 + slot3) / 1_000_000) * this.BASE_OUTPUT;
 	}
 
 	@Override

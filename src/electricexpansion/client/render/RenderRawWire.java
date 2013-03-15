@@ -24,7 +24,7 @@ public class RenderRawWire extends TileEntitySpecialRenderer
 
 	public void renderAModelAt(TileEntityRawWire t, double x, double y, double z, float f)
 	{
-		String textureToUse = ElectricExpansion.WIRE_PATH;
+		String textureToUse = ElectricExpansion.TEXTURE_NAME_PREFIX;
 		int meta = t.getBlockMetadata();
 		if (meta != -1)
 		{

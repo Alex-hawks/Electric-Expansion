@@ -26,8 +26,8 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity var1, double x, double y, double z, float var8)
 	{
-		TileEntityMultimeter tileEntity = (TileEntityMultimeter) var1;
-		ForgeDirection direction = tileEntity.getDirection();
+		TileEntityMultimeter te = (TileEntityMultimeter) var1;
+		ForgeDirection direction = te.getDirection(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
 
 		/**
 		 * Render from side 2 to 6. This means render all sides excluding top and bottom.
@@ -92,9 +92,9 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
 				FontRenderer fontRenderer = this.getFontRenderer();
 				int maxWidth = 1;
 
-				String amperes = ElectricityDisplay.getDisplay(tileEntity.electricityReading.amperes, ElectricUnit.AMPERE);
-				String voltage = ElectricityDisplay.getDisplay(tileEntity.electricityReading.voltage, ElectricUnit.VOLTAGE);
-				String watt = ElectricityDisplay.getDisplay(tileEntity.electricityReading.getWatts(), ElectricUnit.WATT);
+				String amperes = ElectricityDisplay.getDisplay(te.electricityReading.amperes, ElectricUnit.AMPERE);
+				String voltage = ElectricityDisplay.getDisplay(te.electricityReading.voltage, ElectricUnit.VOLTAGE);
+				String watt = ElectricityDisplay.getDisplay(te.electricityReading.getWatts(), ElectricUnit.WATT);
 
 				maxWidth = Math.max(fontRenderer.getStringWidth(amperes), maxWidth);
 				maxWidth = Math.max(fontRenderer.getStringWidth(voltage), maxWidth);

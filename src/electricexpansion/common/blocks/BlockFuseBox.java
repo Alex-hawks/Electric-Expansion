@@ -63,6 +63,7 @@ public class BlockFuseBox extends BlockAdvanced
 		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
 		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
 		this.icons.put("side", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
+		// TODO Create above texture...
 	}
 
 	/**

@@ -12,22 +12,12 @@ public class ItemBlockSwitchWire extends ItemBlockCableHelper
 	{
 		super(id);
 	}
-
-	public int getIconFromDamage(int i)
-	{
-		return i + 112;
-	}
 	
-	/**
-	 * Allows items to add custom lines of information to the mouseover description. If you want to
-	 * add more information to your item, you can super.addInformation() to keep the electiricty
-	 * info in the item info bar.
-	 */
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 
-		par3List.add("Toggles connectivity when redstone powered");
+		par3List.add("Only conducts when redstone powered");
 	}
 }

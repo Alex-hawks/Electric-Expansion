@@ -1,22 +1,21 @@
 package electricexpansion.common.tile;
 
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.implement.IRotatable;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectrical;
@@ -24,20 +23,14 @@ import universalelectricity.prefab.tile.TileEntityElectrical;
 import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.api.IItemFuse;
-import electricexpansion.common.ElectricExpansion;
 
 public class TileEntityFuseBox extends TileEntityElectrical
-implements IRotatable, IPacketReceiver, IInventory
+implements IPacketReceiver, IInventory
 {
 	public ItemStack[] inventory = new ItemStack[1];
 	private int playersUsing = 0;
 
-	public void initiate()
-	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2), ForgeDirection.getOrientation(getBlockMetadata() + 2).getOpposite()));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockTransformer.blockID);
-	}
-
+	@Override
 	public void updateEntity()
 	{
 		super.updateEntity();
@@ -47,13 +40,13 @@ implements IRotatable, IPacketReceiver, IInventory
 			if (this.hasFuse())
 			{
 				ForgeDirection inputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2).getOpposite();
-				TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+				TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
 				ForgeDirection outputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2);
-				TileEntity outputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+				TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
 
-				ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
-				ElectricityNetwork outputNetwork = ElectricityNetwork.getNetworkFromTileEntity(outputTile, outputDirection);
+				IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+				IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
 
 				if ((outputNetwork != null) && (inputNetwork != null) && (outputNetwork != inputNetwork))
 				{
@@ -86,15 +79,7 @@ implements IRotatable, IPacketReceiver, IInventory
 		}
 	}
 
-	public Packet getDescriptionPacket()
-	{
-		return PacketManager.getPacket("ElecEx", this, new Object[0]);
-	}
-
-	public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-	}
-
+	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.readFromNBT(par1NBTTagCompound);
@@ -110,6 +95,7 @@ implements IRotatable, IPacketReceiver, IInventory
 		}
 	}
 
+	@Override
 	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
 	{
 		super.writeToNBT(par1NBTTagCompound);
@@ -128,16 +114,6 @@ implements IRotatable, IPacketReceiver, IInventory
 		par1NBTTagCompound.setTag("Items", var2);	
 	}
 
-	public ForgeDirection getDirection()
-	{
-		return ForgeDirection.getOrientation(getBlockMetadata());
-	}
-
-	public void setDirection(ForgeDirection facingDirection)
-	{
-		this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, facingDirection.ordinal());
-	}
-
 	public boolean hasFuse()
 	{
 		if (this.inventory[0] != null)
@@ -153,7 +129,7 @@ implements IRotatable, IPacketReceiver, IInventory
 	@Override
 	public String getInvName()
 	{
-		return StatCollector.translateToLocal("container.FuseBox");
+		return StatCollector.translateToLocal("tile.FuseBox.name");
 	}
 
 	@Override
@@ -217,6 +193,35 @@ implements IRotatable, IPacketReceiver, IInventory
 	public void closeChest()
 	{
 		this.playersUsing--;
+		
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+		return direction.ordinal() == meta + 2 || direction.getOpposite().ordinal() == meta + 2;
+	}
+
+	@Override
+	public boolean func_94042_c()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, 
+			EntityPlayer player, ByteArrayDataInput dataStream)
+	{
+		// TODO Auto-generated method stub
 		
 	}
 }

@@ -97,9 +97,8 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	@Override
 	public void updateConnection(TileEntity tileEntity, ForgeDirection side)
 	{
-		if (!this.worldObj.isRemote)
+		if (!this.worldObj.isRemote && tileEntity != null)
 		{
-
 			if (tileEntity instanceof TileEntityInsulatedWire && this instanceof TileEntityInsulatedWire)
 			{
 				TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;

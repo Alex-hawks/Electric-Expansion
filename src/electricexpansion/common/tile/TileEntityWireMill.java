@@ -23,10 +23,14 @@ import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
@@ -37,7 +41,8 @@ import cpw.mods.fml.common.Loader;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyTile, IEnergySink
+public class TileEntityWireMill extends TileEntityElectricityRunnable 
+implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
 	public final double WATTS_PER_TICK = 500;
 	public final double TRANSFER_LIMIT = 1250;
@@ -60,9 +65,6 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
 	@Override
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2)));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockWireMill.blockID);
-
 		this.initialized = true;
 
 		if (Loader.isModLoaded("IC2"))
@@ -93,9 +95,9 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
 		if (!this.worldObj.isRemote)
 		{
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+			TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
 
 			if (inputNetwork != null)
 			{
@@ -128,9 +130,9 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
 			{
 				IItemElectric electricItem = (IItemElectric) this.inventory[0].getItem();
 
-				if (electricItem.canProduceElectricity())
+				if (electricItem.getProvideRequest(this.inventory[0]).getWatts() > 0)
 				{
-					double joulesReceived = electricItem.onUse(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT), this.inventory[0]);
+					double joulesReceived = electricItem.onProvide(ElectricityPack.getFromWatts(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT), electricItem.getVoltage(this.inventory[0])), this.inventory[0]).getWatts();
 					this.setJoules(this.joulesStored + joulesReceived);
 				}
 			}
@@ -433,7 +435,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
 	}
 
 	@Override
-	public double getVoltage(Object... data)
+	public double getVoltage()
 	{
 		return 120;
 	}
@@ -456,19 +458,19 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
 	}
 
 	@Override
-	public double getJoules(Object... data)
+	public double getJoules()
 	{
 		return this.joulesStored;
 	}
 
 	@Override
-	public void setJoules(double joules, Object... data)
+	public void setJoules(double joules)
 	{
 		this.joulesStored = joules;
 	}
 
 	@Override
-	public double getMaxJoules(Object... data)
+	public double getMaxJoules()
 	{
 		return this.maxJoules;
 	}
@@ -524,5 +526,25 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
 	public int getMaxSafeInput()
 	{
 		return 2048;
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		return direction.ordinal() == this.getBlockMetadata() + 2;
+	}
+
+	@Override
+	public boolean func_94042_c()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

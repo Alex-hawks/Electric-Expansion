@@ -1,30 +1,29 @@
 package electricexpansion.common.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.block.IVoltage;
+import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.item.ItemElectric;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
-public class ItemMultimeter extends Item
+public class ItemMultimeter extends ItemElectric
 {
 	public ItemMultimeter(int par1)
 	{
 		super(par1);
 		this.setCreativeTab(EETab.INSTANCE);
 		this.setUnlocalizedName("itemMultimeter");
-	}
-
-	@Override
-	public String getTextureFile()
-	{
-		return ElectricExpansion.ITEM_FILE;
 	}
 
 	@Override
@@ -40,18 +39,18 @@ public class ItemMultimeter extends Item
 
 				ElectricityPack getProduced = wireTile.getNetwork().getProduced();
 
-				player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", " + ElectricInfo.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricInfo.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
+				player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", " + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
 			}
 			else
 			{
-				if (tileEntity instanceof IJouleStorage)
+				if (tileEntity instanceof IElectricityStorage)
 				{
-					IJouleStorage tileStorage = (IJouleStorage) tileEntity;
-					player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/" + ElectricInfo.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
+					IElectricityStorage tileStorage = (IElectricityStorage) tileEntity;
+					player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/" + ElectricityDisplay.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
 				}
 				if (tileEntity instanceof IVoltage)
 				{
-					player.addChatMessage("Electric Expansion: " + ElectricInfo.getDisplay(((IVoltage) tileEntity).getVoltage(), ElectricUnit.VOLTAGE));
+					player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(((IVoltage) tileEntity).getVoltage(), ElectricUnit.VOLTAGE));
 				}
 
 				return true;
@@ -61,4 +60,22 @@ public class ItemMultimeter extends Item
 		return false;
 	}
 
+	@Override
+	public double getMaxJoules(ItemStack itemStack)
+	{
+		return 1_000_000;
+	}
+
+	@Override
+	public double getVoltage(ItemStack itemStack)
+	{
+		return 35;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94581_a(IconRegister par1IconRegister)
+	{
+		this.iconIndex = par1IconRegister.func_94245_a(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+	}
 }

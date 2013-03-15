@@ -130,6 +130,6 @@ public class ItemUpgrade extends Item implements IModifier
 	public void func_94581_a(IconRegister iconRegister)
 	{
 		for (int i = 0; i < this.names.length; i++)
-			this.icons[i] = iconRegister.func_94245_a((this.getUnlocalizedName() + "." + i).replace("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+			this.icons[i] = iconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
 	}
 }

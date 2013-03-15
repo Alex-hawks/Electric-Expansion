@@ -72,9 +72,9 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 	@SideOnly(Side.CLIENT)
 	public void func_94332_a(IconRegister par1IconRegister)
 	{
-		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
+		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
 		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
-		this.icons.put("default", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachine"));
+		this.icons.put("default", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
 	}
 	
 	@SideOnly(Side.CLIENT)

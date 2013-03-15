@@ -17,14 +17,19 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.block.IElectricityStorage;
 import universalelectricity.core.electricity.ElectricityNetwork;
+import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
@@ -36,7 +41,7 @@ import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.InsulationRecipes;
 
 public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable
-implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyTile, IEnergySink
+implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
 	public final double WATTS_PER_TICK = 500.0D;
 	public final double TRANSFER_LIMIT = 1250.0D;
@@ -55,9 +60,6 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 
 	public void initiate()
 	{
-		ElectricityConnections.registerConnector(this, EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2)));
-		this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansion.blockInsulationMachine.blockID);
-
 		this.initialized = true;
 
 		if (Loader.isModLoaded("IC2"))
@@ -86,9 +88,9 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 		if (!this.worldObj.isRemote)
 		{
 			ForgeDirection inputDirection = ForgeDirection.getOrientation(getBlockMetadata() + 2);
-			TileEntity inputTile = Vector3.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+			TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
 
-			ElectricityNetwork inputNetwork = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+			IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
 
 			if (inputNetwork != null)
 			{
@@ -121,9 +123,9 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 			{
 				IItemElectric electricItem = (IItemElectric)this.inventory[0].getItem();
 
-				if (electricItem.canProduceElectricity())
+				if (electricItem.getProvideRequest(this.inventory[0]).getWatts() > 0)
 				{
-					double joulesReceived = electricItem.onUse(Math.max(electricItem.getMaxJoules(new Object[] { this.inventory[0] }) * 0.005D, 1250.0D), this.inventory[0]);
+					double joulesReceived = electricItem.onProvide(ElectricityPack.getFromWatts(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005D, 1250.0D), electricItem.getVoltage(this.inventory[0])), this.inventory[0]).getWatts();
 					setJoules(this.joulesStored + joulesReceived);
 				}
 			}
@@ -345,7 +347,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 
 	public String getInvName()
 	{
-		return "Insultion Refiner";
+		return StatCollector.translateToLocal("tile.insulator.name");
 	}
 
 	public int getInventoryStackLimit()
@@ -438,5 +440,47 @@ implements IInventory, ISidedInventory, IPacketReceiver, IJouleStorage, IEnergyT
 	public int getMaxSafeInput()
 	{
 		return 2048;
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection direction)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public double getJoules()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setJoules(double joules)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public double getMaxJoules()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean func_94042_c()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

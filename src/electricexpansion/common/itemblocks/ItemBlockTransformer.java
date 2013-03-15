@@ -20,12 +20,13 @@ public class ItemBlockTransformer extends ItemBlock
 	{
 		String name = null;
 		int j = i.getItemDamage();
-		if (j >= 0 && j < 4)
-			name = "60v";
-		if (j >= 4 && j < 8)
-			name = "120v";
-		if (j >= 8 && j < 12)
-			name = "240v";
-		return i.getItem().getItemName() + "." + name;
+		int tier = j - (j & 3);
+		if (tier == 0)
+			name = "2x";
+		if (tier == 4)
+			name = "4x";
+		if (tier == 8)
+			name = "8x";
+		return i.getItem().getUnlocalizedName() + "." + name;
 	}
 }

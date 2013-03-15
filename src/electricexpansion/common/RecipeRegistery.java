@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import universalelectricity.components.common.BasicComponents;
 import universalelectricity.core.item.ItemElectric;
 import universalelectricity.prefab.RecipeHelper;
 import cpw.mods.fml.common.Loader;
@@ -224,19 +225,7 @@ public class RecipeRegistery
 		
 		// Reflection to get Basic Components Wire
 		if (Loader.isModLoaded("BasicComponents"))
-		{
-			try
-			{
-				basicCompWire = (Block) Class.forName("basiccomponents.common.BasicComponents").getField("blockCopperWire").get(Block.class);
-			}
-			catch (Exception e)
-			{
-				e.getStackTrace();
-			}
-
-			RecipeHelper.removeRecipe(new ItemStack(basicCompWire));
-
-		}
+			RecipeHelper.removeRecipe(new ItemStack(BasicComponents.blockCopperWire));
 	}
 
 	public static void drawing()
