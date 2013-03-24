@@ -35,8 +35,15 @@ public class BlockSwitchWireBlock extends BlockConductor
 	@Override
 	public boolean isOpaqueCube()
 	{
-		return true;
+		return false;
 	}
+	
+	@Override
+    @SideOnly(Side.CLIENT)
+    public int getRenderBlockPass()
+    {
+        return 0;
+    }
 	
 	@Override
 	public boolean renderAsNormalBlock()
@@ -57,6 +64,7 @@ public class BlockSwitchWireBlock extends BlockConductor
 	}
 	
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int var4 = 0; var4 < 5; ++var4)
@@ -73,7 +81,7 @@ public class BlockSwitchWireBlock extends BlockConductor
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
 	{
-		return (((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null) ? this.field_94336_cN : ((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack.getIconIndex();
+		return (((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null) ? this.blockIcon : ((TileEntityConductorBase)par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack.getIconIndex();
 	}
 	
 	@Override
@@ -99,8 +107,8 @@ public class BlockSwitchWireBlock extends BlockConductor
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister par1IconRegister)
+	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.field_94336_cN = par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "CamoWire");
+		this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "CamoWire");
 	}
 }

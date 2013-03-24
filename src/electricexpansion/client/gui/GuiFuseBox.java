@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-
 import electricexpansion.api.IItemFuse;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerFuseBox;
@@ -32,7 +31,7 @@ public class GuiFuseBox extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.func_98187_b(this.getTexture());
+		this.mc.renderEngine.bindTexture(GuiFuseBox.getTexture());
 		containerWidth = (this.width - this.xSize) / 2;
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);
@@ -42,7 +41,7 @@ public class GuiFuseBox extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 8, 6, 4210752);
-		String displayVoltage = ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
+		String displayVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
 
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.voltage") + ": " + displayVoltage, 65, 55, 4210752);
 		if (this.tileEntity.getStackInSlot(0) != null)

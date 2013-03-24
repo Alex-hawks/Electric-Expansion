@@ -21,7 +21,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 
 	public void renderAModelAt(TileEntity t, double x, double y, double z, float f)
 	{
-		String textureToUse = ElectricExpansion.TEXTURE_NAME_PREFIX;
+		String textureToUse = ElectricExpansion.MODEL_PATH;
 		int blockID = t.worldObj.getBlockId(t.xCoord, t.yCoord, t.zCoord);
 		int metadata = t.worldObj.getBlockMetadata(t.xCoord, t.yCoord, t.zCoord);
 
@@ -29,26 +29,24 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		{
 			if (blockID == ElectricExpansion.blockInsulatedWire.blockID)
 			{
-				System.out.print("Insulated Wire: ");
 				switch (metadata)
 				{
 					case 0:
-						textureToUse = textureToUse +  "InsulatedCopperWire.png";
+						textureToUse += "InsulatedCopperWire.png";
 						break;
 					case 1:
-						textureToUse = textureToUse +  "InsulatedTinWire.png";
+						textureToUse += "InsulatedTinWire.png";
 						break;
 					case 2:
-						textureToUse = textureToUse +  "InsulatedSilverWire.png";
+						textureToUse += "InsulatedSilverWire.png";
 						break;
 					case 3:
-						textureToUse = textureToUse +  "InsulatedHVWire.png";
+						textureToUse += "InsulatedHVWire.png";
 						break;
 					case 4:
-						textureToUse = textureToUse +  "InsulatedSCWire.png";
+						textureToUse += "InsulatedSCWire.png";
 						break;
 				}
-				System.out.println(textureToUse);
 			}
 
 			else if (blockID == ElectricExpansion.blockLogisticsWire.blockID)
@@ -57,19 +55,19 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 				switch (metadata)
 				{
 					case 0:
-						textureToUse = textureToUse +  "CopperLogisticsWire.png";
+						textureToUse += "CopperLogisticsWire.png";
 						break;
 					case 1:
-						textureToUse = textureToUse +  "TinLogisticsWire.png";
+						textureToUse += "TinLogisticsWire.png";
 						break;
 					case 2:
-						textureToUse = textureToUse +  "SilverLogisticsWire.png";
+						textureToUse += "SilverLogisticsWire.png";
 						break;
 					case 3:
-						textureToUse = textureToUse +  "HVLogisticsWire.png";
+						textureToUse += "HVLogisticsWire.png";
 						break;
 					case 4:
-						textureToUse = textureToUse +  "SCLogisticsWire.png";
+						textureToUse += "SCLogisticsWire.png";
 						break;
 				}
 
@@ -82,19 +80,19 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					switch (metadata)
 					{
 						case 0:
-							textureToUse = textureToUse +  "CopperSwitchWireOn.png";
+							textureToUse += "CopperSwitchWireOn.png";
 							break;
 						case 1:
-							textureToUse = textureToUse +  "TinSwitchWireOn.png";
+							textureToUse += "TinSwitchWireOn.png";
 							break;
 						case 2:
-							textureToUse = textureToUse +  "SilverSwitchWireOn.png";
+							textureToUse += "SilverSwitchWireOn.png";
 							break;
 						case 3:
-							textureToUse = textureToUse +  "HVSwitchWireOn.png";
+							textureToUse += "HVSwitchWireOn.png";
 							break;
 						case 4:
-							textureToUse = textureToUse +  "SCSwitchWireOn.png";
+							textureToUse += "SCSwitchWireOn.png";
 							break;
 					}
 				}
@@ -104,19 +102,19 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 					switch (metadata)
 					{
 						case 0:
-							textureToUse = textureToUse + "CopperSwitchWireOff.png";
+							textureToUse += "CopperSwitchWireOff.png";
 							break;
 						case 1:
-							textureToUse = textureToUse + "TinSwitchWireOff.png";
+							textureToUse += "TinSwitchWireOff.png";
 							break;
 						case 2:
-							textureToUse = textureToUse + "SilverSwitchWireOff.png";
+							textureToUse += "SilverSwitchWireOff.png";
 							break;
 						case 3:
-							textureToUse = textureToUse + "HVSwitchWireOff.png";
+							textureToUse += "HVSwitchWireOff.png";
 							break;
 						case 4:
-							textureToUse = textureToUse + "SCSwitchWireOff.png";
+							textureToUse += "SCSwitchWireOff.png";
 							break;
 					}
 				}
@@ -126,7 +124,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 		TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
 		boolean[] connectedSides = tileEntity.visuallyConnected;
 
-		if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.TEXTURE_NAME_PREFIX)
+		if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.MODEL_PATH)
 		{
 			bindTextureByName(textureToUse);
 		}
@@ -202,7 +200,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 			GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 			GL11.glScalef(1.0F, -1F, -1F);
 
-			this.bindTextureByName(ElectricExpansion.TEXTURE_NAME_PREFIX + "WirePaintOverlay.png");
+			this.bindTextureByName(ElectricExpansion.MODEL_PATH + "WirePaintOverlay.png");
 
 			byte colorByte = ((TileEntityInsulatedWire) tileEntity).colorByte;
 

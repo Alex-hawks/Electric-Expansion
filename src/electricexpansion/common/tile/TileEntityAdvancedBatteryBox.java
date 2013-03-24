@@ -47,7 +47,7 @@ import electricexpansion.common.ElectricExpansion;
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
 implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
-	private static final double BASE_OUTPUT = 10_000;
+	private static final double BASE_OUTPUT = 50000;
 	private ItemStack[] containingItems = new ItemStack[5];
 	private int playersUsing = 0;
 
@@ -156,7 +156,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
 	}
 
 	@Override
-	protected EnumSet getConsumingSides()
+	protected EnumSet<ForgeDirection> getConsumingSides()
 	{
 		return EnumSet.of(ForgeDirection.getOrientation(getBlockMetadata() + 2).getOpposite());
 	}
@@ -418,13 +418,13 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
 		if ((this.containingItems[4] != null) && ((this.containingItems[4].getItem() instanceof IModifier)) && (((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Unlimiter"))
 			slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
 		
-		return ((100 + slot1) * (100 + slot2) * (100 + slot3) / 1_000_000) * this.BASE_OUTPUT;
+		return ((100 + slot1) * (100 + slot2) * (100 + slot3) / 1000000) * TileEntityAdvancedBatteryBox.BASE_OUTPUT;
 	}
 
 	@Override
 	public String getType()
 	{
-		return "AdvancedBatteryBox";
+		return this.getInvName().replaceAll(" ", "");
 	}
 
 	@Override
@@ -436,17 +436,17 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
 	@Override
 	public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception
 	{
-		int getVoltage = 0;
-		int getWattage = 1;
-		int isFull = 2;
+		final int getVoltage = 0;
+		final int getWattage = 1;
+		final int isFull = 2;
 
 		switch (method)
 		{
-			case 0:
+			case getVoltage:
 				return new Object[] { Double.valueOf(this.getVoltage()) };
-			case 1:
+			case getWattage:
 				return new Object[] { Double.valueOf(this.getJoules()) };
-			case 2:
+			case isFull:
 				return new Object[] { Boolean.valueOf(this.getJoules() >= this.getMaxJoules()) };
 		}
 		throw new Exception("Function unimplemented");
@@ -524,23 +524,20 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
 	}
 
 	@Override
-	public boolean func_94042_c()
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		// TODO Auto-generated method stub
+		return this.getBlockMetadata() + 2 == direction.ordinal() || this.getBlockMetadata() + 2 == direction.getOpposite().ordinal();
+	}
+
+	@Override
+	public boolean isInvNameLocalized()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack)
+	{
 		return false;
 	}
 }

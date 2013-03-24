@@ -6,6 +6,7 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
@@ -99,16 +100,14 @@ public class TileEntityMultimeter extends TileEntityElectrical
 	}
 
 	@Override
-	public ForgeDirection getDirection(World world, int x, int y, int z)
+	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
 	{
-		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z) + 2);
+		this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal(), 0x02);
 	}
 
 	@Override
-	public void setDirection(World world, int x, int y, int z,
-			ForgeDirection facingDirection)
+	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
 	{
-		// TODO Auto-generated method stub
-		this.worldObj.setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal(), 0);
+		return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z));
 	}
 }

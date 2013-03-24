@@ -69,7 +69,7 @@ public class ContainerInsulationMachine extends Container
 				{
 					if (!this.mergeItemStack(var4, 0, 1, false)) { return null; }
 				}
-				else if (WireMillRecipes.drawing().getDrawingResult(var4) != null)
+				else if (WireMillRecipes.INSTANCE.getDrawingResult(var4) != null)
 				{
 					if (!this.mergeItemStack(var4, 1, 2, false)) { return null; }
 				}

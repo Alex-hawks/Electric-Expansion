@@ -3,9 +3,6 @@ package electricexpansion.common.blocks;
 import java.util.HashMap;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
@@ -21,9 +18,10 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.block.BlockAdvanced;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityFuseBox;
 
 public class BlockFuseBox extends BlockAdvanced
@@ -43,7 +41,6 @@ public class BlockFuseBox extends BlockAdvanced
 	public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
 	{
 		int metadata = iBlockAccess.getBlockMetadata(x, y, z);
-		TileEntityFuseBox tileEntity = (TileEntityFuseBox) iBlockAccess.getBlockTileEntity(x, y, z);
 
 		if (side == 0 || side == 1)
 			return this.icons.get("top");
@@ -57,12 +54,12 @@ public class BlockFuseBox extends BlockAdvanced
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister par1IconRegister)
+	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.icons.put("top", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
-		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
-		this.icons.put("side", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
+		this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+		this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+		this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
+		this.icons.put("side", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
 		// TODO Create above texture...
 	}
 
@@ -72,24 +69,20 @@ public class BlockFuseBox extends BlockAdvanced
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving player, ItemStack itemStack)
 	{
-		int metadata = world.getBlockMetadata(x, y, z);
-
 		int angle = MathHelper.floor_double((player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 3;
-
 		switch (angle)
 		{
 			case 0:
-				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
+				world.setBlock(x, y, z, this.blockID, 3, 0);
 				break;
 			case 1:
-				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
+				world.setBlock(x, y, z, this.blockID, 1, 0);
 				break;
 			case 2:
-				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
+				world.setBlock(x, y, z, this.blockID, 2, 0);
 				break;
 			case 3:
-				world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
+				world.setBlock(x, y, z, this.blockID, 0, 0);
 				break;
 		}
 
@@ -122,7 +115,8 @@ public class BlockFuseBox extends BlockAdvanced
 				break;
 		}
 
-		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
+		par1World.setBlock(x, y, z, this.blockID, change, 0);
+		par1World.markBlockForRenderUpdate(x, y, z);
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
@@ -160,6 +154,7 @@ public class BlockFuseBox extends BlockAdvanced
 	}
 
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(new ItemStack(this.blockID, 1, 0));

@@ -9,21 +9,19 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class InsulationRecipes
 {
-	private static final InsulationRecipes InsultionBase = new InsulationRecipes();
-
-	private static HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
-	private static HashMap<Integer, ItemStack> recipeToInput = new HashMap<Integer, ItemStack>();
-	private static HashMap<Integer, Integer> recipeToOutput = new HashMap<Integer, Integer>();
-	private static HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
-	private static HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
-
 	/**
 	 * Used to call methods addProcessing and getProcessingResult.
 	 */
-	public static final InsulationRecipes getProcessing()
-	{
-		return InsultionBase;
-	}
+
+	public static final InsulationRecipes INSTANCE = new InsulationRecipes();
+
+	private HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
+	private HashMap<Integer, ItemStack> recipeToInput = new HashMap<Integer, ItemStack>();
+	private HashMap<Integer, Integer> recipeToOutput = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
+	
+	private InsulationRecipes() { }
 
 	/**
 	 * Adds a processing recipe.
@@ -32,13 +30,17 @@ public class InsulationRecipes
 	 * @param output As an int of insulation QTY
 	 * @param ticks The ticks required for the recipe, seconds * 20.
 	 */
-	public static void addProcessing(ItemStack input, int output, int ticks)
+	public void addProcessing(ItemStack input, int output, int ticks)
 	{
 		try
 		{
+			if (ticks <= 0)
+				ticks = 60;
+			if (output <= 0)
+				output = 1;
+			
 			if (input != null && output > 0 && ticks > 0)
 			{
-				boolean j = true;
 				int nextRecipeID = recipeToOutput.size();
 				inputToRecipe.put(stackSizeToOne(input) + "", nextRecipeID);
 				recipeToInput.put(nextRecipeID, stackSizeToOne(input));
@@ -48,10 +50,6 @@ public class InsulationRecipes
 			}
 			else if (input == null)
 				throw new IOException("Error: Input cannot be null.");
-			else if (output <= 0)
-				throw new IOException("Error: Output must be greater than 0.");
-			else if (ticks <= 0)
-				throw new IOException("Error: Ticks must be greater than 0.");
 		}
 		catch (IOException e)
 		{
@@ -66,7 +64,7 @@ public class InsulationRecipes
 	 * @param output As an int of insulation QTY
 	 * @param ticks The ticks required for the recipe, seconds * 20.
 	 */
-	public static void addProcessing(String input, int output, int ticks)
+	public void addProcessing(String input, int output, int ticks)
 	{
 		for (ItemStack input2 : OreDictionary.getOres(input))
 			addProcessing(input2, output, ticks);
@@ -95,7 +93,7 @@ public class InsulationRecipes
 		}
 	}
 
-	public static int getInputQTY(ItemStack input)
+	public int getInputQTY(ItemStack input)
 	{
 		try
 		{
@@ -118,7 +116,7 @@ public class InsulationRecipes
 	 * @param item The Source ItemStack
 	 * @return The processing time, in ticks
 	 */
-	public static Integer getProcessTicks(ItemStack input)
+	public Integer getProcessTicks(ItemStack input)
 	{
 		try
 		{
@@ -156,7 +154,7 @@ public class InsulationRecipes
 			return null;
 	}
 
-	public static Map getRecipesForNEI()
+	public Map<ItemStack, int[]> getRecipesForNEI()
 	{
 		Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
 		// int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3:ticks required)

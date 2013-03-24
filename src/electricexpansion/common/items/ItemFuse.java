@@ -2,7 +2,6 @@ package electricexpansion.common.items;
 
 import java.util.List;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -12,11 +11,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.IItemFuse;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.misc.EETab;
 
 public class ItemFuse extends Item implements IItemFuse
 {
-	private Icon[] icons = new Icon[20];
+	private Icon[] icons = new Icon[16];
 	public ItemFuse(int par1)
 	{
 		super(par1);
@@ -32,26 +30,22 @@ public class ItemFuse extends Item implements IItemFuse
 		{
 			//	Fuses
 			case 0:		
-			case 1:		return 30;
+			case 1:		return 60;
 			case 2:		
-			case 3:		return 60;
+			case 3:		return 120;
 			case 4:		
-			case 5:		return 120;
+			case 5:		return 240;
 			case 6:		
-			case 7:		return 240;
-			case 8:		
-			case 9:		return 480;
+			case 7:		return 480;
 			//	Circuit-Breakers
-			case 10:		
-			case 11:	return 30;
+			case 8:		
+			case 9:		return 60;
+			case 10:	
+			case 11:	return 120;
 			case 12:	
-			case 13:	return 60;
+			case 13:	return 240;
 			case 14:	
-			case 15:	return 120;
-			case 16:	
-			case 17:	return 240;
-			case 18:	
-			case 19:	return 480;
+			case 15:	return 480;
 
 		}
 		return 0;
@@ -74,7 +68,7 @@ public class ItemFuse extends Item implements IItemFuse
 	@Override
 	public boolean canReset(ItemStack itemStack)
 	{
-		return itemStack.getItemDamage() / 10 == 1;
+		return itemStack.getItemDamage() / 8 == 1;
 	}
 	
 	@Override
@@ -111,17 +105,18 @@ public class ItemFuse extends Item implements IItemFuse
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
-		for (int var4 = 0; var4 < 20; var4++)
+		for (int var4 = 0; var4 < icons.length; var4++)
 			par3List.add(new ItemStack(this, 1, var4));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister par1IconRegister)
+	public void updateIcons(IconRegister par1IconRegister)
 	{
 		for (int i = 0; i < this.icons.length; i++)
-			this.icons[i] = par1IconRegister.func_94245_a(this.getUnlocalizedName(new ItemStack(this.itemID, 0, i)).replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+			this.icons[i] = par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 0, i)).replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
 	}
 }

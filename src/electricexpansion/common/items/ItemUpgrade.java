@@ -2,9 +2,6 @@ package electricexpansion.common.items;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +9,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
+import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.prefab.modifier.IModifier;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
@@ -22,11 +23,11 @@ public class ItemUpgrade extends Item implements IModifier
 			"Storage1", 	"Storage2", 	"Storage3", 		"Storage4", 
 			"HalfVoltage", 	"HVUpgrade", 	"HVInputUpgrade", 	"DoubleVoltage",
 			"Unlimiter1", 	"Unlimiter2", 	"Unlimiter3", 		"Unlimiter4" 
-			};
+	};
 	
 	private Icon[] icons = new Icon[names.length];
 	private Icon defaultIcon;
-
+	
 	public ItemUpgrade(int id, int texture)
 	{
 		super(id);
@@ -36,19 +37,19 @@ public class ItemUpgrade extends Item implements IModifier
 		this.setCreativeTab(EETab.INSTANCE);
 		this.setUnlocalizedName("Upgrade");
 	}
-
+	
 	@Override
 	public int getMetadata(int damage)
 	{
 		return damage;
 	}
-
+	
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
 		return this.getUnlocalizedName() + "." + names[itemstack.getItemDamage()];
 	}
-
+	
 	@Override
 	public Icon getIconFromDamage(int i)
 	{
@@ -56,8 +57,9 @@ public class ItemUpgrade extends Item implements IModifier
 			return this.icons[i];
 		return this.defaultIcon;
 	}
-
+	
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int i = 0; i < names.length; i++)
@@ -65,7 +67,7 @@ public class ItemUpgrade extends Item implements IModifier
 			par3List.add(new ItemStack(this, 1, i));
 		}
 	}
-
+	
 	@Override
 	public String getName(ItemStack itemstack)
 	{
@@ -86,7 +88,7 @@ public class ItemUpgrade extends Item implements IModifier
 			default:	return "Unknown";
 		}
 	}
-
+	
 	@Override
 	public int getEffectiveness(ItemStack itemstack)
 	{
@@ -107,29 +109,41 @@ public class ItemUpgrade extends Item implements IModifier
 			default:	return 0;
 		}
 	}
-
+	
 	/**
 	 * Allows items to add custom lines of information to the mouseover description. If you want to
 	 * add more information to your item, you can super.addInformation() to keep the electiricty
 	 * info in the item info bar.
 	 */
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
 	{
 		String strength = "";
 		int effectiveness = this.getEffectiveness(itemstack);
-		if (effectiveness < 0)
+		if (this.getName(itemstack).equals("Capacity"))
 		{
-			strength = " 1/" + String.valueOf(effectiveness * -1);
+			strength = ElectricityDisplay.getDisplay(this.getEffectiveness(itemstack), ElectricUnit.JOULES);
+		}
+		else
+		{
+			if (effectiveness < 0)
+			{
+				strength = "1/" + String.valueOf(effectiveness * -1);
+			}
+			else
+			{
+				strength = effectiveness + "";
+			}
 		}
 		par3List.add("\u00a72" + StatCollector.translateToLocal("upgrades.description." + this.getName(itemstack)).replaceAll("<>", strength));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister iconRegister)
+	public void updateIcons(IconRegister iconRegister)
 	{
 		for (int i = 0; i < this.names.length; i++)
-			this.icons[i] = iconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
+			this.icons[i] = iconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
 	}
 }

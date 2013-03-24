@@ -19,7 +19,7 @@ import electricexpansion.common.tile.TileEntityTransformer;
 public class RenderTransformer extends TileEntitySpecialRenderer
 {
 	private ModelTransformer model;
-	private String textureToUse = ElectricExpansion.TEXTURE_NAME_PREFIX;
+	private String textureToUse = ElectricExpansion.MODEL_PATH;
 	
 	public RenderTransformer()
 	{

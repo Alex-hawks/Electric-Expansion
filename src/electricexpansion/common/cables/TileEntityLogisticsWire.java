@@ -5,9 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IConductor;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
@@ -25,7 +23,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 
 	private double networkProduced = 0;
 
-	private int playersUsing = 0;
 	private byte tick = 0;
 
 	@Override
@@ -85,11 +82,9 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
 				{
 					if (dataStream.readBoolean() == true)
 					{
-						this.playersUsing++;
 					}
 					else
 					{
-						playersUsing--;
 					}
 				}
 			}

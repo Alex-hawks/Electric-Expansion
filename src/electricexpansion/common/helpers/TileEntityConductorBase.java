@@ -1,10 +1,9 @@
 package electricexpansion.common.helpers;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.prefab.tile.TileEntityConductor;
@@ -25,6 +24,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	 * For hidden wires...
 	 */
 	public ItemStack textureItemStack;
+	public boolean isIconLocked = false;
 	
 	public TileEntityConductorBase()
 	{
@@ -36,6 +36,7 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 	public void initiate()
 	{
 		super.initiate();
+		this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
 	@Override
@@ -44,6 +45,40 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
 		return this.getWireMaterial(worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord)).resistance;
 	}
 
+	@Override
+	public void writeToNBT(NBTTagCompound tag)
+	{
+		super.writeToNBT(tag);
+		tag.setBoolean("isIconLocked", this.isIconLocked);
+		if (textureItemStack != null)
+		{
+			this.textureItemStack.writeToNBT(tag);
+		}
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound tag)
+	{
+		super.readFromNBT(tag);
+		try
+		{
+			this.textureItemStack = ItemStack.loadItemStackFromNBT(tag);
+		}
+		catch (Exception e) 
+		{
+			this.textureItemStack = null;
+		}
+		
+		try
+		{
+			this.isIconLocked = tag.getBoolean("isIconLocked");
+		}
+		catch (Exception e) 
+		{
+			this.isIconLocked = false;
+		}
+	}
+	
 	@Override
 	public double getCurrentCapcity()
 	{

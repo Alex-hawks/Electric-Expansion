@@ -51,8 +51,8 @@ public class GuiWireMill extends GuiContainer
 		}
 
 		this.fontRenderer.drawString("Status: " + displayText, 82, 45, 4210752);
-		this.fontRenderer.drawString("Voltage: " + ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 4210752);
-		this.fontRenderer.drawString("Require: " + ElectricityDisplay.getDisplay(this.tileEntity.WATTS_PER_TICK * 20, ElectricUnit.WATT), 82, 68, 4210752);
+		this.fontRenderer.drawString("Voltage: " + ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 4210752);
+		this.fontRenderer.drawString("Require: " + ElectricityDisplay.getDisplayShort(this.tileEntity.WATTS_PER_TICK * 20, ElectricUnit.WATT), 82, 68, 4210752);
 		this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
@@ -63,7 +63,7 @@ public class GuiWireMill extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.func_98187_b(this.getTexture());
+		this.mc.renderEngine.bindTexture(GuiWireMill.getTexture());
 		containerWidth = (this.width - this.xSize) / 2;
 		containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);

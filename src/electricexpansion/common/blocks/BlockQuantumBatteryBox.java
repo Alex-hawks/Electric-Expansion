@@ -70,14 +70,15 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister par1IconRegister)
+	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
-		this.icons.put("input", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
-		this.icons.put("default", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
+		this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
+		this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
+		this.icons.put("default", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
 	}
 	
 	@SideOnly(Side.CLIENT)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		par3List.add(new ItemStack(par1, 1, 0));
@@ -115,24 +116,21 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 	@Override
 	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
-		
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 3;
 		
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
+				par1World.setBlock(x, y, z, this.blockID, 3, 0);
 				break;
 			case 1:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
+				par1World.setBlock(x, y, z, this.blockID, 1, 0);
 				break;
 			case 2:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
+				par1World.setBlock(x, y, z, this.blockID, 2, 0);
 				break;
 			case 3:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
+				par1World.setBlock(x, y, z, this.blockID, 0, 0);
 				break;
 		}
 		
@@ -169,7 +167,8 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
 				break;
 		}
 		
-		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
+		par1World.setBlock(x, y, z, this.blockID, change, 0);
+		par1World.markBlockForRenderUpdate(x, y, z);
 		
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		

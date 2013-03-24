@@ -8,7 +8,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class EETab extends CreativeTabs
 {
 	public static final EETab INSTANCE = new EETab("ElectricExpansion");
-	private static ItemStack itemStack;
+	private ItemStack itemStack;
 
 	public EETab(String par2Str)
 	{
@@ -16,7 +16,7 @@ public class EETab extends CreativeTabs
 		LanguageRegistry.instance().addStringLocalization("itemGroup.ElectricExpansion", "en_US", "Electric Expansion");
 	}
 
-	public static void setItemStack(ItemStack newItemStack)
+	public void setItemStack(ItemStack newItemStack)
 	{
 		if (itemStack == null)
 		{

@@ -33,7 +33,6 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 	private ItemStack[] containingItems = new ItemStack[2];
 	private int playersUsing = 0;
 	private byte frequency = 0;
-	private boolean isOpen;
 	private double joulesForDisplay = 0;
 	private String owningPlayer = null;
 
@@ -174,11 +173,6 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 		par1NBTTagCompound.setString("owner", this.owningPlayer);
 	}
 
-	private void addJoules(double joules)
-	{
-		ElectricExpansion.DistributionNetworksInstance.addJoules(this.owningPlayer, this.frequency, joules);
-	}
-
 	@Override
 	public double getJoules()
 	{
@@ -298,7 +292,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 	@Override
 	public byte getFrequency()
 	{
-		return frequency;
+		return this.frequency;
 	}
 
 	@Override
@@ -322,11 +316,6 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 		this.setFrequency((byte) frequency);
 	}
 
-	private int setFrequency(int frequency, boolean b)
-	{
-		return this.setFrequency((short) frequency, b);
-	}
-
 	private int setFrequency(short frequency, boolean b)
 	{
 		this.setFrequency(frequency);
@@ -345,7 +334,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 	@Override
 	public String getType()
 	{
-		return "QuantumBatteryBox";
+		return this.getInvName().replaceAll(" ", "");
 	}
 
 	@Override
@@ -379,11 +368,11 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 		final int getFrequency = 3;
 		final int setFrequency = 4;
 		final int getPlayer = 5;
-		int arg0 = 0;
+		byte arg0 = -1;
 		try
 		{
 			if ((Integer) arguments[0] != null)
-				arg0 = ((Integer) arguments[0]).intValue();
+				arg0 = ((Byte) arguments[0]).byteValue();
 		}
 		catch (Exception e)
 		{
@@ -395,12 +384,14 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 			{
 				case getVoltage:
 					return new Object[] { this.getVoltage() };
+				case isFull:
+					return new Object[] { this.getJoules() >= this.getMaxJoules() };
 				case getJoules:
 					return new Object[] { this.getJoules() };
 				case getFrequency:
 					return new Object[] { this.getFrequency() };
 				case setFrequency:
-					return new Object[] { this.setFrequency((byte) arg0, true) };
+					return new Object[] { arg0 == 0 ? this.setFrequency((byte) arg0, true) : "Expected args for this function is 1. You have provided none." };
 				case getPlayer:
 					return new Object[] { this.getOwningPlayer() };
 				default:
@@ -418,16 +409,14 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public boolean isInvNameLocalized()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
+	public boolean isStackValidForSlot(int i, ItemStack itemstack)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -10,7 +10,6 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -28,8 +27,7 @@ public class TileEntityFuseBox extends TileEntityElectrical
 implements IPacketReceiver, IInventory
 {
 	public ItemStack[] inventory = new ItemStack[1];
-	private int playersUsing = 0;
-
+	
 	@Override
 	public void updateEntity()
 	{
@@ -186,13 +184,11 @@ implements IPacketReceiver, IInventory
 	@Override
 	public void openChest()
 	{
-		this.playersUsing ++;
 	}
 
 	@Override
 	public void closeChest()
 	{
-		this.playersUsing--;
 		
 	}
 
@@ -204,24 +200,20 @@ implements IPacketReceiver, IInventory
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
 	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, 
-			EntityPlayer player, ByteArrayDataInput dataStream)
-	{
-		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean isInvNameLocalized()
+	{
+		return true;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int i, ItemStack itemstack)
+	{
+		return false;
 	}
 }

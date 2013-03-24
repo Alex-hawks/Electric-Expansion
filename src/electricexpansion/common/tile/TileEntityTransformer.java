@@ -6,9 +6,9 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -174,15 +174,15 @@ public class TileEntityTransformer extends TileEntityElectrical implements IRota
 	}
 
 	@Override
-	public ForgeDirection getDirection(World world, int x, int y, int z)
+	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
 	{
-		return ForgeDirection.getOrientation(this.getBlockMetadata() - type);
+		this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal() - 2 + this.type, 0);
 	}
 
 	@Override
-	public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
+	public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
 	{
-		this.worldObj.setBlockAndMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal() - 2 + this.type, 0);
+		return ForgeDirection.getOrientation(this.getBlockMetadata() - type);
 	}
 
 }

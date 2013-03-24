@@ -7,9 +7,6 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
-
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -19,12 +16,12 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -101,7 +98,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 
 			if (inputNetwork != null)
 			{
-				if (this.joulesStored < this.maxJoules)
+				if (this.joulesStored < TileEntityWireMill.maxJoules)
 				{
 					inputNetwork.startRequesting(this, Math.min((this.getMaxJoules() - this.getJoules()), TRANSFER_LIMIT) / this.getVoltage(), this.getVoltage());
 					ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
@@ -237,19 +234,19 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 		ItemStack outputSlot = this.inventory[2];
 		if (inputSlot != null)
 		{
-			if (WireMillRecipes.drawing().getDrawingResult(inputSlot) == null)
+			if (WireMillRecipes.INSTANCE.getDrawingResult(inputSlot) == null)
 			{
 				canWork = false;
 			}
-			else if (WireMillRecipes.drawing().getDrawingResult(inputSlot) != null && outputSlot == null)
+			else if (WireMillRecipes.INSTANCE.getDrawingResult(inputSlot) != null && outputSlot == null)
 			{
 				canWork = true;
 			}
 			else if (outputSlot != null)
 			{
-				String result = (String) (WireMillRecipes.stackSizeToOne(WireMillRecipes.drawing().getDrawingResult(inputSlot)) + "");
+				String result = (String) (WireMillRecipes.stackSizeToOne(WireMillRecipes.INSTANCE.getDrawingResult(inputSlot)) + "");
 				String output2 = (String) (WireMillRecipes.stackSizeToOne(outputSlot) + "");
-				int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(), inputSlot.getMaxStackSize()) - WireMillRecipes.drawing().getDrawingResult(inputSlot).stackSize;
+				int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(), inputSlot.getMaxStackSize()) - WireMillRecipes.INSTANCE.getDrawingResult(inputSlot).stackSize;
 
 				if ((result.equals(output2)) && !(outputSlot.stackSize <= maxSpaceForSuccess))
 				{
@@ -273,14 +270,14 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	{
 		if (this.canDraw())
 		{
-			ItemStack resultItemStack = WireMillRecipes.drawing().getDrawingResult(this.inventory[1]);
+			ItemStack resultItemStack = WireMillRecipes.INSTANCE.getDrawingResult(this.inventory[1]);
 
 			if (this.inventory[2] == null)
 				this.inventory[2] = resultItemStack.copy();
 			else if (this.inventory[2].isItemEqual(resultItemStack))
 				this.inventory[2].stackSize = this.inventory[2].stackSize + resultItemStack.stackSize;
 
-			this.inventory[1].stackSize = this.inventory[1].stackSize - WireMillRecipes.drawing().getInputQTY(this.inventory[1]);
+			this.inventory[1].stackSize = this.inventory[1].stackSize - WireMillRecipes.INSTANCE.getInputQTY(this.inventory[1]);
 
 			if (this.inventory[1].stackSize <= 0)
 				this.inventory[1] = null;
@@ -343,7 +340,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	@Override
 	public int getStartInventorySide(ForgeDirection side)
 	{
-		if (side == side.DOWN || side == side.UP)
+		if (side == ForgeDirection.DOWN || side == ForgeDirection.UP)
 			return side.ordinal();
 		else
 			return 2;
@@ -419,7 +416,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	@Override
 	public String getInvName()
 	{
-		return "Wire Mill";
+		return StatCollector.translateToLocal("tile.wiremill.name");
 	}
 
 	@Override
@@ -447,7 +444,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	{
 		if (this.inventory[1] != null)
 		{
-			if (WireMillRecipes.drawing().getDrawingResult(this.inventory[1]) != null) { return (int) WireMillRecipes.drawing().getDrawingTicks(this.inventory[1]); }
+			if (WireMillRecipes.INSTANCE.getDrawingResult(this.inventory[1]) != null) { return (int) WireMillRecipes.INSTANCE.getDrawingTicks(this.inventory[1]); }
 		}
 		return -1;
 	}
@@ -472,7 +469,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	@Override
 	public double getMaxJoules()
 	{
-		return this.maxJoules;
+		return TileEntityWireMill.maxJoules;
 	}
 
 	@Override
@@ -525,7 +522,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	@Override
 	public int getMaxSafeInput()
 	{
-		return 2048;
+		return Integer.MAX_VALUE;
 	}
 
 	@Override
@@ -535,16 +532,14 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public boolean isInvNameLocalized()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
+	public boolean isStackValidForSlot(int i, ItemStack itemstack)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

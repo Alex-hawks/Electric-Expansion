@@ -2,6 +2,7 @@ package electricexpansion.common.blocks;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,21 +42,19 @@ public class BlockTransformer extends BlockAdvanced
 		int tierStart = metadata - (metadata & 3);
 		
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 3;
-		
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, tierStart + 3, 0);
+				par1World.setBlock(x, y, z, this.blockID, tierStart + 3, 0);
 				break;
 			case 1:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, tierStart + 1, 0);
+				par1World.setBlock(x, y, z, this.blockID, tierStart + 1, 0);
 				break;
 			case 2:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, tierStart + 2, 0);
+				par1World.setBlock(x, y, z, this.blockID, tierStart + 2, 0);
 				break;
 			case 3:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, tierStart + 0, 0);
+				par1World.setBlock(x, y, z, this.blockID, tierStart + 0, 0);
 				break;
 		}
 		
@@ -89,7 +88,8 @@ public class BlockTransformer extends BlockAdvanced
 				break;
 		}
 				
-		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change + original, 0);
+		par1World.setBlock(x, y, z, this.blockID, change + tierStart, 0);
+		par1World.markBlockForRenderUpdate(x, y, z);
 		
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 		
@@ -142,6 +142,7 @@ public class BlockTransformer extends BlockAdvanced
 	}
 	
 	@Override
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
 	{
 		for (int i = 0; i < 9; i += 4)
@@ -164,4 +165,11 @@ public class BlockTransformer extends BlockAdvanced
 		return new ItemStack(id, 1, tierStart);
 	}
 	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister)
+	{
+		
+	}
+
 }

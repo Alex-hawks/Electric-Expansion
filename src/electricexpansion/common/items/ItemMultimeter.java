@@ -1,7 +1,5 @@
 package electricexpansion.common.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,6 +12,8 @@ import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ItemElectric;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
@@ -23,7 +23,7 @@ public class ItemMultimeter extends ItemElectric
 	{
 		super(par1);
 		this.setCreativeTab(EETab.INSTANCE);
-		this.setUnlocalizedName("itemMultimeter");
+		this.setUnlocalizedName("Multimeter");
 	}
 
 	@Override
@@ -74,8 +74,8 @@ public class ItemMultimeter extends ItemElectric
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister par1IconRegister)
+	public void updateIcons(IconRegister par1IconRegister)
 	{
-		this.iconIndex = par1IconRegister.func_94245_a(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+		this.iconIndex = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
 	}
 }

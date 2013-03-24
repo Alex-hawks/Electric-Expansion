@@ -2,6 +2,7 @@ package electricexpansion.common.blocks;
 
 import java.util.HashMap;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,7 @@ public class BlockMultimeter extends BlockAdvanced
 	public BlockMultimeter(int id, int textureIndex)
 	{
 		super(id, UniversalElectricity.machine);
-		this.setStepSound(this.soundMetalFootstep);
+		this.setStepSound(Block.soundMetalFootstep);
 		this.setCreativeTab(EETab.INSTANCE);
 		this.setUnlocalizedName("multimeter");
 	}
@@ -48,23 +49,21 @@ public class BlockMultimeter extends BlockAdvanced
     {
     	int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
     	
-		if (side == 0 || side == 1)
-			return this.icons.get("top");
-		else if (side == metadata)
+		if (side == metadata)
 			return this.icons.get("output");
 		else
-			return this.icons.get("machine");
+			return this.icons.get("top");
     }
 
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister par1IconRegister)
+	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.icons.put("top", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-		this.icons.put("output", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
-		this.icons.put("machine", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
-		this.icons.put("front", par1IconRegister.func_94245_a(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
+		this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+		this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+		this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
+		this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
 	}
 
 	/**
@@ -92,7 +91,7 @@ public class BlockMultimeter extends BlockAdvanced
 				break;
 
 		}
-		world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
+		world.setBlock(x, y, z, this.blockID, change, 0);
 		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
 		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 	}
@@ -119,7 +118,8 @@ public class BlockMultimeter extends BlockAdvanced
 				break;
 		}
 
-		world.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
+		world.setBlock(x, y, z, this.blockID, change, 0);
+		world.markBlockForRenderUpdate(x, y, z);
 		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
 		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
 		return true;

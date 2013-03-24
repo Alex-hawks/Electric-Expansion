@@ -28,7 +28,7 @@ public class GuiLogisticsWire extends GuiScreen
 	{
 		drawDefaultBackground();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.func_98187_b(this.getTexture());
+		this.mc.renderEngine.bindTexture(GuiLogisticsWire.getTexture());
 		int posX = (this.width - xSizeOfTexture) / 2;
 		int posY = (this.height - ySizeOfTexture) / 2;
 		drawTexturedModalRect(posX, posY, 0, 0, xSizeOfTexture, ySizeOfTexture);
@@ -67,6 +67,7 @@ public class GuiLogisticsWire extends GuiScreen
 	 * Called from the main game loop to update the screen.
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void updateScreen()
 	{
 		super.updateScreen();

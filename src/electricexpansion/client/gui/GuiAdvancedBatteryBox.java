@@ -8,7 +8,6 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
@@ -31,10 +30,10 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 22, 6, 4210752);
-		String displayJoules = ElectricityDisplay.getDisplay(this.tileEntity.getJoules(), ElectricUnit.JOULES);
-		String displayMaxJoules = ElectricityDisplay.getDisplay(this.tileEntity.getMaxJoules(), ElectricUnit.JOULES);
-		String displayInputVoltage = ElectricityDisplay.getDisplay(this.tileEntity.getInputVoltage(), ElectricUnit.VOLTAGE);
-		String displayOutputVoltage = ElectricityDisplay.getDisplay(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
+		String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoules(), ElectricUnit.JOULES);
+		String displayMaxJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getMaxJoules(), ElectricUnit.JOULES);
+		String displayInputVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getInputVoltage(), ElectricUnit.VOLTAGE);
+		String displayOutputVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
 
 		if (this.tileEntity.isDisabled())
 		{
@@ -51,7 +50,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.func_98187_b(this.getTexture());
+		this.mc.renderEngine.bindTexture(GuiAdvancedBatteryBox.getTexture());
 
 		this.containerWidth = ((this.width - this.xSize) / 2);
 		this.containerHeight = ((this.height - this.ySize) / 2);

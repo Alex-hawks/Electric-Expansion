@@ -5,9 +5,6 @@ import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
-
-import java.util.EnumSet;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -23,7 +20,6 @@ import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
@@ -209,7 +205,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 		int outputSlot = (this.inventory[2] != null) ? this.inventory[2].stackSize : 0;
 		if (inputSlot != null)
 		{
-			if ((InsulationRecipes.getProcessing().getProcessResult(inputSlot) > 0) && (InsulationRecipes.getProcessing().getProcessResult(inputSlot) + outputSlot <= 64))
+			if ((InsulationRecipes.INSTANCE.getProcessResult(inputSlot) > 0) && (InsulationRecipes.INSTANCE.getProcessResult(inputSlot) + outputSlot <= 64))
 			{
 				canWork = true;
 			}
@@ -222,14 +218,14 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	{
 		if (canProcess())
 		{
-			int result = InsulationRecipes.getProcessing().getProcessResult(this.inventory[1]);
+			int result = InsulationRecipes.INSTANCE.getProcessResult(this.inventory[1]);
 
 			if (this.inventory[2] == null)
 				this.inventory[2] = new ItemStack(ElectricExpansion.itemParts, result, 6);
 			else if (this.inventory[2].stackSize + result <= 64) {
 				this.inventory[2].stackSize += result;
 			}
-			InsulationRecipes.getProcessing(); this.inventory[1].stackSize -= InsulationRecipes.getInputQTY(this.inventory[1]);
+			this.inventory[1].stackSize -= InsulationRecipes.INSTANCE.getInputQTY(this.inventory[1]);
 
 			if (this.inventory[1].stackSize <= 0)
 				this.inventory[1] = null;
@@ -369,10 +365,9 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	{
 		if (this.inventory[1] != null)
 		{
-			if (InsulationRecipes.getProcessing().getProcessResult(this.inventory[1]) != 0)
+			if (InsulationRecipes.INSTANCE.getProcessResult(this.inventory[1]) != 0)
 			{
-				InsulationRecipes.getProcessing(); 
-				return InsulationRecipes.getProcessTicks(this.inventory[1]).intValue();
+				return InsulationRecipes.INSTANCE.getProcessTicks(this.inventory[1]).intValue();
 			}
 		}
 		return -1;
@@ -445,42 +440,38 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return direction.ordinal() == this.getBlockMetadata() + 2;
 	}
 
 	@Override
 	public double getJoules()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return this.joulesStored;
 	}
 
 	@Override
 	public void setJoules(double joules)
 	{
-		// TODO Auto-generated method stub
-		
+		this.joulesStored = joules;
 	}
 
 	@Override
 	public double getMaxJoules()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return TileEntityInsulatingMachine.maxJoules;
 	}
 
 	@Override
-	public boolean func_94042_c()
+	public boolean isInvNameLocalized()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack)
+	public boolean isStackValidForSlot(int i, ItemStack itemstack)
 	{
-		// TODO Auto-generated method stub
+		if (i == 1)
+			return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 1;
 		return false;
 	}
 }

@@ -9,22 +9,20 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class WireMillRecipes
 {
-	private static final WireMillRecipes drawingBase = new WireMillRecipes();
-
-	private static HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
-	private static HashMap<Integer, ItemStack> recipeToInput = new HashMap<Integer, ItemStack>();
-	private static HashMap<Integer, ItemStack> recipeToOutput = new HashMap<Integer, ItemStack>();
-	private static HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
-	private static HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
-
 	/**
 	 * Used to call methods addDrawing and getDrawingResult.
 	 */
-	public static final WireMillRecipes drawing()
-	{
-		return drawingBase;
-	}
+	public static final WireMillRecipes INSTANCE = new WireMillRecipes();
 
+	private HashMap<String, Integer> inputToRecipe = new HashMap<String, Integer>();
+	private HashMap<Integer, ItemStack> recipeToInput = new HashMap<Integer, ItemStack>();
+	private HashMap<Integer, ItemStack> recipeToOutput = new HashMap<Integer, ItemStack>();
+	private HashMap<Integer, Integer> recipeToTicks = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Integer> recipeToInputQTY = new HashMap<Integer, Integer>();
+
+
+	private WireMillRecipes() { }
+	
 	/**
 	 * Adds a drawing recipe.
 	 * 
@@ -32,19 +30,18 @@ public class WireMillRecipes
 	 * @param output As an ItemStack
 	 * @param ticks The ticks required for the recipe, seconds * 20.
 	 */
-	public static void addDrawing(ItemStack input, ItemStack output, int ticks)
+	public void addProcessing(ItemStack input, ItemStack output, int ticks)
 	{
 		try
 		{
 			if (input != null && output != null && ticks > 0)
 			{
-				boolean j = true;
-				int nextRecipeID = recipeToOutput.size();
-				inputToRecipe.put(stackSizeToOne(input) + "", nextRecipeID);
-				recipeToInput.put(nextRecipeID, stackSizeToOne(input));
-				recipeToOutput.put(nextRecipeID, output);
-				recipeToTicks.put(nextRecipeID, ticks);
-				recipeToInputQTY.put(nextRecipeID, input.stackSize);
+				int nextRecipeID = this.recipeToOutput.size();
+				this.inputToRecipe.put(stackSizeToOne(input) + "", nextRecipeID);
+				this.recipeToInput.put(nextRecipeID, stackSizeToOne(input));
+				this.recipeToOutput.put(nextRecipeID, output);
+				this.recipeToTicks.put(nextRecipeID, ticks);
+				this.recipeToInputQTY.put(nextRecipeID, input.stackSize);
 			}
 			else if (input == null)
 				throw new IOException("Error: Input cannot be null.");
@@ -66,10 +63,10 @@ public class WireMillRecipes
 	 * @param output As an ItemStack
 	 * @param ticks The ticks required for the recipe, seconds * 20.
 	 */
-	public static void addDrawing(String input, ItemStack output, int ticks)
+	public void addProcessing(String input, ItemStack output, int ticks)
 	{
 		for (ItemStack input2 : OreDictionary.getOres(input))
-			addDrawing(input2, output, ticks);
+			this.addProcessing(input2, output, ticks);
 	}
 
 	/**
@@ -83,7 +80,7 @@ public class WireMillRecipes
 		try
 		{
 			int recipeID = 0;
-			recipeID = inputToRecipe.get(stackSizeToOne(input) + "");
+			recipeID = this.inputToRecipe.get(stackSizeToOne(input) + "");
 			if (input.stackSize >= recipeToInputQTY.get(recipeID))
 				return (ItemStack) this.recipeToOutput.get(recipeID);
 			else
@@ -95,14 +92,14 @@ public class WireMillRecipes
 		}
 	}
 
-	public static int getInputQTY(ItemStack input)
+	public int getInputQTY(ItemStack input)
 	{
 		try
 		{
 			int recipeID = 0;
-			recipeID = inputToRecipe.get(stackSizeToOne(input) + "");
+			recipeID = this.inputToRecipe.get(stackSizeToOne(input) + "");
 			if (input.stackSize >= recipeToInputQTY.get(recipeID))
-				return (int) recipeToInputQTY.get(recipeID);
+				return (int) this.recipeToInputQTY.get(recipeID);
 			else
 				return (Integer) null;
 		}
@@ -118,14 +115,14 @@ public class WireMillRecipes
 	 * @param item The Source ItemStack
 	 * @return The processing time, in ticks
 	 */
-	public static Integer getDrawingTicks(ItemStack input)
+	public Integer getDrawingTicks(ItemStack input)
 	{
 		try
 		{
 			int recipeID = 0;
-			recipeID = inputToRecipe.get(stackSizeToOne(input) + "");
+			recipeID = this.inputToRecipe.get(stackSizeToOne(input) + "");
 			if (input.stackSize >= recipeToInputQTY.get(recipeID))
-				return (Integer) recipeToTicks.get(recipeID);
+				return (Integer) this.recipeToTicks.get(recipeID);
 			else
 				return 0;
 		}
@@ -156,7 +153,7 @@ public class WireMillRecipes
 			return null;
 	}
 
-	public static Map getRecipesForNEI()
+	public Map<ItemStack, int[]> getRecipesForNEI()
 	{
 		Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
 		// int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3:ticks required)
@@ -164,7 +161,7 @@ public class WireMillRecipes
 		for (int i = 0; i < recipeToInput.size(); i++)
 		{
 			ItemStack input = stackSizeChange(recipeToInput.get(i), recipeToInputQTY.get(i));
-			int[] output = { recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), getDrawingTicks(recipeToInput.get(i)) };
+			int[] output = { recipeToOutput.get(i).itemID, recipeToOutput.get(i).stackSize, recipeToOutput.get(i).getItemDamage(), this.getDrawingTicks(recipeToInput.get(i)) };
 			recipes.put(input, output);
 		}
 		return recipes;

@@ -5,7 +5,7 @@
  */
 
 package dan200.turtle.api;
-import dan200.computer.api.*;
+import dan200.computer.api.IHostedPeripheral;
 
 /**
  * The interface passed to upgrades by turtles, providing methods that they can call.

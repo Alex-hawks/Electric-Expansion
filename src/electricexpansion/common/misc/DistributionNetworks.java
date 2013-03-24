@@ -182,7 +182,6 @@ public class DistributionNetworks
 			folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + server.getFolderName() + File.separator + "ElectricExpansion";
 		}
 
-		String files;
 		File folderToUse = new File(folder);
 		File[] listOfFiles = folderToUse.listFiles();
 

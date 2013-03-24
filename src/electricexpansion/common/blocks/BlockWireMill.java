@@ -1,5 +1,6 @@
 package electricexpansion.common.blocks;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -34,24 +35,21 @@ public class BlockWireMill extends BlockAdvanced
 	@Override
 	public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
 	{
-		int metadata = par1World.getBlockMetadata(x, y, z);
-
 		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 3;
-
+		
 		switch (angle)
 		{
 			case 0:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 1, 0);
+				par1World.setBlock(x, y, z, this.blockID, 1, 0);
 				break;
 			case 1:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 2, 0);
+				par1World.setBlock(x, y, z, this.blockID, 2, 0);
 				break;
 			case 2:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 0, 0);
+				par1World.setBlock(x, y, z, this.blockID, 0, 0);
 				break;
 			case 3:
-				par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, 3, 0);
+				par1World.setBlock(x, y, z, this.blockID, 3, 0);
 				break;
 		}
 
@@ -83,7 +81,8 @@ public class BlockWireMill extends BlockAdvanced
 				break;
 		}
 
-		par1World.setBlockAndMetadataWithNotify(x, y, z, this.blockID, change, 0);
+		par1World.setBlock(x, y, z, this.blockID, change, 0);
+		par1World.markBlockForRenderUpdate(x, y, z);
 
 		((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
 
@@ -145,6 +144,13 @@ public class BlockWireMill extends BlockAdvanced
 	public int getRenderType()
 	{
 		return ClientProxy.RENDER_ID;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister)
+	{
+		
 	}
 
 }

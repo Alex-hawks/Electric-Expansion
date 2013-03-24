@@ -39,6 +39,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public void initGui()
 	{
 		super.initGui();
@@ -61,7 +62,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
 	{
 		this.textFieldFrequency.drawTextBox();
 
-		String displayJoules = ElectricityDisplay.getDisplay(tileEntity.getJoulesForDisplay(), ElectricUnit.JOULES);
+		String displayJoules = ElectricityDisplay.getDisplayShort(tileEntity.getJoulesForDisplay(), ElectricUnit.JOULES);
 
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 42, 6, 4210752);
 		this.fontRenderer.drawString("Current Frequency: " + tileEntity.getFrequency(), 10, 20, 4210752);
@@ -79,7 +80,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.func_98187_b(this.getTexture());
+		this.mc.renderEngine.bindTexture(GuiQuantumBatteryBox.getTexture());
 		this.containerWidth = (this.width - this.xSize) / 2;
 		this.containerHeight = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(containerWidth, containerHeight, 0, 0, this.xSize, this.ySize);

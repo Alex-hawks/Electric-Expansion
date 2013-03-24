@@ -40,12 +40,13 @@ public class GuiSwitchButton extends GuiButton
 	 * Draws this button to the screen.
 	 */
 	@Override
+	@SuppressWarnings("unused")
 	public void drawButton(Minecraft par1Minecraft, int par2, int par3)
 	{
 		if (this.drawButton)
 		{
 			FontRenderer var4 = par1Minecraft.fontRenderer;
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, par1Minecraft.renderEngine.getTexture(ElectricExpansion.TEXTURE_PATH + "SwitchButton.png"));
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, par1Minecraft.renderEngine.getTexture(ElectricExpansion.GUI_PATH + "SwitchButton.png"));
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			this.field_82253_i = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
 
