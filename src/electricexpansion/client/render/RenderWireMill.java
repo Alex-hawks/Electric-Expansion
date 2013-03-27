@@ -18,7 +18,6 @@ public class RenderWireMill extends TileEntitySpecialRenderer
 	public RenderWireMill()
 	{
 		this.model = new ModelWireMill();
-
 	}
 
 	@Override

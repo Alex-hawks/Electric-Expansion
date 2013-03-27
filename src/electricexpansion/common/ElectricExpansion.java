@@ -67,7 +67,7 @@ import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.misc.EventHandler;
 
-@Mod(modid = ElectricExpansion.MOD_ID, name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience")
+@Mod(modid = ElectricExpansion.MOD_ID, name = ElectricExpansion.NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience;after:ICBM|Contraption")
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandler.class, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {

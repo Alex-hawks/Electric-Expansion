@@ -31,7 +31,6 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 			GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MODEL_PATH + "wiremill.png"));
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.5F, .8F, 0.5F);
-			// GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glScalef(1F, -1F, -1F);
 			wireMill.render(null, 0, 0, 0, 0, 0, 0.0625F);
 			GL11.glPopMatrix();
@@ -49,12 +48,10 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
 			}
 			GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glTranslatef(0.5F, .8F, 0.5F);
-			// GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
 			GL11.glScalef(1F, -1F, -1F);
 			transformer.render(null, 0, 0, 0, 0, 0, 0.0625F);
 			GL11.glPopMatrix();
 		}
-
 	}
 
 	@Override
