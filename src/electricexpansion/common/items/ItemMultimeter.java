@@ -63,7 +63,7 @@ public class ItemMultimeter extends ItemElectric
 	@Override
 	public double getMaxJoules(ItemStack itemStack)
 	{
-		return 1_000_000;
+		return 1000000;
 	}
 
 	@Override
