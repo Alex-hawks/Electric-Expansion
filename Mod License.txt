@@ -1,10 +1,10 @@
 This mod falls under the IMS (It's My Stuff) license. In particular, the revision of the license created by Alex_hawks.
 
 Under the license, there exist the following conditions:
-1:	All distributions (eg. Modpacks) must either retain the license, or provide a direct link to it, either on the same page as the download (spoilers work), or in the downlaod itself. Linking to the mod's thread, site, etc is also fine.
+1:	All distributions (eg. Modpacks) must either retain the license, or provide a direct link to it, either on the same page as the download (spoilers work), or in the download itself. Linking to the mod's thread, site, etc is also fine.
 2:	You MUST NOT say you helped, when you didn't help at all. You can say you didn't help, when you did actually help.
-3:	For modpacks (just in case); you MUST be legally alowed to include all other mods. For the purposes of mods that also include this condition, such as ChickenBones' Enderstorage, you have permission, so as to avoid an infinite loop.
-4:	If you do include this mod in your modpack, you must only include Recomended Builds unless a Stable Build is advised by a member of the Electric Expansion Developement Team.
+3:	For modpacks (just in case); you MUST be legally allowed to include all other mods. For the purposes of mods that also include this condition, such as ChickenBones' Enderstorage, you have permission, so as to avoid an infinite loop.
+4:	If you do include this mod in your modpack, you must only include Recommended Builds unless a Stable Build is advised by a member of the Electric Expansion Development Team.
 5:	Do NOT decompile the mod. You do not need to. Just visit the Github repo of the mod.
 6:	Unless otherwise stated above, you do not need permission for any use of this mod, except making money off the Electric Expansion binaries, in which case permission must be made public. Having adds on your site, which contains content related to Electric Expansion, is permitted. This is not permission to host that content though.
 7:	Permission to use this mod in your modpack may be revoked if the modpack is generating a bad response in the Universal Electricity community.
