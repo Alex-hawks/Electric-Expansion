@@ -10,29 +10,31 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemUltimateBattery extends ItemElectric
 {
-	public ItemUltimateBattery(int par1)
-	{
-		super(par1);
-		this.setUnlocalizedName("UltimateBattery");
-		this.setCreativeTab(EETab.INSTANCE);
-	}
-
-	@Override
-	public double getMaxJoules(ItemStack i)
-	{
-		return 5000000;
-	}
-
-	@Override
-	public double getVoltage(ItemStack i)
-	{
-		return 75;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void updateIcons(IconRegister par1IconRegister)
-	{
-		this.iconIndex = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
-	}
+    public ItemUltimateBattery(int par1)
+    {
+        super(par1);
+        this.setUnlocalizedName("UltimateBattery");
+        this.setCreativeTab(EETab.INSTANCE);
+    }
+    
+    @Override
+    public double getMaxJoules(ItemStack i)
+    {
+        return 5000000;
+    }
+    
+    @Override
+    public double getVoltage(ItemStack i)
+    {
+        return 75;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void updateIcons(IconRegister par1IconRegister)
+    {
+        this.iconIndex = par1IconRegister.registerIcon(this
+                .getUnlocalizedName().replaceAll("item.",
+                        ElectricExpansion.TEXTURE_NAME_PREFIX));
+    }
 }

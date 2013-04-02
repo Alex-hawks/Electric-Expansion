@@ -4,8 +4,8 @@ import electricexpansion.common.helpers.ItemBlockCableHelper;
 
 public class ItemBlockWireBlock extends ItemBlockCableHelper
 {
-	public ItemBlockWireBlock(int id)
-	{
-		super(id);
-	}
+    public ItemBlockWireBlock(int id)
+    {
+        super(id);
+    }
 }

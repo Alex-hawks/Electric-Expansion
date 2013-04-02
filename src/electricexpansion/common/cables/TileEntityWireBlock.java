@@ -4,6 +4,6 @@ import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntityWireBlock extends TileEntityConductorBase
 {
-	// everything is in the helper class.
-	// this class MUST remain existent...
+    // everything is in the helper class.
+    // this class MUST remain existent...
 }

@@ -25,135 +25,151 @@ import electricexpansion.common.tile.TileEntityMultimeter;
 
 public class BlockMultimeter extends BlockAdvanced
 {
-	private HashMap<String, Icon> icons = new HashMap<String, Icon>();
-	
-	public BlockMultimeter(int id, int textureIndex)
-	{
-		super(id, UniversalElectricity.machine);
-		this.setStepSound(Block.soundMetalFootstep);
-		this.setCreativeTab(EETab.INSTANCE);
-		this.setUnlocalizedName("multimeter");
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
-	{
-		if (side == 3)
-			return this.icons.get("front");
-		else
-			return this.icons.get("top");
-	}
-	
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
+    private HashMap<String, Icon> icons = new HashMap<String, Icon>();
+    
+    public BlockMultimeter(int id, int textureIndex)
     {
-    	int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
-    	
-		if (side == metadata)
-			return this.icons.get("output");
-		else
-			return this.icons.get("top");
+        super(id, UniversalElectricity.machine);
+        this.setStepSound(Block.soundMetalFootstep);
+        this.setCreativeTab(EETab.INSTANCE);
+        this.setUnlocalizedName("multimeter");
     }
-
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister)
-	{
-		this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-		this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
-		this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
-		this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
-	}
-
-	/**
-	 * Called when the block is placed in the world.
-	 */
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
-	{
-		int angle = MathHelper.floor_double((par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int change = 2;
-
-		switch (angle)
-		{
-			case 0:
-				change = 2;
-				break;
-			case 1:
-				change = 5;
-				break;
-			case 2:
-				change = 3;
-				break;
-			case 3:
-				change = 4;
-				break;
-
-		}
-		world.setBlock(x, y, z, this.blockID, change, 0);
-		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
-		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-	}
-
-	@Override
-	public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
-	{
-		int original = world.getBlockMetadata(x, y, z);
-		int change = 2;
-
-		switch (original)
-		{
-			case 2:
-				change = 5;
-				break;
-			case 5:
-				change = 4;
-				break;
-			case 4:
-				change = 3;
-				break;
-			case 3:
-				change = 2;
-				break;
-		}
-
-		world.setBlock(x, y, z, this.blockID, change, 0);
-		world.markBlockForRenderUpdate(x, y, z);
-		((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
-		world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
-		return true;
-	}
-
-	/**
-	 * Is this block powering the block on the specified side
-	 */
-	@Override
-	public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-	{
-		TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-
-		if (tileEntity instanceof IRedstoneProvider)
-			return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
-
-		return 0;
-	}
-
-	@Override
-	public boolean isOpaqueCube()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock()
-	{
-		return false;
-	}
-
-	@Override
-	public TileEntity createTileEntity(World var1, int metadata)
-	{
-		return new TileEntityMultimeter();
-	}
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+    {
+        if (side == 3)
+            return this.icons.get("front");
+        else
+            return this.icons.get("top");
+    }
+    
+    @Override
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y,
+            int z, int side)
+    {
+        int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
+        
+        if (side == metadata)
+            return this.icons.get("output");
+        else
+            return this.icons.get("top");
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IconRegister par1IconRegister)
+    {
+        this.icons.put("top", par1IconRegister
+                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
+                        + "machineTop"));
+        this.icons.put("output", par1IconRegister
+                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
+                        + "machineOutput"));
+        this.icons.put("machine",
+                par1IconRegister
+                        .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
+                                + "machine"));
+        this.icons.put("front", par1IconRegister
+                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
+                        + "multimeter"));
+    }
+    
+    /**
+     * Called when the block is placed in the world.
+     */
+    @Override
+    public void onBlockPlacedBy(World world, int x, int y, int z,
+            EntityLiving par5EntityLiving, ItemStack itemStack)
+    {
+        int angle = MathHelper
+                .floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int change = 2;
+        
+        switch (angle)
+        {
+            case 0:
+                change = 2;
+                break;
+            case 1:
+                change = 5;
+                break;
+            case 2:
+                change = 3;
+                break;
+            case 3:
+                change = 4;
+                break;
+        
+        }
+        world.setBlock(x, y, z, this.blockID, change, 0);
+        ((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
+        world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+    }
+    
+    @Override
+    public boolean onUseWrench(World world, int x, int y, int z,
+            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
+            float hitZ)
+    {
+        int original = world.getBlockMetadata(x, y, z);
+        int change = 2;
+        
+        switch (original)
+        {
+            case 2:
+                change = 5;
+                break;
+            case 5:
+                change = 4;
+                break;
+            case 4:
+                change = 3;
+                break;
+            case 3:
+                change = 2;
+                break;
+        }
+        
+        world.setBlock(x, y, z, this.blockID, change, 0);
+        world.markBlockForRenderUpdate(x, y, z);
+        ((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
+        world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+        return true;
+    }
+    
+    /**
+     * Is this block powering the block on the specified side
+     */
+    @Override
+    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x,
+            int y, int z, int side)
+    {
+        TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
+        
+        if (tileEntity instanceof IRedstoneProvider)
+            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection
+                    .getOrientation(side)) ? 15 : 0;
+        
+        return 0;
+    }
+    
+    @Override
+    public boolean isOpaqueCube()
+    {
+        return false;
+    }
+    
+    @Override
+    public boolean renderAsNormalBlock()
+    {
+        return false;
+    }
+    
+    @Override
+    public TileEntity createTileEntity(World var1, int metadata)
+    {
+        return new TileEntityMultimeter();
+    }
 }

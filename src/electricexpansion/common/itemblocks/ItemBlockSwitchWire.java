@@ -8,17 +8,18 @@ import electricexpansion.common.helpers.ItemBlockCableHelper;
 
 public class ItemBlockSwitchWire extends ItemBlockCableHelper
 {
-	public ItemBlockSwitchWire(int id)
-	{
-		super(id);
-	}
-	
-	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
-	{
-		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
-
-		par3List.add("Only conducts when redstone powered");
-	}
+    public ItemBlockSwitchWire(int id)
+    {
+        super(id);
+    }
+    
+    @Override
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public void addInformation(ItemStack par1ItemStack,
+            EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    {
+        super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
+        
+        par3List.add("Only conducts when redstone powered");
+    }
 }
