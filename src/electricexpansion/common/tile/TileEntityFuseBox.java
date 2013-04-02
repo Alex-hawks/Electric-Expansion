@@ -23,8 +23,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.api.IItemFuse;
 
-public class TileEntityFuseBox extends TileEntityElectrical implements
-        IPacketReceiver, IInventory
+public class TileEntityFuseBox extends TileEntityElectrical implements IPacketReceiver, IInventory
 {
     public ItemStack[] inventory = new ItemStack[1];
     
@@ -37,39 +36,32 @@ public class TileEntityFuseBox extends TileEntityElectrical implements
         {
             if (this.hasFuse())
             {
-                ForgeDirection inputDirection = ForgeDirection.getOrientation(
-                        this.getBlockMetadata() + 2).getOpposite();
-                TileEntity inputTile = VectorHelper.getTileEntityFromSide(
-                        this.worldObj, new Vector3(this), inputDirection);
+                ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2)
+                        .getOpposite();
+                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                        inputDirection);
                 
-                ForgeDirection outputDirection = ForgeDirection
-                        .getOrientation(this.getBlockMetadata() + 2);
-                TileEntity outputTile = VectorHelper.getTileEntityFromSide(
-                        this.worldObj, new Vector3(this), outputDirection);
+                ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+                TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                        outputDirection);
                 
-                IElectricityNetwork inputNetwork = ElectricityNetworkHelper
-                        .getNetworkFromTileEntity(inputTile,
-                                outputDirection.getOpposite());
-                IElectricityNetwork outputNetwork = ElectricityNetworkHelper
-                        .getNetworkFromTileEntity(outputTile, outputDirection);
+                IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
+                        outputDirection.getOpposite());
+                IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
+                        outputDirection);
                 
-                if (outputNetwork != null && inputNetwork != null
-                        && outputNetwork != inputNetwork)
+                if (outputNetwork != null && inputNetwork != null && outputNetwork != inputNetwork)
                 {
-                    ElectricityPack request = outputNetwork
-                            .getRequest(new TileEntity[0]);
+                    ElectricityPack request = outputNetwork.getRequest(new TileEntity[0]);
                     inputNetwork.startRequesting(this, request);
                     
-                    ElectricityPack recieved = inputNetwork
-                            .consumeElectricity(this);
+                    ElectricityPack recieved = inputNetwork.consumeElectricity(this);
                     
                     outputNetwork.startProducing(this, recieved);
                     
-                    if (recieved.amperes > ((IItemFuse) this.inventory[0]
-                            .getItem()).getMaxVolts(this.inventory[0]))
+                    if (recieved.amperes > ((IItemFuse) this.inventory[0].getItem()).getMaxVolts(this.inventory[0]))
                     {
-                        ((IItemFuse) this.inventory[0].getItem())
-                                .onFuseTrip(this.inventory[0]);
+                        ((IItemFuse) this.inventory[0].getItem()).onFuseTrip(this.inventory[0]);
                     }
                 }
                 else if (outputNetwork != null && inputNetwork == null)
@@ -84,8 +76,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements
             
             if (!this.worldObj.isRemote)
             {
-                PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                        this.worldObj, new Vector3(this), 12.0D);
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
             }
         }
     }
@@ -132,8 +123,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements
         if (this.inventory[0] != null)
         {
             if (this.inventory[0].getItem() instanceof IItemFuse)
-                return ((IItemFuse) this.inventory[0].getItem())
-                        .isValidFuse(this.inventory[0]);
+                return ((IItemFuse) this.inventory[0].getItem()).isValidFuse(this.inventory[0]);
         }
         return false;
     }
@@ -159,8 +149,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements
     @Override
     public ItemStack decrStackSize(int var1, int var2)
     {
-        if (var1 < this.inventory.length
-                && this.inventory[var1].stackSize >= var2)
+        if (var1 < this.inventory.length && this.inventory[var1].stackSize >= var2)
         {
             ItemStack toReturn = this.inventory[var1].copy();
             toReturn.stackSize -= var2;
@@ -197,10 +186,8 @@ public class TileEntityFuseBox extends TileEntityElectrical implements
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord,
-                this.zCoord) != this ? false
-                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D,
-                        this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false
+                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
     
     @Override
@@ -217,16 +204,13 @@ public class TileEntityFuseBox extends TileEntityElectrical implements
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord,
-                this.zCoord);
-        return direction.ordinal() == meta + 2
-                || direction.getOpposite().ordinal() == meta + 2;
+        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        return direction.ordinal() == meta + 2 || direction.getOpposite().ordinal() == meta + 2;
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int packetType,
-            Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet,
+            EntityPlayer player, ByteArrayDataInput dataStream)
     {
         
     }

@@ -31,10 +31,8 @@ public class GuiLogisticsWire extends GuiScreen
         this.mc.renderEngine.bindTexture(GuiLogisticsWire.getTexture());
         int posX = (this.width - this.xSizeOfTexture) / 2;
         int posY = (this.height - this.ySizeOfTexture) / 2;
-        this.drawTexturedModalRect(posX, posY, 0, 0, this.xSizeOfTexture,
-                this.ySizeOfTexture);
-        this.fontRenderer.drawString("Logistics Wire", posX
-                + this.xSizeOfTexture / 2 - 35, posY + 4, 4210752);
+        this.drawTexturedModalRect(posX, posY, 0, 0, this.xSizeOfTexture, this.ySizeOfTexture);
+        this.fontRenderer.drawString("Logistics Wire", posX + this.xSizeOfTexture / 2 - 35, posY + 4, 4210752);
         super.drawScreen(x, y, f);
     }
     
@@ -43,8 +41,8 @@ public class GuiLogisticsWire extends GuiScreen
     {
         super.onGuiClosed();
         
-        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                ElectricExpansion.CHANNEL, this.tileEntity, (byte) 7, false));
+        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
+                (byte) 7, false));
     }
     
     @Override
@@ -54,21 +52,18 @@ public class GuiLogisticsWire extends GuiScreen
         {
             case 0:
                 this.tileEntity.buttonStatus0 = !this.tileEntity.buttonStatus0;
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                        ElectricExpansion.CHANNEL, this.tileEntity, (byte) -1,
-                        this.tileEntity.buttonStatus0));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
+                        (byte) -1, this.tileEntity.buttonStatus0));
                 break;
             case 1:
                 this.tileEntity.buttonStatus1 = !this.tileEntity.buttonStatus1;
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                        ElectricExpansion.CHANNEL, this.tileEntity, (byte) 0,
-                        this.tileEntity.buttonStatus1));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
+                        (byte) 0, this.tileEntity.buttonStatus1));
                 break;
             case 2:
                 this.tileEntity.buttonStatus2 = !this.tileEntity.buttonStatus2;
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                        ElectricExpansion.CHANNEL, this.tileEntity, (byte) 1,
-                        this.tileEntity.buttonStatus2));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
+                        (byte) 1, this.tileEntity.buttonStatus2));
                 break;
         }
     }
@@ -87,12 +82,12 @@ public class GuiLogisticsWire extends GuiScreen
         int posX = (this.width - this.xSizeOfTexture) / 2;
         int posY = (this.height - this.ySizeOfTexture) / 2;
         
-        this.buttonList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150,
-                16, "Redstone Output", this.tileEntity.buttonStatus0));
-        this.buttonList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150,
-                16, "Unused", this.tileEntity.buttonStatus1));
-        this.buttonList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150,
-                16, "Unused", this.tileEntity.buttonStatus2));
+        this.buttonList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Redstone Output",
+                this.tileEntity.buttonStatus0));
+        this.buttonList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused",
+                this.tileEntity.buttonStatus1));
+        this.buttonList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused",
+                this.tileEntity.buttonStatus2));
         
         if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead)
         {

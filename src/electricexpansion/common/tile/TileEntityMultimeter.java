@@ -20,8 +20,7 @@ import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityMultimeter extends TileEntityElectrical implements
-        IPacketReceiver, IRotatable
+public class TileEntityMultimeter extends TileEntityElectrical implements IPacketReceiver, IRotatable
 {
     public ElectricityPack electricityReading = new ElectricityPack();
     private ElectricityPack lastReading = new ElectricityPack();
@@ -39,18 +38,16 @@ public class TileEntityMultimeter extends TileEntityElectrical implements
             {
                 if (!this.isDisabled())
                 {
-                    ForgeDirection inputDirection = ForgeDirection
-                            .getOrientation(this.getBlockMetadata() + 2);
-                    TileEntity inputTile = VectorHelper.getTileEntityFromSide(
-                            this.worldObj, new Vector3(this), inputDirection);
+                    ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+                    TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                            inputDirection);
                     
                     if (inputTile != null)
                     {
                         if (inputTile instanceof IConductor)
                         {
-                            this.electricityReading = ((IConductor) inputTile)
-                                    .getNetwork()
-                                    .getProduced(new TileEntity[0]);
+                            this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced(
+                                    new TileEntity[0]);
                             this.electricityReading.amperes *= 20.0D;
                         }
                         else
@@ -66,9 +63,8 @@ public class TileEntityMultimeter extends TileEntityElectrical implements
                 
                 if (this.electricityReading.amperes != this.lastReading.amperes)
                 {
-                    PacketManager.sendPacketToClients(
-                            this.getDescriptionPacket(), this.worldObj,
-                            new Vector3(this), 20.0D);
+                    PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this),
+                            20.0D);
                 }
             }
         }
@@ -77,14 +73,12 @@ public class TileEntityMultimeter extends TileEntityElectrical implements
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this,
-                new Object[] { Double.valueOf(this.electricityReading.amperes),
-                        Double.valueOf(this.electricityReading.voltage) });
+        return PacketManager.getPacket("ElecEx", this, new Object[] { Double.valueOf(this.electricityReading.amperes),
+                Double.valueOf(this.electricityReading.voltage) });
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type,
-            Packet250CustomPayload packet, EntityPlayer player,
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
             ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
@@ -113,11 +107,10 @@ public class TileEntityMultimeter extends TileEntityElectrical implements
     }
     
     @Override
-    public void setDirection(World world, int x, int y, int z,
-            ForgeDirection facingDirection)
+    public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
     {
-        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord,
-                this.getBlockType().blockID, facingDirection.ordinal(), 0x02);
+        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID,
+                facingDirection.ordinal(), 0x02);
     }
     
     @Override

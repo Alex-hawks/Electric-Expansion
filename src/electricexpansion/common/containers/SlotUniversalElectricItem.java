@@ -8,8 +8,7 @@ import universalelectricity.core.item.IItemElectric;
 
 public class SlotUniversalElectricItem extends Slot
 {
-    public SlotUniversalElectricItem(IInventory par2IInventory, int par3,
-            int par4, int par5)
+    public SlotUniversalElectricItem(IInventory par2IInventory, int par3, int par4, int par5)
     {
         super(par2IInventory, par3, par4, par5);
     }
@@ -21,7 +20,6 @@ public class SlotUniversalElectricItem extends Slot
     @Override
     public boolean isItemValid(ItemStack par1ItemStack)
     {
-        return par1ItemStack.getItem() instanceof IItemElectric
-                || par1ItemStack.getItem() instanceof IElectricItem;
+        return par1ItemStack.getItem() instanceof IItemElectric || par1ItemStack.getItem() instanceof IElectricItem;
     }
 }

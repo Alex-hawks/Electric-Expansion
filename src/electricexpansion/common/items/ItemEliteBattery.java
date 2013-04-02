@@ -33,8 +33,7 @@ public class ItemEliteBattery extends ItemElectric
     @SideOnly(Side.CLIENT)
     public void updateIcons(IconRegister par1IconRegister)
     {
-        this.iconIndex = par1IconRegister.registerIcon(this
-                .getUnlocalizedName().replaceAll("item.",
-                        ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.iconIndex = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.",
+                ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
 }

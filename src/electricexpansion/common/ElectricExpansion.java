@@ -83,8 +83,8 @@ public class ElectricExpansion
     // @Mod
     public static final String MOD_ID = "ElectricExpansion";
     public static final String MOD_NAME = "Electric Expansion";
-    public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION
-            + "." + REVIS_VERSION + "." + BUILD_VERSION;
+    public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVIS_VERSION + "."
+            + BUILD_VERSION;
     public static final String DEPENDENCIES = "after:UniversalElectricity;after:AtomicScience";
     public static final boolean USE_METADATA = true;
     
@@ -105,13 +105,11 @@ public class ElectricExpansion
     
     public static final String TEXTURE_NAME_PREFIX = "electricexpansion:";
     
-    private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US",
-            "pl_PL" };
+    private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
     
     public static OreGenBase silverOreGeneration;
     
-    public static final Configuration CONFIG = new Configuration(new File(
-            Loader.instance().getConfigDir(),
+    public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(),
             "UniversalElectricity/ElectricExpansion.cfg"));
     public static boolean configLoaded = configLoad(CONFIG);
     
@@ -162,70 +160,49 @@ public class ElectricExpansion
     {
         config.load();
         
-        blockRawWire = new BlockRawWire(config.getBlock("Uninsulated_Wire",
-                BLOCK_ID_PREFIX).getInt(), 0);
-        blockInsulatedWire = new BlockInsulatedWire(config.getBlock(
-                "Insulated_Wire", BLOCK_ID_PREFIX + 1).getInt(), 0);
-        blockWireBlock = new BlockWireBlock(config.getBlock("Wire_Block",
-                BLOCK_ID_PREFIX + 2).getInt(), 0);
-        blockSwitchWire = new BlockSwitchWire(config.getBlock("Switch_Wire",
-                BLOCK_ID_PREFIX + 3).getInt(), 0);
-        blockSwitchWireBlock = new BlockSwitchWireBlock(config.getBlock(
-                "Switch_Wire_Block", BLOCK_ID_PREFIX + 4).getInt(), 0);
+        blockRawWire = new BlockRawWire(config.getBlock("Uninsulated_Wire", BLOCK_ID_PREFIX).getInt(), 0);
+        blockInsulatedWire = new BlockInsulatedWire(config.getBlock("Insulated_Wire", BLOCK_ID_PREFIX + 1).getInt(), 0);
+        blockWireBlock = new BlockWireBlock(config.getBlock("Wire_Block", BLOCK_ID_PREFIX + 2).getInt(), 0);
+        blockSwitchWire = new BlockSwitchWire(config.getBlock("Switch_Wire", BLOCK_ID_PREFIX + 3).getInt(), 0);
+        blockSwitchWireBlock = new BlockSwitchWireBlock(config.getBlock("Switch_Wire_Block", BLOCK_ID_PREFIX + 4)
+                .getInt(), 0);
         // +5
         // +6
-        blockAdvBatteryBox = new BlockAdvancedBatteryBox(config.getBlock(
-                "Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0);
-        blockMultimeter = new BlockMultimeter(config.getBlock("Multimeter",
-                BLOCK_ID_PREFIX + 8).getInt(), 0);
-        blockSilverOre = new BlockBasic(config.getBlock("Silver Ore",
-                BLOCK_ID_PREFIX + 9).getInt(), Material.rock, EETab.INSTANCE,
-                2F, "SilverOre");
-        blockInsulationMachine = new BlockInsulationMachine(config.getBlock(
-                "Insulation_Refiner", BLOCK_ID_PREFIX + 10).getInt());
-        blockWireMill = new BlockWireMill(config.getBlock("Wire_Mill",
-                BLOCK_ID_PREFIX + 11).getInt());
-        blockTransformer = new BlockTransformer(config.getBlock("Transformer",
-                BLOCK_ID_PREFIX + 12).getInt());
-        blockDistribution = new BlockQuantumBatteryBox(config.getBlock(
-                "Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
-        blockLead = new BlockBasic(config.getBlock("Lead_Block",
-                BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE,
-                2F, "LeadBlock");
-        blockLogisticsWire = new BlockLogisticsWire(config.getBlock(
-                "Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
+        blockAdvBatteryBox = new BlockAdvancedBatteryBox(config.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7)
+                .getInt(), 0);
+        blockMultimeter = new BlockMultimeter(config.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0);
+        blockSilverOre = new BlockBasic(config.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt(), Material.rock,
+                EETab.INSTANCE, 2F, "SilverOre");
+        blockInsulationMachine = new BlockInsulationMachine(config.getBlock("Insulation_Refiner", BLOCK_ID_PREFIX + 10)
+                .getInt());
+        blockWireMill = new BlockWireMill(config.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt());
+        blockTransformer = new BlockTransformer(config.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt());
+        blockDistribution = new BlockQuantumBatteryBox(config.getBlock("Wireless_Transfer_Machines",
+                BLOCK_ID_PREFIX + 13).getInt());
+        blockLead = new BlockBasic(config.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron,
+                EETab.INSTANCE, 2F, "LeadBlock");
+        blockLogisticsWire = new BlockLogisticsWire(config.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
         // blockFuseBox = new BlockFuseBox(config.getBlock("Fuse_Box",
         // BLOCK_ID_PREFIX + 16).getInt());
         
-        itemUpgrade = new ItemUpgrade(config.getItem(
-                "Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0);
-        itemEliteBat = new ItemEliteBattery(config.getItem("Elite_Battery",
-                ITEM_ID_PREFIX + 1).getInt());
-        itemUltimateBat = new ItemUltimateBattery(config.getItem(
-                "Ultimate_Battery", ITEM_ID_PREFIX + 2).getInt());
-        itemParts = new ItemParts(config.getItem("Parts", ITEM_ID_PREFIX + 3)
-                .getInt(), 0);
+        itemUpgrade = new ItemUpgrade(config.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0);
+        itemEliteBat = new ItemEliteBattery(config.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
+        itemUltimateBat = new ItemUltimateBattery(config.getItem("Ultimate_Battery", ITEM_ID_PREFIX + 2).getInt());
+        itemParts = new ItemParts(config.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
         // +4
-        itemAdvBat = new ItemAdvancedBattery(config.getItem("Advanced_Battery",
-                ITEM_ID_PREFIX + 5).getInt());
+        itemAdvBat = new ItemAdvancedBattery(config.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
         // itemFuse = new ItemFuse(config.getItem("Fuses", ITEM_ID_PREFIX +
         // 6).getInt());
         // +7
-        itemMultimeter = new ItemMultimeter(config.getItem("Item_Multimeter",
-                ITEM_ID_PREFIX + 8).getInt());
+        itemMultimeter = new ItemMultimeter(config.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt());
         
-        silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver",
-                new ItemStack(blockSilverOre, 1), 36, 10, 3).enable(config);
+        silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(blockSilverOre, 1), 36,
+                10, 3).enable(config);
         
         debugRecipes = config.get("General", "Debug_Recipes", false,
-                "Set to true for debug Recipes. This is considdered cheating.")
-                .getBoolean(false);
-        useHashCodes = config
-                .get("General",
-                        "Use_Hashcodes",
-                        true,
-                        "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.")
-                .getBoolean(true);
+                "Set to true for debug Recipes. This is considdered cheating.").getBoolean(false);
+        useHashCodes = config.get("General", "Use_Hashcodes", true,
+                "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(true);
         
         if (config.hasChanged())
         {
@@ -282,8 +259,7 @@ public class ElectricExpansion
         
         meta.logoFile = "/EELogo.png";
         meta.version = ElectricExpansion.VERSION;
-        meta.authorList = Arrays
-                .asList(new String[] { "Mattredsox & Alex_hawks" });
+        meta.authorList = Arrays.asList(new String[] { "Mattredsox & Alex_hawks" });
         meta.credits = "Please see the website.";
         meta.autogenerated = false;
         
@@ -299,81 +275,54 @@ public class ElectricExpansion
             StartLog("preInit");
         }
         
-        GameRegistry.registerBlock(blockAdvBatteryBox, ItemBlock.class,
-                "blockAdvBatteryBox", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockWireMill, ItemBlock.class,
-                "blockWireMill", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockInsulationMachine, ItemBlock.class,
-                "blockInsulationMachine", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockMultimeter, ItemBlock.class,
-                "blockMultimeter", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockLead, ItemBlock.class, "blockLead",
+        GameRegistry.registerBlock(blockAdvBatteryBox, ItemBlock.class, "blockAdvBatteryBox", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockWireMill, ItemBlock.class, "blockWireMill", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockInsulationMachine, ItemBlock.class, "blockInsulationMachine",
                 ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockTransformer,
-                ItemBlockTransformer.class, "blockTransformer",
+        GameRegistry.registerBlock(blockMultimeter, ItemBlock.class, "blockMultimeter", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockLead, ItemBlock.class, "blockLead", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockTransformer, ItemBlockTransformer.class, "blockTransformer",
                 ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockSilverOre, ItemBlock.class,
-                "blockSilverOre", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockSilverOre, ItemBlock.class, "blockSilverOre", ElectricExpansion.MOD_ID);
         // GameRegistry.registerBlock(blockRedstoneWire, ItemBlock.class,
         // "blockRedstoneWire", this.MOD_ID);
         
-        GameRegistry.registerBlock(blockDistribution, ItemBlock.class,
-                "blockDistribution", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockDistribution, ItemBlock.class, "blockDistribution", ElectricExpansion.MOD_ID);
         // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class,
         // "blockFuseBox", this.MOD_ID);
         
-        GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class,
-                "blockRawWire", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockInsulatedWire,
-                ItemBlockInsulatedWire.class, "blockInsulatedWire",
+        GameRegistry.registerBlock(blockRawWire, ItemBlockRawWire.class, "blockRawWire", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire",
                 ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class,
-                "blockSwitchWire", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockSwitchWireBlock,
-                ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock",
+        GameRegistry.registerBlock(blockSwitchWire, ItemBlockSwitchWire.class, "blockSwitchWire",
                 ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockWireBlock, ItemBlockWireBlock.class,
-                "blockWireBlock", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(blockLogisticsWire,
-                ItemBlockLogisticsWire.class, "blockLogisticsWire",
+        GameRegistry.registerBlock(blockSwitchWireBlock, ItemBlockSwitchWireBlock.class, "blockSwitchWireBlock",
+                ElectricExpansion.MOD_ID);
+        GameRegistry
+                .registerBlock(blockWireBlock, ItemBlockWireBlock.class, "blockWireBlock", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire",
                 ElectricExpansion.MOD_ID);
         
         OreDictionary.registerOre("blockLead", ElectricExpansion.blockLead);
-        OreDictionary.registerOre("advancedBattery",
-                ElectricExpansion.itemAdvBat);
-        OreDictionary.registerOre("eliteBattery",
-                ElectricExpansion.itemEliteBat);
-        OreDictionary.registerOre("advancedBattery",
-                ElectricExpansion.itemAdvBat);
-        OreDictionary.registerOre("transformer",
-                ElectricExpansion.blockTransformer);
+        OreDictionary.registerOre("advancedBattery", ElectricExpansion.itemAdvBat);
+        OreDictionary.registerOre("eliteBattery", ElectricExpansion.itemEliteBat);
+        OreDictionary.registerOre("advancedBattery", ElectricExpansion.itemAdvBat);
+        OreDictionary.registerOre("transformer", ElectricExpansion.blockTransformer);
         OreDictionary.registerOre("wireMill", ElectricExpansion.blockWireMill);
-        OreDictionary.registerOre("multimeter",
-                ElectricExpansion.blockMultimeter);
-        OreDictionary.registerOre("itemMultimeter",
-                ElectricExpansion.itemMultimeter);
-        OreDictionary.registerOre("ingotElectrum", new ItemStack(
-                ElectricExpansion.itemParts, 1, 2));
-        OreDictionary.registerOre("ingotLead", new ItemStack(
-                ElectricExpansion.itemParts, 1, 7));
-        OreDictionary.registerOre("coil", new ItemStack(
-                ElectricExpansion.itemParts, 1, 8));
-        OreDictionary.registerOre("ingotSilver", new ItemStack(
-                ElectricExpansion.itemParts, 1, 9));
+        OreDictionary.registerOre("multimeter", ElectricExpansion.blockMultimeter);
+        OreDictionary.registerOre("itemMultimeter", ElectricExpansion.itemMultimeter);
+        OreDictionary.registerOre("ingotElectrum", new ItemStack(ElectricExpansion.itemParts, 1, 2));
+        OreDictionary.registerOre("ingotLead", new ItemStack(ElectricExpansion.itemParts, 1, 7));
+        OreDictionary.registerOre("coil", new ItemStack(ElectricExpansion.itemParts, 1, 8));
+        OreDictionary.registerOre("ingotSilver", new ItemStack(ElectricExpansion.itemParts, 1, 9));
         
-        OreDictionary.registerOre("copperWire", new ItemStack(
-                ElectricExpansion.blockInsulatedWire, 1, 0));
-        OreDictionary.registerOre("tinWire", new ItemStack(
-                ElectricExpansion.blockInsulatedWire, 1, 1));
-        OreDictionary.registerOre("silverWire", new ItemStack(
-                ElectricExpansion.blockInsulatedWire, 1, 2));
-        OreDictionary.registerOre("aluminumWire", new ItemStack(
-                ElectricExpansion.blockInsulatedWire, 1, 3));
-        OreDictionary.registerOre("superconductor", new ItemStack(
-                ElectricExpansion.blockInsulatedWire, 1, 4));
+        OreDictionary.registerOre("copperWire", new ItemStack(ElectricExpansion.blockInsulatedWire, 1, 0));
+        OreDictionary.registerOre("tinWire", new ItemStack(ElectricExpansion.blockInsulatedWire, 1, 1));
+        OreDictionary.registerOre("silverWire", new ItemStack(ElectricExpansion.blockInsulatedWire, 1, 2));
+        OreDictionary.registerOre("aluminumWire", new ItemStack(ElectricExpansion.blockInsulatedWire, 1, 3));
+        OreDictionary.registerOre("superconductor", new ItemStack(ElectricExpansion.blockInsulatedWire, 1, 4));
         
-        NetworkRegistry.instance().registerGuiHandler(this,
-                ElectricExpansion.proxy);
+        NetworkRegistry.instance().registerGuiHandler(this, ElectricExpansion.proxy);
         
         if (!Loader.isModLoaded("BasicComponents"))
         {
@@ -393,8 +342,7 @@ public class ElectricExpansion
         RecipeRegistery.crafting();
         RecipeRegistery.drawing();
         RecipeRegistery.insulation();
-        EETab.INSTANCE.setItemStack(new ItemStack(
-                ElectricExpansion.blockTransformer));
+        EETab.INSTANCE.setItemStack(new ItemStack(ElectricExpansion.blockTransformer));
         
         int languages = 0;
         
@@ -403,24 +351,20 @@ public class ElectricExpansion
          */
         for (String language : LANGUAGES_SUPPORTED)
         {
-            LanguageRegistry.instance().loadLocalization(
-                    LANGUAGE_PATH + language + ".properties", language, false);
+            LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
             
-            if (LanguageRegistry.instance().getStringLocalization("children",
-                    language) != "")
+            if (LanguageRegistry.instance().getStringLocalization("children", language) != "")
             {
                 try
                 {
-                    String[] children = LanguageRegistry.instance()
-                            .getStringLocalization("children", language)
+                    String[] children = LanguageRegistry.instance().getStringLocalization("children", language)
                             .split(",");
                     
                     for (String child : children)
                     {
                         if (child != "" && child != null)
                         {
-                            LanguageRegistry.instance().loadLocalization(
-                                    LANGUAGE_PATH + language + ".properties",
+                            LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties",
                                     child, false);
                             languages++;
                         }
@@ -435,8 +379,7 @@ public class ElectricExpansion
         int unofficialLanguages = 0;
         unofficialLanguages = langLoad();
         
-        EELogger.info("Loaded " + languages + " Official and "
-                + unofficialLanguages + " unofficial languages");
+        EELogger.info("Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
         
         UniversalElectricity.isVoltageSensitive = true;
         
@@ -471,8 +414,8 @@ public class ElectricExpansion
         }
         else if (!MinecraftServer.getServer().isDedicatedServer())
         {
-            folderDir = Minecraft.getMinecraftDir() + File.separator + "mods"
-                    + File.separator + "ElectricExpansionLanguages";
+            folderDir = Minecraft.getMinecraftDir() + File.separator + "mods" + File.separator
+                    + "ElectricExpansionLanguages";
         }
         
         File folder = new File(folderDir);
@@ -500,8 +443,7 @@ public class ElectricExpansion
                     if (name.endsWith(".lang"))
                     {
                         String lang = name.substring(0, name.length() - 4);
-                        LanguageRegistry.instance().loadLocalization(
-                                langFile.toString(), lang, false);
+                        LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
                         unofficialLanguages++;
                     }
                 }

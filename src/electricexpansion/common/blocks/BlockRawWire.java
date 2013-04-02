@@ -58,20 +58,16 @@ public class BlockRawWire extends BlockConductor
     }
     
     @Override
-    public void onEntityCollidedWithBlock(World par1World, int x, int y, int z,
-            Entity entity)
+    public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity entity)
     {
         if (entity instanceof EntityLiving)
         {
-            TileEntityRawWire tileEntity = (TileEntityRawWire) par1World
-                    .getBlockTileEntity(x, y, z);
+            TileEntityRawWire tileEntity = (TileEntityRawWire) par1World.getBlockTileEntity(x, y, z);
             
             if (tileEntity.getNetwork().getProduced().getWatts() > 0)
             {
-                ((EntityLiving) entity).attackEntityFrom(
-                        CustomDamageSource.electrocution,
-                        EnumWireMaterial.values()[par1World.getBlockMetadata(x,
-                                y, z)].electrocutionDamage);
+                ((EntityLiving) entity).attackEntityFrom(CustomDamageSource.electrocution,
+                        EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
             }
         }
     }
@@ -85,8 +81,7 @@ public class BlockRawWire extends BlockConductor
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; ++var4)
         {
@@ -95,8 +90,7 @@ public class BlockRawWire extends BlockConductor
     }
     
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
-            int x, int y, int z)
+    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int x, int y, int z)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)

@@ -33,11 +33,9 @@ public class BlockWireMill extends BlockAdvanced
      * Called when the block is placed in the world.
      */
     @Override
-    public void onBlockPlacedBy(World par1World, int x, int y, int z,
-            EntityLiving par5EntityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
-        int angle = MathHelper
-                .floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         
         switch (angle)
         {
@@ -60,9 +58,8 @@ public class BlockWireMill extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         
@@ -94,14 +91,12 @@ public class BlockWireMill extends BlockAdvanced
     }
     
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 2, par1World,
-                    x, y, z);
+            par5EntityPlayer.openGui(ElectricExpansion.instance, 2, par1World, x, y, z);
             return true;
         }
         
@@ -128,8 +123,7 @@ public class BlockWireMill extends BlockAdvanced
     }
     
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world,
-            int x, int y, int z)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
         int id = this.idPicked(world, x, y, z);
         

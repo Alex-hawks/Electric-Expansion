@@ -23,8 +23,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityTransformer extends TileEntityElectrical implements
-        IRotatable, IPacketReceiver
+public class TileEntityTransformer extends TileEntityElectrical implements IRotatable, IPacketReceiver
 {
     // USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP
     // DOWN.
@@ -35,8 +34,7 @@ public class TileEntityTransformer extends TileEntityElectrical implements
     @Override
     public void initiate()
     {
-        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord,
-                this.zCoord);
+        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
         this.type = meta - (meta & 3);
     }
     
@@ -47,22 +45,19 @@ public class TileEntityTransformer extends TileEntityElectrical implements
         
         if (!this.worldObj.isRemote)
         {
-            ForgeDirection inputDirection = ForgeDirection.getOrientation(
-                    this.getBlockMetadata() - this.type + 2).getOpposite();
-            TileEntity inputTile = VectorHelper.getTileEntityFromSide(
-                    this.worldObj, new Vector3(this), inputDirection);
+            ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2)
+                    .getOpposite();
+            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
             // Check if requesting power on output
-            ForgeDirection outputDirection = ForgeDirection.getOrientation(this
-                    .getBlockMetadata() - this.type + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(
-                    this.worldObj, new Vector3(this), outputDirection);
+            ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2);
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                    outputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper
-                    .getNetworkFromTileEntity(inputTile,
-                            outputDirection.getOpposite());
-            IElectricityNetwork outputNetwork = ElectricityNetworkHelper
-                    .getNetworkFromTileEntity(outputTile, outputDirection);
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
+                    outputDirection.getOpposite());
+            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
+                    outputDirection);
             
             if (outputNetwork != null && inputNetwork == null)
             {
@@ -79,10 +74,8 @@ public class TileEntityTransformer extends TileEntityElectrical implements
                 {
                     if (outputNetwork.getRequest().getWatts() > 0)
                     {
-                        inputNetwork.startRequesting(this,
-                                outputNetwork.getRequest());
-                        ElectricityPack actualEnergy = inputNetwork
-                                .consumeElectricity(this);
+                        inputNetwork.startRequesting(this, outputNetwork.getRequest());
+                        ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
                         
                         if (actualEnergy.getWatts() > 0)
                         {
@@ -101,17 +94,14 @@ public class TileEntityTransformer extends TileEntityElectrical implements
                                 typeChange = 8;
                             }
                             
-                            double newVoltage = actualEnergy.voltage
-                                    * typeChange;
+                            double newVoltage = actualEnergy.voltage * typeChange;
                             
                             if (!this.stepUp)
                             {
                                 newVoltage = actualEnergy.voltage / typeChange;
                             }
                             
-                            outputNetwork.startProducing(this,
-                                    actualEnergy.getWatts() / newVoltage,
-                                    newVoltage);
+                            outputNetwork.startProducing(this, actualEnergy.getWatts() / newVoltage, newVoltage);
                         }
                         else
                         {
@@ -133,8 +123,7 @@ public class TileEntityTransformer extends TileEntityElectrical implements
             
             if (!this.worldObj.isRemote)
             {
-                PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                        this.worldObj, new Vector3(this), 12);
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
             }
             
         }
@@ -143,13 +132,11 @@ public class TileEntityTransformer extends TileEntityElectrical implements
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this,
-                this.stepUp, this.type);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.stepUp, this.type);
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type,
-            Packet250CustomPayload packet, EntityPlayer player,
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
             ByteArrayDataInput dataStream)
     {
         try
@@ -188,26 +175,21 @@ public class TileEntityTransformer extends TileEntityElectrical implements
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord,
-                this.zCoord);
-        return direction.ordinal() - 2 + this.type == meta
-                || direction.getOpposite().ordinal() - 2 + this.type == meta;
+        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
+        return direction.ordinal() - 2 + this.type == meta || direction.getOpposite().ordinal() - 2 + this.type == meta;
     }
     
     @Override
-    public void setDirection(World world, int x, int y, int z,
-            ForgeDirection facingDirection)
+    public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
     {
-        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord,
-                this.getBlockType().blockID, facingDirection.ordinal() - 2
-                        + this.type, 0);
+        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID,
+                facingDirection.ordinal() - 2 + this.type, 0);
     }
     
     @Override
     public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
     {
-        return ForgeDirection.getOrientation(this.getBlockMetadata()
-                - this.type);
+        return ForgeDirection.getOrientation(this.getBlockMetadata() - this.type);
     }
     
 }

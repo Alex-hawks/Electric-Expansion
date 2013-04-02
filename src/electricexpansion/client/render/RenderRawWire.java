@@ -22,8 +22,7 @@ public class RenderRawWire extends TileEntitySpecialRenderer
         this.model = new ModelRawWire();
     }
     
-    public void renderAModelAt(TileEntityRawWire t, double x, double y,
-            double z, float f)
+    public void renderAModelAt(TileEntityRawWire t, double x, double y, double z, float f)
     {
         String textureToUse = ElectricExpansion.MODEL_PATH;
         int meta = t.getBlockMetadata();
@@ -90,10 +89,8 @@ public class RenderRawWire extends TileEntitySpecialRenderer
     }
     
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double var2,
-            double var4, double var6, float var8)
+    public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8)
     {
-        this.renderAModelAt((TileEntityRawWire) tileEntity, var2, var4, var6,
-                var8);
+        this.renderAModelAt((TileEntityRawWire) tileEntity, var2, var4, var6, var8);
     }
 }

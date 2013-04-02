@@ -51,8 +51,7 @@ public class InsulationRecipes
             if (input != null && output > 0 && ticks > 0)
             {
                 int nextRecipeID = this.recipeToOutput.size();
-                this.inputToRecipe
-                        .put(stackSizeToOne(input) + "", nextRecipeID);
+                this.inputToRecipe.put(stackSizeToOne(input) + "", nextRecipeID);
                 this.recipeToInput.put(nextRecipeID, stackSizeToOne(input));
                 this.recipeToOutput.put(nextRecipeID, output);
                 this.recipeToTicks.put(nextRecipeID, ticks);
@@ -181,10 +180,8 @@ public class InsulationRecipes
         // (TileEntityWireMill.WATTS_PER_TICK
         for (int i = 0; i < this.recipeToInput.size(); i++)
         {
-            ItemStack input = stackSizeChange(this.recipeToInput.get(i),
-                    this.recipeToInputQTY.get(i));
-            int[] output = { this.recipeToOutput.get(i),
-                    this.getProcessTicks(this.recipeToInput.get(i)) };
+            ItemStack input = stackSizeChange(this.recipeToInput.get(i), this.recipeToInputQTY.get(i));
+            int[] output = { this.recipeToOutput.get(i), this.getProcessTicks(this.recipeToInput.get(i)) };
             recipes.put(input, output);
         }
         return recipes;

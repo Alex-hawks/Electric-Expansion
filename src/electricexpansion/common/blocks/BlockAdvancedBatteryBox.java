@@ -39,55 +39,38 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineTop"));
-        this.icons.put("output", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineOutput"));
-        this.icons.put("input", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineInput"));
-        this.icons.put("tier1", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "batBoxT1"));
-        this.icons.put("tier2", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "batBoxT2"));
-        this.icons.put("tier3", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "batBoxT3"));
-        this.icons.put("tier4", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "batBoxT4"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+        this.icons
+                .put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
+        this.icons.put("tier1", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT1"));
+        this.icons.put("tier2", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT2"));
+        this.icons.put("tier3", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT3"));
+        this.icons.put("tier4", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT4"));
     }
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z,
-            int side)
+    public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
     {
         int metadata = iBlockAccess.getBlockMetadata(x, y, z);
-        TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) iBlockAccess
-                .getBlockTileEntity(x, y, z);
+        TileEntityAdvancedBatteryBox tileEntity = (TileEntityAdvancedBatteryBox) iBlockAccess.getBlockTileEntity(x, y,
+                z);
         if (side == 0 || side == 1)
             return this.icons.get("top");
         
         if (side == metadata + 2)
             return this.icons.get("output");
-        else if (side == ForgeDirection.getOrientation(metadata + 2)
-                .getOpposite().ordinal())
+        else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
             return this.icons.get("input");
         
         if (tileEntity.getMaxJoules() <= 8000000)
             return this.icons.get("tier1");
         
-        if (tileEntity.getMaxJoules() > 8000000
-                && tileEntity.getMaxJoules() <= 12000000)
+        if (tileEntity.getMaxJoules() > 8000000 && tileEntity.getMaxJoules() <= 12000000)
             return this.icons.get("tier2");
         
-        if (tileEntity.getMaxJoules() > 12000000
-                && tileEntity.getMaxJoules() <= 16000000)
+        if (tileEntity.getMaxJoules() > 12000000 && tileEntity.getMaxJoules() <= 16000000)
             return this.icons.get("tier3");
         
         if (tileEntity.getMaxJoules() > 16000000)
@@ -104,8 +87,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
             return this.icons.get("top");
         else if (side == metadata + 2)
             return this.icons.get("output");
-        else if (side == ForgeDirection.getOrientation(metadata + 2)
-                .getOpposite().ordinal())
+        else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
             return this.icons.get("input");
         else
             return this.icons.get("tier1");
@@ -115,11 +97,9 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
      * Called when the block is placed in the world.
      */
     @Override
-    public void onBlockPlacedBy(World par1World, int x, int y, int z,
-            EntityLiving par5EntityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
-        int angle = MathHelper
-                .floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         switch (angle)
         {
             case 0:
@@ -141,9 +121,8 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         
@@ -178,14 +157,12 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World,
-                    x, y, z);
+            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
             return true;
             
         }
@@ -196,8 +173,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
      * Is this block powering the block on the specified side
      */
     @Override
-    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x,
-            int y, int z, int side)
+    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
@@ -216,8 +192,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
      * Is this block indirectly powering the block on the specified side
      */
     @Override
-    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x,
-            int y, int z, int side)
+    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
@@ -257,8 +232,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world,
-            int x, int y, int z)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
         int id = this.idPicked(world, x, y, z);
         

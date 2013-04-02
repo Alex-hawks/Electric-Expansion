@@ -13,8 +13,7 @@ public class EETab extends CreativeTabs
     public EETab(String par2Str)
     {
         super(CreativeTabs.getNextID(), par2Str);
-        LanguageRegistry.instance().addStringLocalization(
-                "itemGroup.ElectricExpansion", "en_US", "Electric Expansion");
+        LanguageRegistry.instance().addStringLocalization("itemGroup.ElectricExpansion", "en_US", "Electric Expansion");
     }
     
     public void setItemStack(ItemStack newItemStack)

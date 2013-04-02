@@ -19,18 +19,15 @@ public class EventHandler
     {
         if (event.entity != null)
         {
-            if (event.entity instanceof EntitySkeleton
-                    && ((EntitySkeleton) event.entity).getSkeletonType() == 1)
+            if (event.entity instanceof EntitySkeleton && ((EntitySkeleton) event.entity).getSkeletonType() == 1)
             {
                 {
                     Random dropNumber = new Random();
                     int numberOfDrops = dropNumber.nextInt(4) + 1;
-                    ItemStack leadIS = new ItemStack(
-                            ElectricExpansion.itemParts, numberOfDrops, 7);
+                    ItemStack leadIS = new ItemStack(ElectricExpansion.itemParts, numberOfDrops, 7);
                     
-                    event.drops.add(new EntityItem(event.entityLiving.worldObj,
-                            event.entityLiving.posX, event.entityLiving.posY,
-                            event.entityLiving.posZ, leadIS.copy()));
+                    event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX,
+                            event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));
                 }
             }
         }

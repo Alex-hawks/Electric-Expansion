@@ -62,8 +62,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     {
         if (side == metadata + 2)
             return this.icons.get("output");
-        else if (side == ForgeDirection.getOrientation(metadata + 2)
-                .getOpposite().ordinal())
+        else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
             return this.icons.get("input");
         else
             return this.icons.get("default");
@@ -73,22 +72,18 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("output", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "darkMachineOutput"));
-        this.icons.put("input", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "darkMachineInput"));
-        this.icons.put("default", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "darkMachineTop"));
+        this.icons.put("output",
+                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
+        this.icons.put("input",
+                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
+        this.icons.put("default",
+                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(par1, 1, 0));
     }
@@ -104,23 +99,17 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
      */
     
     @Override
-    public boolean onBlockActivated(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int par6, float par7, float par8,
-            float par9)
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6,
+            float par7, float par8, float par9)
     {
         if (!par1World.isRemote)
         {
-            boolean isPlayerOp = FMLCommonHandler
-                    .instance()
-                    .getMinecraftServerInstance()
-                    .getConfigurationManager()
+            boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
                     .areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
-            if (par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World
-                    .getBlockTileEntity(x, y, z)).getOwningPlayer()
-                    || isPlayerOp)
+            if (par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z))
+                    .getOwningPlayer() || isPlayerOp)
             {
-                par5EntityPlayer.openGui(ElectricExpansion.instance, 4,
-                        par1World, x, y, z);
+                par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
                 return true;
             }
             return true;
@@ -132,11 +121,9 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
      * Called when the block is placed in the world.
      */
     @Override
-    public void onBlockPlacedBy(World par1World, int x, int y, int z,
-            EntityLiving par5EntityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
-        int angle = MathHelper
-                .floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         
         switch (angle)
         {
@@ -157,8 +144,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
         if (par5EntityLiving instanceof EntityPlayer
                 && (TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z) instanceof TileEntityQuantumBatteryBox)
         {
-            ((TileEntityQuantumBatteryBox) par1World
-                    .getBlockTileEntity(x, y, z))
+            ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z))
                     .setPlayer((EntityPlayer) par5EntityLiving);
         }
         
@@ -167,9 +153,8 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         
@@ -201,8 +186,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world,
-            int x, int y, int z)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
         int id = this.idPicked(world, x, y, z);
         

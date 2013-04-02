@@ -67,8 +67,7 @@ public class BlockInsulatedWire extends BlockConductor
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; var4++)
         {
@@ -98,12 +97,10 @@ public class BlockInsulatedWire extends BlockConductor
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onBlockActivated(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int par6, float par7, float par8,
-            float par9)
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6,
+            float par7, float par8, float par9)
     {
-        TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) par1World
-                .getBlockTileEntity(x, y, z);
+        TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) par1World.getBlockTileEntity(x, y, z);
         
         if (!par1World.isRemote)
         {
@@ -113,17 +110,14 @@ public class BlockInsulatedWire extends BlockConductor
                 if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemDye)
                 {
                     
-                    int dyeColor = par5EntityPlayer.inventory.getCurrentItem()
-                            .getItemDamageForDisplay();
+                    int dyeColor = par5EntityPlayer.inventory.getCurrentItem().getItemDamageForDisplay();
                     
                     tileEntity.colorByte = (byte) dyeColor;
                     
-                    par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory
-                            .getCurrentItem().stackSize - 1;
+                    par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory.getCurrentItem().stackSize - 1;
                     
-                    PacketManager.sendPacketToClients(PacketManager.getPacket(
-                            ElectricExpansion.CHANNEL, tileEntity, (byte) 0,
-                            tileEntity.colorByte));
+                    PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity,
+                            (byte) 0, tileEntity.colorByte));
                     
                     ((IConductor) tileEntity).updateAdjacentConnections();
                     
@@ -143,8 +137,7 @@ public class BlockInsulatedWire extends BlockConductor
     
     private void updateWireSwitch(World world, int x, int y, int z)
     {
-        TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) world
-                .getBlockTileEntity(x, y, z);
+        TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
         
         TileEntity tileEntity1;
         
@@ -180,16 +173,14 @@ public class BlockInsulatedWire extends BlockConductor
                 if (tileEntity1 instanceof IConductor)
                 {
                     ((IConductor) tileEntity1).updateAdjacentConnections();
-                    tileEntity1.worldObj.markBlockForUpdate(tileEntity1.xCoord,
-                            tileEntity1.yCoord, tileEntity1.zCoord);
+                    tileEntity1.worldObj.markBlockForUpdate(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord);
                 }
             }
         }
     }
     
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
-            int x, int y, int z)
+    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int x, int y, int z)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)

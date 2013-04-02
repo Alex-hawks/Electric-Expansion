@@ -13,12 +13,10 @@ public class ContainerFuseBox extends Container
 {
     private TileEntityFuseBox tileEntity;
     
-    public ContainerFuseBox(InventoryPlayer par1InventoryPlayer,
-            TileEntityFuseBox tileEntity)
+    public ContainerFuseBox(InventoryPlayer par1InventoryPlayer, TileEntityFuseBox tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotSpecific(tileEntity, 0, 8, 16,
-                IItemFuse.class));
+        this.addSlotToContainer(new SlotSpecific(tileEntity, 0, 8, 16, IItemFuse.class));
         
         int var3, var4;
         
@@ -26,15 +24,14 @@ public class ContainerFuseBox extends Container
         {
             for (var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4
-                        + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18,
+                        84 + var3 * 18));
             }
         }
         
         for (var3 = 0; var3 < 9; ++var3)
         {
-            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3,
-                    8 + var3 * 18, 142));
+            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
         }
         
         tileEntity.openChest();
@@ -84,8 +81,7 @@ public class ContainerFuseBox extends Container
                     if (!this.mergeItemStack(var4, 0, 1, false))
                         return var5;
                 }
-                else if (par1 >= 28 && par1 < 37
-                        && !this.mergeItemStack(var4, 1, 28, false))
+                else if (par1 >= 28 && par1 < 37 && !this.mergeItemStack(var4, 1, 28, false))
                     return var5;
             }
             else if (!this.mergeItemStack(var4, 1, 37, false))

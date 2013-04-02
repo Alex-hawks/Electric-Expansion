@@ -29,8 +29,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
     
     private byte frequency;
     
-    public GuiQuantumBatteryBox(InventoryPlayer par1InventoryPlayer,
-            TileEntityQuantumBatteryBox tileEntity)
+    public GuiQuantumBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityQuantumBatteryBox tileEntity)
     {
         super(new ContainerDistribution(par1InventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
@@ -46,15 +45,13 @@ public class GuiQuantumBatteryBox extends GuiContainer
         super.initGui();
         int var1 = (this.width - this.xSize) / 2;
         int var2 = (this.height - this.ySize) / 2;
-        this.textFieldFrequency = new GuiTextField(this.fontRenderer, 6, 45,
-                49, 13);
+        this.textFieldFrequency = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
         this.textFieldFrequency.setMaxStringLength(3);
         this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
         
         this.buttonList.clear();
         
-        this.buttonList
-                .add(new GuiButton(0, var1 + 6, var2 + 60, 50, 20, "Set"));
+        this.buttonList.add(new GuiButton(0, var1 + 6, var2 + 60, 50, 20, "Set"));
     }
     
     /**
@@ -66,26 +63,19 @@ public class GuiQuantumBatteryBox extends GuiContainer
     {
         this.textFieldFrequency.drawTextBox();
         
-        String displayJoules = ElectricityDisplay.getDisplayShort(
-                this.tileEntity.getJoulesForDisplay(), ElectricUnit.JOULES);
+        String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoulesForDisplay(),
+                ElectricUnit.JOULES);
         
-        this.fontRenderer.drawString(this.tileEntity.getInvName(), 42, 6,
-                4210752);
-        this.fontRenderer.drawString(
-                "Current Frequency: " + this.tileEntity.getFrequency(), 10, 20,
-                4210752);
-        this.fontRenderer.drawString("Current Storage: " + displayJoules, 10,
-                30, 4210752);
+        this.fontRenderer.drawString(this.tileEntity.getInvName(), 42, 6, 4210752);
+        this.fontRenderer.drawString("Current Frequency: " + this.tileEntity.getFrequency(), 10, 20, 4210752);
+        this.fontRenderer.drawString("Current Storage: " + displayJoules, 10, 30, 4210752);
         if (this.tileEntity.getOwningPlayer() != null)
         {
-            this.fontRenderer.drawString(
-                    "Player: " + this.tileEntity.getOwningPlayer(), 65, 66,
-                    4210752);
+            this.fontRenderer.drawString("Player: " + this.tileEntity.getOwningPlayer(), 65, 66, 4210752);
         }
         else
         {
-            this.fontRenderer.drawString("I have no owner. BUG!", 62, 66,
-                    4210752);
+            this.fontRenderer.drawString("I have no owner. BUG!", 62, 66, 4210752);
         }
     }
     
@@ -94,22 +84,18 @@ public class GuiQuantumBatteryBox extends GuiContainer
      * items)
      */
     @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2,
-            int par3)
+    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(GuiQuantumBatteryBox.getTexture());
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(this.containerWidth, this.containerHeight,
-                0, 0, this.xSize, this.ySize);
+        this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
         
         if (this.tileEntity.getJoulesForDisplay() > 0)
         {
-            int scale = (int) (this.tileEntity.getJoulesForDisplay()
-                    / this.tileEntity.getMaxJoules() * 72);
-            this.drawTexturedModalRect(this.containerWidth + 70,
-                    this.containerHeight + 51, 0, 166, scale, 5);
+            int scale = (int) (this.tileEntity.getJoulesForDisplay() / this.tileEntity.getMaxJoules() * 72);
+            this.drawTexturedModalRect(this.containerWidth + 70, this.containerHeight + 51, 0, 166, scale, 5);
         }
     }
     
@@ -120,8 +106,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
     protected void mouseClicked(int par1, int par2, int par3)
     {
         super.mouseClicked(par1, par2, par3);
-        this.textFieldFrequency.mouseClicked(par1 - this.containerWidth, par2
-                - this.containerHeight, par3);
+        this.textFieldFrequency.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
     }
     
     /**
@@ -134,17 +119,14 @@ public class GuiQuantumBatteryBox extends GuiContainer
         super.keyTyped(par1, par2);
         if (par2 == 28)
         {
-            PacketDispatcher
-                    .sendPacketToServer(PacketManager.getPacket(
-                            ElectricExpansion.CHANNEL, this.tileEntity,
-                            this.frequency));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
+                    this.frequency));
         }
         this.textFieldFrequency.textboxKeyTyped(par1, par2);
         
         try
         {
-            byte newFrequency = (byte) Math.max(
-                    Byte.parseByte(this.textFieldFrequency.getText()), 0);
+            byte newFrequency = (byte) Math.max(Byte.parseByte(this.textFieldFrequency.getText()), 0);
             this.frequency = newFrequency;
         }
         catch (Exception e)
@@ -158,8 +140,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
         switch (button.id)
         {
             case 0:
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                        ElectricExpansion.CHANNEL, this.tileEntity,
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
                         this.frequency));
                 break;
             default:
@@ -171,8 +152,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
     {
         if (!this.textFieldFrequency.isFocused())
         {
-            this.textFieldFrequency
-                    .setText(this.tileEntity.getFrequency() + "");
+            this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
         }
     }
     

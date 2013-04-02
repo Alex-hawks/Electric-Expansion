@@ -66,8 +66,7 @@ public class BlockSwitchWireBlock extends BlockConductor
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; ++var4)
         {
@@ -76,27 +75,23 @@ public class BlockSwitchWireBlock extends BlockConductor
     }
     
     @Override
-    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z,
-            int side)
+    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
     {
         return true;
     }
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y,
-            int z, int side)
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(
-                x, y, z)).textureItemStack == null ? this.blockIcon
-                : ((TileEntityConductorBase) par1IBlockAccess
-                        .getBlockTileEntity(x, y, z)).textureItemStack
+        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon
+                : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack
                         .getIconIndex();
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z,
-            EntityPlayer player, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
+            float par8, float par9)
     {
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityConductorBase)
         {
@@ -122,8 +117,6 @@ public class BlockSwitchWireBlock extends BlockConductor
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "CamoWire");
+        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "CamoWire");
     }
 }

@@ -68,8 +68,7 @@ public class BlockSwitchWire extends BlockConductor
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; ++var4)
         {
@@ -78,8 +77,7 @@ public class BlockSwitchWire extends BlockConductor
     }
     
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
-            int x, int y, int z)
+    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int x, int y, int z)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)

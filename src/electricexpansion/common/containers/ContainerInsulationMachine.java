@@ -14,16 +14,16 @@ public class ContainerInsulationMachine extends Container
 {
     private TileEntityInsulatingMachine tileEntity;
     
-    public ContainerInsulationMachine(InventoryPlayer par1InventoryPlayer,
-            TileEntityInsulatingMachine tileEntity)
+    public ContainerInsulationMachine(InventoryPlayer par1InventoryPlayer, TileEntityInsulatingMachine tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0,
-                55, 49)); // Electric Input Slot
+        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
+                                                                                       // Input
+                                                                                       // Slot
         this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be
                                                                   // processed
-        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player,
-                tileEntity, 2, 108, 25)); // Process result
+        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); // Process
+                                                                                                      // result
         
         int var3;
         
@@ -31,14 +31,13 @@ public class ContainerInsulationMachine extends Container
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4
-                        + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18,
+                        84 + var3 * 18));
             }
         }
         for (var3 = 0; var3 < 9; ++var3)
         {
-            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3,
-                    8 + var3 * 18, 142));
+            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
         }
         tileEntity.openChest();
     }
@@ -95,8 +94,7 @@ public class ContainerInsulationMachine extends Container
                     if (!this.mergeItemStack(var4, 30, 39, false))
                         return null;
                 }
-                else if (par1 >= 30 && par1 < 39
-                        && !this.mergeItemStack(var4, 3, 30, false))
+                else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 3, 30, false))
                     return null;
             }
             else if (!this.mergeItemStack(var4, 3, 39, false))

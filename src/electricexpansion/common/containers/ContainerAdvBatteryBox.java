@@ -13,14 +13,13 @@ public class ContainerAdvBatteryBox extends Container
 {
     private TileEntityAdvancedBatteryBox tileEntity;
     
-    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer,
-            TileEntityAdvancedBatteryBox AdvBatteryBox)
+    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox AdvBatteryBox)
     {
         this.tileEntity = AdvBatteryBox;
-        this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0,
-                11, 24)); // Top slot
-        this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1,
-                11, 48)); // Bottom slot
+        this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, 11, 24)); // Top
+                                                                                          // slot
+        this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, 11, 48)); // Bottom
+                                                                                          // slot
         
         this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 2, 149, 7)); // 1st
                                                                              // Upgrade
@@ -38,15 +37,14 @@ public class ContainerAdvBatteryBox extends Container
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4
-                        + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18,
+                        84 + var3 * 18));
             }
         }
         
         for (var3 = 0; var3 < 9; ++var3)
         {
-            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3,
-                    8 + var3 * 18, 142));
+            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
         }
         
         this.tileEntity.openChest();
@@ -84,8 +82,7 @@ public class ContainerAdvBatteryBox extends Container
             {
                 if (var4.getItem() instanceof IItemElectric)
                 {
-                    if (((IItemElectric) var4.getItem())
-                            .getProvideRequest(var2).getWatts() > 0)
+                    if (((IItemElectric) var4.getItem()).getProvideRequest(var2).getWatts() > 0)
                     {
                         if (!this.mergeItemStack(var4, 1, 2, false))
                             return null;

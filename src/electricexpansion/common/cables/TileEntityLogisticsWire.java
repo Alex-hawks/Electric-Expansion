@@ -15,8 +15,7 @@ import com.google.common.io.ByteArrayDataInput;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityLogisticsWire extends TileEntityConductorBase implements
-        IRedstoneProvider
+public class TileEntityLogisticsWire extends TileEntityConductorBase implements IRedstoneProvider
 {
     public boolean buttonStatus0 = false;
     public boolean buttonStatus1 = false;
@@ -29,15 +28,13 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements
     @Override
     public void initiate()
     {
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord,
-                this.zCoord, ElectricExpansion.blockAdvBatteryBox.blockID);
-        PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                this.worldObj, new Vector3(this), 12);
+        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
+                ElectricExpansion.blockAdvBatteryBox.blockID);
+        PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type,
-            Packet250CustomPayload packet, EntityPlayer player,
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
             ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
@@ -123,11 +120,10 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(this.channel, this, (byte) 5,
-                this.visuallyConnected[0], this.visuallyConnected[1],
-                this.visuallyConnected[2], this.visuallyConnected[3],
-                this.visuallyConnected[4], this.visuallyConnected[5],
-                this.buttonStatus0, this.buttonStatus1, this.buttonStatus2);
+        return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0],
+                this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
+                this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1,
+                this.buttonStatus2);
     }
     
     @Override
@@ -144,24 +140,19 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements
             {
                 this.tick = 0;
                 
-                if (this.networkProduced == 0
-                        && this.getNetwork().getProduced().getWatts() != 0)
+                if (this.networkProduced == 0 && this.getNetwork().getProduced().getWatts() != 0)
                 {
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord,
-                            this.yCoord, this.zCoord,
+                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
                             ElectricExpansion.blockLogisticsWire.blockID);
                 }
                 
-                if (this.networkProduced != 0
-                        && this.getNetwork().getProduced().getWatts() == 0)
+                if (this.networkProduced != 0 && this.getNetwork().getProduced().getWatts() == 0)
                 {
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord,
-                            this.yCoord, this.zCoord,
+                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
                             ElectricExpansion.blockLogisticsWire.blockID);
                 }
                 
-                this.networkProduced = this.getNetwork().getProduced()
-                        .getWatts();
+                this.networkProduced = this.getNetwork().getProduced().getWatts();
             }
         }
         
@@ -170,8 +161,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements
     @Override
     public boolean isPoweringTo(ForgeDirection side)
     {
-        if (this.buttonStatus0
-                && this.getNetwork().getProduced().getWatts() > 0)
+        if (this.buttonStatus0 && this.getNetwork().getProduced().getWatts() > 0)
             return true;
         
         return false;

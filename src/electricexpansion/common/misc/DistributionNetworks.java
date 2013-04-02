@@ -53,20 +53,18 @@ public class DistributionNetworks
             {
                 this.playerFrequencies.put(player, new double[128]);
             }
-            this.playerFrequencies.get(player)[frequency] = this.playerFrequencies
-                    .get(player)[frequency] + addedJoules;
+            this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency] + addedJoules;
         }
     }
     
-    public void removeJoules(String player, short frequency,
-            double removedJoules)
+    public void removeJoules(String player, short frequency, double removedJoules)
     {
         try
         {
             if (player != null)
             {
-                this.playerFrequencies.get(player)[frequency] = this.playerFrequencies
-                        .get(player)[frequency] - removedJoules;
+                this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency]
+                        - removedJoules;
             }
         }
         catch (Exception e)
@@ -88,16 +86,15 @@ public class DistributionNetworks
         }
         else
         {
-            folder = Minecraft.getMinecraftDir() + File.separator + "saves"
-                    + File.separator + this.server.getFolderName();
+            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator
+                    + this.server.getFolderName();
         }
         
         if (!event.world.isRemote)
         {
             try
             {
-                File file = new File(folder + File.separator
-                        + "ElectricExpansion");
+                File file = new File(folder + File.separator + "ElectricExpansion");
                 if (!file.exists())
                 {
                     file.mkdirs();
@@ -108,21 +105,16 @@ public class DistributionNetworks
                 
                 for (int i = 0; i < this.playerFrequencies.size(); i++)
                 {
-                    File var3 = new File(file + File.separator + players[i]
-                            + "_tmp.dat");
-                    File var4 = new File(file + File.separator + players[i]
-                            + ".dat");
-                    File var5 = new File(file + File.separator + players[i]
-                            + "_Backup.dat");
+                    File var3 = new File(file + File.separator + players[i] + "_tmp.dat");
+                    File var4 = new File(file + File.separator + players[i] + ".dat");
+                    File var5 = new File(file + File.separator + players[i] + "_Backup.dat");
                     NBTTagCompound nbt = new NBTTagCompound();
                     for (int j = 0; j < this.playerFrequencies.get(players[i]).length; j++)
                     {
                         if (this.playerFrequencies.get(players[i])[j] > 0)
                         {
-                            nbt.setDouble(j + "",
-                                    this.playerFrequencies.get(players[i])[j]);
-                            CompressedStreamTools.writeCompressed(nbt,
-                                    new FileOutputStream(var3));
+                            nbt.setDouble(j + "", this.playerFrequencies.get(players[i])[j]);
+                            CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(var3));
                         }
                     }
                     if (var5.exists())
@@ -138,8 +130,7 @@ public class DistributionNetworks
             }
             catch (Exception e)
             {
-                ElectricExpansion.EELogger
-                        .severe("Failed to save the Quantum Battery Box Electricity Storage Data!");
+                ElectricExpansion.EELogger.severe("Failed to save the Quantum Battery Box Electricity Storage Data!");
             }
         }
         if (event instanceof WorldEvent.Unload)
@@ -169,10 +160,8 @@ public class DistributionNetworks
                         {
                             try
                             {
-                                this.playerFrequencies.get(name)[i] = CompressedStreamTools
-                                        .readCompressed(
-                                                new FileInputStream(playerFile))
-                                        .getDouble(i + "");
+                                this.playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(
+                                        new FileInputStream(playerFile)).getDouble(i + "");
                             }
                             catch (Exception e)
                             {
@@ -185,8 +174,7 @@ public class DistributionNetworks
         }
         catch (Exception e)
         {
-            ElectricExpansion.EELogger
-                    .warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
+            ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
             ElectricExpansion.EELogger
                     .warning("If this is the first time loading the world after the mod was installed, there are no problems.");
         }
@@ -205,14 +193,12 @@ public class DistributionNetworks
         String folder = "";
         if (this.server.isDedicatedServer())
         {
-            folder = this.server.getFolderName() + File.separator
-                    + "ElectricExpansion";
+            folder = this.server.getFolderName() + File.separator + "ElectricExpansion";
         }
         else if (!this.server.isDedicatedServer())
         {
-            folder = Minecraft.getMinecraftDir() + File.separator + "saves"
-                    + File.separator + this.server.getFolderName()
-                    + File.separator + "ElectricExpansion";
+            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator
+                    + this.server.getFolderName() + File.separator + "ElectricExpansion";
         }
         
         File folderToUse = new File(folder);

@@ -81,8 +81,7 @@ public class BlockLogisticsWire extends BlockConductor
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; ++var4)
         {
@@ -91,29 +90,24 @@ public class BlockLogisticsWire extends BlockConductor
     }
     
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3,
-            int par4, EntityPlayer par5EntityPlayer, int par6, float par7,
-            float par8, float par9)
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer,
+            int par6, float par7, float par8, float par9)
     {
-        TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) par1World
-                .getBlockTileEntity(par2, par3, par4);
+        TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) par1World.getBlockTileEntity(par2, par3, par4);
         
         if (!par1World.isRemote)
         {
-            PacketManager.sendPacketToClients(PacketManager.getPacket(
-                    ElectricExpansion.CHANNEL, tileEntity, (byte) 3,
-                    tileEntity.buttonStatus0, tileEntity.buttonStatus1,
-                    tileEntity.buttonStatus2), tileEntity.worldObj,
+            PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 3,
+                    tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj,
                     new Vector3(tileEntity), 12);
             
         }
         else
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                    ElectricExpansion.CHANNEL, tileEntity, (byte) 7, true));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity,
+                    (byte) 7, true));
             
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World,
-                    par2, par3, par4);
+            par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
             return true;
         }
         
@@ -122,14 +116,12 @@ public class BlockLogisticsWire extends BlockConductor
     }
     
     @Override
-    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x,
-            int y, int z, int side)
+    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
         if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection
-                    .getOrientation(side)) ? 15 : 0;
+            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
         else
         {
             System.out.println("!tileEntity instanceof IRedstoneProvider");
@@ -139,14 +131,12 @@ public class BlockLogisticsWire extends BlockConductor
     }
     
     @Override
-    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x,
-            int y, int z, int side)
+    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
         if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity)
-                    .isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15
+            return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15
                     : 0;
         else
         {
@@ -157,8 +147,7 @@ public class BlockLogisticsWire extends BlockConductor
     }
     
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess,
-            int x, int y, int z)
+    public void setBlockBoundsBasedOnState(IBlockAccess par1IBlockAccess, int x, int y, int z)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)

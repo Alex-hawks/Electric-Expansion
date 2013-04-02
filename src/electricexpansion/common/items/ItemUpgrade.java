@@ -19,10 +19,8 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-    private String[] names = new String[] { "Storage1", "Storage2", "Storage3",
-            "Storage4", "HalfVoltage", "HVUpgrade", "HVInputUpgrade",
-            "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3",
-            "Unlimiter4" };
+    private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade",
+            "HVInputUpgrade", "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4" };
     
     private Icon[] icons = new Icon[this.names.length];
     private Icon defaultIcon;
@@ -46,8 +44,7 @@ public class ItemUpgrade extends Item implements IModifier
     @Override
     public String getUnlocalizedName(ItemStack itemstack)
     {
-        return this.getUnlocalizedName() + "."
-                + this.names[itemstack.getItemDamage()];
+        return this.getUnlocalizedName() + "." + this.names[itemstack.getItemDamage()];
     }
     
     @Override
@@ -60,8 +57,7 @@ public class ItemUpgrade extends Item implements IModifier
     
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubItems(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int i = 0; i < this.names.length; i++)
         {
@@ -138,15 +134,13 @@ public class ItemUpgrade extends Item implements IModifier
      */
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void addInformation(ItemStack itemstack, EntityPlayer player,
-            List par3List, boolean par4)
+    public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
     {
         String strength = "";
         int effectiveness = this.getEffectiveness(itemstack);
         if (this.getName(itemstack).equals("Capacity"))
         {
-            strength = ElectricityDisplay.getDisplay(
-                    this.getEffectiveness(itemstack), ElectricUnit.JOULES);
+            strength = ElectricityDisplay.getDisplay(this.getEffectiveness(itemstack), ElectricUnit.JOULES);
         }
         else
         {
@@ -160,9 +154,8 @@ public class ItemUpgrade extends Item implements IModifier
             }
         }
         par3List.add("\u00a72"
-                + StatCollector.translateToLocal(
-                        "upgrades.description." + this.getName(itemstack))
-                        .replaceAll("<>", strength));
+                + StatCollector.translateToLocal("upgrades.description." + this.getName(itemstack)).replaceAll("<>",
+                        strength));
     }
     
     @Override
@@ -171,9 +164,7 @@ public class ItemUpgrade extends Item implements IModifier
     {
         for (int i = 0; i < this.names.length; i++)
         {
-            this.icons[i] = iconRegister
-                    .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                            + this.names[i]);
+            this.icons[i] = iconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
         }
     }
 }

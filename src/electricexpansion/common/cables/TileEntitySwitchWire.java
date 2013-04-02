@@ -8,7 +8,6 @@ public class TileEntitySwitchWire extends TileEntityConductorBase
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        return this.worldObj.isBlockIndirectlyGettingPowered(this.xCoord,
-                this.yCoord, this.zCoord);
+        return this.worldObj.isBlockIndirectlyGettingPowered(this.xCoord, this.yCoord, this.zCoord);
     }
 }

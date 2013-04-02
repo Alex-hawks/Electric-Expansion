@@ -27,15 +27,13 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
     @Override
     public void initiate()
     {
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord,
-                this.zCoord, ElectricExpansion.blockInsulatedWire.blockID);
-        PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                this.worldObj, new Vector3(this), 12);
+        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
+                ElectricExpansion.blockInsulatedWire.blockID);
+        PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type,
-            Packet250CustomPayload packet, EntityPlayer player,
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
             ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
@@ -86,11 +84,9 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this,
-                (byte) 1, this.visuallyConnected[0], this.visuallyConnected[1],
-                this.visuallyConnected[2], this.visuallyConnected[3],
-                this.visuallyConnected[4], this.visuallyConnected[5],
-                this.colorByte);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, (byte) 1, this.visuallyConnected[0],
+                this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
+                this.visuallyConnected[4], this.visuallyConnected[5], this.colorByte);
     }
     
 }

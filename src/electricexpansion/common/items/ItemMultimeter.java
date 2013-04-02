@@ -31,9 +31,8 @@ public class ItemMultimeter extends ItemElectric
     }
     
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player,
-            World worldObj, int x, int y, int z, int side, float hitX,
-            float hitY, float hitZ)
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World worldObj, int x, int y, int z, int side,
+            float hitX, float hitY, float hitZ)
     {
         if (!worldObj.isRemote && this.onUse(stack))
         {
@@ -43,18 +42,12 @@ public class ItemMultimeter extends ItemElectric
             {
                 IConductor wireTile = (IConductor) tileEntity;
                 
-                ElectricityPack getProduced = wireTile.getNetwork()
-                        .getProduced();
+                ElectricityPack getProduced = wireTile.getNetwork().getProduced();
                 
                 player.addChatMessage("Electric Expansion: "
-                        + ElectricityDisplay.getDisplay(getProduced.amperes,
-                                ElectricUnit.AMPERE)
-                        + ", "
-                        + ElectricityDisplay.getDisplay(getProduced.voltage,
-                                ElectricUnit.VOLTAGE)
-                        + ", "
-                        + ElectricityDisplay.getDisplay(
-                                getProduced.getWatts() * 20, ElectricUnit.WATT));
+                        + ElectricityDisplay.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", "
+                        + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", "
+                        + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
                 
                 return true;
             }
@@ -64,20 +57,13 @@ public class ItemMultimeter extends ItemElectric
                 {
                     IElectricityStorage tileStorage = (IElectricityStorage) tileEntity;
                     player.addChatMessage("Electric Expansion: "
-                            + ElectricityDisplay.getDisplay(
-                                    tileStorage.getJoules(),
-                                    ElectricUnit.JOULES)
-                            + "/"
-                            + ElectricityDisplay.getDisplay(
-                                    tileStorage.getMaxJoules(),
-                                    ElectricUnit.JOULES));
+                            + ElectricityDisplay.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/"
+                            + ElectricityDisplay.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
                 }
                 if (tileEntity instanceof IVoltage)
                 {
                     player.addChatMessage("Electric Expansion: "
-                            + ElectricityDisplay.getDisplay(
-                                    ((IVoltage) tileEntity).getVoltage(),
-                                    ElectricUnit.VOLTAGE));
+                            + ElectricityDisplay.getDisplay(((IVoltage) tileEntity).getVoltage(), ElectricUnit.VOLTAGE));
                 }
                 
                 return true;
@@ -91,8 +77,7 @@ public class ItemMultimeter extends ItemElectric
     {
         if (this.getJoules(itemStack) >= this.JOULES_PER_USE)
         {
-            this.setJoules(this.getJoules(itemStack) - this.JOULES_PER_USE,
-                    itemStack);
+            this.setJoules(this.getJoules(itemStack) - this.JOULES_PER_USE, itemStack);
             return true;
         }
         else
@@ -115,9 +100,8 @@ public class ItemMultimeter extends ItemElectric
     @SideOnly(Side.CLIENT)
     public void updateIcons(IconRegister par1IconRegister)
     {
-        this.iconIndex = par1IconRegister.registerIcon(this
-                .getUnlocalizedName().replaceAll("item.",
-                        ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.iconIndex = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.",
+                ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
     
     @Override
@@ -129,15 +113,14 @@ public class ItemMultimeter extends ItemElectric
             itemStack.setTagCompound(new NBTTagCompound());
         }
         
-        double electricityStored = Math.max(
-                Math.min(joules, this.getMaxJoules(itemStack)), 0);
+        double electricityStored = Math.max(Math.min(joules, this.getMaxJoules(itemStack)), 0);
         itemStack.getTagCompound().setDouble("electricity", electricityStored);
         
         /**
          * Sets the damage as a percentage to render the bar properly.
          */
-        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored
-                / this.getMaxJoules(itemStack) * this.getMaxDamage()));
+        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack)
+                * this.getMaxDamage()));
     }
     
     @Override
@@ -146,14 +129,13 @@ public class ItemMultimeter extends ItemElectric
         if (itemStack.getTagCompound() == null)
             return 0;
         
-        double electricityStored = itemStack.getTagCompound().getDouble(
-                "electricity");
+        double electricityStored = itemStack.getTagCompound().getDouble("electricity");
         
         /**
          * Sets the damage as a percentage to render the bar properly.
          */
-        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored
-                / this.getMaxJoules(itemStack) * this.getMaxDamage()));
+        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack)
+                * this.getMaxDamage()));
         return electricityStored;
     }
 }

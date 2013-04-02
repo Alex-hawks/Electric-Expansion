@@ -27,12 +27,10 @@ public class RenderTransformer extends TileEntitySpecialRenderer
     }
     
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y,
-            double z, float var5)
+    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float var5)
     {
         this.textureToUse = ElectricExpansion.MODEL_PATH;
-        String status = ((TileEntityTransformer) tileEntity).stepUp ? "Step Up"
-                : "Step Down";
+        String status = ((TileEntityTransformer) tileEntity).stepUp ? "Step Up" : "Step Down";
         
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         
@@ -42,14 +40,12 @@ public class RenderTransformer extends TileEntitySpecialRenderer
         {
             if (new Vector3(tileEntity).isEqual(new Vector3(movingPosition)))
             {
-                RenderFloatingText.renderFloatingText(status,
-                        (float) ((float) x + .5), (float) y - 1,
+                RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1,
                         (float) ((float) z + .5));
             }
         }
         
-        int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord,
-                tileEntity.yCoord, tileEntity.zCoord);
+        int metadata = tileEntity.worldObj.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
         
         switch (metadata)
         {

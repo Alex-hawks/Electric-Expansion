@@ -22,8 +22,7 @@ public class GuiInsulationMachine extends GuiContainer
     private int containerWidth;
     private int containerHeight;
     
-    public GuiInsulationMachine(InventoryPlayer par1InventoryPlayer,
-            TileEntityInsulatingMachine tileEntity)
+    public GuiInsulationMachine(InventoryPlayer par1InventoryPlayer, TileEntityInsulatingMachine tileEntity)
     {
         super(new ContainerInsulationMachine(par1InventoryPlayer, tileEntity));
         this.tileEntity = tileEntity;
@@ -54,18 +53,14 @@ public class GuiInsulationMachine extends GuiContainer
         
         this.fontRenderer.drawString("Status: " + displayText, 82, 45, 4210752);
         this.fontRenderer.drawString(
-                "Voltage: "
-                        + ElectricityDisplay.getDisplayShort(
-                                this.tileEntity.getVoltage(),
-                                ElectricUnit.VOLTAGE), 82, 56, 4210752);
+                "Voltage: " + ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE),
+                82, 56, 4210752);
         this.fontRenderer.drawString(
                 "Require: "
-                        + ElectricityDisplay.getDisplayShort(
-                                this.tileEntity.WATTS_PER_TICK * 20,
-                                ElectricUnit.WATT), 82, 68, 4210752);
-        this.fontRenderer.drawString(
-                StatCollector.translateToLocal("container.inventory"), 8,
-                this.ySize - 96 + 2, 4210752);
+                        + ElectricityDisplay.getDisplayShort(this.tileEntity.WATTS_PER_TICK * 20, ElectricUnit.WATT),
+                82, 68, 4210752);
+        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2,
+                4210752);
     }
     
     /**
@@ -73,30 +68,24 @@ public class GuiInsulationMachine extends GuiContainer
      * items)
      */
     @Override
-    protected void drawGuiContainerBackgroundLayer(float par1, int par2,
-            int par3)
+    protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(GuiInsulationMachine.getTexture());
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(this.containerWidth, this.containerHeight,
-                0, 0, this.xSize, this.ySize);
+        this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
         
         if (this.tileEntity.getProcessTimeLeft() >= 0)
         {
-            int scale = (int) ((double) this.tileEntity.getProcessTimeLeft()
-                    / this.tileEntity.getProcessingTime() * 23);
-            this.drawTexturedModalRect(this.containerWidth + 77,
-                    this.containerHeight + 27, 176, 0, 23 - scale, 13);
+            int scale = (int) ((double) this.tileEntity.getProcessTimeLeft() / this.tileEntity.getProcessingTime() * 23);
+            this.drawTexturedModalRect(this.containerWidth + 77, this.containerHeight + 27, 176, 0, 23 - scale, 13);
         }
         
         if (this.tileEntity.getJoules() >= 0)
         {
-            int scale = (int) (this.tileEntity.getJoules()
-                    / this.tileEntity.getMaxJoules() * 50);
-            this.drawTexturedModalRect(this.containerWidth + 35,
-                    this.containerHeight + 20, 176, 13, 4, 50 - scale);
+            int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 50);
+            this.drawTexturedModalRect(this.containerWidth + 35, this.containerHeight + 20, 176, 13, 4, 50 - scale);
         }
     }
     

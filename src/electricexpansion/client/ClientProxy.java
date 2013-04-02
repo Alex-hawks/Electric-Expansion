@@ -46,36 +46,27 @@ public class ClientProxy extends CommonProxy
         RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new RenderHandler());
         
-        ClientRegistry.registerTileEntity(TileEntityWireMill.class,
-                "TileEntityWireMill", new RenderWireMill());
-        ClientRegistry.registerTileEntity(TileEntityRawWire.class,
-                "TileEntityRawWire", new RenderRawWire());
-        ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class,
-                "TileEntityInsulatedWire", new RenderInsulatedWire());
-        ClientRegistry.registerTileEntity(TileEntitySwitchWire.class,
-                "TileEntitySwitchWire", new RenderInsulatedWire());
-        ClientRegistry.registerTileEntity(TileEntityLogisticsWire.class,
-                "TileEntityLogisticsWire", new RenderInsulatedWire());
-        GameRegistry.registerTileEntity(TileEntityWireBlock.class,
-                "TileEntityWireBlock");
-        GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class,
-                "TileEntitySwitchWireBlock");
-        GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class,
-                "TileEntityDistribution");
-        GameRegistry.registerTileEntity(TileEntityInsulatingMachine.class,
-                "TileEntityInsulatingMachine");
+        ClientRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill", new RenderWireMill());
+        ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
+        ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire",
+                new RenderInsulatedWire());
+        ClientRegistry
+                .registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
+        ClientRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire",
+                new RenderInsulatedWire());
+        GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
+        GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
+        GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
+        GameRegistry.registerTileEntity(TileEntityInsulatingMachine.class, "TileEntityInsulatingMachine");
         
-        ClientRegistry.registerTileEntity(TileEntityTransformer.class,
-                "TileEntityTransformer", new RenderTransformer());
-        ClientRegistry.registerTileEntity(TileEntityMultimeter.class,
-                "TileEntityMultimeter", new RenderMultimeter());
-        GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class,
-                "TileEntityAdvBox");
+        ClientRegistry
+                .registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
+        ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
+        GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
     }
     
     @Override
-    public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-            int x, int y, int z)
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z)
     {
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
         if (tileEntity != null)
@@ -83,25 +74,19 @@ public class ClientProxy extends CommonProxy
             switch (ID)
             {
                 case 0:
-                    return new GuiAdvancedBatteryBox(player.inventory,
-                            (TileEntityAdvancedBatteryBox) tileEntity);
+                    return new GuiAdvancedBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
                 case 1:
                     break; // What's this used for?
                 case 2:
-                    return new GuiWireMill(player.inventory,
-                            (TileEntityWireMill) tileEntity);
+                    return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
                 case 3:
-                    return new GuiLogisticsWire(
-                            (TileEntityLogisticsWire) tileEntity);
+                    return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
                 case 4:
-                    return new GuiQuantumBatteryBox(player.inventory,
-                            (TileEntityQuantumBatteryBox) tileEntity);
+                    return new GuiQuantumBatteryBox(player.inventory, (TileEntityQuantumBatteryBox) tileEntity);
                 case 5:
-                    return new GuiInsulationMachine(player.inventory,
-                            (TileEntityInsulatingMachine) tileEntity);
+                    return new GuiInsulationMachine(player.inventory, (TileEntityInsulatingMachine) tileEntity);
                 case 6:
-                    return new GuiFuseBox(player.inventory,
-                            (TileEntityFuseBox) tileEntity);
+                    return new GuiFuseBox(player.inventory, (TileEntityFuseBox) tileEntity);
                     
             }
         }

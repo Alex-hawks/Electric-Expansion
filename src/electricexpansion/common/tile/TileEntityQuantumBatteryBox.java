@@ -27,9 +27,8 @@ import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
-public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
-        implements IWirelessPowerMachine, IPacketReceiver, IInventory,
-        IPeripheral
+public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage implements IWirelessPowerMachine,
+        IPacketReceiver, IInventory, IPeripheral
 {
     private ItemStack[] containingItems = new ItemStack[2];
     private int playersUsing = 0;
@@ -50,35 +49,28 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
         
         if (!this.isDisabled())
         {
-            ForgeDirection outputDirection = ForgeDirection.getOrientation(this
-                    .getBlockMetadata() + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(
-                    this.worldObj, new Vector3(this), outputDirection);
+            ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                    outputDirection);
             
             if (!this.worldObj.isRemote)
             {
-                TileEntity inputTile = VectorHelper.getTileEntityFromSide(
-                        this.worldObj, new Vector3(this),
+                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
                         outputDirection.getOpposite());
                 
-                IElectricityNetwork inputNetwork = ElectricityNetworkHelper
-                        .getNetworkFromTileEntity(inputTile,
-                                outputDirection.getOpposite());
-                IElectricityNetwork outputNetwork = ElectricityNetworkHelper
-                        .getNetworkFromTileEntity(outputTile, outputDirection);
+                IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
+                        outputDirection.getOpposite());
+                IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
+                        outputDirection);
                 
                 if (outputNetwork != null && inputNetwork != outputNetwork)
                 {
-                    double outputWatts = Math.min(
-                            outputNetwork.getRequest(new TileEntity[] { this })
-                                    .getWatts(), Math.min(this.getJoules(),
-                                    10000));
+                    double outputWatts = Math.min(outputNetwork.getRequest(new TileEntity[] { this }).getWatts(),
+                            Math.min(this.getJoules(), 10000));
                     
                     if (this.getJoules() > 0.0D && outputWatts > 0.0D)
                     {
-                        outputNetwork.startProducing(this,
-                                outputWatts / this.getVoltage(),
-                                this.getVoltage());
+                        outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
                         this.setJoules(this.getJoules() - outputWatts);
                     }
                     else
@@ -94,35 +86,30 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
         {
             if (this.ticks % 3L == 0L && this.playersUsing > 0)
             {
-                PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                        this.worldObj, new Vector3(this), 12.0D);
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
             }
         }
     }
     
     public void sendPacket()
     {
-        PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                this.worldObj);
+        PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj);
     }
     
     @Override
     public Packet getDescriptionPacket()
     {
         if (ElectricExpansion.useHashCodes)
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this,
-                    this.getFrequency(), this.disabledTicks, this.getJoules(),
-                    Integer.valueOf(this.owningPlayer.hashCode()).toString());
+            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks,
+                    this.getJoules(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
         else
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this,
-                    this.getFrequency(), this.disabledTicks, this.getJoules(),
-                    this.owningPlayer);
+            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks,
+                    this.getJoules(), this.owningPlayer);
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int packetType,
-            Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet,
+            EntityPlayer player, ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
         {
@@ -197,22 +184,19 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
     @Override
     public double getJoules()
     {
-        return ElectricExpansion.DistributionNetworksInstance.getJoules(
-                this.owningPlayer, this.frequency);
+        return ElectricExpansion.DistributionNetworksInstance.getJoules(this.owningPlayer, this.frequency);
     }
     
     @Override
     public void removeJoules(double outputWatts)
     {
-        ElectricExpansion.DistributionNetworksInstance.removeJoules(
-                this.owningPlayer, this.frequency, outputWatts);
+        ElectricExpansion.DistributionNetworksInstance.removeJoules(this.owningPlayer, this.frequency, outputWatts);
     }
     
     @Override
     public void setJoules(double joules)
     {
-        ElectricExpansion.DistributionNetworksInstance.setJoules(
-                this.owningPlayer, this.frequency, joules);
+        ElectricExpansion.DistributionNetworksInstance.setJoules(this.owningPlayer, this.frequency, joules);
     }
     
     @Override
@@ -285,8 +269,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
     {
         this.containingItems[par1] = par2ItemStack;
         
-        if (par2ItemStack != null
-                && par2ItemStack.stackSize > this.getInventoryStackLimit())
+        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
         {
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
@@ -307,10 +290,8 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord,
-                this.zCoord) != this ? false
-                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D,
-                        this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false
+                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
     
     @Override
@@ -326,8 +307,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
         
         if (this.worldObj.isRemote)
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(
-                    ElectricExpansion.CHANNEL, this, newFrequency));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, newFrequency));
         }
     }
     
@@ -365,8 +345,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
     @Override
     public String[] getMethodNames()
     {
-        return new String[] { "getVoltage", "isFull", "getJoules",
-                "getFrequency", "setFrequency", "getPlayer" };
+        return new String[] { "getVoltage", "isFull", "getJoules", "getFrequency", "setFrequency", "getPlayer" };
     }
     
     @Override
@@ -386,8 +365,8 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
     }
     
     @Override
-    public Object[] callMethod(IComputerAccess computer, int method,
-            Object[] arguments) throws IllegalArgumentException
+    public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments)
+            throws IllegalArgumentException
     {
         final int getVoltage = 0;
         final int isFull = 1;
@@ -414,15 +393,13 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
                 case getVoltage:
                     return new Object[] { this.getVoltage() };
                 case isFull:
-                    return new Object[] { this.getJoules() >= this
-                            .getMaxJoules() };
+                    return new Object[] { this.getJoules() >= this.getMaxJoules() };
                 case getJoules:
                     return new Object[] { this.getJoules() };
                 case getFrequency:
                     return new Object[] { this.getFrequency() };
                 case setFrequency:
-                    return new Object[] { arg0 == 0 ? this.setFrequency(arg0,
-                            true)
+                    return new Object[] { arg0 == 0 ? this.setFrequency(arg0, true)
                             : "Expected args for this function is 1. You have provided none." };
                 case getPlayer:
                     return new Object[] { this.getOwningPlayer() };
@@ -437,10 +414,8 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        return direction == ForgeDirection.getOrientation(this
-                .getBlockMetadata() + 2)
-                || direction == ForgeDirection.getOrientation(
-                        this.getBlockMetadata() + 2).getOpposite();
+        return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2)
+                || direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
     }
     
     @Override

@@ -19,13 +19,11 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
 {
     private static final ModelInsulatedWire model = new ModelInsulatedWire();
     
-    public void renderAModelAt(TileEntity t, double x, double y, double z,
-            float f)
+    public void renderAModelAt(TileEntity t, double x, double y, double z, float f)
     {
         String textureToUse = ElectricExpansion.MODEL_PATH;
         int blockID = t.worldObj.getBlockId(t.xCoord, t.yCoord, t.zCoord);
-        int metadata = t.worldObj
-                .getBlockMetadata(t.xCoord, t.yCoord, t.zCoord);
+        int metadata = t.worldObj.getBlockMetadata(t.xCoord, t.yCoord, t.zCoord);
         
         if (metadata != -1)
         {
@@ -77,8 +75,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
             
             else if (blockID == ElectricExpansion.blockSwitchWire.blockID)
             {
-                if (t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord,
-                        t.yCoord, t.zCoord))
+                if (t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
                 {
                     switch (metadata)
                     {
@@ -127,8 +124,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
         boolean[] connectedSides = tileEntity.visuallyConnected;
         
-        if (textureToUse != null && textureToUse != ""
-                && textureToUse != ElectricExpansion.MODEL_PATH)
+        if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.MODEL_PATH)
         {
             this.bindTextureByName(textureToUse);
         }
@@ -137,8 +133,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
         
-        if (tileEntity instanceof TileEntityInsulatedWire
-                || tileEntity instanceof TileEntityLogisticsWire)
+        if (tileEntity instanceof TileEntityInsulatedWire || tileEntity instanceof TileEntityLogisticsWire)
         {
             if (connectedSides[0])
             {
@@ -168,8 +163,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         
         else if (tileEntity instanceof TileEntitySwitchWire)
         {
-            if (tileEntity.getWorldObj().isBlockIndirectlyGettingPowered(
-                    t.xCoord, t.yCoord, t.zCoord))
+            if (tileEntity.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
             {
                 if (connectedSides[0])
                 {
@@ -203,12 +197,10 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         if (tileEntity instanceof TileEntityInsulatedWire)
         {
             GL11.glPushMatrix();
-            GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F,
-                    (float) z + 0.5F);
+            GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
             GL11.glScalef(1.0F, -1F, -1F);
             
-            this.bindTextureByName(ElectricExpansion.MODEL_PATH
-                    + "WirePaintOverlay.png");
+            this.bindTextureByName(ElectricExpansion.MODEL_PATH + "WirePaintOverlay.png");
             
             byte colorByte = ((TileEntityInsulatedWire) tileEntity).colorByte;
             
@@ -299,8 +291,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
     }
     
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double var2,
-            double var4, double var6, float var8)
+    public void renderTileEntityAt(TileEntity tileEntity, double var2, double var4, double var6, float var8)
     {
         this.renderAModelAt(tileEntity, var2, var4, var6, var8);
     }

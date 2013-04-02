@@ -16,15 +16,13 @@ public class ItemBlockRawWire extends ItemBlockCableHelper
     
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void addInformation(ItemStack par1ItemStack,
-            EntityPlayer par2EntityPlayer, List par3List, boolean par4)
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
     {
         super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
         
         par3List.add("Will shock you when near");
         par3List.add("Shock Damage: "
-                + (double) EnumWireMaterial.values()[par1ItemStack
-                        .getItemDamage()].electrocutionDamage / 2 + " Hearts");
+                + (double) EnumWireMaterial.values()[par1ItemStack.getItemDamage()].electrocutionDamage / 2 + " Hearts");
         
     }
 }

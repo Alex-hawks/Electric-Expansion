@@ -22,8 +22,7 @@ public class Recipes
         {
             try
             {
-                electricexpansion.common.misc.InsulationRecipes.INSTANCE
-                        .addProcessing(input, output, ticks);
+                electricexpansion.common.misc.InsulationRecipes.INSTANCE.addProcessing(input, output, ticks);
                 return true;
             }
             catch (Exception e)
@@ -52,8 +51,7 @@ public class Recipes
         {
             try
             {
-                electricexpansion.common.misc.InsulationRecipes.INSTANCE
-                        .addProcessing(input, output, ticks);
+                electricexpansion.common.misc.InsulationRecipes.INSTANCE.addProcessing(input, output, ticks);
                 return true;
             }
             catch (Exception e)
@@ -82,8 +80,7 @@ public class Recipes
         {
             try
             {
-                electricexpansion.common.misc.WireMillRecipes.INSTANCE
-                        .addProcessing(input, output, ticks);
+                electricexpansion.common.misc.WireMillRecipes.INSTANCE.addProcessing(input, output, ticks);
                 return true;
             }
             catch (Exception e)
@@ -112,8 +109,7 @@ public class Recipes
         {
             try
             {
-                electricexpansion.common.misc.WireMillRecipes.INSTANCE
-                        .addProcessing(input, output, ticks);
+                electricexpansion.common.misc.WireMillRecipes.INSTANCE.addProcessing(input, output, ticks);
                 return true;
             }
             catch (Exception e)

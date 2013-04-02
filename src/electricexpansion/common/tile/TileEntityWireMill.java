@@ -38,9 +38,8 @@ import cpw.mods.fml.common.Loader;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityRunnable implements
-        IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage,
-        IEnergyTile, IEnergySink
+public class TileEntityWireMill extends TileEntityElectricityRunnable implements IInventory, ISidedInventory,
+        IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
     public final double WATTS_PER_TICK = 500;
     public final double TRANSFER_LIMIT = 1250;
@@ -92,35 +91,27 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
         
         if (!this.worldObj.isRemote)
         {
-            ForgeDirection inputDirection = ForgeDirection.getOrientation(this
-                    .getBlockMetadata() + 2);
-            TileEntity inputTile = VectorHelper.getTileEntityFromSide(
-                    this.worldObj, new Vector3(this), inputDirection);
+            ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper
-                    .getNetworkFromTileEntity(inputTile,
-                            inputDirection.getOpposite());
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
+                    inputDirection.getOpposite());
             
             if (inputNetwork != null)
             {
                 if (this.joulesStored < TileEntityWireMill.maxJoules)
                 {
-                    inputNetwork.startRequesting(
-                            this,
-                            Math.min(this.getMaxJoules() - this.getJoules(),
-                                    this.TRANSFER_LIMIT) / this.getVoltage(),
+                    inputNetwork.startRequesting(this,
+                            Math.min(this.getMaxJoules() - this.getJoules(), this.TRANSFER_LIMIT) / this.getVoltage(),
                             this.getVoltage());
-                    ElectricityPack electricityPack = inputNetwork
-                            .consumeElectricity(this);
-                    this.setJoules(this.joulesStored
-                            + electricityPack.getWatts());
+                    ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
+                    this.setJoules(this.joulesStored + electricityPack.getWatts());
                     
                     if (UniversalElectricity.isVoltageSensitive)
                     {
                         if (electricityPack.voltage > this.getVoltage())
                         {
-                            this.worldObj.createExplosion(null, this.xCoord,
-                                    this.yCoord, this.zCoord, 2f, true);
+                            this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
                         }
                     }
                 }
@@ -133,40 +124,31 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
         
         // The bottom slot is for portable
         // batteries
-        if (this.inventory[0] != null
-                && this.joulesStored < this.getMaxJoules())
+        if (this.inventory[0] != null && this.joulesStored < this.getMaxJoules())
         {
             if (this.inventory[0].getItem() instanceof IItemElectric)
             {
-                IItemElectric electricItem = (IItemElectric) this.inventory[0]
-                        .getItem();
+                IItemElectric electricItem = (IItemElectric) this.inventory[0].getItem();
                 
-                if (electricItem.getProvideRequest(this.inventory[0])
-                        .getWatts() > 0)
+                if (electricItem.getProvideRequest(this.inventory[0]).getWatts() > 0)
                 {
-                    double joulesReceived = electricItem.onProvide(
-                            ElectricityPack.getFromWatts(Math.max(electricItem
-                                    .getMaxJoules(this.inventory[0]) * 0.005,
-                                    this.TRANSFER_LIMIT), electricItem
-                                    .getVoltage(this.inventory[0])),
-                            this.inventory[0]).getWatts();
+                    double joulesReceived = electricItem
+                            .onProvide(
+                                    ElectricityPack.getFromWatts(Math.max(
+                                            electricItem.getMaxJoules(this.inventory[0]) * 0.005, this.TRANSFER_LIMIT),
+                                            electricItem.getVoltage(this.inventory[0])), this.inventory[0]).getWatts();
                     this.setJoules(this.joulesStored + joulesReceived);
                 }
             }
             
             else if (this.inventory[0].getItem() instanceof IElectricItem)
             {
-                IElectricItem item = (IElectricItem) this.inventory[0]
-                        .getItem();
+                IElectricItem item = (IElectricItem) this.inventory[0].getItem();
                 if (item.canProvideEnergy())
                 {
-                    double gain = ElectricItem
-                            .discharge(
-                                    this.inventory[0],
-                                    (int) ((int) (this.getMaxJoules() - this
-                                            .getJoules()) * UniversalElectricity.TO_IC2_RATIO),
-                                    3, false, false)
-                            * UniversalElectricity.IC2_RATIO;
+                    double gain = ElectricItem.discharge(this.inventory[0],
+                            (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO),
+                            3, false, false) * UniversalElectricity.IC2_RATIO;
                     this.setJoules(this.getJoules() + gain);
                 }
             }
@@ -178,8 +160,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
             // be processed
             if (this.inventory[1] != null
                     && this.canDraw()
-                    && (this.drawingTicks == 0
-                            || this.targetID != this.inventory[1].itemID || this.targetMeta != this.inventory[1]
+                    && (this.drawingTicks == 0 || this.targetID != this.inventory[1].itemID || this.targetMeta != this.inventory[1]
                             .getItemDamage()))
             {
                 this.targetID = this.inventory[1].itemID;
@@ -214,8 +195,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
         {
             if (this.ticks % 3 == 0 && this.playersUsing > 0)
             {
-                PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                        this.worldObj, new Vector3(this), 12);
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
             }
         }
         
@@ -226,14 +206,13 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this,
-                this.drawingTicks, this.disabledTicks, this.joulesStored);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks,
+                this.joulesStored);
     }
     
     @Override
-    public void handlePacketData(INetworkManager inputNetwork, int type,
-            Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet,
+            EntityPlayer player, ByteArrayDataInput dataStream)
     {
         try
         {
@@ -252,8 +231,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     {
         if (!this.worldObj.isRemote)
         {
-            PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                    this.worldObj, new Vector3(this), 15);
+            PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 15);
         }
         this.playersUsing++;
     }
@@ -276,30 +254,23 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
             {
                 canWork = false;
             }
-            else if (WireMillRecipes.INSTANCE.getDrawingResult(inputSlot) != null
-                    && outputSlot == null)
+            else if (WireMillRecipes.INSTANCE.getDrawingResult(inputSlot) != null && outputSlot == null)
             {
                 canWork = true;
             }
             else if (outputSlot != null)
             {
-                String result = WireMillRecipes
-                        .stackSizeToOne(WireMillRecipes.INSTANCE
-                                .getDrawingResult(inputSlot))
+                String result = WireMillRecipes.stackSizeToOne(WireMillRecipes.INSTANCE.getDrawingResult(inputSlot))
                         + "";
-                String output2 = WireMillRecipes.stackSizeToOne(outputSlot)
-                        + "";
-                int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(),
-                        inputSlot.getMaxStackSize())
+                String output2 = WireMillRecipes.stackSizeToOne(outputSlot) + "";
+                int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(), inputSlot.getMaxStackSize())
                         - WireMillRecipes.INSTANCE.getDrawingResult(inputSlot).stackSize;
                 
-                if (result.equals(output2)
-                        && !(outputSlot.stackSize <= maxSpaceForSuccess))
+                if (result.equals(output2) && !(outputSlot.stackSize <= maxSpaceForSuccess))
                 {
                     canWork = false;
                 }
-                else if (result.equals(output2)
-                        && outputSlot.stackSize <= maxSpaceForSuccess)
+                else if (result.equals(output2) && outputSlot.stackSize <= maxSpaceForSuccess)
                 {
                     canWork = true;
                 }
@@ -317,8 +288,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     {
         if (this.canDraw())
         {
-            ItemStack resultItemStack = WireMillRecipes.INSTANCE
-                    .getDrawingResult(this.inventory[1]);
+            ItemStack resultItemStack = WireMillRecipes.INSTANCE.getDrawingResult(this.inventory[1]);
             
             if (this.inventory[2] == null)
             {
@@ -326,8 +296,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
             }
             else if (this.inventory[2].isItemEqual(resultItemStack))
             {
-                this.inventory[2].stackSize = this.inventory[2].stackSize
-                        + resultItemStack.stackSize;
+                this.inventory[2].stackSize = this.inventory[2].stackSize + resultItemStack.stackSize;
             }
             
             this.inventory[1].stackSize = this.inventory[1].stackSize
@@ -469,8 +438,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     {
         this.inventory[par1] = par2ItemStack;
         
-        if (par2ItemStack != null
-                && par2ItemStack.stackSize > this.getInventoryStackLimit())
+        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
         {
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
@@ -491,10 +459,8 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord,
-                this.zCoord) != this ? false
-                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D,
-                        this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false
+                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
     
     @Override
@@ -511,8 +477,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
         if (this.inventory[1] != null)
         {
             if (WireMillRecipes.INSTANCE.getDrawingResult(this.inventory[1]) != null)
-                return WireMillRecipes.INSTANCE
-                        .getDrawingTicks(this.inventory[1]);
+                return WireMillRecipes.INSTANCE.getDrawingTicks(this.inventory[1]);
         }
         return -1;
     }
@@ -550,8 +515,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
     {
         
-        if (direction.toForgeDirection() == ForgeDirection.getOrientation(this
-                .getBlockMetadata() + 2))
+        if (direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() + 2))
             return true;
         else
             return false;

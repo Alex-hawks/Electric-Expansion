@@ -44,9 +44,8 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
-        implements IRedstoneProvider, IPacketReceiver, ISidedInventory,
-        IPeripheral, IEnergySink, IEnergySource
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IRedstoneProvider,
+        IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
     private static final double BASE_OUTPUT = 50000;
     private ItemStack[] containingItems = new ItemStack[5];
@@ -85,54 +84,44 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
                 if (this.containingItems[0].getItem() instanceof IItemElectric)
                 {
                     this.setJoules(this.getJoules()
-                            - ElectricItemHelper.chargeItem(
-                                    this.containingItems[0], this.getJoules(),
+                            - ElectricItemHelper.chargeItem(this.containingItems[0], this.getJoules(),
                                     this.getVoltage()));
                 }
                 else if (this.containingItems[0].getItem() instanceof IElectricItem)
                 {
-                    double sent = ElectricItem
-                            .charge(this.containingItems[0],
-                                    (int) (this.getJoules() * UniversalElectricity.TO_IC2_RATIO),
-                                    3, false, false)
+                    double sent = ElectricItem.charge(this.containingItems[0],
+                            (int) (this.getJoules() * UniversalElectricity.TO_IC2_RATIO), 3, false, false)
                             * UniversalElectricity.IC2_RATIO;
                     this.setJoules(this.getJoules() - sent);
                 }
                 
             }
             
-            if (this.containingItems[1] != null
-                    && this.getJoules() < this.getMaxJoules())
+            if (this.containingItems[1] != null && this.getJoules() < this.getMaxJoules())
             {
                 if (this.containingItems[1].getItem() instanceof IItemElectric)
                 {
-                    IItemElectric electricItem = (IItemElectric) this.containingItems[1]
-                            .getItem();
+                    IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
                     
-                    if (electricItem.getProvideRequest(this.containingItems[1])
-                            .getWatts() > 0)
+                    if (electricItem.getProvideRequest(this.containingItems[1]).getWatts() > 0)
                     {
-                        ElectricityPack packRecieved = electricItem.onProvide(
-                                ElectricityPack.getFromWatts(
-                                        this.getMaxJoules() - this.getJoules(),
-                                        this.getVoltage()),
-                                this.containingItems[1]);
-                        this.setJoules(this.getJoules()
-                                + packRecieved.getWatts());
+                        ElectricityPack packRecieved = electricItem
+                                .onProvide(
+                                        ElectricityPack.getFromWatts(this.getMaxJoules() - this.getJoules(),
+                                                this.getVoltage()), this.containingItems[1]);
+                        this.setJoules(this.getJoules() + packRecieved.getWatts());
                     }
                     
                 }
                 else if (this.containingItems[1].getItem() instanceof IElectricItem)
                 {
-                    IElectricItem item = (IElectricItem) this.containingItems[1]
-                            .getItem();
+                    IElectricItem item = (IElectricItem) this.containingItems[1].getItem();
                     if (item.canProvideEnergy())
                     {
                         double gain = ElectricItem
                                 .discharge(
                                         this.containingItems[1],
-                                        (int) ((int) (this.getMaxJoules() - this
-                                                .getJoules()) * UniversalElectricity.TO_IC2_RATIO),
+                                        (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO),
                                         3, false, false)
                                 * UniversalElectricity.IC2_RATIO;
                         this.setJoules(this.getJoules() + gain);
@@ -140,35 +129,28 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
                 }
             }
             
-            ForgeDirection outputDirection = ForgeDirection.getOrientation(this
-                    .getBlockMetadata() + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(
-                    this.worldObj, new Vector3(this), outputDirection);
+            ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                    outputDirection);
             
             if (!this.worldObj.isRemote)
             {
-                TileEntity inputTile = VectorHelper.getTileEntityFromSide(
-                        this.worldObj, new Vector3(this),
+                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
                         outputDirection.getOpposite());
                 
-                IElectricityNetwork inputNetwork = ElectricityNetworkHelper
-                        .getNetworkFromTileEntity(inputTile,
-                                outputDirection.getOpposite());
-                IElectricityNetwork outputNetwork = ElectricityNetworkHelper
-                        .getNetworkFromTileEntity(outputTile, outputDirection);
+                IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
+                        outputDirection.getOpposite());
+                IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
+                        outputDirection);
                 
                 if (outputNetwork != null && inputNetwork != outputNetwork)
                 {
-                    double outputWatts = Math.min(
-                            outputNetwork.getRequest(new TileEntity[] { this })
-                                    .getWatts(), Math.min(this.getJoules(),
-                                    this.getOutputCap()));
+                    double outputWatts = Math.min(outputNetwork.getRequest(new TileEntity[] { this }).getWatts(),
+                            Math.min(this.getJoules(), this.getOutputCap()));
                     
                     if (this.getJoules() > 0.0D && outputWatts > 0.0D)
                     {
-                        outputNetwork.startProducing(this,
-                                outputWatts / this.getVoltage(),
-                                this.getVoltage());
+                        outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
                         this.setJoules(this.getJoules() - outputWatts);
                     }
                     else
@@ -183,8 +165,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
                 if (Loader.isModLoaded("IC2"))
                     if (this.getJoules() >= 128.0D * UniversalElectricity.IC2_RATIO)
                     {
-                        this.setJoules(this.getJoules() - this.sendEnergy(128)
-                                * UniversalElectricity.IC2_RATIO);
+                        this.setJoules(this.getJoules() - this.sendEnergy(128) * UniversalElectricity.IC2_RATIO);
                     }
         }
         
@@ -192,8 +173,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
         {
             if (this.ticks % 3L == 0L && this.playersUsing > 0)
             {
-                PacketManager.sendPacketToClients(this.getDescriptionPacket(),
-                        this.worldObj, new Vector3(this), 12.0D);
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
             }
         }
     }
@@ -201,23 +181,18 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     @Override
     protected EnumSet<ForgeDirection> getConsumingSides()
     {
-        return EnumSet.of(ForgeDirection.getOrientation(
-                this.getBlockMetadata() + 2).getOpposite());
+        return EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite());
     }
     
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(
-                ElectricExpansion.CHANNEL,
-                this,
-                new Object[] { Double.valueOf(this.getJoules()),
-                        Integer.valueOf(this.disabledTicks) });
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] {
+                Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks) });
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type,
-            Packet250CustomPayload packet, EntityPlayer player,
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
             ByteArrayDataInput dataStream)
     {
         try
@@ -258,8 +233,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
             
             if (var5 >= 0 && var5 < this.containingItems.length)
             {
-                this.containingItems[var5] = ItemStack
-                        .loadItemStackFromNBT(var4);
+                this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
             }
         }
     }
@@ -357,8 +331,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     {
         this.containingItems[par1] = par2ItemStack;
         
-        if (par2ItemStack != null
-                && par2ItemStack.stackSize > this.getInventoryStackLimit())
+        if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit())
         {
             par2ItemStack.stackSize = this.getInventoryStackLimit();
         }
@@ -383,29 +356,20 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
         int slot2 = 0;
         int slot3 = 0;
         
-        if (this.containingItems[2] != null
-                && this.containingItems[2].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[2].getItem())
-                        .getName(this.containingItems[2]) == "Capacity")
+        if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "Capacity")
         {
-            slot1 = ((IModifier) this.containingItems[2].getItem())
-                    .getEffectiveness(this.containingItems[2]);
+            slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
         }
-        if (this.containingItems[3] != null
-                && this.containingItems[3].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[3].getItem())
-                        .getName(this.containingItems[3]) == "Capacity")
+        if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "Capacity")
         {
-            slot2 = ((IModifier) this.containingItems[3].getItem())
-                    .getEffectiveness(this.containingItems[3]);
+            slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
         }
-        if (this.containingItems[4] != null
-                && this.containingItems[4].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[4].getItem())
-                        .getName(this.containingItems[4]) == "Capacity")
+        if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Capacity")
         {
-            slot3 = ((IModifier) this.containingItems[4].getItem())
-                    .getEffectiveness(this.containingItems[4]);
+            slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
         }
         return 5000000 + slot1 + slot2 + slot3;
     }
@@ -413,8 +377,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     @Override
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
-        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord,
-                this.zCoord) == this;
+        return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
     }
     
     @Override
@@ -442,8 +405,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
         {
             if (electricityPack.voltage > this.getInputVoltage())
             {
-                this.worldObj.createExplosion(null, this.xCoord, this.yCoord,
-                        this.zCoord, 1.5F, true);
+                this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 1.5F, true);
                 return;
             }
         }
@@ -455,10 +417,8 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     {
         return Math.max(
                 this.getVoltage(),
-                Math.max(
-                        120.0D,
-                        this.getVoltageModifier("InputVoltageModifier")
-                                * this.getVoltageModifier("VoltageModifier")
+                Math.max(120.0D,
+                        this.getVoltageModifier("InputVoltageModifier") * this.getVoltageModifier("VoltageModifier")
                                 * 120.0D));
     }
     
@@ -468,29 +428,20 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
         double slot2 = 1.0D;
         double slot3 = 1.0D;
         
-        if (this.containingItems[2] != null
-                && this.containingItems[2].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[2].getItem())
-                        .getName(this.containingItems[2]) == type)
+        if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == type)
         {
-            slot1 = ((IModifier) this.containingItems[2].getItem())
-                    .getEffectiveness(this.containingItems[2]);
+            slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
         }
-        if (this.containingItems[3] != null
-                && this.containingItems[3].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[3].getItem())
-                        .getName(this.containingItems[3]) == type)
+        if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == type)
         {
-            slot2 = ((IModifier) this.containingItems[3].getItem())
-                    .getEffectiveness(this.containingItems[3]);
+            slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
         }
-        if (this.containingItems[4] != null
-                && this.containingItems[4].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[4].getItem())
-                        .getName(this.containingItems[4]) == type)
+        if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == type)
         {
-            slot3 = ((IModifier) this.containingItems[4].getItem())
-                    .getEffectiveness(this.containingItems[4]);
+            slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
         }
         if (slot1 < 0.0D)
         {
@@ -513,33 +464,23 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
         double slot2 = 0;
         double slot3 = 0;
         
-        if (this.containingItems[2] != null
-                && this.containingItems[2].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[2].getItem())
-                        .getName(this.containingItems[2]) == "Unlimiter")
+        if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[2].getItem()).getName(this.containingItems[2]) == "Unlimiter")
         {
-            slot1 = ((IModifier) this.containingItems[2].getItem())
-                    .getEffectiveness(this.containingItems[2]);
+            slot1 = ((IModifier) this.containingItems[2].getItem()).getEffectiveness(this.containingItems[2]);
         }
-        if (this.containingItems[3] != null
-                && this.containingItems[3].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[3].getItem())
-                        .getName(this.containingItems[3]) == "Unlimiter")
+        if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[3].getItem()).getName(this.containingItems[3]) == "Unlimiter")
         {
-            slot2 = ((IModifier) this.containingItems[3].getItem())
-                    .getEffectiveness(this.containingItems[3]);
+            slot2 = ((IModifier) this.containingItems[3].getItem()).getEffectiveness(this.containingItems[3]);
         }
-        if (this.containingItems[4] != null
-                && this.containingItems[4].getItem() instanceof IModifier
-                && ((IModifier) this.containingItems[4].getItem())
-                        .getName(this.containingItems[4]) == "Unlimiter")
+        if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier
+                && ((IModifier) this.containingItems[4].getItem()).getName(this.containingItems[4]) == "Unlimiter")
         {
-            slot3 = ((IModifier) this.containingItems[4].getItem())
-                    .getEffectiveness(this.containingItems[4]);
+            slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
         }
         
-        return (100 + slot1) * (100 + slot2) * (100 + slot3) / 1000000
-                * TileEntityAdvancedBatteryBox.BASE_OUTPUT;
+        return (100 + slot1) * (100 + slot2) * (100 + slot3) / 1000000 * TileEntityAdvancedBatteryBox.BASE_OUTPUT;
     }
     
     @Override
@@ -555,8 +496,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     }
     
     @Override
-    public Object[] callMethod(IComputerAccess computer, int method,
-            Object[] arguments) throws Exception
+    public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws Exception
     {
         final int getVoltage = 0;
         final int getWattage = 1;
@@ -569,8 +509,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
             case getWattage:
                 return new Object[] { Double.valueOf(this.getJoules()) };
             case isFull:
-                return new Object[] { Boolean.valueOf(this.getJoules() >= this
-                        .getMaxJoules()) };
+                return new Object[] { Boolean.valueOf(this.getJoules() >= this.getMaxJoules()) };
         }
         throw new Exception("Function unimplemented");
     }
@@ -620,8 +559,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
             rejects = givenElectricity - this.getRequest().getWatts();
         }
         
-        this.onReceive(ElectricityPack.getFromWatts(givenElectricity,
-                this.getVoltage()));
+        this.onReceive(ElectricityPack.getFromWatts(givenElectricity, this.getVoltage()));
         
         return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
     }
@@ -635,8 +573,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     @Override
     public boolean emitsEnergyTo(TileEntity receiver, Direction direction)
     {
-        return this.getConsumingSides().contains(
-                direction.toForgeDirection().getOpposite());
+        return this.getConsumingSides().contains(direction.toForgeDirection().getOpposite());
     }
     
     @Override
@@ -656,8 +593,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage
     public boolean canConnect(ForgeDirection direction)
     {
         return this.getBlockMetadata() + 2 == direction.ordinal()
-                || this.getBlockMetadata() + 2 == direction.getOpposite()
-                        .ordinal();
+                || this.getBlockMetadata() + 2 == direction.getOpposite().ordinal();
     }
     
     @Override

@@ -36,14 +36,12 @@ public class BlockTransformer extends BlockAdvanced
      * Called when the block is placed in the world.
      */
     @Override
-    public void onBlockPlacedBy(World par1World, int x, int y, int z,
-            EntityLiving par5EntityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         int tierStart = metadata - (metadata & 3);
         
-        int angle = MathHelper
-                .floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         switch (angle)
         {
             case 0:
@@ -65,9 +63,8 @@ public class BlockTransformer extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         int tierStart = metadata - (metadata & 3);
@@ -101,14 +98,12 @@ public class BlockTransformer extends BlockAdvanced
     }
     
     @Override
-    public boolean onSneakUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {
-            TileEntityTransformer tileEntity = (TileEntityTransformer) par1World
-                    .getBlockTileEntity(x, y, z);
+            TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
             
             tileEntity.stepUp = !tileEntity.stepUp;
             return true;
@@ -124,8 +119,7 @@ public class BlockTransformer extends BlockAdvanced
     }
     
     @Override
-    public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-            ForgeDirection side)
+    public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
     {
         return side.equals(ForgeDirection.DOWN);
     }
@@ -151,8 +145,7 @@ public class BlockTransformer extends BlockAdvanced
     
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int i = 0; i < 9; i += 4)
         {
@@ -161,8 +154,7 @@ public class BlockTransformer extends BlockAdvanced
     }
     
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world,
-            int x, int y, int z)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
         int id = this.idPicked(world, x, y, z);
         

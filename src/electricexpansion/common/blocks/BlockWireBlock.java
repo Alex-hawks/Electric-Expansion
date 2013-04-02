@@ -74,8 +74,7 @@ public class BlockWireBlock extends BlockConductor
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; ++var4)
         {
@@ -85,19 +84,16 @@ public class BlockWireBlock extends BlockConductor
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y,
-            int z, int side)
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(
-                x, y, z)).textureItemStack == null ? this.blockIcon
-                : ((TileEntityConductorBase) par1IBlockAccess
-                        .getBlockTileEntity(x, y, z)).textureItemStack
+        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon
+                : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack
                         .getIconIndex();
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z,
-            EntityPlayer player, int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
+            float par8, float par9)
     {
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)
@@ -106,23 +102,18 @@ public class BlockWireBlock extends BlockConductor
             if (player.inventory.getCurrentItem() != null
                     && player.inventory.getCurrentItem().getItem() instanceof ItemBlock)
             {
-                if (!te.isIconLocked
-                        && player.inventory.getCurrentItem().itemID != this.blockID
-                        && Block.blocksList[player.inventory.getCurrentItem().itemID]
-                                .getRenderType() == 0
-                        && Block.blocksList[player.inventory.getCurrentItem().itemID]
-                                .getRenderBlockPass() == 0)
+                if (!te.isIconLocked && player.inventory.getCurrentItem().itemID != this.blockID
+                        && Block.blocksList[player.inventory.getCurrentItem().itemID].getRenderType() == 0
+                        && Block.blocksList[player.inventory.getCurrentItem().itemID].getRenderBlockPass() == 0)
                 {
-                    ((TileEntityConductorBase) world
-                            .getBlockTileEntity(x, y, z)).textureItemStack = player.inventory
+                    ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory
                             .getCurrentItem();
                     world.markBlockForRenderUpdate(x, y, z);
                     return true;
                 }
                 else
                 {
-                    ((TileEntityConductorBase) world
-                            .getBlockTileEntity(x, y, z)).textureItemStack = null;
+                    ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = null;
                     world.markBlockForRenderUpdate(x, y, z);
                     return true;
                 }
@@ -144,8 +135,6 @@ public class BlockWireBlock extends BlockConductor
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "CamoWire");
+        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "CamoWire");
     }
 }

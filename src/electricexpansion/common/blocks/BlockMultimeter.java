@@ -46,8 +46,7 @@ public class BlockMultimeter extends BlockAdvanced
     }
     
     @Override
-    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y,
-            int z, int side)
+    public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
         
@@ -61,30 +60,20 @@ public class BlockMultimeter extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineTop"));
-        this.icons.put("output", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineOutput"));
-        this.icons.put("machine",
-                par1IconRegister
-                        .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                                + "machine"));
-        this.icons.put("front", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "multimeter"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+        this.icons
+                .put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+        this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
+        this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
     }
     
     /**
      * Called when the block is placed in the world.
      */
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z,
-            EntityLiving par5EntityLiving, ItemStack itemStack)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
-        int angle = MathHelper
-                .floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         int change = 2;
         
         switch (angle)
@@ -109,9 +98,8 @@ public class BlockMultimeter extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World world, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX,
+            float hitY, float hitZ)
     {
         int original = world.getBlockMetadata(x, y, z);
         int change = 2;
@@ -143,14 +131,12 @@ public class BlockMultimeter extends BlockAdvanced
      * Is this block powering the block on the specified side
      */
     @Override
-    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x,
-            int y, int z, int side)
+    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
         if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection
-                    .getOrientation(side)) ? 15 : 0;
+            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
         
         return 0;
     }

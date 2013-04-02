@@ -24,12 +24,10 @@ import electricexpansion.common.tile.TileEntityMultimeter;
 public class RenderMultimeter extends TileEntitySpecialRenderer
 {
     @Override
-    public void renderTileEntityAt(TileEntity var1, double x, double y,
-            double z, float var8)
+    public void renderTileEntityAt(TileEntity var1, double x, double y, double z, float var8)
     {
         TileEntityMultimeter te = (TileEntityMultimeter) var1;
-        ForgeDirection direction = te.getDirection(te.worldObj, te.xCoord,
-                te.yCoord, te.zCoord);
+        ForgeDirection direction = te.getDirection(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
         
         /**
          * Render from side 2 to 6. This means render all sides excluding top
@@ -37,13 +35,11 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
          */
         for (int side = 0; side < 6; side++)
         {
-            ForgeDirection relativeSide = VectorHelper.getOrientationFromSide(
-                    direction, ForgeDirection.getOrientation(side));
+            ForgeDirection relativeSide = VectorHelper.getOrientationFromSide(direction,
+                    ForgeDirection.getOrientation(side));
             
-            if (relativeSide == ForgeDirection.EAST
-                    || relativeSide == ForgeDirection.WEST
-                    || relativeSide == ForgeDirection.UP
-                    || relativeSide == ForgeDirection.DOWN
+            if (relativeSide == ForgeDirection.EAST || relativeSide == ForgeDirection.WEST
+                    || relativeSide == ForgeDirection.UP || relativeSide == ForgeDirection.DOWN
                     || relativeSide == ForgeDirection.SOUTH)
             {
                 GL11.glPushMatrix();
@@ -92,26 +88,19 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
                         break;
                 }
                 
-                GL11.glTranslatef(dx + displayWidth / 2, 1F, dz + displayHeight
-                        / 2);
+                GL11.glTranslatef(dx + displayWidth / 2, 1F, dz + displayHeight / 2);
                 GL11.glRotatef(-90, 1, 0, 0);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 FontRenderer fontRenderer = this.getFontRenderer();
                 int maxWidth = 1;
                 
-                String amperes = ElectricityDisplay.getDisplay(
-                        te.electricityReading.amperes, ElectricUnit.AMPERE);
-                String voltage = ElectricityDisplay.getDisplay(
-                        te.electricityReading.voltage, ElectricUnit.VOLTAGE);
-                String watt = ElectricityDisplay.getDisplay(
-                        te.electricityReading.getWatts(), ElectricUnit.WATT);
+                String amperes = ElectricityDisplay.getDisplay(te.electricityReading.amperes, ElectricUnit.AMPERE);
+                String voltage = ElectricityDisplay.getDisplay(te.electricityReading.voltage, ElectricUnit.VOLTAGE);
+                String watt = ElectricityDisplay.getDisplay(te.electricityReading.getWatts(), ElectricUnit.WATT);
                 
-                maxWidth = Math.max(fontRenderer.getStringWidth(amperes),
-                        maxWidth);
-                maxWidth = Math.max(fontRenderer.getStringWidth(voltage),
-                        maxWidth);
-                maxWidth = Math
-                        .max(fontRenderer.getStringWidth(watt), maxWidth);
+                maxWidth = Math.max(fontRenderer.getStringWidth(amperes), maxWidth);
+                maxWidth = Math.max(fontRenderer.getStringWidth(voltage), maxWidth);
+                maxWidth = Math.max(fontRenderer.getStringWidth(watt), maxWidth);
                 maxWidth += 4;
                 int lineHeight = fontRenderer.FONT_HEIGHT + 2;
                 int requiredHeight = lineHeight * 1;
@@ -130,12 +119,12 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
                 offsetX = (realWidth - maxWidth) / 2 + 2 + 5;
                 
                 GL11.glDisable(GL11.GL_LIGHTING);
-                fontRenderer.drawString(amperes, offsetX - realWidth / 2, 1
-                        + offsetY - realHeight / 2 - 1 * lineHeight, 1);
-                fontRenderer.drawString(voltage, offsetX - realWidth / 2, 1
-                        + offsetY - realHeight / 2 + 0 * lineHeight, 1);
-                fontRenderer.drawString(watt, offsetX - realWidth / 2, 1
-                        + offsetY - realHeight / 2 + 1 * lineHeight, 1);
+                fontRenderer.drawString(amperes, offsetX - realWidth / 2,
+                        1 + offsetY - realHeight / 2 - 1 * lineHeight, 1);
+                fontRenderer.drawString(voltage, offsetX - realWidth / 2,
+                        1 + offsetY - realHeight / 2 + 0 * lineHeight, 1);
+                fontRenderer
+                        .drawString(watt, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 1 * lineHeight, 1);
                 
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

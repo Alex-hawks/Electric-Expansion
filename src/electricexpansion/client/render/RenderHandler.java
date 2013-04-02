@@ -22,17 +22,16 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
     public ModelTransformer transformer = new ModelTransformer();
     
     @Override
-    public void renderInventoryBlock(Block block, int metadata, int modelID,
-            RenderBlocks renderer)
+    public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
     {
         GL11.glPushMatrix();
         
         if (block.blockID == ElectricExpansion.blockWireMill.blockID)
         {
-            GL11.glBindTexture(3553,
-                    FMLClientHandler.instance().getClient().renderEngine
-                            .getTexture(ElectricExpansion.MODEL_PATH
-                                    + "wiremill.png"));
+            GL11.glBindTexture(
+                    3553,
+                    FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MODEL_PATH
+                            + "wiremill.png"));
             GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(0.5F, .8F, 0.5F);
             GL11.glScalef(1F, -1F, -1F);
@@ -44,22 +43,16 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
             switch (metadata / 4)
             {
                 case 0:
-                    GL11.glBindTexture(3553, FMLClientHandler.instance()
-                            .getClient().renderEngine
-                            .getTexture(ElectricExpansion.MODEL_PATH
-                                    + "transformer1.png"));
+                    GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine
+                            .getTexture(ElectricExpansion.MODEL_PATH + "transformer1.png"));
                     break;
                 case 1:
-                    GL11.glBindTexture(3553, FMLClientHandler.instance()
-                            .getClient().renderEngine
-                            .getTexture(ElectricExpansion.MODEL_PATH
-                                    + "transformer2.png"));
+                    GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine
+                            .getTexture(ElectricExpansion.MODEL_PATH + "transformer2.png"));
                     break;
                 case 2:
-                    GL11.glBindTexture(3553, FMLClientHandler.instance()
-                            .getClient().renderEngine
-                            .getTexture(ElectricExpansion.MODEL_PATH
-                                    + "transformer3.png"));
+                    GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine
+                            .getTexture(ElectricExpansion.MODEL_PATH + "transformer3.png"));
                     break;
             }
             GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
@@ -71,8 +64,8 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
     }
     
     @Override
-    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-            Block block, int modelId, RenderBlocks renderer)
+    public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
+            RenderBlocks renderer)
     {
         return false;
     }

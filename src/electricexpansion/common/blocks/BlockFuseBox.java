@@ -38,8 +38,7 @@ public class BlockFuseBox extends BlockAdvanced
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z,
-            int side)
+    public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
     {
         int metadata = iBlockAccess.getBlockMetadata(x, y, z);
         
@@ -47,8 +46,7 @@ public class BlockFuseBox extends BlockAdvanced
             return this.icons.get("top");
         else if (side == metadata + 2)
             return this.icons.get("output");
-        else if (side == ForgeDirection.getOrientation(metadata + 2)
-                .getOpposite().ordinal())
+        else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
             return this.icons.get("input");
         else
             return this.icons.get("side");
@@ -58,19 +56,11 @@ public class BlockFuseBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineTop"));
-        this.icons.put("output", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineOutput"));
-        this.icons.put("input", par1IconRegister
-                .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                        + "machineInput"));
-        this.icons.put("side",
-                par1IconRegister
-                        .registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX
-                                + "fusebox"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+        this.icons
+                .put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
+        this.icons.put("side", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
         // TODO Create above texture...
     }
     
@@ -78,11 +68,9 @@ public class BlockFuseBox extends BlockAdvanced
      * Called when the block is placed in the world.
      */
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z,
-            EntityLiving player, ItemStack itemStack)
+    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving player, ItemStack itemStack)
     {
-        int angle = MathHelper
-                .floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int angle = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         switch (angle)
         {
             case 0:
@@ -104,9 +92,8 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         int original = metadata;
@@ -139,9 +126,8 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onSneakUseWrench(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         return false;
     }
@@ -153,8 +139,7 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean isBlockSolidOnSide(World world, int x, int y, int z,
-            ForgeDirection side)
+    public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
     {
         return true;
     }
@@ -173,15 +158,13 @@ public class BlockFuseBox extends BlockAdvanced
     
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
-            List par3List)
+    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         par3List.add(new ItemStack(this.blockID, 1, 0));
     }
     
     @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world,
-            int x, int y, int z)
+    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
         int id = this.idPicked(world, x, y, z);
         
@@ -192,14 +175,12 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z,
-            EntityPlayer par5EntityPlayer, int side, float hitX, float hitY,
-            float hitZ)
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+            float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 6, par1World,
-                    x, y, z);
+            par5EntityPlayer.openGui(ElectricExpansion.instance, 6, par1World, x, y, z);
             return true;
         }
         

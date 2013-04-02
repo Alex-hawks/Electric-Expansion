@@ -16,8 +16,7 @@ public class RenderFloatingText
     /**
      * Renders a floating text in a specific position.
      */
-    public static void renderFloatingText(String text, float x, float y,
-            float z, int color)
+    public static void renderFloatingText(String text, float x, float y, float z, int color)
     {
         RenderManager renderManager = RenderManager.instance;
         FontRenderer fontRenderer = renderManager.getFontRenderer();
@@ -48,12 +47,10 @@ public class RenderFloatingText
         tessellator.draw();
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glColor4f(1f, 1f, 1f, 0.5f);
-        fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2,
-                yOffset, color);
+        fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2, yOffset, color);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthMask(true);
-        fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2,
-                yOffset, color);
+        fontRenderer.drawString(text, -fontRenderer.getStringWidth(text) / 2, yOffset, color);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
