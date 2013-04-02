@@ -24,9 +24,6 @@ public class TileEntityInsulatedWire extends TileEntityConductorBase
 
 	public byte colorByte = -1;
 
-	// everything is in the helper class.
-	// this class MUST remain existent...
-
 	@Override
 	public void initiate()
 	{

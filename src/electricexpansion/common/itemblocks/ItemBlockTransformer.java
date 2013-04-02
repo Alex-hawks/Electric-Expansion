@@ -11,12 +11,14 @@ public class ItemBlockTransformer extends ItemBlock
 		this.setHasSubtypes(true);
 	}
 
+	@Override
 	public int getMetadata(int par1)
 	{
 		return par1;
 	}
 
-	public String getItemNameIS(ItemStack i)
+	@Override
+	public String getUnlocalizedName(ItemStack i)
 	{
 		String name = null;
 		int j = i.getItemDamage();

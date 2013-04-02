@@ -8,6 +8,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import universalelectricity.components.common.BasicComponents;
+import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.ItemElectric;
 import universalelectricity.prefab.RecipeHelper;
 import cpw.mods.fml.common.Loader;
@@ -28,6 +29,7 @@ public class RecipeRegistery
 	private static final Block blockWireBlock = ElectricExpansion.blockWireBlock;
 	private static final Block blockMultimeter = ElectricExpansion.blockMultimeter;
 	private static final Block blockDistribution = ElectricExpansion.blockDistribution;
+	private static final Block blockInsulationMachine = ElectricExpansion.blockInsulationMachine;
 	
 	//	EE Items
 	private static final Item itemParts = ElectricExpansion.itemParts;
@@ -71,6 +73,10 @@ public class RecipeRegistery
 		//	Machines
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0) }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%', "basicCircuit", '^', Block.glass, '@', Item.stick }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[]{ "!!!", "@@@", "!#!", '!', ElectricItemHelper.getUncharged(BasicComponents.itemBattery), '@', "copperWire", '#', "basicCircuit" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulationMachine), new Object[] { "!@!", "@#@", "!$!", '!', "plateSteel", '@', Block.netherBrick, '#', Item.bucketLava, '$', "electricFurnace" }));
+		
+		
 		if (OreDictionary.getOres("antimatterGram").size() > 0)
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockDistribution), new Object[] { "!!!", "!@!", "!!!", '@', new ItemStack(blockBatBox), '!', "antimatterGram" }));
 		else
@@ -94,7 +100,7 @@ public class RecipeRegistery
 		
 		//	Upgrades
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object[] { "$!$", "!@!", "#!#", '!', new ItemStack(ElectricExpansion.itemAdvBat, 1, -1), '@', new ItemStack(itemUpgrade, 1, 0), '#', "advancedCircuit", '$', "plateSteel" }));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object[] { "#!#", "!@!", "#!#", '!', new ItemStack(ElectricExpansion.itemEliteBat, 1, -1), '@', new ItemStack(itemUpgrade, 1, 1), '#', "eliteCircuit" }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object[] { "#!#", "!@!", "#!#", '!', new ItemStack(ElectricExpansion.itemEliteBat, 1, Integer.MIN_VALUE), '@', new ItemStack(itemUpgrade, 1, 1), '#', "eliteCircuit" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 3), new Object[] { "#!#", "!@!", "#!#", '!', "antimatterMilligram", '@', new ItemStack(itemUltimateBat, 1, -1), '#', "eliteCircuit" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 4), new Object[] { "#$#", "#!#", "#$#", '!', new ItemStack(ElectricExpansion.blockTransformer, 1, 4), '#', new ItemStack(blockInsulatedWire, 1, 0), '$', "basicCircuit" }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 5), new Object[] { "#$#", "#!#", "#$#", '!', new ItemStack(ElectricExpansion.blockTransformer, 1, 8), '#', new ItemStack(blockInsulatedWire, 1, 3), '$', "eliteCircuit" }));
@@ -120,7 +126,7 @@ public class RecipeRegistery
 		GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansion.itemParts, 9, 7), new Object[] { ElectricExpansion.blockLead });
 		
 		//	Tools
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%', "advancedCircuit", '^', Block.glass, '@', Item.stick }));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', "copperWire", '%', "advancedCircuit", '^', Block.glass, '@', BasicComponents.itemBattery }));
 		
 		//	Insulation
 		GameRegistry.addShapelessRecipe(new ItemStack(itemParts, 1, 6), new Object[] { Block.cloth });

@@ -122,8 +122,8 @@ public class BlockTransformer extends BlockAdvanced
 		return side.equals(ForgeDirection.DOWN);
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getRenderType()
 	{
 		return ClientProxy.RENDER_ID;
@@ -171,5 +171,11 @@ public class BlockTransformer extends BlockAdvanced
 	{
 		
 	}
+	
+	@Override
+    public int damageDropped(int metadata)
+    {
+		return metadata - (metadata & 3);
+    }
 
 }

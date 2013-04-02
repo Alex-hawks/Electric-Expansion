@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="ElectricExpansion" basedir="/" default="build">
+
+	<property file="build.properties" />
+
+	<target name="build">
+
+		<delete dir="build" />
+		<delete dir="${dir.mcp}/reobf" />
+
+		<copy todir="${dir.development}\${dir.mcp}\src\minecraft">
+			
+			<fileset dir="source/ElectricExpansion/src">
+				<exclude name=".git/**"/>
+				<exclude name="**/*.java"/>
+				<exclude name="**/*.xml"/>
+			</fileset>
+			
+			<fileset dir="source/Universal-Electricity/src/minecraft">
+				<exclude name=".git/**"/>
+				<exclude name="**/*.java"/>
+				<exclude name="**/*.xml"/>
+			</fileset>
+		</copy>
+		
+		<mkdir dir="build" />
+		
+		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@MAJOR@" value="${release.mod.major}" />
+		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@MINOR@" value="${release.mod.minor}" />
+		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@REVIS@" value="${release.mod.revis}" />
+		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@BUILD@" value="${BUILD_NUMBER}" />
+
+		<exec executable="recompile.bat" dir="MCP" resolveexecutable="true" osfamily="windows"></exec>
+		<exec executable="reobfuscate_srg.bat" dir="MCP" resolveexecutable="true" osfamily="windows"></exec>
+		<exec executable="recompile.sh" dir="MCP" resolveexecutable="true" osfamily="unix"></exec>
+		<exec executable="reobfuscate_srg.sh" dir="MCP" resolveexecutable="true" osfamily="unix"></exec>
+
+		<copy todir="build">
+			<fileset dir="${dir.mcp}/reobf/minecraft" excludes=".git/**" />
+		
+			<fileset dir="source/ElectricExpansion/resources">
+				<exclude name=".git/**"/>
+				<exclude name="**/*.java"/>
+				<exclude name="**/*.xml"/>
+			</fileset>
+		
+			<fileset dir="source/Universal-Electricity/resources">
+				<exclude name=".git/**"/>
+				<exclude name="**/*.java"/>
+				<exclude name="**/*.xml"/>
+				<exclude name="**/BCLoader.class"/>
+			</fileset>
+
+		</copy>
+
+		<jar destfile="build/ElectricExpansion${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${BUILD_NUMBER}.jar"
+			<fileset dir="build" />
+		</jar>
+	</target>
+</project>

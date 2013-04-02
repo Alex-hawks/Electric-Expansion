@@ -19,7 +19,7 @@ import electricexpansion.common.tile.TileEntityTransformer;
 public class RenderTransformer extends TileEntitySpecialRenderer
 {
 	private ModelTransformer model;
-	private String textureToUse = ElectricExpansion.MODEL_PATH;
+	private String textureToUse;
 	
 	public RenderTransformer()
 	{
@@ -29,6 +29,7 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float var5)
 	{
+		textureToUse = ElectricExpansion.MODEL_PATH;
 		String status = ((TileEntityTransformer) tileEntity).stepUp ? "Step Up" : "Step Down";
 		
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -51,20 +52,20 @@ public class RenderTransformer extends TileEntitySpecialRenderer
 			case 1:
 			case 2:
 			case 3:
-				this.textureToUse += "transformer1.png";
+				this.textureToUse = this.textureToUse + "transformer1.png";
 				break;
 			case 4:
 			case 5:
 			case 6:
 			case 7:
 			case 8:
-				this.textureToUse += "transformer2.png";
+				this.textureToUse = this.textureToUse + "transformer2.png";
 				break;
 			case 9:
 			case 10:
 			case 11:
 			case 12:
-				this.textureToUse += "transformer3.png";
+				this.textureToUse = this.textureToUse + "transformer3.png";
 				break;
 		}
 		bindTextureByName(this.textureToUse);
