@@ -3,6 +3,7 @@
 <project name="ElectricExpansion" default="build">
 
 	<property file="build.properties" />
+	<property environment="env" />
 
 	<target name="build">
 
