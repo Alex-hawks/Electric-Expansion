@@ -9,15 +9,15 @@
 		<delete dir="build" />
 		<delete dir="${dir.mcp}/reobf" />
 
-		<copy todir="${dir.development}\${dir.mcp}\src\minecraft">
+		<copy todir="${dir.mcp}\src\minecraft">
 			
-			<fileset dir="source/ElectricExpansion/src">
+			<fileset dir="${dir.development}/src">
 				<exclude name=".git/**"/>
 				<exclude name="**/*.java"/>
 				<exclude name="**/*.xml"/>
 			</fileset>
 			
-			<fileset dir="source/Universal-Electricity/src/minecraft">
+			<fileset dir="${dir.development}/Universal-Electricity/src/minecraft">
 				<exclude name=".git/**"/>
 				<exclude name="**/*.java"/>
 				<exclude name="**/*.xml"/>
@@ -26,10 +26,10 @@
 		
 		<mkdir dir="build" />
 		
-		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@MAJOR@" value="${release.mod.major}" />
-		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@MINOR@" value="${release.mod.minor}" />
-		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@REVIS@" value="${release.mod.revis}" />
-		<replace dir="${dir.development}\${dir.mcp}\src\minecraft" token="@BUILD@" value="${BUILD_NUMBER}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@MAJOR@" value="${release.mod.major}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@MINOR@" value="${release.mod.minor}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@REVIS@" value="${release.mod.revis}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@BUILD@" value="${BUILD_NUMBER}" />
 
 		<exec executable="recompile.bat" dir="MCP" resolveexecutable="true" osfamily="windows"></exec>
 		<exec executable="reobfuscate_srg.bat" dir="MCP" resolveexecutable="true" osfamily="windows"></exec>
