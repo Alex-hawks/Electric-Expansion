@@ -10,8 +10,7 @@
 		<delete dir="${dir.mcp}/reobf" />
 		
 		<copy todir="${dir.development}">
-			
-			<fileset dir="${JENKINS_HOME}/workspace/Minecraft Forge/forge/" />
+			<fileset dir="../Minecraft Forge/forge/" />
 		</copy>
 
 		<copy todir="${dir.mcp}\src\minecraft">
