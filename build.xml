@@ -37,8 +37,14 @@
 
 		<exec executable="recompile.bat" dir="${dir.mcp}" resolveexecutable="true" osfamily="windows"></exec>
 		<exec executable="reobfuscate_srg.bat" dir="${dir.mcp}" resolveexecutable="true" osfamily="windows"></exec>
-		<exec executable="recompile.sh" dir="${dir.mcp}" resolveexecutable="true" osfamily="unix"></exec>
-		<exec executable="reobfuscate_srg.sh" dir="${dir.mcp}" resolveexecutable="true" osfamily="unix"></exec>
+		
+		<exec dir="${dir.mcp}" executable="bash" osfamily="unix">
+			<arg line="recompile.sh" />
+		</exec>
+		
+		<exec dir="${dir.mcp}" executable="bash" osfamily="unix">
+			<arg line="reobfuscate_srg.sh" />
+		</exec>
 
 		<copy todir="build">
 			<fileset dir="${dir.mcp}/reobf/minecraft" excludes=".git/**" />
