@@ -10,7 +10,7 @@
 		<delete dir="${dir.mcp}/reobf" />
 		
 		<copy todir="${dir.development}">
-			<fileset dir="../Minecraft Forge/forge/" />
+			<fileset dir="../Minecraft Forge/" />
 		</copy>
 
 		<copy todir="${dir.mcp}\src\minecraft">
