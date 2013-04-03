@@ -54,7 +54,7 @@
 
 		</copy>
 
-		<jar destfile="build/ElectricExpansion${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${BUILD_NUMBER}.jar"
+		<jar destfile="build/ElectricExpansion${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${BUILD_NUMBER}.jar">
 			<fileset dir="build" />
 		</jar>
 	</target>
