@@ -143,6 +143,7 @@ public class ElectricExpansion
     
     static boolean debugRecipes;
     public static boolean useHashCodes;
+    private static boolean useUeVoltageSensitivity;
     
     public static DistributionNetworks DistributionNetworksInstance;
     
@@ -195,6 +196,7 @@ public class ElectricExpansion
         
         debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(false);
         useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(true);
+        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(false);  
         
         if (config.hasChanged())
             config.save();
@@ -323,9 +325,12 @@ public class ElectricExpansion
         
         EELogger.info("Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
         
-        UniversalElectricity.isVoltageSensitive = true;
         
-        EELogger.finest("Successfully toggled Voltage Sensitivity!");
+        if (!useUeVoltageSensitivity)
+        {
+            UniversalElectricity.isVoltageSensitive = true;
+            EELogger.finest("Successfully toggled Voltage Sensitivity!");
+        }
         
         OreGenerator.addOre(silverOreGeneration);
     }
