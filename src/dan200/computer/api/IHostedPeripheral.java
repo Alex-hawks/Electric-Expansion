@@ -5,7 +5,7 @@
  */
 
 package dan200.computer.api;
-import dan200.turtle.api.ITurtleUpgrade;
+import dan200.computer.api.IPeripheral;
 
 /**
  * A subclass of IPeripheral specifically for peripherals

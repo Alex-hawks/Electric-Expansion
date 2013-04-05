@@ -4,9 +4,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.item.IItemElectric;
+import universalelectricity.prefab.SlotSpecific;
 import electricexpansion.common.misc.WireMillRecipes;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -17,13 +17,9 @@ public class ContainerWireMill extends Container
     public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
-        // Input
-        // Slot
-        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be drawn
-                                                                  // into wire
-        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); // Drawing
-        // result
+        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric Input Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be drawn into wire
+        this.addSlotToContainer(new SlotSpecific(tileEntity, 2, 108, 25, (ItemStack) null)); // Drawing result
         
         int var3;
         

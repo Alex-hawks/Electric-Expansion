@@ -144,7 +144,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
             else if (this.inventory[0].getItem() instanceof IElectricItem)
             {
                 IElectricItem item = (IElectricItem) this.inventory[0].getItem();
-                if (item.canProvideEnergy())
+                if (item.canProvideEnergy(this.inventory[0]))
                 {
                     double gain = ElectricItem.discharge(this.inventory[0],
                             (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO),

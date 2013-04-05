@@ -40,8 +40,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     public void registerIcons(IconRegister par1IconRegister)
     {
         this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-        this.icons
-                .put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+        this.icons.put("out", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
         this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
         this.icons.put("tier1", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT1"));
         this.icons.put("tier2", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT2"));
@@ -60,7 +59,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
             return this.icons.get("top");
         
         if (side == metadata + 2)
-            return this.icons.get("output");
+            return this.icons.get("out");
         else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
             return this.icons.get("input");
         
@@ -86,7 +85,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         if (side == 0 || side == 1)
             return this.icons.get("top");
         else if (side == metadata + 2)
-            return this.icons.get("output");
+            return this.icons.get("out");
         else if (side == ForgeDirection.getOrientation(metadata + 2).getOpposite().ordinal())
             return this.icons.get("input");
         else
@@ -168,45 +167,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         }
         return true;
     }
-    
-    /**
-     * Is this block powering the block on the specified side
-     */
-    @Override
-    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if (tileEntity instanceof TileEntityAdvancedBatteryBox)
-        {
-            TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) tileEntity;
-            double max = te.getMaxJoules();
-            double current = te.getJoules();
-            return (int) (current / max * 15);
-        }
-        
-        return 0;
-    }
-    
-    /**
-     * Is this block indirectly powering the block on the specified side
-     */
-    @Override
-    public int isProvidingWeakPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if (tileEntity instanceof TileEntityAdvancedBatteryBox)
-        {
-            TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) tileEntity;
-            double max = te.getMaxJoules();
-            double current = te.getJoules();
-            return (int) (current / max * 15);
-        }
-        
-        return 0;
-    }
-    
+       
     @Override
     public boolean isOpaqueCube()
     {
@@ -246,4 +207,25 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         return new ItemStack(id, 1, 0);
     }
     
+    @Override
+    public boolean hasComparatorInputOverride()
+    {
+        return true;
+    }
+    
+    public int getComparatorInputOverride(World par1World, int x, int y, int z, int meta)
+    {
+        
+        TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
+        
+        if (tileEntity instanceof TileEntityAdvancedBatteryBox)
+        {
+            TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) tileEntity;
+            double max = te.getMaxJoules();
+            double current = te.getJoules();
+            return (int) (current / max * 15);
+        }
+        
+        return 0;
+    }
 }

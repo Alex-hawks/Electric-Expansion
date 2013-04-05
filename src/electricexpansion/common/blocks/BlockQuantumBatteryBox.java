@@ -23,6 +23,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
+import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 
 public class BlockQuantumBatteryBox extends BlockAdvanced
@@ -198,5 +199,28 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
             return null;
         
         return new ItemStack(id, 1, 0);
+    }
+    
+    
+    @Override
+    public boolean hasComparatorInputOverride()
+    {
+        return true;
+    }
+    
+    public int getComparatorInputOverride(World par1World, int x, int y, int z, int meta)
+    {
+        
+        TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
+        
+        if (tileEntity instanceof TileEntityQuantumBatteryBox)
+        {
+            TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) tileEntity;
+            double max = te.getMaxJoules();
+            double current = te.getJoules();
+            return (int) (current / max * 15);
+        }
+        
+        return 0;
     }
 }

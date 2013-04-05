@@ -116,7 +116,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
                 else if (this.containingItems[1].getItem() instanceof IElectricItem)
                 {
                     IElectricItem item = (IElectricItem) this.containingItems[1].getItem();
-                    if (item.canProvideEnergy())
+                    if (item.canProvideEnergy(this.containingItems[1]))
                     {
                         double gain = ElectricItem
                                 .discharge(

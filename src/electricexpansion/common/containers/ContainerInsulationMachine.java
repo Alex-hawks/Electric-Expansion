@@ -4,10 +4,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.item.IItemElectric;
-import electricexpansion.common.misc.WireMillRecipes;
+import universalelectricity.prefab.SlotSpecific;
+import electricexpansion.common.misc.InsulationRecipes;
 import electricexpansion.common.tile.TileEntityInsulatingMachine;
 
 public class ContainerInsulationMachine extends Container
@@ -17,13 +17,9 @@ public class ContainerInsulationMachine extends Container
     public ContainerInsulationMachine(InventoryPlayer par1InventoryPlayer, TileEntityInsulatingMachine tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
-                                                                                       // Input
-                                                                                       // Slot
-        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be
-                                                                  // processed
-        this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, tileEntity, 2, 108, 25)); // Process
-                                                                                                      // result
+        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric Input Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be processed
+        this.addSlotToContainer(new SlotSpecific(tileEntity, 2, 108, 25, (ItemStack) null)); // Process result
         
         int var3;
         
@@ -84,7 +80,7 @@ public class ContainerInsulationMachine extends Container
                     if (!this.mergeItemStack(var4, 0, 1, false))
                         return null;
                 }
-                else if (WireMillRecipes.INSTANCE.getDrawingResult(var4) != null)
+                else if (InsulationRecipes.INSTANCE.getProcessResult(var4) > 0)
                 {
                     if (!this.mergeItemStack(var4, 1, 2, false))
                         return null;

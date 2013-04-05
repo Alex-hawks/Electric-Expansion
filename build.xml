@@ -65,8 +65,12 @@
 
 		</copy>
 
-		<jar destfile="build/ElectricExpansion${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${env.BUILD_NUMBER}.jar">
+		<jar destfile="build/ElectricExpansion_v${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${env.BUILD_NUMBER}.jar">
 			<fileset dir="build" />
 		</jar>
+		
+		<exec dir="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}" executable="bash" osfamily="unix">
+			<arg line="echo @ ElectricExpansion_v${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${env.BUILD_NUMBER}.jar>> builds.txt" />
+		</exec>
 	</target>
 </project>

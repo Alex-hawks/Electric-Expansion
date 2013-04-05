@@ -1,6 +1,8 @@
 package electricexpansion.common.tile;
 
 import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.IElectricItem;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
@@ -37,7 +39,7 @@ import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.InsulationRecipes;
 
 public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable implements IInventory, ISidedInventory,
-        IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
     public final double WATTS_PER_TICK = 500.0D;
     public final double TRANSFER_LIMIT = 1250.0D;
@@ -99,7 +101,7 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
                     inputNetwork.startRequesting(
                             this,
                             Math.min(this.getMaxJoules(new Object[0]) - this.getJoules(new Object[0]), 1250.0D)
-                                    / this.getVoltage(new Object[0]), this.getVoltage(new Object[0]));
+                            / this.getVoltage(new Object[0]), this.getVoltage(new Object[0]));
                     ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
                     this.setJoules(this.joulesStored + electricityPack.getWatts(), new Object[0]);
                     
@@ -135,7 +137,19 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
                     this.setJoules(this.joulesStored + joulesReceived);
                 }
             }
+            else if (this.inventory[0].getItem() instanceof IElectricItem)
+            {
+                IElectricItem item = (IElectricItem) this.inventory[0].getItem();
+                if (item.canProvideEnergy(this.inventory[0]))
+                {
+                    double gain = ElectricItem.discharge(this.inventory[0],
+                            (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO),
+                            3, false, false) * UniversalElectricity.IC2_RATIO;
+                    this.setJoules(this.getJoules() + gain);
+                }
+            }
         }
+        
         
         if (this.joulesStored >= this.WATTS_PER_TICK - 50.0D && !this.isDisabled())
         {
@@ -520,6 +534,6 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
     {
         if (i == 1)
             return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 1;
-        return false;
+            return false;
     }
 }
