@@ -4,11 +4,12 @@
 
 	<property file="build.properties" />
 	<property environment="env" />
+	<property name="file.EEjar" value="ElectricExpansion_v${version.mod.major}.${version.mod.minor}.${version.mod.revis}.${env.BUILD_NUMBER}.jar" />
 
 	<target name="build">
 
-		<delete dir="build" />
-		<delete dir="${dir.mcp}/reobf" />
+		<delete dir="contents" />
+		<delete dir="${dir.development}/forge" />
 		
 		<copy todir="${dir.development}">
 			<fileset dir="../Minecraft Forge/" />
@@ -18,36 +19,37 @@
 			
 			<fileset dir="${dir.development}src">
 				<exclude name=".git/**"/>
-				<exclude name="**/*.java"/>
 				<exclude name="**/*.xml"/>
 			</fileset>
 			
 			<fileset dir="${dir.development}Universal-Electricity/src/minecraft">
 				<exclude name=".git/**"/>
-				<exclude name="**/*.java"/>
 				<exclude name="**/*.xml"/>
 			</fileset>
 		</copy>
 		
-		<mkdir dir="build" />
+		<mkdir dir="contents" />
 		
-		<replace dir="${dir.mcp}\src\minecraft" token="@MAJOR@" value="${release.mod.major}" />
-		<replace dir="${dir.mcp}\src\minecraft" token="@MINOR@" value="${release.mod.minor}" />
-		<replace dir="${dir.mcp}\src\minecraft" token="@REVIS@" value="${release.mod.revis}" />
-		<replace dir="${dir.mcp}\src\minecraft" token="@BUILD@" value="${BUILD_NUMBER}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@MAJOR@" value="${version.mod.major}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@MINOR@" value="${version.mod.minor}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@REVIS@" value="${version.mod.revis}" />
+		<replace dir="${dir.mcp}\src\minecraft" token="@BUILD@" value="${env.BUILD_NUMBER}" />
 
-		<exec executable="recompile.bat" dir="${dir.mcp}" resolveexecutable="true" osfamily="windows"></exec>
-		<exec executable="reobfuscate_srg.bat" dir="${dir.mcp}" resolveexecutable="true" osfamily="windows"></exec>
+		<exec dir="${dir.mcp}" executable="cmd" osfamily="windows">
+			<arg line="recompile.bat" />
+		</exec>
+		<exec dir="${dir.mcp}" executable="cmd" osfamily="windows">
+			<arg line="reobfuscate_srg.bat" />
+		</exec>
 		
 		<exec dir="${dir.mcp}" executable="bash" osfamily="unix">
 			<arg line="recompile.sh" />
 		</exec>
-		
 		<exec dir="${dir.mcp}" executable="bash" osfamily="unix">
 			<arg line="reobfuscate_srg.sh" />
 		</exec>
 
-		<copy todir="build">
+		<copy todir="contents">
 			<fileset dir="${dir.mcp}/reobf/minecraft" excludes=".git/**" />
 		
 			<fileset dir="${dir.development}\resources">
@@ -65,12 +67,18 @@
 
 		</copy>
 
-		<jar destfile="build/ElectricExpansion_v${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${env.BUILD_NUMBER}.jar">
+		<jar destfile="build/${file.EEjar}">
 			<fileset dir="build" />
 		</jar>
 		
 		<exec dir="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}" executable="bash" osfamily="unix">
-			<arg line="echo @ ElectricExpansion_v${release.mod.major}.${release.mod.minor}.${release.mod.revis}.${env.BUILD_NUMBER}.jar>> builds.txt" />
+			<arg line="echo @ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}>> info.txt" />
 		</exec>
+		
+		<exec dir="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}" executable="cmd" osfamily="windows">
+			<arg line="echo.@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}>> info.txt" />
+		</exec>
+		
+		<copy todir="build" file="build.properties" />
 	</target>
 </project>
