@@ -79,7 +79,7 @@ public class RecipeRegistery
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!#!", '!', ElectricItemHelper.getUncharged(BasicComponents.itemBattery), '@',
             "copperWire", '#', "basicCircuit" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulationMachine), new Object[] { "!@!", "@#@", "!$!", '!', "plateSteel", '@', Block.netherBrick, '#', Item.bucketLava, '$',
-        "electricFurnace" }));
+        Block.furnaceIdle }));
         
         if (OreDictionary.getOres("antimatterGram").size() > 0)
         {

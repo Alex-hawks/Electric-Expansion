@@ -10,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.EnumWireMaterial;
 import electricexpansion.common.ElectricExpansion;
 
@@ -37,6 +39,7 @@ public abstract class ItemBlockCableHelper extends ItemBlock
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
     {
@@ -49,6 +52,7 @@ public abstract class ItemBlockCableHelper extends ItemBlock
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     public void updateIcons(IconRegister par1IconRegister)
     {
         if (this.getUnlocalizedName().equals("tile.HiddenWire")
@@ -64,6 +68,7 @@ public abstract class ItemBlockCableHelper extends ItemBlock
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     public Icon getIconFromDamage(int meta)
     {
         return this.icons.get(this.getUnlocalizedName(new ItemStack(this.itemID, 1, meta)));
