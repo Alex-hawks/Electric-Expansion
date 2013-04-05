@@ -74,13 +74,7 @@
 			<fileset dir="contents" />
 		</jar>
 		
-		<exec dir="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}" executable="bash" osfamily="unix">
-			<arg line="echo @ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}>> info.txt" />
-		</exec>
-		
-		<exec dir="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}" executable="cmd" osfamily="windows">
-			<arg line="echo.@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}>> info.txt" />
-		</exec>
+		<echo file="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/info.txt" message="@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}" append="true" />
 		
 		<copy todir="build" file="build.properties" />
 	</target>
