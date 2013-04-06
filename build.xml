@@ -70,7 +70,7 @@
 
 		</copy>
 
-		<jar destfile="build/${file.EEjar}">
+		<jar destfile="output/${file.EEjar}">
 			<fileset dir="contents" />
 		</jar>
 		
