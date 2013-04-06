@@ -74,7 +74,8 @@
 			<fileset dir="contents" />
 		</jar>
 		
-		<echo file="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/info.txt" message="@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}" append="true" />
+		<echo file="${env.JENKINS_HOME}/jobs/${env.JOB_NAME}/info.txt" append="true" >
+		@ ${env.BUILD_NUMBER} ${version.minecraft} ${file.EEjar}</echo>
 		
 		<copy todir="build" file="build.properties" />
 	</target>
