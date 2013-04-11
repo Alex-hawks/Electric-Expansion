@@ -12,7 +12,6 @@ import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
-import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntityLogisticsWire extends TileEntityConductorBase implements IRedstoneProvider
@@ -29,7 +28,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
     public void initiate()
     {
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                ElectricExpansion.blockAdvBatteryBox.blockID);
+                this.blockType.blockID);
         PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
     }
     
@@ -143,13 +142,13 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
                 if (this.networkProduced == 0 && this.getNetwork().getProduced().getWatts() != 0)
                 {
                     this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                            ElectricExpansion.blockLogisticsWire.blockID);
+                            this.blockType.blockID);
                 }
                 
                 if (this.networkProduced != 0 && this.getNetwork().getProduced().getWatts() == 0)
                 {
                     this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                            ElectricExpansion.blockLogisticsWire.blockID);
+                            this.blockType.blockID);
                 }
                 
                 this.networkProduced = this.getNetwork().getProduced().getWatts();

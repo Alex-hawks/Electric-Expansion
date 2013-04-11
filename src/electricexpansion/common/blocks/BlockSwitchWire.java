@@ -18,7 +18,7 @@ import electricexpansion.common.misc.EETab;
 
 public class BlockSwitchWire extends BlockConductor
 {
-    public BlockSwitchWire(int id, int meta)
+    public BlockSwitchWire(int id)
     {
         super(id, Material.cloth);
         this.setUnlocalizedName("SwitchWire");

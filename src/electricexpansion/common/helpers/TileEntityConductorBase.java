@@ -129,8 +129,10 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
             {
                 TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
                 
-                if (tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte
-                        || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1)
+                if ((tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte
+                        || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1) 
+                        && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(this
+                                .getBlockMetadata()))
                 {
                     if (((IConnector) tileEntity).canConnect(side.getOpposite()))
                     {
@@ -171,19 +173,6 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
                             return;
                             
                         }
-                        
-                        else if (((IConnector) tileEntity).canConnect(side.getOpposite()))
-                        {
-                            this.connectedBlocks[side.ordinal()] = tileEntity;
-                            this.visuallyConnected[side.ordinal()] = true;
-                            
-                            if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
-                            {
-                                this.getNetwork().mergeConnection(((INetworkProvider) tileEntity).getNetwork());
-                            }
-                            
-                            return;
-                        }
                     }
                 }
                 
@@ -204,12 +193,6 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
                 }
             }
             
-        }
-        
-        if (this.connectedBlocks[side.ordinal()] != null)
-        {
-            this.getNetwork().stopProducing(this.connectedBlocks[side.ordinal()]);
-            this.getNetwork().stopRequesting(this.connectedBlocks[side.ordinal()]);
         }
         
         this.connectedBlocks[side.ordinal()] = null;

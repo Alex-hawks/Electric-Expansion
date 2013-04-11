@@ -8,6 +8,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
 import electricexpansion.common.cables.TileEntityLogisticsWire;
 import electricexpansion.common.cables.TileEntityRawWire;
+import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
@@ -35,10 +36,8 @@ public class CommonProxy implements IGuiHandler
         GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
         GameRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire");
         GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
-        // GameRegistry.registerTileEntity(TileEntityRedstoneWire.class,
-        // "TileEntityRedstoneWire");
-        // GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class,
-        // "TileEntityRedstoneWireBlock");
+        GameRegistry.registerTileEntity(TileEntityRedstonePaintedWire.class, "TileEntityRedstonePaintedWire");
+        // GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
         GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
         GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
         GameRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer");

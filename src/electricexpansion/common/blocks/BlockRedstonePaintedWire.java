@@ -2,36 +2,71 @@ package electricexpansion.common.blocks;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.prefab.block.BlockConductor;
-import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.cables.TileEntityInsulatedWire;
+import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import electricexpansion.common.misc.EETab;
 
-public class BlockInsulatedWire extends BlockConductor
+public class BlockRedstonePaintedWire extends Block implements ITileEntityProvider
 {
-    public BlockInsulatedWire(int id)
+    
+    public BlockRedstonePaintedWire(int id)
     {
         super(id, Material.cloth);
-        this.setUnlocalizedName("InsulatedWire");
+        this.setUnlocalizedName("RedstonePaintedWire");
         this.setStepSound(soundClothFootstep);
         this.setResistance(0.2F);
         this.setHardness(0.1F);
         this.setBlockBounds(0.30F, 0.30F, 0.30F, 0.70F, 0.70F, 0.70F);
         this.setCreativeTab(EETab.INSTANCE);
+    }
+    
+    @Override
+    public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
+    {
+        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
+        if (tileEntity instanceof TileEntityRedstonePaintedWire)
+        {
+            TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) tileEntity;
+            return te.connectedBlocks[side] == null;
+        }
+        return false; 
+    }
+    
+    @Override
+    public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int side)
+    {
+        if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
+        {
+            TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
+            int strength = te.redstoneLevel;
+            return strength / 17;
+        }
+        return 0;
+    }
+    
+    @Override
+    public int isProvidingWeakPower(IBlockAccess world, int x, int y, int z, int side)
+    {
+        if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
+        {
+            TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
+            int strength = te.redstoneLevel;
+            return strength / 17;
+        }
+        return 0;
     }
     
     @Override
@@ -59,14 +94,14 @@ public class BlockInsulatedWire extends BlockConductor
     }
     
     @Override
-    public TileEntity createNewTileEntity(World var1)
+    public TileEntity createNewTileEntity(World world)
     {
-        return new TileEntityInsulatedWire();
+        return new TileEntityRedstonePaintedWire();
     }
     
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
         for (int var4 = 0; var4 < 5; var4++)
@@ -93,51 +128,9 @@ public class BlockInsulatedWire extends BlockConductor
         
     }
     
-    /**
-     * Called when the block is right clicked by the player
-     */
-    @Override
-    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6,
-            float par7, float par8, float par9)
-    {
-        TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) par1World.getBlockTileEntity(x, y, z);
-        
-        if (!par1World.isRemote)
-        {
-            
-            if (par5EntityPlayer.inventory.getCurrentItem() != null)
-            {
-                if (par5EntityPlayer.inventory.getCurrentItem().getItem() instanceof ItemDye)
-                {
-                    
-                    int dyeColor = par5EntityPlayer.inventory.getCurrentItem().getItemDamageForDisplay();
-                    
-                    tileEntity.colorByte = (byte) dyeColor;
-                    
-                    par5EntityPlayer.inventory.getCurrentItem().stackSize = par5EntityPlayer.inventory.getCurrentItem().stackSize - 1;
-                    
-                    PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity,
-                            (byte) 0, tileEntity.colorByte));
-                    
-                    ((IConductor) tileEntity).updateAdjacentConnections();
-                    
-                    this.updateWireSwitch(par1World, x, y, z);
-                    
-                    return true;
-                    
-                }
-                
-            }
-            
-        }
-        
-        return false;
-        
-    }
-    
     private void updateWireSwitch(World world, int x, int y, int z)
     {
-        TileEntityInsulatedWire tileEntity = (TileEntityInsulatedWire) world.getBlockTileEntity(x, y, z);
+        TileEntityRedstonePaintedWire tileEntity = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
         
         TileEntity tileEntity1;
         
@@ -201,4 +194,18 @@ public class BlockInsulatedWire extends BlockConductor
     {
     }
     
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player,
+            int hitX, float hitY, float hitZ, float side)
+    {
+        if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
+        {
+            TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
+            player.addChatMessage("redstoneLevel: " + te.redstoneLevel);
+            player.addChatMessage("worldRedstoneLevel: " + world.getStrongestIndirectPower(x, y, z));
+            
+            return true;
+        }
+        return false;
+    }
 }

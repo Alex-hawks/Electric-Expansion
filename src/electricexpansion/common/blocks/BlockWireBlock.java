@@ -23,7 +23,7 @@ import electricexpansion.common.misc.EETab;
 
 public class BlockWireBlock extends BlockConductor
 {
-    public BlockWireBlock(int id, int meta)
+    public BlockWireBlock(int id)
     {
         super(id, Material.rock);
         this.setUnlocalizedName("HiddenWire");
@@ -103,8 +103,7 @@ public class BlockWireBlock extends BlockConductor
                     && player.inventory.getCurrentItem().getItem() instanceof ItemBlock)
             {
                 if (!te.isIconLocked && player.inventory.getCurrentItem().itemID != this.blockID
-                        && Block.blocksList[player.inventory.getCurrentItem().itemID].getRenderType() == 0
-                        && Block.blocksList[player.inventory.getCurrentItem().itemID].getRenderBlockPass() == 0)
+                        && Block.isNormalCube(player.inventory.getCurrentItem().itemID))
                 {
                     ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory
                             .getCurrentItem();

@@ -22,7 +22,10 @@ public class ItemUpgrade extends Item implements IModifier
     private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade",
             "HVInputUpgrade", "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4" };
     
+    @SideOnly(Side.CLIENT)
     private Icon[] icons = new Icon[this.names.length];
+    
+    @SideOnly(Side.CLIENT)
     private Icon defaultIcon;
     
     public ItemUpgrade(int id, int texture)
@@ -48,6 +51,7 @@ public class ItemUpgrade extends Item implements IModifier
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     public Icon getIconFromDamage(int i)
     {
         if (i <= this.icons.length)
@@ -56,6 +60,7 @@ public class ItemUpgrade extends Item implements IModifier
     }
     
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
@@ -133,6 +138,7 @@ public class ItemUpgrade extends Item implements IModifier
      * super.addInformation() to keep the electiricty info in the item info bar.
      */
     @Override
+    @SideOnly(Side.CLIENT)
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
     {

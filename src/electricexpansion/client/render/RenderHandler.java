@@ -10,6 +10,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.client.model.ModelTransformer;
 import electricexpansion.client.model.ModelWireMill;
@@ -26,7 +27,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
     {
         GL11.glPushMatrix();
         
-        if (block.blockID == ElectricExpansion.blockWireMill.blockID)
+        if (block.blockID == ElectricExpansionItems.blockWireMill.blockID)
         {
             GL11.glBindTexture(
                     3553,
@@ -38,7 +39,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
             this.wireMill.render(null, 0, 0, 0, 0, 0, 0.0625F);
             GL11.glPopMatrix();
         }
-        if (block.blockID == ElectricExpansion.blockTransformer.blockID)
+        if (block.blockID == ElectricExpansionItems.blockTransformer.blockID)
         {
             switch (metadata / 4)
             {

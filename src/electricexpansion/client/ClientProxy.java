@@ -24,6 +24,7 @@ import electricexpansion.common.CommonProxy;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
 import electricexpansion.common.cables.TileEntityLogisticsWire;
 import electricexpansion.common.cables.TileEntityRawWire;
+import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
@@ -45,22 +46,20 @@ public class ClientProxy extends CommonProxy
     {
         RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler(new RenderHandler());
+        RenderInsulatedWire insulatedWireRenderer = new RenderInsulatedWire();
         
         ClientRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill", new RenderWireMill());
         ClientRegistry.registerTileEntity(TileEntityRawWire.class, "TileEntityRawWire", new RenderRawWire());
-        ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire",
-                new RenderInsulatedWire());
-        ClientRegistry
-                .registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", new RenderInsulatedWire());
-        ClientRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire",
-                new RenderInsulatedWire());
+        ClientRegistry.registerTileEntity(TileEntityInsulatedWire.class, "TileEntityInsulatedWire", insulatedWireRenderer);
+        ClientRegistry.registerTileEntity(TileEntitySwitchWire.class, "TileEntitySwitchWire", insulatedWireRenderer);
+        ClientRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire", insulatedWireRenderer);
+        ClientRegistry.registerTileEntity(TileEntityRedstonePaintedWire.class, "TileEntityRedstonePaintedWire", insulatedWireRenderer);
         GameRegistry.registerTileEntity(TileEntityWireBlock.class, "TileEntityWireBlock");
         GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
         GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
         GameRegistry.registerTileEntity(TileEntityInsulatingMachine.class, "TileEntityInsulatingMachine");
         
-        ClientRegistry
-                .registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
+        ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
         ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());
         GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
     }

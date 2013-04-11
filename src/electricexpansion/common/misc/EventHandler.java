@@ -10,6 +10,7 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.ElectricExpansion;
 
 public class EventHandler
@@ -24,7 +25,7 @@ public class EventHandler
                 {
                     Random dropNumber = new Random();
                     int numberOfDrops = dropNumber.nextInt(4) + 1;
-                    ItemStack leadIS = new ItemStack(ElectricExpansion.itemParts, numberOfDrops, 7);
+                    ItemStack leadIS = new ItemStack(ElectricExpansionItems.itemParts, numberOfDrops, 7);
                     
                     event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX,
                             event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));

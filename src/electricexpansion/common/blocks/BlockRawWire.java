@@ -22,7 +22,7 @@ import electricexpansion.common.misc.EETab;
 
 public class BlockRawWire extends BlockConductor
 {
-    public BlockRawWire(int id, int meta)
+    public BlockRawWire(int id)
     {
         super(id, Material.cloth);
         this.setUnlocalizedName("RawWire");

@@ -7,10 +7,10 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.client.model.ModelInsulatedWire;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
-import electricexpansion.common.cables.TileEntityLogisticsWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
@@ -27,7 +27,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         
         if (metadata != -1)
         {
-            if (blockID == ElectricExpansion.blockInsulatedWire.blockID)
+            if (blockID == ElectricExpansionItems.blockInsulatedWire.blockID)
             {
                 switch (metadata)
                 {
@@ -49,7 +49,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
                 }
             }
             
-            else if (blockID == ElectricExpansion.blockLogisticsWire.blockID)
+            else if (blockID == ElectricExpansionItems.blockLogisticsWire.blockID)
             {
                 
                 switch (metadata)
@@ -73,7 +73,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
                 
             }
             
-            else if (blockID == ElectricExpansion.blockSwitchWire.blockID)
+            else if (blockID == ElectricExpansionItems.blockSwitchWire.blockID)
             {
                 if (t.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
                 {
@@ -119,8 +119,30 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
                     }
                 }
             }
+            
+            else if (blockID == ElectricExpansionItems.blockRedstonePaintedWire.blockID)
+            {
+                switch (metadata)
+                {
+                    case 0:
+                        textureToUse += "CopperRSWire.png";
+                        break;
+                    case 1:
+                        textureToUse += "TinRSWire.png";
+                        break;
+                    case 2:
+                        textureToUse += "SilverRSWire.png";
+                        break;
+                    case 3:
+                        textureToUse += "HVRSWire.png";
+                        break;
+                    case 4:
+                        textureToUse += "SCRSWire.png";
+                        break;
+                }
+            }
         }
-        
+
         TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
         boolean[] connectedSides = tileEntity.visuallyConnected;
         
@@ -133,35 +155,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
         
-        if (tileEntity instanceof TileEntityInsulatedWire || tileEntity instanceof TileEntityLogisticsWire)
-        {
-            if (connectedSides[0])
-            {
-                model.renderBottom();
-            }
-            if (connectedSides[1])
-            {
-                model.renderTop();
-            }
-            if (connectedSides[2])
-            {
-                model.renderBack();
-            }
-            if (connectedSides[3])
-            {
-                model.renderFront();
-            }
-            if (connectedSides[4])
-            {
-                model.renderLeft();
-            }
-            if (connectedSides[5])
-            {
-                model.renderRight();
-            }
-        }
-        
-        else if (tileEntity instanceof TileEntitySwitchWire)
+        if (tileEntity instanceof TileEntitySwitchWire)
         {
             if (tileEntity.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
             {
@@ -191,6 +185,35 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
                 }
             }
         }
+        
+        else
+        {
+            if (connectedSides[0])
+            {
+                model.renderBottom();
+            }
+            if (connectedSides[1])
+            {
+                model.renderTop();
+            }
+            if (connectedSides[2])
+            {
+                model.renderBack();
+            }
+            if (connectedSides[3])
+            {
+                model.renderFront();
+            }
+            if (connectedSides[4])
+            {
+                model.renderLeft();
+            }
+            if (connectedSides[5])
+            {
+                model.renderRight();
+            }
+        }
+        
         model.renderMiddle();
         GL11.glPopMatrix();
         

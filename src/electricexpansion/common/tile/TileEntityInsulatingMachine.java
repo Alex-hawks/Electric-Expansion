@@ -35,7 +35,7 @@ import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.misc.InsulationRecipes;
 
 public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable implements IInventory, ISidedInventory,
@@ -262,7 +262,7 @@ IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
             
             if (this.inventory[2] == null)
             {
-                this.inventory[2] = new ItemStack(ElectricExpansion.itemParts, result, 6);
+                this.inventory[2] = new ItemStack(ElectricExpansionItems.itemParts, result, 6);
             }
             else if (this.inventory[2].stackSize + result <= 64)
             {
