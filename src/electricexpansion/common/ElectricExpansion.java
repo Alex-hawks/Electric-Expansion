@@ -191,7 +191,7 @@ public class ElectricExpansion
                 + "make all aspects as realistic as possible, whether that means the items and "
                 + "block names or the processes and materials for each aspect of Electric Expansion.";
         
-        meta.url = "http://universalelectricity.com/?m=electric_expansion";
+        meta.url = "http://universalelectricity.com/electric%20expansion";
         
         meta.logoFile = "/EELogo.png";
         meta.version = ElectricExpansion.VERSION + "." + BUILD_VERSION;
