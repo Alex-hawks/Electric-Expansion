@@ -98,9 +98,9 @@ public class ItemMultimeter extends ItemElectric
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void updateIcons(IconRegister par1IconRegister)
+    public void registerIcons(IconRegister par1IconRegister)
     {
-        this.iconIndex = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.",
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.",
                 ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
     

@@ -166,7 +166,7 @@ public class ItemUpgrade extends Item implements IModifier
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void updateIcons(IconRegister iconRegister)
+    public void registerIcons(IconRegister iconRegister)
     {
         for (int i = 0; i < this.names.length; i++)
         {

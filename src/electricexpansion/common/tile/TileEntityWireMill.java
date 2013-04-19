@@ -38,8 +38,8 @@ import cpw.mods.fml.common.Loader;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityRunnable implements IInventory, ISidedInventory,
-        IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+public class TileEntityWireMill extends TileEntityElectricityRunnable 
+implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
     public final double WATTS_PER_TICK = 500;
     public final double TRANSFER_LIMIT = 1250;

@@ -7,7 +7,6 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -40,7 +39,7 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         if (tileEntity instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) tileEntity;
-            return te.connectedBlocks[side] == null;
+            return (side > -1 && side < 6) ? te.connectedBlocks[side] == null : false;
         }
         return false; 
     }
@@ -51,8 +50,8 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            int strength = te.redstoneLevel;
-            return strength / 17;
+            if (te.smartNetwork != null)
+                    return te.smartNetwork.rsLevel;
         }
         return 0;
     }
@@ -63,8 +62,8 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            int strength = te.redstoneLevel;
-            return strength / 17;
+            if (te.smartNetwork != null)
+                return te.smartNetwork.rsLevel;
         }
         return 0;
     }
@@ -192,20 +191,5 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-    }
-    
-    @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player,
-            int hitX, float hitY, float hitZ, float side)
-    {
-        if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
-        {
-            TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            player.addChatMessage("redstoneLevel: " + te.redstoneLevel);
-            player.addChatMessage("worldRedstoneLevel: " + world.getStrongestIndirectPower(x, y, z));
-            
-            return true;
-        }
-        return false;
     }
 }

@@ -37,7 +37,7 @@ public class BlockMultimeter extends BlockAdvanced
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+    public Icon getIcon(int side, int metadata)
     {
         if (side == 3)
             return this.icons.get("front");

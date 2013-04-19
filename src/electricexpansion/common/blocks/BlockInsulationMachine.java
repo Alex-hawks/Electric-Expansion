@@ -166,7 +166,7 @@ public class BlockInsulationMachine extends BlockAdvanced
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+    public Icon getIcon(int side, int metadata)
     {
         if (side == 1)
             return this.icons.get("top");

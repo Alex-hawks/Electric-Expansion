@@ -6,19 +6,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.prefab.tile.TileEntityConductor;
 import electricexpansion.api.EnumWireMaterial;
 import electricexpansion.api.EnumWireType;
 import electricexpansion.api.IAdvancedConductor;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
+import electricexpansion.common.misc.EENetwork;
 
 /**
- * 
- * @author Alex_hawks Helper Class used by me to make adding methods to all
- *         cables easily...
+ * @author Alex_hawks 
+ * Helper Class used by me to make adding methods to all cables easily...
  */
-
 public abstract class TileEntityConductorBase extends TileEntityConductor implements IAdvancedConductor
 {
     /**
@@ -26,6 +26,35 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
      */
     public ItemStack textureItemStack;
     public boolean isIconLocked = false;
+    
+    public EENetwork smartNetwork;
+    public IElectricityNetwork network;
+    
+    @Override
+    public IElectricityNetwork getNetwork()
+    {
+        if (this.smartNetwork == null && this.network == null)
+        {
+            this.setNetwork(new EENetwork(this));
+        }
+
+        return this.smartNetwork;
+    }
+    
+    @Override
+    public void setNetwork(IElectricityNetwork network)
+    {
+        if (network instanceof EENetwork)
+        {
+            this.smartNetwork = (EENetwork) network;
+            this.network = null;
+        }
+        else
+        {
+            this.network = network;
+            this.smartNetwork = null;
+        }
+    }
     
     public TileEntityConductorBase()
     {

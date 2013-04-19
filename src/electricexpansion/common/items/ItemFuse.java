@@ -126,7 +126,7 @@ public class ItemFuse extends Item implements IItemFuse
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void updateIcons(IconRegister par1IconRegister)
+    public void registerIcons(IconRegister par1IconRegister)
     {
         for (int i = 0; i < this.icons.length; i++)
         {

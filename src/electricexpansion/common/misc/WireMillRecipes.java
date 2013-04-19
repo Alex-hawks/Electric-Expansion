@@ -165,13 +165,15 @@ public class WireMillRecipes
             return null;
     }
     
+    /**
+     * A helper method for getting the recipes for NEI 
+     * @return Map<inputItemStack, int[]>
+     * int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3: ticksRequired)
+     * requiredEnergy = ticksRequired * {@link electricexpansion.common.tile.TileEntityWireMill#WATTS_PER_TICK WATTS_PER_TICK}
+     */
     public Map<ItemStack, int[]> getRecipesForNEI()
     {
         Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
-        // int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3:ticks
-        // required)
-        // requiredEnergy = ticks required * 500
-        // (TileEntityWireMill.WATTS_PER_TICK
         for (int i = 0; i < this.recipeToInput.size(); i++)
         {
             ItemStack input = stackSizeChange(this.recipeToInput.get(i), this.recipeToInputQTY.get(i));

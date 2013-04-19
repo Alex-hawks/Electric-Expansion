@@ -53,7 +53,7 @@ public abstract class ItemBlockCableHelper extends ItemBlock
     
     @Override
     @SideOnly(Side.CLIENT)
-    public void updateIcons(IconRegister par1IconRegister)
+    public void registerIcons(IconRegister par1IconRegister)
     {
         if (this.getUnlocalizedName().equals("tile.HiddenWire")
                 || this.getUnlocalizedName().equals("tile.SwitchWireBlock"))

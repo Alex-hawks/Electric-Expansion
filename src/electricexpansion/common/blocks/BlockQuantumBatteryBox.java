@@ -59,7 +59,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+    public Icon getIcon(int side, int metadata)
     {
         if (side == metadata + 2)
             return this.icons.get("output");

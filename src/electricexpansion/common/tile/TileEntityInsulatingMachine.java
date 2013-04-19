@@ -38,8 +38,8 @@ import cpw.mods.fml.common.Loader;
 import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.misc.InsulationRecipes;
 
-public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable implements IInventory, ISidedInventory,
-IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable 
+implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
     public final double WATTS_PER_TICK = 500.0D;
     public final double TRANSFER_LIMIT = 1250.0D;

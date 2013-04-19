@@ -47,6 +47,7 @@ import electricexpansion.common.blocks.BlockLogisticsWire;
 import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockQuantumBatteryBox;
 import electricexpansion.common.blocks.BlockRawWire;
+import electricexpansion.common.blocks.BlockRedstoneNetworkCore;
 import electricexpansion.common.blocks.BlockRedstonePaintedWire;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
@@ -155,7 +156,8 @@ public class ElectricExpansion
         ElectricExpansionItems.blockDistribution = new BlockQuantumBatteryBox(config.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
         ElectricExpansionItems.blockLead = new BlockBasic(config.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE, 2F, "LeadBlock");
         ElectricExpansionItems.blockLogisticsWire = new BlockLogisticsWire(config.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
-        // blockFuseBox = new BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
+        // ElectricExpansionItems.blockFuseBox = new BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
+        ElectricExpansionItems.blockRedstoneNetworkCore = new BlockRedstoneNetworkCore(config.getBlock("RS_Network_Core", BLOCK_ID_PREFIX + 16).getInt());
         
         ElectricExpansionItems.itemUpgrade = new ItemUpgrade(config.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0);
         ElectricExpansionItems.itemEliteBat = new ItemEliteBattery(config.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
@@ -218,6 +220,7 @@ public class ElectricExpansion
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockDistribution, ItemBlock.class, "blockDistribution", ElectricExpansion.MOD_ID);
         // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
+        GameRegistry.registerBlock(ElectricExpansionItems.blockRedstoneNetworkCore, ItemBlock.class, "blockRsNetworkCore", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockRawWire, ItemBlockRawWire.class, "blockRawWire", ElectricExpansion.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire", ElectricExpansion.MOD_ID);

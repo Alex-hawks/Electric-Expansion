@@ -80,7 +80,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     
     @Override
     @SideOnly(Side.CLIENT)
-    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata)
+    public Icon getIcon(int side, int metadata)
     {
         if (side == 0 || side == 1)
             return this.icons.get("top");
@@ -178,12 +178,6 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     public boolean renderAsNormalBlock()
     {
         return false;
-    }
-    
-    @Override
-    public boolean canProvidePower()
-    {
-        return true;
     }
     
     @Override
