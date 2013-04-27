@@ -40,9 +40,9 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
                 ForgeDirection facing = ForgeDirection.getOrientation(blockMetadata);
                 if (this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ) instanceof INetworkProvider)
                 {
-                    if (((IElectricityNetwork) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)) != null)
+                    if (((INetworkProvider) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)).getNetwork() != null)
                     {
-                        this.setNetwork((IElectricityNetwork) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ));
+                        this.setNetwork(((INetworkProvider) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)).getNetwork());
                     }
                 }
             }
