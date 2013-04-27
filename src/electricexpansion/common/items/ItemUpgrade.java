@@ -22,7 +22,6 @@ public class ItemUpgrade extends Item implements IModifier
     private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade",
             "HVInputUpgrade", "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4" };
     
-    @SideOnly(Side.CLIENT)
     private Icon[] icons = new Icon[this.names.length];
     
     @SideOnly(Side.CLIENT)
