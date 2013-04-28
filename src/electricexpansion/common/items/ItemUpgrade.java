@@ -19,8 +19,11 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-    private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade",
-            "HVInputUpgrade", "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4" };
+    private String[] names = new String[] { 
+            "Storage1", "Storage2", "Storage3", "Storage4", 
+            "HalfVoltage", "HVUpgrade", "HVInputUpgrade", "DoubleVoltage", 
+            "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4" 
+            };
     
     private Icon[] icons = new Icon[this.names.length];
     
@@ -70,7 +73,7 @@ public class ItemUpgrade extends Item implements IModifier
     }
     
     @Override
-    public String getName(ItemStack itemstack)
+    public String getType(ItemStack itemstack)
     {
         switch (itemstack.getItemDamage())
         {
@@ -98,7 +101,7 @@ public class ItemUpgrade extends Item implements IModifier
     }
     
     @Override
-    public int getEffectiveness(ItemStack itemstack)
+    public double getEffectiveness(ItemStack itemstack)
     {
         switch (itemstack.getItemDamage())
         {
@@ -111,7 +114,7 @@ public class ItemUpgrade extends Item implements IModifier
             case 3:
                 return 5000000;
             case 4:
-                return -2;
+                return 0.5;
             case 5:
                 return 20;
             case 6:
@@ -142,8 +145,8 @@ public class ItemUpgrade extends Item implements IModifier
     public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
     {
         String strength = "";
-        int effectiveness = this.getEffectiveness(itemstack);
-        if (this.getName(itemstack).equals("Capacity"))
+        double effectiveness = this.getEffectiveness(itemstack);
+        if (this.getType(itemstack).equals("Capacity"))
         {
             strength = ElectricityDisplay.getDisplay(this.getEffectiveness(itemstack), ElectricUnit.JOULES);
         }
@@ -159,7 +162,7 @@ public class ItemUpgrade extends Item implements IModifier
             }
         }
         par3List.add("\u00a72"
-                + StatCollector.translateToLocal("upgrades.description." + this.getName(itemstack)).replaceAll("<>",
+                + StatCollector.translateToLocal("upgrades.description." + this.getType(itemstack)).replaceAll("<>",
                         strength));
     }
     
@@ -171,5 +174,26 @@ public class ItemUpgrade extends Item implements IModifier
         {
             this.icons[i] = iconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
         }
+    }
+
+    @Override
+    public int getTier(ItemStack i)
+    {
+        switch (i.getItemDamage())
+        {
+            case 0:     return 0;
+            case 1:     return 1;
+            case 2:     return 2;
+            case 3:     return 3;
+            case 4:     return 0;
+            case 5:     return 1;
+            case 6:     return 1;
+            case 7:     return 0;
+            case 8:     return 0;
+            case 9:     return 1;
+            case 10:    return 2;
+            case 11:    return 3;
+        }
+        return -1;
     }
 }

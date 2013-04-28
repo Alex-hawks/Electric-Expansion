@@ -28,12 +28,11 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
     public boolean isIconLocked = false;
     
     public EENetwork smartNetwork;
-    public IElectricityNetwork network;
     
     @Override
     public IElectricityNetwork getNetwork()
     {
-        if (this.smartNetwork == null && this.network == null)
+        if (this.smartNetwork == null)
         {
             this.setNetwork(new EENetwork(this));
         }
@@ -47,12 +46,10 @@ public abstract class TileEntityConductorBase extends TileEntityConductor implem
         if (network instanceof EENetwork)
         {
             this.smartNetwork = (EENetwork) network;
-            this.network = null;
         }
         else
         {
-            this.network = network;
-            this.smartNetwork = null;
+            this.smartNetwork = new EENetwork(network);
         }
     }
     

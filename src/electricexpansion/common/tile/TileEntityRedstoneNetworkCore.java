@@ -25,14 +25,11 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
         {
             if (this.network != null)
             {
+                int netRs = this.network.rsLevel;
                 for (IRedstoneNetAccessor rsCable : this.network.getRedstoneInterfacers())
                 {
-                    if (rsCable.getIsAcceptingRsSignal())
-                    {
-                        int netRs = this.network.rsLevel;
-                        int worldRs = rsCable.getWorld().getBlockPowerInput(rsCable.getX(), rsCable.getY(), rsCable.getZ());
-                        this.network.rsLevel = (byte) (netRs > worldRs ? netRs : worldRs);
-                    }
+                    int worldRs = rsCable.getRsSignalFromBlock();
+                    this.network.rsLevel = (byte) (netRs > worldRs ? netRs : worldRs);
                 }
             }
             else if (this.network == null)
@@ -47,6 +44,8 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
                 }
             }
         }
+        if (this.ticks % 300 == 0 && this.network != null)
+            this.network.cleanUpConductors();
     }
     
     @Override

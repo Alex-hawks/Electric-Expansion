@@ -46,7 +46,7 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int metadata)
     {
-            return (side == metadata) ? this.icons.get("rsMachineOutput") : this.icons.get("rsMachine");
+            return (side == metadata) ? this.icons.get("out") : this.icons.get("top");
     }
 
     @Override
@@ -56,16 +56,16 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         switch (angle)
         {
             case 0:
-                par1World.setBlock(x, y, z, this.blockID, 3, 0);
+                par1World.setBlock(x, y, z, this.blockID, 5, 0);
                 break;
             case 1:
-                par1World.setBlock(x, y, z, this.blockID, 1, 0);
+                par1World.setBlock(x, y, z, this.blockID, 3, 0);
                 break;
             case 2:
-                par1World.setBlock(x, y, z, this.blockID, 2, 0);
+                par1World.setBlock(x, y, z, this.blockID, 4, 0);
                 break;
             case 3:
-                par1World.setBlock(x, y, z, this.blockID, 0, 0);
+                par1World.setBlock(x, y, z, this.blockID, 2, 0);
                 break;
         }
         

@@ -22,7 +22,7 @@ import cpw.mods.fml.common.FMLLog;
 import electricexpansion.api.IRedstoneNetAccessor;
 import electricexpansion.common.tile.TileEntityRedstoneNetworkCore;
 /**
- *  Originally created by Calclavia as {@link universalelectricity.core.electricity.ElectricityNetwork} and modified
+ *  Originally created by Calclavia as {@link universalelectricity.core.electricity.ElectricityNetwork ElectricityNetwork} and modified
  *  by me (Alex_hawks) to be better suited to the Redstone Signal handling that I required...
  * 
  * @author Calclavia
@@ -520,5 +520,10 @@ public class EENetwork implements IElectricityNetwork
     public List<IRedstoneNetAccessor> getRedstoneInterfacers()
     {
         return redstoneInterfacers;
+    }
+
+    public void addRsInterfacer(IRedstoneNetAccessor interfacer)
+    {
+        this.redstoneInterfacers.add(interfacer);
     }
 }

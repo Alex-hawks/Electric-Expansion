@@ -1,6 +1,5 @@
 package electricexpansion.api;
 
-import net.minecraft.world.World;
 import universalelectricity.core.block.INetworkProvider;
 
 /**
@@ -10,11 +9,5 @@ import universalelectricity.core.block.INetworkProvider;
  */
 public interface IRedstoneNetAccessor extends INetworkProvider
 {
-    public boolean getIsAcceptingRsSignal();
-    
-    public int getX();
-    public int getY();
-    public int getZ();
-    
-    public World getWorld();
+    public int getRsSignalFromBlock();
 }

@@ -7,6 +7,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -51,7 +52,7 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
             if (te.smartNetwork != null)
-                    return te.smartNetwork.rsLevel;
+                return te.smartNetwork.rsLevel;
         }
         return 0;
     }
@@ -192,4 +193,17 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
     public void registerIcons(IconRegister par1IconRegister)
     {
     }
+    
+    @Override
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+    {
+        TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
+        if (te.smartNetwork != null)
+        {
+            player.addChatMessage("RsLevel: " + te.smartNetwork.rsLevel);
+            return true;
+        }
+        return true;
+    }
+    
 }

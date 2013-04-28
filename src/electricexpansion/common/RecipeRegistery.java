@@ -77,7 +77,8 @@ public class RecipeRegistery
 		registerLogisticsCables();
 		registerCamoCables();
 		registerCamoSwitchCables();
-		registerRedstoneCables();
+		//registerRedstoneCables();
+		//they are broken in their special functions
 
 		// Machines
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%', new ItemStack(itemParts, 1, 0) }));
