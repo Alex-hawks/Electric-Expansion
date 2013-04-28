@@ -3,6 +3,7 @@ package electricexpansion.common.nei;
 import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import electricexpansion.client.gui.GuiInsulationMachine;
+import electricexpansion.client.gui.GuiWireMill;
 
 public class NEIElextricExpansionConfig implements IConfigureNEI {
 
@@ -15,7 +16,7 @@ public class NEIElextricExpansionConfig implements IConfigureNEI {
 		
 		API.registerRecipeHandler(new WireMillRecipeHandler());
 		API.registerUsageHandler(new WireMillRecipeHandler());
-		API.setGuiOffset(GuiInsulationMachine.class, 0, 0);
+		API.setGuiOffset(GuiWireMill.class, 0, 0);
 	}
 
 	@Override

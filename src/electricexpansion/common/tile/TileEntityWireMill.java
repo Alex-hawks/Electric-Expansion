@@ -41,8 +41,8 @@ import electricexpansion.common.misc.WireMillRecipes;
 public class TileEntityWireMill extends TileEntityElectricityRunnable 
 implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
-    public final double WATTS_PER_TICK = 500;
-    public final double TRANSFER_LIMIT = 1250;
+    public static final double WATTS_PER_TICK = 500;
+    public static final double TRANSFER_LIMIT = 1250;
     private int drawingTicks = 0;
     private double joulesStored = 0;
     public static double maxJoules = 150000;
