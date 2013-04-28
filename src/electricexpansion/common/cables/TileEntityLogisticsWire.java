@@ -12,6 +12,7 @@ import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntityLogisticsWire extends TileEntityConductorBase implements IRedstoneProvider
@@ -28,7 +29,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
     public void initiate()
     {
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                this.blockType.blockID);
+                ElectricExpansionItems.blockLogisticsWire.blockID);
         PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
     }
     
