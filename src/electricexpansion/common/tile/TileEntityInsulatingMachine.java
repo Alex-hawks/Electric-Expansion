@@ -41,8 +41,8 @@ import electricexpansion.common.misc.InsulationRecipes;
 public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable 
 implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
-    public final double WATTS_PER_TICK = 500.0D;
-    public final double TRANSFER_LIMIT = 1250.0D;
+    public static final double WATTS_PER_TICK = 500.0D;
+    public static final double TRANSFER_LIMIT = 1250.0D;
     private int processTicks = 0;
     private double joulesStored = 0.0D;
     private int recipeTicks = 0;

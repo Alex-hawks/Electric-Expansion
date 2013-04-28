@@ -185,7 +185,7 @@ public class InsulationRecipes
         for (int i = 0; i < this.recipeToInput.size(); i++)
         {
             ItemStack input = stackSizeChange(this.recipeToInput.get(i), this.recipeToInputQTY.get(i));
-            int[] output = {RecipeRegistery.getInsulationIS().itemID, this.recipeToOutput.get(i), RecipeRegistery.getInsulationIS().getItemDamage(), this.getProcessTicks(this.recipeToInput.get(i)) };
+            int[] output = {RecipeRegistery.getInsulationIS().itemID, this.recipeToOutput.get(i), RecipeRegistery.getInsulationIS().getItemDamage(), this.getProcessTicks(input) };
             recipes.put(input, output);
         }
         return recipes;
