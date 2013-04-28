@@ -177,8 +177,7 @@ public class WireMillRecipes
         for (int i = 0; i < this.recipeToInput.size(); i++)
         {
             ItemStack input = stackSizeChange(this.recipeToInput.get(i), this.recipeToInputQTY.get(i));
-            int[] output = { this.recipeToOutput.get(i).itemID, this.recipeToOutput.get(i).stackSize,
-                    this.recipeToOutput.get(i).getItemDamage(), this.getDrawingTicks(this.recipeToInput.get(i)) };
+            int[] output = { this.recipeToOutput.get(i).itemID, this.recipeToOutput.get(i).stackSize, this.recipeToOutput.get(i).getItemDamage(), this.getDrawingTicks(input) };
             recipes.put(input, output);
         }
         return recipes;
