@@ -183,6 +183,7 @@ public class RecipeRegistery
 		InsulationRecipes.INSTANCE.addProcessing(new ItemStack(Item.leather, 8), 24, ticks * 25);
 		InsulationRecipes.INSTANCE.addProcessing(new ItemStack(Item.rottenFlesh, 8), 16, ticks * 25);
 		FurnaceRecipes.smelting().addSmelting(Item.leather.itemID, insulationIS, 0.7f);
+		GameRegistry.addShapedRecipe(insulationIS, Block.cloth, Block.cloth, Block.cloth, Block.cloth);
 
 		for (ItemStack is : OreDictionary.getOres("itemRubber"))
 		{
