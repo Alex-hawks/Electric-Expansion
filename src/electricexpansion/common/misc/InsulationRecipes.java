@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import electricexpansion.common.RecipeRegistery;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -177,13 +179,13 @@ public class InsulationRecipes
      * int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3: ticksRequired)
      * requiredEnergy = ticksRequired * {@link electricexpansion.common.tile.TileEntityInsulatingMachine#WATTS_PER_TICK WATTS_PER_TICK}
      */
-    public Map<ItemStack, int[]> getRecipesForNEI()
+    public Map<ItemStack, int[]> getRecipesForNEI() //didn't work as advertised so i fixed it
     {
         Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
         for (int i = 0; i < this.recipeToInput.size(); i++)
         {
             ItemStack input = stackSizeChange(this.recipeToInput.get(i), this.recipeToInputQTY.get(i));
-            int[] output = { this.recipeToOutput.get(i), this.getProcessTicks(this.recipeToInput.get(i)) };
+            int[] output = {RecipeRegistery.getInsulationIS().itemID, this.recipeToOutput.get(i), RecipeRegistery.getInsulationIS().getItemDamage(), this.getProcessTicks(this.recipeToInput.get(i)) };
             recipes.put(input, output);
         }
         return recipes;

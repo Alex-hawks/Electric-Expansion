@@ -327,4 +327,7 @@ public class RecipeRegistery
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 3), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 3), '!', Item.redstone, '#', Item.slimeBall }));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 4), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 4), '!', Item.redstone, '#', Item.slimeBall }));
 	}
+public static ItemStack getInsulationIS() { //need this for things
+		return insulationIS;
+	}
 }
