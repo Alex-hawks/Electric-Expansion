@@ -40,42 +40,27 @@ public class GuiSwitchButton extends GuiButton
      * Draws this button to the screen.
      */
     @Override
-    @SuppressWarnings("unused")
     public void drawButton(Minecraft par1Minecraft, int par2, int par3)
     {
-        if (this.drawButton)
+        FontRenderer fontrenderer = par1Minecraft.fontRenderer;
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D,
+                par1Minecraft.renderEngine.getTexture(ElectricExpansion.GUI_PATH + "SwitchButton.png"));
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        this.field_82253_i = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width
+                && par3 < this.yPosition + this.height;
+        
+        int var5 = 0;
+        
+        if (this.isActive)
         {
-            FontRenderer var4 = par1Minecraft.fontRenderer;
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D,
-                    par1Minecraft.renderEngine.getTexture(ElectricExpansion.GUI_PATH + "SwitchButton.png"));
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            this.field_82253_i = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width
-                    && par3 < this.yPosition + this.height;
-            
-            int var5 = 0;
-            
-            if (this.isActive)
-            {
-                var5 = 16;
-            }
-            
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, var5, this.width / 2, this.height);
-            this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, var5,
-                    this.width / 2, this.height);
-            this.mouseDragged(par1Minecraft, par2, par3);
-            int var6 = 14737632;
-            
-            if (this.isActive)
-            {
-                this.drawCenteredString(var4, this.displayString, this.xPosition + this.width / 2, this.yPosition
-                        + (this.height - 8) / 2, 0x006400);
-            }
-            else
-            {
-                this.drawCenteredString(var4, this.displayString, this.xPosition + this.width / 2, this.yPosition
-                        + (this.height - 8) / 2, 0xFF0000);
-            }
+            var5 = 16;
         }
+        
+        this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, var5, this.width / 2, this.height);
+        this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, var5, this.width / 2, this.height);
+        this.mouseDragged(par1Minecraft, par2, par3);
+        
+        this.drawCenteredString(fontrenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, this.isActive ? 0x006400 : 0xFF0000);
     }
     
     @Override

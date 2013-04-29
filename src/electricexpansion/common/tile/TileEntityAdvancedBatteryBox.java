@@ -138,7 +138,7 @@ IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
             
             if (outputNetwork != null && inputNetwork != outputNetwork)
             {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), this.getOutputCap() / this.getVoltage()), this.getVoltage());
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.max(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
                 
                 if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
                 {
@@ -150,7 +150,6 @@ IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
                     outputNetwork.stopProducing(this);
                 }
             }
-            
             
             if (this.getJoules() > 0.0D)
                 if (Loader.isModLoaded("IC2"))

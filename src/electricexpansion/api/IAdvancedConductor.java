@@ -1,5 +1,7 @@
 package electricexpansion.api;
 
+import universalelectricity.core.block.IConductor;
+
 /**
  * Applied to TileEntities. Gets the wire information based on the block's
  * metadata.
@@ -7,7 +9,7 @@ package electricexpansion.api;
  * @author Calclavia
  * 
  */
-public interface IAdvancedConductor
+public interface IAdvancedConductor extends IConductor
 {
     public EnumWireMaterial getWireMaterial(int metadata);
     

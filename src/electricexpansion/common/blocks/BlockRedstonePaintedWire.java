@@ -200,9 +200,13 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
         if (te.smartNetwork != null)
         {
-            player.addChatMessage("RsLevel: " + te.smartNetwork.rsLevel);
-            return true;
+            player.addChatMessage("NetRsLevel: " + te.smartNetwork.rsLevel);
         }
+        else 
+        {
+            player.addChatMessage("NetRsLevel: NETWORK INVALID");
+        }
+        player.addChatMessage("WldRsLevel: " + world.getBlockPowerInput(x, y, z));
         return true;
     }
     

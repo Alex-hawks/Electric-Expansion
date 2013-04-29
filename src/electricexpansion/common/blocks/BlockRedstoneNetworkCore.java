@@ -18,8 +18,8 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.EENetwork;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityRedstoneNetworkCore;
 
 public class BlockRedstoneNetworkCore extends BlockAdvanced
@@ -70,7 +70,7 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         }
         
         ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-        par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+        par1World.markBlockForUpdate(x, y, z);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         }
         
         par1World.setBlock(x, y, z, this.blockID, change, 0);
-        par1World.markBlockForRenderUpdate(x, y, z);
+        par1World.markBlockForUpdate(x, y, z);
         
         ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
         
@@ -131,5 +131,20 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
             return null;
         
         return new ItemStack(id, 1, 0);
+    }
+    
+    @Override
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+    {
+        TileEntityRedstoneNetworkCore te = (TileEntityRedstoneNetworkCore) world.getBlockTileEntity(x, y, z);
+        if (te.getNetwork() != null)
+        {
+            player.addChatMessage("NetRsLevel: " + ((EENetwork)te.getNetwork()).rsLevel);
+        }
+        else 
+        {
+            player.addChatMessage("NetRsLevel: NETWORK INVALID");
+        }
+        return true;
     }
 }

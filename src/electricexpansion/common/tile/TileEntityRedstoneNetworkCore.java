@@ -29,10 +29,10 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
                 for (IRedstoneNetAccessor rsCable : this.network.getRedstoneInterfacers())
                 {
                     int worldRs = rsCable.getRsSignalFromBlock();
-                    this.network.rsLevel = (byte) (netRs > worldRs ? netRs : worldRs);
+                    this.network.rsLevel = (byte) (Math.max(netRs, worldRs));
                 }
             }
-            else if (this.network == null)
+            else
             {
                 ForgeDirection facing = ForgeDirection.getOrientation(blockMetadata);
                 if (this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ) instanceof INetworkProvider)
@@ -62,6 +62,7 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
         {
             this.network = (EENetwork) network;
             ((EENetwork) network).coreProcessor = this;
+            this.network.cleanUpConductors();
         }
         //  It is a Basic UE network. Time to convert...
         else if (network instanceof ElectricityNetwork)

@@ -10,6 +10,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
+import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
@@ -28,7 +29,7 @@ import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
 public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage implements IWirelessPowerMachine,
-        IPacketReceiver, IInventory, IPeripheral
+IPacketReceiver, IInventory, IPeripheral
 {
     private ItemStack[] containingItems = new ItemStack[2];
     private int playersUsing = 0;
@@ -53,32 +54,27 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
             TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
                     outputDirection);
             
-            if (!this.worldObj.isRemote)
+            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
+                    outputDirection.getOpposite());
+            
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
+                    outputDirection.getOpposite());
+            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
+                    outputDirection);
+            
+            if (outputNetwork != null && inputNetwork != outputNetwork)
             {
-                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                        outputDirection.getOpposite());
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.max(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
                 
-                IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                        outputDirection.getOpposite());
-                IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
-                        outputDirection);
-                
-                if (outputNetwork != null && inputNetwork != outputNetwork)
+                if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
                 {
-                    double outputWatts = Math.min(outputNetwork.getRequest(new TileEntity[] { this }).getWatts(),
-                            Math.min(this.getJoules(), 10000));
-                    
-                    if (this.getJoules() > 0.0D && outputWatts > 0.0D)
-                    {
-                        outputNetwork.startProducing(this, outputWatts / this.getVoltage(), this.getVoltage());
-                        this.setJoules(this.getJoules() - outputWatts);
-                    }
-                    else
-                    {
-                        outputNetwork.stopProducing(this);
-                    }
+                    outputNetwork.startProducing(this, actualOutput);
+                    this.setJoules(this.getJoules() - actualOutput.getWatts());
                 }
-                
+                else
+                {
+                    outputNetwork.stopProducing(this);
+                }
             }
         }
         
@@ -91,6 +87,11 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
         }
     }
     
+    private double getOutputCap()
+    {
+        return 10_000;
+    }
+
     public void sendPacket()
     {
         PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj);
@@ -367,20 +368,17 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
     @Override
     public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments)
             throws IllegalArgumentException
-    {
+            {
         final int getVoltage = 0;
         final int isFull = 1;
         final int getJoules = 2;
         final int getFrequency = 3;
         final int setFrequency = 4;
         final int getPlayer = 5;
-        byte arg0 = -1;
+        byte arg0 = 0;
         try
         {
-            if ((Integer) arguments[0] != null)
-            {
-                arg0 = ((Byte) arguments[0]).byteValue();
-            }
+            arg0 = (Byte) arguments[0];
         }
         catch (Exception e)
         {
@@ -399,8 +397,9 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
                 case getFrequency:
                     return new Object[] { this.getFrequency() };
                 case setFrequency:
-                    return new Object[] { arg0 == 0 ? this.setFrequency(arg0, true)
-                            : "Expected args for this function is 1. You have provided none." };
+                    return new Object[] { arguments.length == 1 ? this.setFrequency(arg0, true)
+                            : "Expected args for this function is 1. You have provided %s."
+                                .replace("%s", arguments.length + "") };
                 case getPlayer:
                     return new Object[] { this.getOwningPlayer() };
                 default:
@@ -409,7 +408,7 @@ public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage im
         }
         else
             return new Object[] { "Please wait for the EMP to run out." };
-    }
+            }
     
     @Override
     public boolean canConnect(ForgeDirection direction)

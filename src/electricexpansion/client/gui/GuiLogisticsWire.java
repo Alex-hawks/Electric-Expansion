@@ -12,7 +12,6 @@ import electricexpansion.common.cables.TileEntityLogisticsWire;
 
 public class GuiLogisticsWire extends GuiScreen
 {
-    
     private TileEntityLogisticsWire tileEntity;
     
     public GuiLogisticsWire(TileEntityLogisticsWire LogisticsWire)
@@ -68,9 +67,6 @@ public class GuiLogisticsWire extends GuiScreen
         }
     }
     
-    /**
-     * Called from the main game loop to update the screen.
-     */
     @Override
     @SuppressWarnings("unchecked")
     public void updateScreen()
@@ -82,9 +78,9 @@ public class GuiLogisticsWire extends GuiScreen
         int posX = (this.width - this.xSizeOfTexture) / 2;
         int posY = (this.height - this.ySizeOfTexture) / 2;
         
-        this.buttonList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Redstone Output",
+        this.buttonList.add(new GuiSwitchButton(0, posX + 13, posY + 15, 150, 16, "Output to World",
                 this.tileEntity.buttonStatus0));
-        this.buttonList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Unused",
+        this.buttonList.add(new GuiSwitchButton(1, posX + 13, posY + 38, 150, 16, "Output to RS Network",
                 this.tileEntity.buttonStatus1));
         this.buttonList.add(new GuiSwitchButton(2, posX + 13, posY + 61, 150, 16, "Unused",
                 this.tileEntity.buttonStatus2));
