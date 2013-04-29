@@ -322,9 +322,13 @@ IPacketReceiver, IInventory, IPeripheral
         this.setFrequency((byte) frequency);
     }
     
-    private int setFrequency(short frequency, boolean b)
+    private int setFrequency(Object frequency)
     {
-        this.setFrequency(frequency);
+        if (frequency instanceof Double)
+        {
+            Double freq = (Double) frequency;
+            this.setFrequency((int) Math.floor(freq));
+        }
         return this.frequency;
     }
     
@@ -368,21 +372,13 @@ IPacketReceiver, IInventory, IPeripheral
     @Override
     public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments)
             throws IllegalArgumentException
-            {
+    {
         final int getVoltage = 0;
         final int isFull = 1;
         final int getJoules = 2;
         final int getFrequency = 3;
         final int setFrequency = 4;
         final int getPlayer = 5;
-        byte arg0 = 0;
-        try
-        {
-            arg0 = (Byte) arguments[0];
-        }
-        catch (Exception e)
-        {
-        }
         
         if (!this.isDisabled())
         {
@@ -397,7 +393,7 @@ IPacketReceiver, IInventory, IPeripheral
                 case getFrequency:
                     return new Object[] { this.getFrequency() };
                 case setFrequency:
-                    return new Object[] { arguments.length == 1 ? this.setFrequency(arg0, true)
+                    return new Object[] { arguments.length == 1 ? this.setFrequency(arguments[0])
                             : "Expected args for this function is 1. You have provided %s."
                                 .replace("%s", arguments.length + "") };
                 case getPlayer:
@@ -408,7 +404,7 @@ IPacketReceiver, IInventory, IPeripheral
         }
         else
             return new Object[] { "Please wait for the EMP to run out." };
-            }
+    }
     
     @Override
     public boolean canConnect(ForgeDirection direction)
