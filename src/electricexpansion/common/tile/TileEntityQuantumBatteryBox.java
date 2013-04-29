@@ -89,7 +89,7 @@ IPacketReceiver, IInventory, IPeripheral
     
     private double getOutputCap()
     {
-        return 10_000;
+        return 10000;
     }
 
     public void sendPacket()

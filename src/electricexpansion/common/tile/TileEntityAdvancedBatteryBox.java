@@ -171,7 +171,7 @@ IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
     @Override
     public ElectricityPack getRequest()
     {
-        return new ElectricityPack(Math.min((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getOutputCap() / 3.0), this.getVoltage());
+        return new ElectricityPack(Math.min((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getOutputCap() / 2.0), this.getVoltage());
     }
     
     @Override
