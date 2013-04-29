@@ -138,7 +138,7 @@ IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
             
             if (outputNetwork != null && inputNetwork != outputNetwork)
             {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.max(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
                 
                 if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
                 {

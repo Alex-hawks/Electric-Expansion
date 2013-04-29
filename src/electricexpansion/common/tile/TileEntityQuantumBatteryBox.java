@@ -64,7 +64,7 @@ IPacketReceiver, IInventory, IPeripheral
             
             if (outputNetwork != null && inputNetwork != outputNetwork)
             {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.max(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
                 
                 if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
                 {
@@ -85,6 +85,12 @@ IPacketReceiver, IInventory, IPeripheral
                 PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
             }
         }
+    }
+    
+    @Override
+    public ElectricityPack getRequest()
+    {
+        return new ElectricityPack(Math.min((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getOutputCap() / 2.0), this.getVoltage());
     }
     
     private double getOutputCap()
