@@ -245,8 +245,7 @@ public class ElectricExpansion
         OreDictionary.registerOre("silverWire", new ItemStack(ElectricExpansionItems.blockInsulatedWire, 1, 2));
         OreDictionary.registerOre("aluminumWire", new ItemStack(ElectricExpansionItems.blockInsulatedWire, 1, 3));
         OreDictionary.registerOre("superconductor", new ItemStack(ElectricExpansionItems.blockInsulatedWire, 1, 4));
-        
-        // TODO register insulation...
+        OreDictionary.registerOre("insulation", RecipeRegistery.getInsulationIS());
         
         NetworkRegistry.instance().registerGuiHandler(this, ElectricExpansion.proxy);
         
