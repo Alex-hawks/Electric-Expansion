@@ -61,13 +61,6 @@
 				<exclude name="**/*.java"/>
 				<exclude name="**/*.xml"/>
 			</fileset>
-		
-			<fileset dir="${dir.development}../Universal Electricity/resources">
-				<exclude name=".git/**"/>
-				<exclude name="**/*.java"/>
-				<exclude name="**/*.xml"/>
-			</fileset>
-
 		</copy>
 
 		<jar destfile="output/${file.EEjar}">
