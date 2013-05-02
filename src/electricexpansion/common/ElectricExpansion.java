@@ -71,7 +71,7 @@ import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.misc.EventHandler;
 
-@Mod(modid = ElectricExpansion.MOD_ID, name = ElectricExpansion.MOD_NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience;after:ICBM|Contraption", useMetadata = true)
+@Mod(modid = ElectricExpansion.MOD_ID, name = ElectricExpansion.MOD_NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience;after:ICBM|Contraption;after:MineFactoryReloaded;after:IC2", useMetadata = true)
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
 public class ElectricExpansion
 {
@@ -263,8 +263,6 @@ public class ElectricExpansion
         proxy.init();
         
         RecipeRegistery.crafting();
-        RecipeRegistery.drawing();
-        RecipeRegistery.insulation();
         EETab.INSTANCE.setItemStack(new ItemStack(ElectricExpansionItems.blockTransformer));
         
         int languages = 0;
@@ -318,6 +316,8 @@ public class ElectricExpansion
         log(Level.INFO, "PostInitializing ElectricExpansion v." + VERSION);
         
         MinecraftForge.EVENT_BUS.register(new EventHandler());
+        RecipeRegistery.drawing();
+        RecipeRegistery.insulation();
     }
     
     @ServerStarting
