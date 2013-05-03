@@ -32,7 +32,6 @@ import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.implement.IRedstoneProvider;
-import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
@@ -42,6 +41,7 @@ import com.google.common.io.ByteArrayDataInput;
 import cpw.mods.fml.common.Loader;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
+import electricexpansion.api.IModifier;
 import electricexpansion.common.ElectricExpansion;
 
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IRedstoneProvider,

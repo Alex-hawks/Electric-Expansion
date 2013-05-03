@@ -6,30 +6,22 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.item.IItemElectric;
-import universalelectricity.prefab.modifier.SlotModifier;
+import universalelectricity.prefab.SlotSpecific;
+import electricexpansion.api.IModifier;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class ContainerAdvBatteryBox extends Container
 {
-    private TileEntityAdvancedBatteryBox tileEntity;
-    
-    public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox AdvBatteryBox)
-    {
-        this.tileEntity = AdvBatteryBox;
-        this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, 11, 24)); // Top
-                                                                                          // slot
-        this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, 11, 48)); // Bottom
-                                                                                          // slot
-        
-        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 2, 149, 7)); // 1st
-                                                                             // Upgrade
-                                                                             // slot
-        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 3, 149, 31)); // 2nd
-                                                                              // Upgrade
-                                                                              // slot
-        this.addSlotToContainer(new SlotModifier(AdvBatteryBox, 4, 149, 55)); // 3rd
-                                                                              // Upgrade
-                                                                              // slot
+	private TileEntityAdvancedBatteryBox tileEntity;
+
+	public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox AdvBatteryBox)
+	{
+		this.tileEntity = AdvBatteryBox;
+		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, 11, 24));
+		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, 11, 48));
+		this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 149, 7, IModifier.class));
+		this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 149, 31, IModifier.class));
+		this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 149, 55, IModifier.class)); 
         
         int var3;
         

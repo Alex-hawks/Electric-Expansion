@@ -11,9 +11,9 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-import universalelectricity.prefab.modifier.IModifier;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.api.IModifier;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 
