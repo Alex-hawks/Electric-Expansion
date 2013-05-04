@@ -60,9 +60,9 @@ public class GuiAdvancedBatteryBox extends GuiContainer
         
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
+        this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize / 4 * 5, this.ySize);
         int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
-        this.drawTexturedModalRect(this.containerWidth + 64, this.containerHeight + 46, 176, 0, scale, 20);
+        this.drawTexturedModalRect(this.containerWidth + 64, this.containerHeight + 46, 0, 166, scale, 3);
     }
     
     public static String getTexture()

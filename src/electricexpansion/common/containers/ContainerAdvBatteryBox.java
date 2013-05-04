@@ -19,9 +19,13 @@ public class ContainerAdvBatteryBox extends Container
 		this.tileEntity = AdvBatteryBox;
 		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, 11, 24));
 		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, 11, 48));
-		this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 149, 7, IModifier.class));
-		this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 149, 31, IModifier.class));
-		this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 149, 55, IModifier.class)); 
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 149, 10, IModifier.class)); // 1st Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 149, 34, IModifier.class)); // 2nd Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 149, 58, IModifier.class)); // 3rd Upgrade slot
+
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 6, 197, 10, new ItemStack[] { })); // 1st Mode slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 6, 197, 34, new ItemStack[] { })); // 2nd Mode slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 197, 58, ItemLinkCard.class)); // 3rd Mode slot        
         
         int var3;
         

@@ -63,6 +63,7 @@ import electricexpansion.common.itemblocks.ItemBlockTransformer;
 import electricexpansion.common.itemblocks.ItemBlockWireBlock;
 import electricexpansion.common.items.ItemAdvancedBattery;
 import electricexpansion.common.items.ItemEliteBattery;
+import electricexpansion.common.items.ItemLinkCard;
 import electricexpansion.common.items.ItemMultimeter;
 import electricexpansion.common.items.ItemParts;
 import electricexpansion.common.items.ItemUltimateBattery;
@@ -84,7 +85,7 @@ public class ElectricExpansion
     // @Mod
     public static final String MOD_ID = "ElectricExpansion";
     public static final String MOD_NAME = "Electric Expansion";
-    public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVIS_VERSION;
+    public static final String VERSION = MAJOR_VERSION + "." + MINOR_VERSION + "." + REVIS_VERSION + "." + BUILD_VERSION;
     public static final String DEPENDENCIES = "after:UniversalElectricity;after:AtomicScience";
     public static final boolean USE_METADATA = true;
     
@@ -162,7 +163,7 @@ public class ElectricExpansion
         ElectricExpansionItems.itemEliteBat = new ItemEliteBattery(config.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
         ElectricExpansionItems.itemUltimateBat = new ItemUltimateBattery(config.getItem("Ultimate_Battery", ITEM_ID_PREFIX + 2).getInt());
         ElectricExpansionItems.itemParts = new ItemParts(config.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
-        // +4
+        ElectricExpansionItems.itemLinkCard = new ItemLinkCard(config.getItem("Link_Card", ITEM_ID_PREFIX + 3).getInt());
         ElectricExpansionItems.itemAdvBat = new ItemAdvancedBattery(config.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
         // itemFuse = new ItemFuse(config.getItem("Fuses", ITEM_ID_PREFIX + 6).getInt());
         // +7

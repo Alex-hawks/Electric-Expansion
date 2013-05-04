@@ -158,6 +158,6 @@ public class GuiQuantumBatteryBox extends GuiContainer
     
     public static String getTexture()
     {
-        return ElectricExpansion.GUI_PATH + "GuiLogistics.png";
+        return ElectricExpansion.GUI_PATH + "GuiWPT.png";
     }
 }

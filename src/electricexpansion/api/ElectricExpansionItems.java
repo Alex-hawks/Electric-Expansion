@@ -45,4 +45,5 @@ public class ElectricExpansionItems
     public static ItemElectric itemUltimateBat;
     public static Item itemMultimeter;
     public static Item itemFuse;
+    public static Item itemLinkCard;
 }
