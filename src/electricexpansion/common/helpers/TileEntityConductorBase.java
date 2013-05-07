@@ -322,6 +322,8 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
             {
                 boolean[] previousConnections = this.visuallyConnected.clone();
 
+                this.smartNetwork.refreshConductors();
+                
                 for (byte i = 0; i < 6; i++)
                 {
                     this.updateConnection(VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));

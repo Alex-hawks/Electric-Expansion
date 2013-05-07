@@ -6,30 +6,6 @@ import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntityRedstonePaintedWire extends TileEntityConductorBase implements IRedstoneNetAccessor
 {
-    private boolean isRegistered = false;
-    @Override
-    public void initiate()
-    {
-        super.initiate();
-        if (this.smartNetwork != null)
-        {
-            this.smartNetwork.addRsInterfacer(this);
-            this.isRegistered = true;
-        }
-        else {}
-    }
-    
-    @Override
-    public void updateEntity()
-    {
-        super.updateEntity();
-        if (!this.isRegistered && this.smartNetwork != null)
-        {
-            this.smartNetwork.addRsInterfacer(this);
-            this.isRegistered = true;
-        }
-    }
-    
     @Override
     public boolean canUpdate()
     {

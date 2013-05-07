@@ -40,6 +40,7 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
                     if (((INetworkProvider) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)).getNetwork() != null)
                     {
                         this.setNetwork(((INetworkProvider) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)).getNetwork());
+                        this.network.refreshConductors();
                     }
                 }
             }
@@ -63,12 +64,6 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
             this.network = (EENetwork) network;
             ((EENetwork) network).coreProcessor = this;
             this.network.cleanUpConductors();
-        }
-        //  It is a Basic UE network. Time to convert...
-        else if (network instanceof ElectricityNetwork)
-        {
-            this.network = new EENetwork(network);
-            this.network.coreProcessor = this;
         }
         //  It is another mod's network... (f.e. Mekanism's Universal cable) or, another controller is in the network.
         //  Either way, we're not touching it...
