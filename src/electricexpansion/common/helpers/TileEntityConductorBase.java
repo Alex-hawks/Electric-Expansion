@@ -321,8 +321,9 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
             if (!this.worldObj.isRemote)
             {
                 boolean[] previousConnections = this.visuallyConnected.clone();
-
-                this.smartNetwork.refreshConductors();
+                
+                if (this.smartNetwork != null)
+                    this.smartNetwork.refreshConductors();
                 
                 for (byte i = 0; i < 6; i++)
                 {
