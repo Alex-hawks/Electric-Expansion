@@ -25,6 +25,8 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
     public ElectricityPack electricityReading = new ElectricityPack();
     private ElectricityPack lastReading = new ElectricityPack();
     
+    private int[] rotationMatrix = { 0, 1, 2, 5, 3, 4 };
+    
     @Override
     public void updateEntity()
     {
@@ -38,16 +40,14 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
             {
                 if (!this.isDisabled())
                 {
-                    ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-                    TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                            inputDirection);
+                    ForgeDirection inputDirection = ForgeDirection.getOrientation(rotationMatrix[this.getBlockMetadata()]);
+                    TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
                     
                     if (inputTile != null)
                     {
                         if (inputTile instanceof IConductor)
                         {
-                            this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced(
-                                    new TileEntity[0]);
+                            this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced(new TileEntity[0]);
                             this.electricityReading.amperes *= 20.0D;
                         }
                         else
@@ -63,8 +63,7 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
                 
                 if (this.electricityReading.amperes != this.lastReading.amperes)
                 {
-                    PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this),
-                            20.0D);
+                    PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 20.0D);
                 }
             }
         }

@@ -9,9 +9,11 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergySource;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -21,7 +23,6 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
@@ -32,7 +33,6 @@ import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.implement.IRedstoneProvider;
-import universalelectricity.prefab.modifier.IModifier;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
@@ -42,14 +42,29 @@ import com.google.common.io.ByteArrayDataInput;
 import cpw.mods.fml.common.Loader;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
+import electricexpansion.api.IModifier;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.items.ItemLinkCard;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IRedstoneProvider,
-IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
+implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
     private static final double BASE_OUTPUT = 10000;
-    private ItemStack[] containingItems = new ItemStack[7];
+    private ItemStack[] containingItems = new ItemStack[6];
     private int playersUsing = 0;
+    
+    /**
+     * 0:   none
+     * 1:   Electricity (UE, IC2, and RP2 if/when permission is obtained and RP2 is up to date)
+     * 2:   Pneumatic (Intelligence depends on upgrade. BuildCraft, ThermalExpansion) (Unavailable for now)
+     * 3:   Quantum (Depends on Upgrade, Replaces Quantum Battery Box soon)
+     * 4:   Universal Cables (Depends on upgrade. Mekanism) (Unavailable for now)
+     * 5:   Factorization Cables (Depends on upgrade. Factorization) (Unavailable for now)
+     * 6:   Universal (Depends on Upgrade(s), Requires availability of Modes: 1, 2, 
+     *      4 if Mekanism is installed, 5 if Factorization is installed) (Unavailable for now)
+     */
+    private byte inputMode = 0;
+    private byte outputMode = 0;
     
     @Override
     public void initiate()
@@ -252,24 +267,6 @@ IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
         }
         
         par1NBTTagCompound.setTag("Items", var2);
-    }
-    
-    @Override
-    public int getStartInventorySide(ForgeDirection side)
-    {
-        if (side == ForgeDirection.DOWN)
-            return 1;
-        
-        if (side == ForgeDirection.UP)
-            return 1;
-        
-        return 0;
-    }
-    
-    @Override
-    public int getSizeInventorySide(ForgeDirection side)
-    {
-        return 1;
     }
     
     @Override
@@ -586,5 +583,173 @@ IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
     public boolean isStackValidForSlot(int i, ItemStack itemstack)
     {
         return false;
+    }
+    
+    public boolean isLinkCardValid(ItemStack is)
+    {
+        if (is != null && is.getItem() instanceof ItemLinkCard)
+        {
+            NBTTagCompound link = ((ItemLinkCard) is.getItem()).getOrCreateLinkData(is, this);
+            if (ItemLinkCard.isDataEqual(link, this))
+            {
+                return false;
+            }
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    public void setLinkCard(ItemStack is)
+    {
+        this.containingItems[5] = is;
+    }
+    
+    public byte getInputMode()
+    {
+        return this.inputMode;
+    }
+    
+    public byte getOutputMode()
+    {
+        return this.outputMode;
+    }
+    
+    public ArrayList<Byte> getAvailableModes()
+    {
+        ArrayList<Byte> toReturn = new ArrayList<Byte>();
+        toReturn.add((byte) 0);
+        toReturn.add((byte) 1);
+        if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+        {
+//            toReturn.add((byte) 2);
+        }
+        if (this.hasUpgrade("Quantum"))
+        {
+            toReturn.add((byte) 3);
+        }
+        if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
+        {
+//            toReturn.add((byte) 4);
+        }
+        if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
+        {
+//            toReturn.add((byte) 5);
+        }
+        if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
+                && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
+        {
+//            toReturn.add((byte) 7);
+        }
+        return toReturn;
+    }
+    
+    public void setInputMode(byte mode)
+    {
+        switch (mode)
+        {
+            case 0: 
+            case 1: 
+                this.inputMode = mode;
+                break;
+            case 2: 
+                if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+                    this.inputMode = mode;
+                break;
+            case 3: 
+                if (this.hasUpgrade("Quantum"))
+                    this.inputMode = mode;
+                break;
+            case 4: 
+                if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
+                    this.inputMode = mode;
+                break;
+            case 5:
+                if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
+                    this.inputMode = mode;
+                break;
+            case 7:
+                if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
+                        && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                        && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
+                    this.inputMode = mode;
+        }
+    }
+    
+    public void setOutputMode(byte mode)
+    {
+        switch (mode)
+        {
+            case 0: 
+            case 1: 
+                this.outputMode = mode;
+                break;
+            case 2: 
+                if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+                    this.outputMode = mode;
+                break;
+            case 3: 
+                if (this.hasUpgrade("Quantum"))
+                    this.outputMode = mode;
+                break;
+            case 4: 
+                if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
+                    this.outputMode = mode;
+                break;
+            case 5:
+                if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
+                    this.outputMode = mode;
+                break;
+            case 7:
+                if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
+                        && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                        && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
+                    this.outputMode = mode;
+        }
+    }
+    
+    public boolean hasUpgrade(String upgrade)
+    {
+        if (this.containingItems[2] != null && this.containingItems[2].getItem() instanceof IModifier)
+        {
+            String type = ((IModifier) this.containingItems[2].getItem()).getType(this.containingItems[2]);
+            if (type != null && type.equals(upgrade))
+                return true;
+        }
+        
+        if (this.containingItems[3] != null && this.containingItems[3].getItem() instanceof IModifier)
+        {
+            String type = ((IModifier) this.containingItems[3].getItem()).getType(this.containingItems[3]);
+            if (type != null && type.equals(upgrade))
+                return true;
+        }
+        
+        if (this.containingItems[4] != null && this.containingItems[4].getItem() instanceof IModifier)
+        {
+            String type = ((IModifier) this.containingItems[4].getItem()).getType(this.containingItems[4]);
+            if (type != null && type.equals(upgrade))
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int[] getAccessibleSlotsFromSide(int var1)
+    {
+        return (var1 == 0 || var1 == 1) ? new int[] { var1 } : new int[] {};
+    }
+
+    @Override
+    public boolean canInsertItem(int i, ItemStack itemstack, int j)
+    {
+        return i == j && (i == 0 || i == 1);
+    }
+
+    @Override
+    public boolean canExtractItem(int i, ItemStack itemstack, int j)
+    {
+        return i == j && (i == 0 || i == 1);
     }
 }

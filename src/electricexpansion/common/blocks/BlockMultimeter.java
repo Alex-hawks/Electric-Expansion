@@ -1,6 +1,7 @@
 package electricexpansion.common.blocks;
 
 import java.util.HashMap;
+import java.util.logging.Level;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -12,10 +13,8 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.block.BlockAdvanced;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -61,8 +60,7 @@ public class BlockMultimeter extends BlockAdvanced
     public void registerIcons(IconRegister par1IconRegister)
     {
         this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-        this.icons
-                .put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
         this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
         this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
     }
@@ -73,26 +71,11 @@ public class BlockMultimeter extends BlockAdvanced
     @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
+        ElectricExpansion.log(Level.WARNING, "Pitch: ", par5EntityLiving.rotationPitch + "");
+        
         int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-        int change = 2;
-        
-        switch (angle)
-        {
-            case 0:
-                change = 2;
-                break;
-            case 1:
-                change = 5;
-                break;
-            case 2:
-                change = 3;
-                break;
-            case 3:
-                change = 4;
-                break;
-        
-        }
-        world.setBlock(x, y, z, this.blockID, change, 0);
+
+        world.setBlock(x, y, z, this.blockID, angle + 2, 0);
         ((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
         world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
@@ -102,49 +85,22 @@ public class BlockMultimeter extends BlockAdvanced
             float hitY, float hitZ)
     {
         int original = world.getBlockMetadata(x, y, z);
-        int change = 2;
         
-        switch (original)
-        {
-            case 2:
-                change = 5;
-                break;
-            case 5:
-                change = 4;
-                break;
-            case 4:
-                change = 3;
-                break;
-            case 3:
-                change = 2;
-                break;
-        }
+        if (++original > 5)
+            world.setBlock(x, y, z, this.blockID, 0, 0);
+        else 
+            world.setBlock(x, y, z, this.blockID, original, 0);
         
-        world.setBlock(x, y, z, this.blockID, change, 0);
         world.markBlockForRenderUpdate(x, y, z);
         ((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
         world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
         return true;
     }
     
-    /**
-     * Is this block powering the block on the specified side
-     */
-    @Override
-    public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
-    {
-        TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
-        
-        if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
-        
-        return 0;
-    }
-    
     @Override
     public boolean isOpaqueCube()
     {
-        return false;
+        return true;
     }
     
     @Override

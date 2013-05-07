@@ -20,6 +20,7 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.items.ItemLinkCard;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
@@ -156,18 +157,32 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int side,
             float hitX, float hitY, float hitZ)
     {
-        if (!par1World.isRemote)
+        if (!world.isRemote)
         {
-            par5EntityPlayer.openGui(ElectricExpansion.instance, 0, par1World, x, y, z);
-            return true;
-            
+            if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof ItemLinkCard)
+            {
+                ItemStack is = player.getCurrentEquippedItem();
+                if (((ItemLinkCard) is.getItem()).getHasLinkData(is))
+                {
+                    TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) world.getBlockTileEntity(x, y, z);
+                    if (!te.isLinkCardValid(is))
+                    {
+                        te.setLinkCard(is);
+                        player.inventory.mainInventory[player.inventory.currentItem] = null;
+                    }
+                }
+            }
+            else
+            {
+                player.openGui(ElectricExpansion.instance, 0, world, x, y, z);
+            }
         }
         return true;
     }
-       
+    
     @Override
     public boolean isOpaqueCube()
     {

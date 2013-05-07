@@ -11,16 +11,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 
 @SideOnly(Side.CLIENT)
-public class GuiSwitchButton extends GuiButton
+public class ButtonSwitch extends GuiButton
 {
     private boolean isActive;
     
-    public GuiSwitchButton(int par1, int par2, int par3, String par4Str, boolean initState)
+    public ButtonSwitch(int par1, int par2, int par3, String par4Str, boolean initState)
     {
         this(par1, par2, par3, 200, 16, par4Str, initState);
     }
     
-    public GuiSwitchButton(int par1, int par2, int par3, int par4, int par5, String par6Str, boolean initState)
+    public ButtonSwitch(int par1, int par2, int par3, int par4, int par5, String par6Str, boolean initState)
     {
         super(par1, par2, par3, par4, par5, par6Str);
         this.width = 200;
