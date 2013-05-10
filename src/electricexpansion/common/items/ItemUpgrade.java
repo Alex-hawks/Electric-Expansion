@@ -22,7 +22,9 @@ public class ItemUpgrade extends Item implements IModifier
     private String[] names = new String[] { 
             "Storage1", "Storage2", "Storage3", "Storage4", 
             "HalfVoltage", "HVUpgrade", "HVInputUpgrade", "DoubleVoltage", 
-            "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4" 
+            "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4",
+            "Pnematic", "CrossDimension", "Mekanism", "Factorization",
+            "Quantum"
             };
     
     private Icon[] icons = new Icon[this.names.length];
@@ -88,13 +90,22 @@ public class ItemUpgrade extends Item implements IModifier
             case 6:
                 return "InputVoltageModifier";
             case 7:
-                return "VoltageModifier"; // Seperate because it was added at a
-                                          // later point in time
+                return "VoltageModifier"; // Seperate because it was added at a later point in time
             case 8:
             case 9:
             case 10:
             case 11:
                 return "Unlimiter";
+            case 12:
+                return "Pnematic";
+            case 13:
+                return "CrossDimension";
+            case 14:
+                return "Mekanism";
+            case 15:
+                return "Factorization";
+            case 16:
+                return "Quantum";
             default:
                 return "Unknown";
         }

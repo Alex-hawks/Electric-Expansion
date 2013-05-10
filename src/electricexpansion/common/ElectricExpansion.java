@@ -113,9 +113,9 @@ public class ElectricExpansion
     public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
     public static boolean configLoaded = false;
     
-    static boolean debugRecipes;
-    public static boolean useHashCodes;
-    private static boolean useUeVoltageSensitivity;
+    public static boolean debugRecipes = true;
+    public static boolean useHashCodes = true;
+    private static boolean useUeVoltageSensitivity = false;
     
     public static DistributionNetworks DistributionNetworksInstance;
     
@@ -173,9 +173,9 @@ public class ElectricExpansion
         
         silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(ElectricExpansionItems.blockSilverOre), 36, 10, 3).enable(config);
         
-        debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(false);
-        useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(true);
-        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(false);
+        debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(debugRecipes);
+        useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(useHashCodes);
+        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(useUeVoltageSensitivity);
         
         if (config.hasChanged())
             config.save();

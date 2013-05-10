@@ -18,13 +18,13 @@ public class ContainerAdvBatteryBox extends Container
 	public ContainerAdvBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox AdvBatteryBox)
 	{
 		this.tileEntity = AdvBatteryBox;
-		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, 11, 24));
-		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, 11, 48));
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 173, 10, IModifier.class)); // 1st Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 173, 34, IModifier.class)); // 2nd Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 173, 58, IModifier.class)); // 3rd Upgrade slot
+		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, -11, 24));
+		this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, -11, 48));
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 151, 10, IModifier.class)); // 1st Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 151, 34, IModifier.class)); // 2nd Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 151, 58, IModifier.class)); // 3rd Upgrade slot
         
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 197, 58, ItemLinkCard.class)); // 3rd Mode slot        
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 175, 58, ItemLinkCard.class)); // 3rd Mode slot        
         
         int var3;
         
@@ -32,14 +32,14 @@ public class ContainerAdvBatteryBox extends Container
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18,
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, var4 * 18 - 14,
                         84 + var3 * 18));
             }
         }
         
         for (var3 = 0; var3 < 9; ++var3)
         {
-            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
+            this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, var3 * 18 - 14, 142));
         }
         
         this.tileEntity.openChest();

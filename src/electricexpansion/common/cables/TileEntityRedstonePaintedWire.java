@@ -11,15 +11,23 @@ public class TileEntityRedstonePaintedWire extends TileEntityConductorBase imple
     {
         return true;
     }
-
+    
     @Override
     public int getRsSignalFromBlock()
     {
-        int i = 0;
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
+        if (this.mode)
         {
-            i = Math.max(i, this.worldObj.getBlockPowerInput(this.xCoord + side.offsetX, this.yCoord + side.offsetY, this.zCoord + side.offsetZ));
+            int i = 0;
+            for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
+                i = Math.max(i, this.worldObj.getBlockPowerInput(this.xCoord + side.offsetX, this.yCoord + side.offsetY, this.zCoord + side.offsetZ));
+
+            this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+            return i;
         }
-        return i;
+        else
+        {
+            this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+            return 0;
+        }
     }
 }

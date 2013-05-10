@@ -9,6 +9,7 @@ import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -18,7 +19,6 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.core.block.IElectricityStorage;
@@ -36,6 +36,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 import electricexpansion.api.ElectricExpansionItems;
+import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.InsulationRecipes;
 
 public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable 
@@ -151,7 +152,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
         }
         
         
-        if (this.joulesStored >= this.WATTS_PER_TICK - 50.0D && !this.isDisabled())
+        if (this.joulesStored >= WATTS_PER_TICK - 50.0D && !this.isDisabled())
         {
             if (this.inventory[1] != null
                     && this.canProcess()
@@ -323,20 +324,6 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
             }
         }
         par1NBTTagCompound.setTag("Items", var2);
-    }
-    
-    @Override
-    public int getStartInventorySide(ForgeDirection side)
-    {
-        if (side == ForgeDirection.DOWN || side == ForgeDirection.UP)
-            return side.ordinal();
-        return 2;
-    }
-    
-    @Override
-    public int getSizeInventorySide(ForgeDirection side)
-    {
-        return 1;
     }
     
     @Override
@@ -535,5 +522,35 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
         if (i == 1)
             return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 1;
             return false;
+    }
+    
+    @Override
+    public int[] getAccessibleSlotsFromSide(int side)
+    {
+        return new int[] { 0, 1, 2 };
+    }
+
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemstack, int side)
+    {
+        switch (slot)
+        {
+            case 0: return ChargeUtils.UE.isFull(itemstack);
+            case 1: return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 0;
+            
+            default: return false;
+        }
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack itemstack, int side)
+    {
+        switch (slot)
+        {
+            case 0: return ChargeUtils.UE.isEmpty(itemstack);
+            case 2: return true;
+            
+            default: return false;
+        }
     }
 }

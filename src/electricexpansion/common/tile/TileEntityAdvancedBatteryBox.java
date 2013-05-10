@@ -1,8 +1,6 @@
 package electricexpansion.common.tile;
 
 import ic2.api.Direction;
-import ic2.api.ElectricItem;
-import ic2.api.IElectricItem;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileSourceEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
@@ -22,13 +20,14 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
+import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.electricity.IElectricityNetwork;
-import universalelectricity.core.item.ElectricItemHelper;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
@@ -40,16 +39,22 @@ import universalelectricity.prefab.tile.TileEntityElectricityStorage;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.IModifier;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.items.ItemLinkCard;
+import electricexpansion.common.misc.ChargeUtils;
+import electricexpansion.common.misc.UniversalPowerUtils;
+import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
 implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
     private static final double BASE_OUTPUT = 10000;
+    private static final double BASE_VOLTAGE = 120;
+    
     private ItemStack[] containingItems = new ItemStack[6];
     private int playersUsing = 0;
     
@@ -65,6 +70,9 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
      */
     private byte inputMode = 0;
     private byte outputMode = 0;
+    
+    private ForgeDirection output = ForgeDirection.UP;
+    private ForgeDirection input = ForgeDirection.DOWN;
     
     @Override
     public void initiate()
@@ -94,84 +102,50 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         
         if (!this.isDisabled())
         {
-            if (this.containingItems[0] != null && this.getJoules() > 0.0D)
+            switch (this.outputMode)
             {
-                if (this.containingItems[0].getItem() instanceof IItemElectric)
-                {
-                    this.setJoules(this.getJoules()
-                            - ElectricItemHelper.chargeItem(this.containingItems[0], this.getJoules(),
-                                    this.getVoltage()));
-                }
-                else if (this.containingItems[0].getItem() instanceof IElectricItem)
-                {
-                    double sent = ElectricItem.charge(this.containingItems[0],
-                            (int) (this.getJoules() * UniversalElectricity.TO_IC2_RATIO), 3, false, false)
-                            * UniversalElectricity.IC2_RATIO;
-                    this.setJoules(this.getJoules() - sent);
-                }
-                
+                case 1: 
+                    this.sendElectricalEnergy();
+                    break;
+                case 2:
+                    this.sendPneumaticEnergy();
+                    break;
+                case 3: 
+                    this.sendQuantumEnergy();
+                    break;
+                case 4: 
+                    this.sendMekanismEnergy();
+                    break;
+                case 5:
+                    this.sendFzEnergy();
+                    break;
+                case 6:
+                    this.sendUniversalEnergy();
+                    break;
+                default:
+                    break;
             }
             
-            if (this.containingItems[1] != null && this.getJoules() < this.getMaxJoules())
+            switch (this.inputMode)
             {
-                if (this.containingItems[1].getItem() instanceof IItemElectric)
-                {
-                    IItemElectric electricItem = (IItemElectric) this.containingItems[1].getItem();
-                    
-                    if (electricItem.getProvideRequest(this.containingItems[1]).getWatts() > 0)
-                    {
-                        ElectricityPack packRecieved = electricItem
-                                .onProvide(
-                                        ElectricityPack.getFromWatts(this.getMaxJoules() - this.getJoules(),
-                                                this.getVoltage()), this.containingItems[1]);
-                        this.setJoules(this.getJoules() + packRecieved.getWatts());
-                    }
-                    
-                }
-                else if (this.containingItems[1].getItem() instanceof IElectricItem)
-                {
-                    IElectricItem item = (IElectricItem) this.containingItems[1].getItem();
-                    if (item.canProvideEnergy(this.containingItems[1]))
-                    {
-                        double gain = ElectricItem.discharge(this.containingItems[1], (int) ((this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false) * UniversalElectricity.IC2_RATIO;
-                        this.setJoules(this.getJoules() + gain);
-                    }
-                }
+                case 1: 
+                    this.drainElectricalEnergy();
+                    break;
+                case 2:
+                    this.drainPneumaticEnergy();
+                    break;
+                case 4: 
+                    this.drainMekanismEnergy();
+                    break;
+                case 5:
+                    this.drainFzEnergy();
+                    break;
+                case 6:
+                    this.drainUniversalEnergy();
+                    break;
+                default:
+                    break;
             }
-            
-            ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                    outputDirection);
-            
-            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                    outputDirection.getOpposite());
-            
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                    outputDirection.getOpposite());
-            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
-                    outputDirection);
-            
-            if (outputNetwork != null && inputNetwork != outputNetwork)
-            {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
-                
-                if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
-                {
-                    outputNetwork.startProducing(this, actualOutput);
-                    this.setJoules(this.getJoules() - actualOutput.getWatts());
-                }
-                else
-                {
-                    outputNetwork.stopProducing(this);
-                }
-            }
-            
-            if (this.getJoules() > 0.0D)
-                if (Loader.isModLoaded("IC2"))
-                    if (this.getJoules() >= 128.0D * UniversalElectricity.IC2_RATIO)
-                    {
-                        this.setJoules(this.getJoules() - this.sendEnergy(this.getMaxEnergyOutput()) * UniversalElectricity.IC2_RATIO);
-                    }
         }
         
         if (!this.worldObj.isRemote)
@@ -183,37 +157,229 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         }
     }
     
+    private boolean sendElectricalEnergy()
+    {
+        //  Batteries (UE, then IC2. Will not call both charge methods)
+        if (this.containingItems[0] != null && this.containingItems[0].getItem() instanceof IItemElectric)
+            this.setJoules(this.getJoules() - (ChargeUtils.UE.charge(this.containingItems[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+        else
+            this.setJoules(this.getJoules() - (ChargeUtils.IC2.charge(this.containingItems[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+        
+        //  Cables (UE)
+        {
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), output);
+            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, output);
+            
+            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), input);
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, input);
+            
+            if (outputNetwork != null && inputNetwork != outputNetwork)
+            {
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
+                
+                if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
+                {
+                    outputNetwork.startProducing(this, actualOutput);
+                    this.setJoules(this.getJoules() - actualOutput.getWatts());
+                    return true;
+                }
+                else
+                {
+                    outputNetwork.stopProducing(this);
+                }
+            }
+        }
+        
+        //  Cables (IC2, Will not work if already output to UE, will actively avoid Mekanism Cables)
+        {
+            if (this.getJoules() > 0.0D)
+            {
+                if (Loader.isModLoaded("IC2"))
+                {
+                    UniversalPowerUtils.GenericPack toOutput = UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.max(this.getJoules(), this.getOutputCap()) / this.getVoltage(), this.getVoltage());
+                    
+                    if (toOutput.toEU() >= 128)
+                    {
+                        EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, toOutput.toEU());
+                        MinecraftForge.EVENT_BUS.post(event);
+                        
+                        this.setJoules(this.getJoules() - toOutput.toUEWatts());
+                        return true;
+                    }
+                }
+            }
+        }        
+        return false;
+    }
+    
+    private boolean sendPneumaticEnergy()
+    {
+        return false;
+    }
+    
+    private boolean sendQuantumEnergy()
+    {
+        ItemStack is = this.containingItems[5];
+        if (is != null && is.getItem() instanceof ItemLinkCard)
+        {
+            ItemLinkCard item = (ItemLinkCard) is.getItem();
+            if (item.getHasLinkData(is) && !ItemLinkCard.isDataEqual(item.getOrCreateLinkData(is, this), this))
+            {
+                NBTTagCompound linkData = item.getOrCreateLinkData(is, this);
+                int dimensionId = linkData.getInteger("dimension");
+                int x = linkData.getInteger("x");
+                int y = linkData.getInteger("y");
+                int z = linkData.getInteger("z");
+                
+                if (this.worldObj.provider.dimensionId == dimensionId || this.hasUpgrade("CrossDimension"))
+                {
+                    if (DimensionManager.getWorld(dimensionId).getBlockTileEntity(x, y, z) instanceof TileEntityAdvancedBatteryBox)
+                    {
+                        TileEntityAdvancedBatteryBox target = (TileEntityAdvancedBatteryBox) DimensionManager.getWorld(dimensionId).getBlockTileEntity(x, y, z);
+                        if (target.getInputMode() == 3)
+                        {
+                            GenericPack thisRequest = UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap() / this.getVoltage(), this.getVoltage());
+                            GenericPack targetRequest = UniversalPowerUtils.INSTANCE.new UEElectricPack(target.getRequest());
+                            
+                            target.onReceive(ChargeUtils.CommonUtil.getSmallest(thisRequest, targetRequest).toUEPack(Math.min(this.getVoltage(), target.getVoltage()), ElectricUnit.VOLTAGE));
+                            this.setJoules(this.getJoules() - ChargeUtils.CommonUtil.getSmallest(thisRequest, targetRequest).toUEWatts());
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean sendMekanismEnergy()
+    {
+        return false;
+    }
+    
+    private boolean sendFzEnergy()
+    {
+        return false;
+    }
+    
+    private boolean sendUniversalEnergy()
+    {
+        if (sendElectricalEnergy())
+            return true;
+        if (sendPneumaticEnergy())
+            return true;
+        if (sendQuantumEnergy())
+            return true;
+        if (sendMekanismEnergy())
+            return true;
+        if (sendFzEnergy())
+            return true;
+        return false;
+    }
+    
+    private boolean drainElectricalEnergy()
+    {
+        if (this.containingItems[0] != null && this.containingItems[0].getItem() instanceof IItemElectric)
+            this.setJoules(this.getJoules() + (ChargeUtils.UE.discharge(this.containingItems[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+        else
+            this.setJoules(this.getJoules() + (ChargeUtils.IC2.discharge(this.containingItems[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+        return true;
+    }
+    
+    private boolean drainPneumaticEnergy()
+    {
+        return false;
+    }
+    
+    private boolean drainMekanismEnergy()
+    {
+        return false;
+    }
+    
+    private boolean drainFzEnergy()
+    {
+        return false;
+    }
+    
+    private boolean drainUniversalEnergy()
+    {
+        if (drainElectricalEnergy())
+            return true;
+        if (drainPneumaticEnergy())
+            return true;
+        if (drainMekanismEnergy())
+            return true;
+        if (drainFzEnergy())
+            return true;
+        return false;
+    }
+    
     @Override
     public ElectricityPack getRequest()
     {
-        return new ElectricityPack(Math.min((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getOutputCap() / 2.0), this.getVoltage());
+        return ElectricityPack.getFromWatts(Math.min((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getOutputCap() / 2.0), this.getVoltage());
     }
     
     @Override
     protected EnumSet<ForgeDirection> getConsumingSides()
     {
-        return EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite());
+        return EnumSet.of(input);
     }
     
     @Override
     public Packet getDescriptionPacket()
     {
         return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] {
-                Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks) });
+                Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks), 
+                Byte.valueOf(this.inputMode), Byte.valueOf(this.outputMode),
+                Byte.valueOf((byte) this.input.ordinal()), Byte.valueOf((byte) this.output.ordinal()) });
     }
     
     @Override
     public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
             ByteArrayDataInput dataStream)
     {
-        try
+        if (this.worldObj.isRemote)
         {
-            this.setJoules(dataStream.readDouble());
-            this.disabledTicks = dataStream.readInt();
+            try
+            {
+                this.setJoules(dataStream.readDouble());
+                this.disabledTicks = dataStream.readInt();
+                this.inputMode = dataStream.readByte();
+                this.outputMode = dataStream.readByte();
+                this.input = ForgeDirection.getOrientation(dataStream.readByte());
+                this.output = ForgeDirection.getOrientation(dataStream.readByte());
+                
+                this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.blockType.blockID);
+                this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
+                this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 0x03);
+            }
+            catch (Exception e) { }
         }
-        catch (Exception e)
+        else
         {
-            e.printStackTrace();
+            try
+            {
+                switch (dataStream.readByte())
+                {
+                    case 1:
+                        boolean a = dataStream.readBoolean();
+                        if (a)
+                            this.setInputNext();
+                        else
+                            this.setOutputNext();
+                    case 2:
+                        boolean b = dataStream.readBoolean();
+                        if (b)
+                            this.setInputMode(dataStream.readByte());
+                        else
+                            this.setOutputMode(dataStream.readByte());
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -247,6 +413,12 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
                 this.containingItems[var5] = ItemStack.loadItemStackFromNBT(var4);
             }
         }
+        
+        this.outputMode = par1NBTTagCompound.getByte("outputMode");
+        this.inputMode = par1NBTTagCompound.getByte("inputMode");
+        
+        this.output = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("output"));
+        this.input = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("input"));
     }
     
     @Override
@@ -267,6 +439,12 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         }
         
         par1NBTTagCompound.setTag("Items", var2);
+        
+        par1NBTTagCompound.setByte("outputMode", this.outputMode);
+        par1NBTTagCompound.setByte("inputMode", this.inputMode);
+        
+        par1NBTTagCompound.setByte("output", (byte) this.output.ordinal());
+        par1NBTTagCompound.setByte("input", (byte) this.input.ordinal());
     }
     
     @Override
@@ -388,7 +566,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     @Override
     public double getVoltage()
     {
-        return 120.0D * this.getVoltageModifier("VoltageModifier");
+        return BASE_VOLTAGE * this.getVoltageModifier("VoltageModifier");
     }
     
     @Override
@@ -408,7 +586,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     
     public double getInputVoltage()
     {
-        return Math.max(this.getVoltage(), Math.max(120.0D, this.getVoltageModifier("InputVoltageModifier") * this.getVoltageModifier("VoltageModifier") * 120.0D));
+        return Math.max(this.getVoltage(), Math.max(BASE_VOLTAGE, this.getVoltageModifier("InputVoltageModifier") * this.getVoltageModifier("VoltageModifier") * BASE_VOLTAGE));
     }
     
     private double getVoltageModifier(String type)
@@ -457,7 +635,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
             slot3 = ((IModifier) this.containingItems[4].getItem()).getEffectiveness(this.containingItems[4]);
         }
         
-        return (100 + slot1) * (100 + slot2) * (100 + slot3) / 1000000 * TileEntityAdvancedBatteryBox.BASE_OUTPUT;
+        return (100 + slot1) * (100 + slot2) * (100 + slot3) / 1000000 * BASE_OUTPUT;
     }
     
     @Override
@@ -559,18 +737,10 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         return 128;
     }
     
-    public int sendEnergy(int send)
-    {
-        EnergyTileSourceEvent event = new EnergyTileSourceEvent(this, send);
-        MinecraftForge.EVENT_BUS.post(event);
-        return event.amount;
-    }
-    
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        return this.getBlockMetadata() + 2 == direction.ordinal()
-                || this.getBlockMetadata() + 2 == direction.getOpposite().ordinal();
+        return direction == this.input || direction == this.output;
     }
     
     @Override
@@ -622,90 +792,100 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         toReturn.add((byte) 1);
         if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
         {
-//            toReturn.add((byte) 2);
+            //            toReturn.add((byte) 2);
         }
         if (this.hasUpgrade("Quantum"))
         {
             toReturn.add((byte) 3);
         }
-        if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
+        if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
         {
-//            toReturn.add((byte) 4);
+            //            toReturn.add((byte) 4);
         }
         if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
         {
-//            toReturn.add((byte) 5);
+            //            toReturn.add((byte) 5);
         }
-        if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
+        if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim"))
                 && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
                 && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
         {
-//            toReturn.add((byte) 7);
+            //            toReturn.add((byte) 6);
         }
         return toReturn;
     }
     
     public void setInputMode(byte mode)
     {
-        switch (mode)
+        if (this.worldObj.isRemote)
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), true, Byte.valueOf(mode) }));
+        else
         {
-            case 0: 
-            case 1: 
-                this.inputMode = mode;
-                break;
-            case 2: 
-                if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+            switch (mode)
+            {
+                case 0: 
+                case 1: 
                     this.inputMode = mode;
-                break;
-            case 3: 
-                if (this.hasUpgrade("Quantum"))
-                    this.inputMode = mode;
-                break;
-            case 4: 
-                if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
-                    this.inputMode = mode;
-                break;
-            case 5:
-                if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
-                    this.inputMode = mode;
-                break;
-            case 7:
-                if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
-                        && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
-                        && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
-                    this.inputMode = mode;
+                    break;
+                case 2: 
+                    if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+                        this.inputMode = mode;
+                    break;
+                case 3: 
+                    if (this.hasUpgrade("Quantum"))
+                        this.inputMode = mode;
+                    break;
+                case 4: 
+                    if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
+                        this.inputMode = mode;
+                    break;
+                case 5:
+                    if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
+                        this.inputMode = mode;
+                    break;
+                case 6:
+                    if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
+                            && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                            && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
+                        this.inputMode = mode;
+            }
         }
     }
     
     public void setOutputMode(byte mode)
     {
-        switch (mode)
+        if (this.worldObj.isRemote)
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), false, Byte.valueOf(mode) }));
+        else
         {
-            case 0: 
-            case 1: 
-                this.outputMode = mode;
-                break;
-            case 2: 
-                if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+            switch (mode)
+            {
+                case 0: 
+                case 1: 
                     this.outputMode = mode;
-                break;
-            case 3: 
-                if (this.hasUpgrade("Quantum"))
-                    this.outputMode = mode;
-                break;
-            case 4: 
-                if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
-                    this.outputMode = mode;
-                break;
-            case 5:
-                if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
-                    this.outputMode = mode;
-                break;
-            case 7:
-                if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
-                        && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
-                        && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
-                    this.outputMode = mode;
+                    break;
+                case 2: 
+                    if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
+                        this.outputMode = mode;
+                    break;
+                case 3: 
+                    if (this.hasUpgrade("Quantum"))
+                        this.outputMode = mode;
+                    break;
+                case 4: 
+                    if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
+                        this.outputMode = mode;
+                    break;
+                case 5:
+                    if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
+                        this.outputMode = mode;
+                    break;
+                case 6:
+                    if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim"))
+                            && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                            && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
+                        this.outputMode = mode;
+            }
         }
     }
     
@@ -731,25 +911,66 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
             if (type != null && type.equals(upgrade))
                 return true;
         }
-
+        
         return false;
     }
-
+    
+    public void setInputNext()
+    {
+        if (this.worldObj.isRemote)
+            this.sendUpdatedModeToServer(true);
+        else 
+        {
+            int newInput = (this.input.ordinal() + 1) % 6;
+            if (newInput == this.output.ordinal())
+                newInput = (newInput + 1) % 6;
+            this.input = ForgeDirection.getOrientation(newInput);
+        }
+    }
+    
+    public void setOutputNext()
+    {
+        if (this.worldObj.isRemote)
+            this.sendUpdatedModeToServer(false);
+        else 
+        {
+            int newOutput = (this.output.ordinal() + 1) % 6;
+            if (newOutput == this.input.ordinal())
+                newOutput = (newOutput + 1) % 6;
+            this.output = ForgeDirection.getOrientation(newOutput);
+        }
+    }
+    
+    private void sendUpdatedModeToServer(boolean b)
+    {
+        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 1), b } ));
+    }
+    
     @Override
     public int[] getAccessibleSlotsFromSide(int var1)
     {
         return (var1 == 0 || var1 == 1) ? new int[] { var1 } : new int[] {};
     }
-
+    
     @Override
     public boolean canInsertItem(int i, ItemStack itemstack, int j)
     {
         return i == j && (i == 0 || i == 1);
     }
-
+    
     @Override
     public boolean canExtractItem(int i, ItemStack itemstack, int j)
     {
         return i == j && (i == 0 || i == 1);
+    }
+    
+    public ForgeDirection getInput()
+    {
+        return this.input;
+    }
+    
+    public ForgeDirection getOutput()
+    {
+        return this.output;
     }
 }

@@ -10,16 +10,20 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.prefab.block.BlockAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
+import electricexpansion.common.misc.EENetwork;
 import electricexpansion.common.misc.EETab;
 
-public class BlockRedstonePaintedWire extends Block implements ITileEntityProvider
+public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEntityProvider
 {
     
     public BlockRedstonePaintedWire(int id)
@@ -36,13 +40,7 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
     @Override
     public boolean canConnectRedstone(IBlockAccess world, int x, int y, int z, int side)
     {
-        TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-        if (tileEntity instanceof TileEntityRedstonePaintedWire)
-        {
-            TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) tileEntity;
-            return (side > -1 && side < 6) ? te.connectedBlocks[side] == null : false;
-        }
-        return false; 
+        return true;
     }
     
     @Override
@@ -51,8 +49,7 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            if (te.smartNetwork != null)
-                return te.smartNetwork.rsLevel;
+            return te.mode ? 0 : ((EENetwork) te.getNetwork()).rsLevel;
         }
         return 0;
     }
@@ -63,8 +60,7 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            if (te.smartNetwork != null)
-                return te.smartNetwork.rsLevel;
+            return te.mode ? 0 : ((EENetwork) te.getNetwork()).rsLevel;
         }
         return 0;
     }
@@ -195,19 +191,37 @@ public class BlockRedstonePaintedWire extends Block implements ITileEntityProvid
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
         TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-        if (te.smartNetwork != null)
+        if (ElectricExpansion.debugRecipes)
         {
-            player.addChatMessage("NetRsLevel: " + te.smartNetwork.rsLevel);
+            if (te.getNetwork() != null)
+            {
+                player.addChatMessage("NetRsLevel: " + ((EENetwork) te.getNetwork()).rsLevel);
+            }
+            else 
+            {
+                player.addChatMessage("NetRsLevel: NETWORK INVALID");
+            }
+            player.addChatMessage("WldRsLevel: " + world.getBlockPowerInput(x, y, z));
+            return true;
         }
-        else 
-        {
-            player.addChatMessage("NetRsLevel: NETWORK INVALID");
-        }
-        player.addChatMessage("WldRsLevel: " + world.getBlockPowerInput(x, y, z));
+        return false;
+    }
+    
+    @Override
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
+    {
+        TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
+        
+        te.mode = !te.mode;
+        
+        if (!world.isRemote)
+            player.addChatMessage(StatCollector.translateToLocal("rsCable.message").replace("<>", 
+                    (te.mode ? StatCollector.translateToLocal("rsCable.input") : StatCollector.translateToLocal("rsCable.output"))));
         return true;
     }
+    
     
 }

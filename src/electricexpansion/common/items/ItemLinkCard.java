@@ -14,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.DimensionManager;
 
 public class ItemLinkCard extends Item
 {
@@ -73,7 +72,7 @@ public class ItemLinkCard extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.",
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.",
                 ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
     

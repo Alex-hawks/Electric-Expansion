@@ -80,10 +80,11 @@ public class WireMillRecipes
     
     /**
      * Used to get the resulting ItemStack from a source ItemStack
+     * Don't check unless Electric Expansion is loaded and this has recipes registered.
      * 
      * @param item
      *            The Source ItemStack
-     * @return The result ItemStack
+     * @return The result ItemStack, null if the input is invalid
      */
     public ItemStack getDrawingResult(ItemStack input)
     {

@@ -49,6 +49,9 @@ public class ItemMultimeter extends ItemElectric
                         + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", "
                         + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
                 
+                if (ElectricExpansion.debugRecipes)
+                    player.addChatMessage(wireTile.getNetwork().toString());
+                
                 return true;
             }
             else

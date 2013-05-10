@@ -102,7 +102,7 @@ public class BlockWireBlock extends BlockConductor
             if (player.inventory.getCurrentItem() != null
                     && player.inventory.getCurrentItem().getItem() instanceof ItemBlock)
             {
-                if (!te.isIconLocked && player.inventory.getCurrentItem().itemID != this.blockID
+                if (!te.mode && player.inventory.getCurrentItem().itemID != this.blockID
                         && Block.isNormalCube(player.inventory.getCurrentItem().itemID))
                 {
                     ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory
@@ -121,7 +121,7 @@ public class BlockWireBlock extends BlockConductor
             {
                 if (player.isSneaking())
                 {
-                    te.isIconLocked = !te.isIconLocked;
+                    te.mode = !te.mode;
                     return true;
                 }
             }

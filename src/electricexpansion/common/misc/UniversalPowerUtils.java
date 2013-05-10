@@ -2,13 +2,12 @@ package electricexpansion.common.misc;
 
 import java.util.logging.Level;
 
-import cpw.mods.fml.common.Loader;
-
-import electricexpansion.common.ElectricExpansion;
 import net.minecraftforge.liquids.LiquidDictionary;
 import net.minecraftforge.liquids.LiquidStack;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.electricity.ElectricityPack;
+import cpw.mods.fml.common.Loader;
+import electricexpansion.common.ElectricExpansion;
 
 public class UniversalPowerUtils
 {
@@ -21,12 +20,26 @@ public class UniversalPowerUtils
     public static final double RP_RATIO     = 0;        //  not used yet
     //  One can dream... ^
     
+    public static final UniversalPowerUtils INSTANCE = new UniversalPowerUtils();
+    
+    private UniversalPowerUtils() { }
+    
     public abstract class GenericPack
     {
         /**
          * A hack to make it so I don't have to unnecessarily duplicate code
          */
         protected double scaledEnergy = 0;
+        protected double unscaledEnergy = 0;
+        
+        /**
+         * Volts, EU per packet...
+         */
+        protected double electricVolts = 1;
+        /**
+         * Amps, no. of EU packets
+         */
+        protected double electricAmps = 0;
         
         public ElectricityPack toUEPack(double givenValue, ElectricUnit givenType)
         {
@@ -60,40 +73,47 @@ public class UniversalPowerUtils
         {
             return this.scaledEnergy;
         }
+        
+        public double getVolts()
+        {
+            return electricVolts;
+        }
+        
+        public double getAmps()
+        {
+            return electricAmps;
+        }
+
+        public double toUEWatts()
+        {
+            return this.scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO);
+        }
     }
     
     public final class UEElectricPack extends GenericPack
     {
-        public final double amps;
-        public final double volts;
-        public final double watts;
-        
         public UEElectricPack(double amps, double volts)
         {
-            this.amps = amps;
-            this.volts = volts;
-            this.watts = amps * volts;
-            this.scaledEnergy = this.watts / (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO);
+            this.electricAmps = amps;
+            this.electricVolts = volts;
+            this.unscaledEnergy = amps * volts;
+            this.scaledEnergy = this.unscaledEnergy / (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO);
+        }
+        
+        public UEElectricPack(ElectricityPack pack)
+        {
+            this(pack.amperes, pack.voltage);
         }
     }
     
     public final class IC2TickPack extends GenericPack
-    {
-        public final int euPerPacket;
-        public final int packetsPerTick;
-        public final int totalEU;
-        
+    {   
         public IC2TickPack(int euPerPacket, int packetsPerTick)
         {
-            this.euPerPacket = euPerPacket;
-            this.packetsPerTick = packetsPerTick;
-            this.totalEU = euPerPacket * packetsPerTick;
-            this.scaledEnergy = this.totalEU / IC2_RATIO;
-        }
-        
-        public int toSinglePacket()
-        {
-            return this.totalEU;
+            this.electricVolts = euPerPacket;
+            this.electricAmps = packetsPerTick;
+            this.unscaledEnergy = euPerPacket * packetsPerTick;
+            this.scaledEnergy = this.unscaledEnergy / IC2_RATIO;
         }
     }
     
@@ -106,6 +126,7 @@ public class UniversalPowerUtils
             if (stack.isLiquidEqual(LiquidDictionary.getLiquid("Steam", 0)))
             {
                 this.steam = stack;
+                this.unscaledEnergy = this.steam.amount;
                 this.scaledEnergy = this.steam.amount / RC_RATIO;
             }
             else
@@ -119,12 +140,15 @@ public class UniversalPowerUtils
 
     public final class BCPack extends GenericPack
     {
-        public final double minecraftJoules;
-        
         public BCPack(double minecraftJoules)
         {
-            this.minecraftJoules = minecraftJoules;
+            this.unscaledEnergy = minecraftJoules;
             this.scaledEnergy = minecraftJoules / BC_RATIO;
         }
+    }
+    
+    public final class EmptyPack extends GenericPack
+    {
+        public EmptyPack() { }
     }
 }

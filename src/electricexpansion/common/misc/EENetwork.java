@@ -91,15 +91,11 @@ public class EENetwork implements IElectricityNetwork
     {
         if (network != null && network != this && network instanceof EENetwork)
         {
-            EENetwork newNetwork = new EENetwork();
-            newNetwork.getConductors().addAll(this.getConductors());
-            newNetwork.getConductors().addAll(network.getConductors());
-            newNetwork.cleanUpConductors();
+            if (((EENetwork) network).coreProcessor != null)
+                ((EENetwork) network).coreProcessor.invalidate();
             
-            if (this.coreProcessor != null && ((EENetwork) network).coreProcessor == null)
-                newNetwork.coreProcessor = this.coreProcessor;
-            else if (this.coreProcessor == null && ((EENetwork) network).coreProcessor != null)
-                newNetwork.coreProcessor = ((EENetwork) network).coreProcessor;
+            this.conductors.addAll(network.getConductors());
+            this.cleanUpConductors();
         }
     }
 

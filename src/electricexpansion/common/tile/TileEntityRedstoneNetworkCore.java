@@ -2,7 +2,6 @@ package electricexpansion.common.tile;
 
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.ElectricityNetwork;
 import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 import electricexpansion.api.IRedstoneNetAccessor;
@@ -36,13 +35,8 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
             {
                 ForgeDirection facing = ForgeDirection.getOrientation(blockMetadata);
                 if (this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ) instanceof INetworkProvider)
-                {
                     if (((INetworkProvider) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)).getNetwork() != null)
-                    {
                         this.setNetwork(((INetworkProvider) this.worldObj.getBlockTileEntity(this.xCoord + facing.offsetX, this.yCoord + facing.offsetY, this.zCoord + facing.offsetZ)).getNetwork());
-                        this.network.refreshConductors();
-                    }
-                }
             }
         }
         if (this.ticks % 300 == 0 && this.network != null)

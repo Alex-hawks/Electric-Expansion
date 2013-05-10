@@ -2,6 +2,7 @@ package electricexpansion.client.gui;
 
 import java.util.ArrayList;
 
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.StatCollector;
@@ -10,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
+import universalelectricity.prefab.network.PacketManager;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
@@ -24,18 +27,30 @@ public class GuiAdvancedBatteryBox extends GuiContainer
     private int guiTopLeftX;
     private int guiTopLeftY;
     
-    private byte displayInputMode;
-    private byte displayOutputMode;
-    
     private ArrayList<Byte> validModes;
     
     public GuiAdvancedBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox te)
     {
         super(new ContainerAdvBatteryBox(par1InventoryPlayer, te));
         this.tileEntity = te;
-        this.displayInputMode = te.getInputMode();
-        this.displayOutputMode = te.getOutputMode();
         this.validModes = te.getAvailableModes();
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public void initGui()
+    {
+        super.initGui();
+
+        this.xSize = 220;
+        
+        this.guiTopLeftX = (this.width - this.xSize) / 2;
+        this.guiTopLeftY = (this.height - this.ySize) / 2;
+        
+        this.buttonList.clear();
+        
+        this.buttonList.add(new GuiButton(0, this.guiTopLeftX + 180, this.guiTopLeftY + 95, 35, 20, this.tileEntity.getInput().name()));
+        this.buttonList.add(new GuiButton(1, this.guiTopLeftX + 180, this.guiTopLeftY + 120, 35, 20, this.tileEntity.getOutput().name()));
     }
     
     @Override
@@ -68,9 +83,15 @@ public class GuiAdvancedBatteryBox extends GuiContainer
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture(GuiAdvancedBatteryBox.getTexture());
         
+        this.xSize = 220;
+        
         this.guiTopLeftX = (this.width - this.xSize) / 2;
         this.guiTopLeftY = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(this.guiTopLeftX, this.guiTopLeftY, 0, 0, this.xSize / 4 * 5, this.ySize);
+        this.drawTexturedModalRect(this.guiTopLeftX, this.guiTopLeftY, 0, 0, this.xSize, this.ySize);
+        
+        this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 10, this.tileEntity.getInputMode() * 17, 169, 16, 16);
+        this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 34, this.tileEntity.getOutputMode() * 17, 186, 16, 16);
+
         int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
         this.drawTexturedModalRect(this.guiTopLeftX + 64, this.guiTopLeftY + 46, 0, 166, scale, 3);
     }
@@ -92,7 +113,6 @@ public class GuiAdvancedBatteryBox extends GuiContainer
                     }
                 }
                 this.tileEntity.setInputMode((byte) (this.validModes.get(currentMode) + 1));
-                this.displayInputMode = this.tileEntity.getInputMode();
                 return;
             }
             if (y >= this.guiTopLeftY + 34 && y <= this.guiTopLeftY + 49)
@@ -107,13 +127,50 @@ public class GuiAdvancedBatteryBox extends GuiContainer
                     }
                 }
                 this.tileEntity.setOutputMode((byte) (this.validModes.get(currentMode) + 1));
-                this.displayOutputMode = this.tileEntity.getOutputMode();
                 return;
             }
         }
         else
             super.mouseClicked(x, y, buttonID); 
     }
+    
+    @Override
+    public void actionPerformed(GuiButton button)
+    {
+        switch (button.id)
+        {
+            case 0:
+                this.tileEntity.setInputNext();
+                break;
+            case 1:
+                this.tileEntity.setOutputNext();
+                break;
+            default:
+        }
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public void updateScreen()
+    {
+        super.updateScreen();
+        
+        this.buttonList.clear();
+        
+        this.xSize = 220;
+        
+        this.guiTopLeftX = (this.width - this.xSize) / 2;
+        this.guiTopLeftY = (this.height - this.ySize) / 2;
+        
+        this.buttonList.add(new GuiButton(0, this.guiTopLeftX + 180, this.guiTopLeftY + 95, 35, 20, this.tileEntity.getInput().name()));
+        this.buttonList.add(new GuiButton(1, this.guiTopLeftX + 180, this.guiTopLeftY + 120, 35, 20, this.tileEntity.getOutput().name()));
+        
+        if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead)
+        {
+            this.mc.thePlayer.closeScreen();
+        }
+    }
+
     
     public static String getTexture()
     {
