@@ -9,6 +9,8 @@ import ic2.api.energy.tile.IEnergySource;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -40,6 +42,7 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.IModifier;
@@ -55,7 +58,7 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	private static final double BASE_VOLTAGE = 120;
 
 	private ItemStack[] containingItems = new ItemStack[6];
-	private int playersUsing = 0;
+	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
 	/**
 	 * 0: none 1: Electricity (UE, IC2, and RP2 if/when permission is obtained and RP2 is up to
@@ -148,9 +151,12 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 
 		if (!this.worldObj.isRemote)
 		{
-			if (this.ticks % 3L == 0L && this.playersUsing > 0)
+			if (this.ticks % 3 == 0)
 			{
-				PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
+				for (EntityPlayer player : this.playersUsing)
+				{
+					PacketDispatcher.sendPacketToPlayer(this.getDescriptionPacket(), (Player) player);
+				}
 			}
 		}
 	}
@@ -276,10 +282,17 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 
 	private boolean drainElectricalEnergy()
 	{
-		if (this.containingItems[0] != null && this.containingItems[0].getItem() instanceof IItemElectric)
-			this.setJoules(this.getJoules() + (ChargeUtils.UE.discharge(this.containingItems[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+		ItemStack electricItemStack = this.containingItems[1];
+
+		if (electricItemStack != null && electricItemStack.getItem() instanceof IItemElectric)
+		{
+			this.setJoules(this.getJoules() + (ChargeUtils.UE.discharge(electricItemStack, UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+		}
 		else
-			this.setJoules(this.getJoules() + (ChargeUtils.IC2.discharge(this.containingItems[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+		{
+			this.setJoules(this.getJoules() + (ChargeUtils.IC2.discharge(electricItemStack, UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap(), this.getVoltage()))).toUEWatts());
+		}
+
 		return true;
 	}
 
@@ -383,13 +396,13 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	@Override
 	public void openChest()
 	{
-		this.playersUsing++;
+
 	}
 
 	@Override
 	public void closeChest()
 	{
-		this.playersUsing--;
+
 	}
 
 	@Override

@@ -92,7 +92,7 @@ public class ChargeUtils
                 GenericPack actualTransmitted = getSmallest(maxRequest, request);
                 
                 item.onReceive(actualTransmitted.toUEPack(request.getVolts(), ElectricUnit.VOLTAGE), toDischarge);
-                
+
                 return actualTransmitted;
             }
             else return UniversalPowerUtils.INSTANCE.new EmptyPack();

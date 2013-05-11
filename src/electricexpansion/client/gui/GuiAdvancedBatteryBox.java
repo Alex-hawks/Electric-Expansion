@@ -14,7 +14,7 @@ import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.containers.ContainerAdvBatteryBox;
+import electricexpansion.common.containers.ContainerAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 @SideOnly(Side.CLIENT)
@@ -29,7 +29,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 
 	public GuiAdvancedBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox te)
 	{
-		super(new ContainerAdvBatteryBox(par1InventoryPlayer, te));
+		super(new ContainerAdvancedBatteryBox(par1InventoryPlayer, te));
 		this.tileEntity = te;
 		this.validModes = te.getAvailableModes();
 	}

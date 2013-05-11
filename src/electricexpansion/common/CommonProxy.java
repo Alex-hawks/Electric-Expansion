@@ -12,7 +12,7 @@ import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
 import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
-import electricexpansion.common.containers.ContainerAdvBatteryBox;
+import electricexpansion.common.containers.ContainerAdvancedBatteryBox;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.containers.ContainerFuseBox;
 import electricexpansion.common.containers.ContainerInsulationMachine;
@@ -62,7 +62,7 @@ public class CommonProxy implements IGuiHandler
             switch (ID)
             {
                 case 0:
-                    return new ContainerAdvBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
+                    return new ContainerAdvancedBatteryBox(player.inventory, (TileEntityAdvancedBatteryBox) tileEntity);
                 case 1:
                     break; // What's this used for?
                 case 2:
