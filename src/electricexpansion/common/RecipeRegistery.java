@@ -131,6 +131,8 @@ public class RecipeRegistery
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 13), new Object[] { "!@!", "@#@", "!@!", '!', "antimatterMilligram", '@', "plateSteel", '#', new ItemStack(itemUpgrade, 1, 16) }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 16), new Object[] { "!@!", "@#@", "!@!", '!', "antimatterMilligram", '@', "plateSteel", '#', "eliteCircuit" }));
+        
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.itemLinkCard), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(Item.ingotIron), '@', new ItemStack(Item.paper), '#', "advancedCircuit" } ));
 
         // Batteries
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAdvBat), new Object[] { " T ", "TRT", "TRT", 'T', "ingotSilver", 'R', Item.lightStoneDust }));

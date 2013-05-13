@@ -3,7 +3,6 @@ package electricexpansion.common.misc;
 import ic2.api.ElectricItem;
 import net.minecraft.item.ItemStack;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.IItemElectric;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 import electricexpansion.common.misc.UniversalPowerUtils.UEElectricPack;
@@ -18,28 +17,43 @@ public class ChargeUtils
         /**
          * @param pack1
          * @param pack2
-         * @return null if they are equal, or at least one of the packs is null
+         * @return the largest, pack1 if they are both equal.
          */
         public static GenericPack getLargest(GenericPack pack1, GenericPack pack2)
         {
             if (pack1 == null || pack2 == null)
+            {
+                if (pack1 != null)
+                    return pack1;
+                if (pack2 != null)
+                    return pack2;
                 return null;
+            }
             if (pack1.getScaledEnergy() == pack2.getScaledEnergy())
-                return null;
+                return pack1;
             return pack1.getScaledEnergy() > pack2.getScaledEnergy() ? pack1 : pack2;
         }
         
+        /**
+         * @return the smallest, pack1 if they are both equal.
+         */
         public static GenericPack getSmallest(GenericPack pack1, GenericPack pack2)
         {
             if (pack1 == null || pack2 == null)
+            {
+                if (pack1 != null)
+                    return pack1;
+                if (pack2 != null)
+                    return pack2;
                 return null;
+            }
             if (pack1.getScaledEnergy() == pack2.getScaledEnergy())
-                return null;
+                return pack1;
             return pack1.getScaledEnergy() < pack2.getScaledEnergy() ? pack1 : pack2;
         }
         
         /**
-         * @return the leftover electricity from the action...
+         * @return the electricity given to toCharge...
          */
         public abstract GenericPack charge(ItemStack toCharge, GenericPack pack);
         
@@ -71,7 +85,7 @@ public class ChargeUtils
                 
                 item.onReceive(actualTransmitted.toUEPack(request.getVolts(), ElectricUnit.VOLTAGE), toCharge);
                 
-                return UniversalPowerUtils.INSTANCE.new UEElectricPack(ElectricityPack.getFromWatts(getLargest(pack, request).toUEWatts() - getSmallest(pack, request).toUEWatts(), pack.getVolts()));
+                return actualTransmitted;
             }
             else
                 return pack;
@@ -88,11 +102,11 @@ public class ChargeUtils
             {
                 IItemElectric item = (IItemElectric) toDischarge.getItem();
                 
-                UEElectricPack request = UniversalPowerUtils.INSTANCE.new UEElectricPack(item.getReceiveRequest(toDischarge));
+                UEElectricPack request = UniversalPowerUtils.INSTANCE.new UEElectricPack(item.getProvideRequest(toDischarge));
                 GenericPack actualTransmitted = getSmallest(maxRequest, request);
                 
-                item.onReceive(actualTransmitted.toUEPack(request.getVolts(), ElectricUnit.VOLTAGE), toDischarge);
-
+                item.onProvide(actualTransmitted.toUEPack(request.getVolts(), ElectricUnit.VOLTAGE), toDischarge);
+                
                 return actualTransmitted;
             }
             else return UniversalPowerUtils.INSTANCE.new EmptyPack();

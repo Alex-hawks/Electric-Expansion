@@ -17,6 +17,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
+import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class ItemMultimeter extends ItemElectric
 {
@@ -36,11 +37,11 @@ public class ItemMultimeter extends ItemElectric
     {
         if (!worldObj.isRemote && this.onUse(stack))
         {
-            TileEntity tileEntity = worldObj.getBlockTileEntity(x, y, z);
+            TileEntity te = worldObj.getBlockTileEntity(x, y, z);
             
-            if (tileEntity instanceof IConductor)
+            if (te instanceof IConductor)
             {
-                IConductor wireTile = (IConductor) tileEntity;
+                IConductor wireTile = (IConductor) te;
                 
                 ElectricityPack getProduced = wireTile.getNetwork().getProduced();
                 
@@ -56,17 +57,24 @@ public class ItemMultimeter extends ItemElectric
             }
             else
             {
-                if (tileEntity instanceof IElectricityStorage)
+                if (te instanceof IElectricityStorage)
                 {
-                    IElectricityStorage tileStorage = (IElectricityStorage) tileEntity;
+                    IElectricityStorage tileStorage = (IElectricityStorage) te;
                     player.addChatMessage("Electric Expansion: "
                             + ElectricityDisplay.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/"
                             + ElectricityDisplay.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
                 }
-                if (tileEntity instanceof IVoltage)
+                if (te instanceof IVoltage)
                 {
                     player.addChatMessage("Electric Expansion: "
-                            + ElectricityDisplay.getDisplay(((IVoltage) tileEntity).getVoltage(), ElectricUnit.VOLTAGE));
+                            + ElectricityDisplay.getDisplay(((IVoltage) te).getVoltage(), ElectricUnit.VOLTAGE));
+                }
+                
+                if (te instanceof TileEntityAdvancedBatteryBox && ElectricExpansion.debugRecipes)
+                {
+                    TileEntityAdvancedBatteryBox te2 = (TileEntityAdvancedBatteryBox) te;
+                    player.addChatMessage("Electric Expansion: Input;  " + te2.getInputMode());
+                    player.addChatMessage("Electric Expansion: Output; " + te2.getOutputMode());
                 }
                 
                 return true;
