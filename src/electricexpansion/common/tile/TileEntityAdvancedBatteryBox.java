@@ -938,26 +938,41 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	public void setInputNext()
 	{
 		if (this.worldObj.isRemote)
+		{
 			this.sendUpdatedModeToServer(true);
+		}
 		else
 		{
 			int newInput = (this.input.ordinal() + 1) % 6;
 			if (newInput == this.output.ordinal())
 				newInput = (newInput + 1) % 6;
-			this.input = ForgeDirection.getOrientation(newInput);
+
+			if (newInput != this.input.ordinal())
+			{
+				this.input = ForgeDirection.getOrientation(newInput);
+				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+			}
+
 		}
 	}
 
 	public void setOutputNext()
 	{
 		if (this.worldObj.isRemote)
+		{
 			this.sendUpdatedModeToServer(false);
+		}
 		else
 		{
 			int newOutput = (this.output.ordinal() + 1) % 6;
 			if (newOutput == this.input.ordinal())
 				newOutput = (newOutput + 1) % 6;
-			this.output = ForgeDirection.getOrientation(newOutput);
+
+			if (newOutput != this.output.ordinal())
+			{
+				this.output = ForgeDirection.getOrientation(newOutput);
+				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
+			}
 		}
 	}
 
