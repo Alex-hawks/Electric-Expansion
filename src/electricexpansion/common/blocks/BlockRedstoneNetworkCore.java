@@ -41,14 +41,14 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "rsMachine"));
         this.icons.put("out", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "rsMachineOutput"));
     }
-
+    
     @Override
     @SideOnly(Side.CLIENT)
     public Icon getIcon(int side, int metadata)
     {
-            return (side == metadata) ? this.icons.get("out") : this.icons.get("top");
+        return (side == metadata) ? this.icons.get("out") : this.icons.get("top");
     }
-
+    
     @Override
     public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLiving par5EntityLiving, ItemStack itemStack)
     {
@@ -72,10 +72,9 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
         par1World.markBlockForUpdate(x, y, z);
     }
-
+    
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         
@@ -84,22 +83,22 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         // Re-orient the block
         switch (metadata)
         {
-            case 0:         // down
+            case 0: // down
                 change = 1;
                 break;
-            case 1:         // up
+            case 1: // up
                 change = 2;
                 break;
-            case 2:         // north
+            case 2: // north
                 change = 5;
                 break;
-            case 3:         // south
+            case 3: // south
                 change = 4;
                 break;
-            case 4:         // west
+            case 4: // west
                 change = 0;
                 break;
-            case 5:         // east
+            case 5: // east
                 change = 3;
                 break;
         }
@@ -111,7 +110,7 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         
         return true;
     }
-
+    
     @Override
     public TileEntity createTileEntity(World world, int metadata)
     {
@@ -139,9 +138,9 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
         TileEntityRedstoneNetworkCore te = (TileEntityRedstoneNetworkCore) world.getBlockTileEntity(x, y, z);
         if (te.getNetwork() != null)
         {
-            player.addChatMessage("NetRsLevel: " + ((EENetwork)te.getNetwork()).rsLevel);
+            player.addChatMessage("NetRsLevel: " + ((EENetwork) te.getNetwork()).rsLevel);
         }
-        else 
+        else
         {
             player.addChatMessage("NetRsLevel: NETWORK INVALID");
         }

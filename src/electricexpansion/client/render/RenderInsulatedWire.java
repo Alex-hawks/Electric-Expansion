@@ -142,7 +142,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
                 }
             }
         }
-
+        
         TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
         boolean[] connectedSides = tileEntity.visuallyConnected;
         

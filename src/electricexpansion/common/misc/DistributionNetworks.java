@@ -63,8 +63,7 @@ public class DistributionNetworks
         {
             if (player != null)
             {
-                this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency]
-                        - removedJoules;
+                this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency] - removedJoules;
             }
         }
         catch (Exception e)
@@ -86,8 +85,7 @@ public class DistributionNetworks
         }
         else
         {
-            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator
-                    + this.server.getFolderName();
+            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + this.server.getFolderName();
         }
         
         if (!event.world.isRemote)
@@ -160,8 +158,7 @@ public class DistributionNetworks
                         {
                             try
                             {
-                                this.playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(
-                                        new FileInputStream(playerFile)).getDouble(i + "");
+                                this.playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getDouble(i + "");
                             }
                             catch (Exception e)
                             {
@@ -175,8 +172,7 @@ public class DistributionNetworks
         catch (Exception e)
         {
             ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
-            ElectricExpansion.EELogger
-                    .warning("If this is the first time loading the world after the mod was installed, there are no problems.");
+            ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
         }
         String[] players = new String[this.playerFrequencies.size()];
         players = this.playerFrequencies.keySet().toArray(players);
@@ -197,8 +193,7 @@ public class DistributionNetworks
         }
         else if (!this.server.isDedicatedServer())
         {
-            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator
-                    + this.server.getFolderName() + File.separator + "ElectricExpansion";
+            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + this.server.getFolderName() + File.separator + "ElectricExpansion";
         }
         
         File folderToUse = new File(folder);

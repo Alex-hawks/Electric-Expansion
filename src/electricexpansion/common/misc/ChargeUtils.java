@@ -109,7 +109,8 @@ public class ChargeUtils
                 
                 return actualTransmitted;
             }
-            else return UniversalPowerUtils.INSTANCE.new EmptyPack();
+            else
+                return UniversalPowerUtils.INSTANCE.new EmptyPack();
         }
         
         @Override
@@ -138,7 +139,7 @@ public class ChargeUtils
         @Override
         public GenericPack charge(ItemStack toCharge, GenericPack pack)
         {
-            try 
+            try
             {
                 return UniversalPowerUtils.INSTANCE.new IC2TickPack(ElectricItem.charge(toCharge, pack.toEU(), 3, false, false), 1);
             }
@@ -151,7 +152,7 @@ public class ChargeUtils
         @Override
         public GenericPack discharge(ItemStack toDischarge, GenericPack pack)
         {
-            try 
+            try
             {
                 return UniversalPowerUtils.INSTANCE.new IC2TickPack(ElectricItem.discharge(toDischarge, pack.toEU(), 3, false, false), 1);
             }

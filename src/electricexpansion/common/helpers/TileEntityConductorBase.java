@@ -34,10 +34,11 @@ import electricexpansion.common.cables.TileEntityInsulatedWire;
 import electricexpansion.common.misc.EENetwork;
 
 /**
- * @author Alex_hawks 
- * Helper Class used by me to make adding methods to all cables easily...
- * Code was taken from {@link universalelectricity.prefab.tile.TileEntityConductor TileEntityConductor}.
- * I have removed the extension of that class to attempt to fix bugs...
+ * @author Alex_hawks Helper Class used by me to make adding methods to all
+ *         cables easily... Code was taken from
+ *         {@link universalelectricity.prefab.tile.TileEntityConductor
+ *         TileEntityConductor}. I have removed the extension of that class to
+ *         attempt to fix bugs...
  */
 public abstract class TileEntityConductorBase extends TileEntityAdvanced implements IPacketReceiver, IAdvancedConductor
 {
@@ -47,8 +48,8 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
     public ItemStack textureItemStack;
     
     /**
-     * Locked Icon for hidden wires.
-     * RS input/output mode for RS wires (true is input)
+     * Locked Icon for hidden wires. RS input/output mode for RS wires (true is
+     * input)
      */
     public boolean mode = false;
     
@@ -132,7 +133,7 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
         }
         catch (Exception e)
         {
-            try 
+            try
             {
                 this.mode = tag.getBoolean("isIconLocked");
             }
@@ -192,10 +193,8 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
             {
                 TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
                 
-                if ((tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte
-                        || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1) 
-                        && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(this
-                                .getBlockMetadata()))
+                if ((tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1)
+                        && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(this.getBlockMetadata()))
                 {
                     if (((IConnector) tileEntity).canConnect(side.getOpposite()))
                     {
@@ -302,7 +301,8 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5]);
+        return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4],
+                this.visuallyConnected[5]);
     }
     
     @Override

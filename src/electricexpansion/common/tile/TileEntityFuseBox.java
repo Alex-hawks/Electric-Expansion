@@ -36,19 +36,14 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
         {
             if (this.hasFuse())
             {
-                ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2)
-                        .getOpposite();
-                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                        inputDirection);
+                ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
                 
                 ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-                TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                        outputDirection);
+                TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
                 
-                IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                        outputDirection.getOpposite());
-                IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
-                        outputDirection);
+                IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+                IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
                 
                 if (outputNetwork != null && inputNetwork != null && outputNetwork != inputNetwork)
                 {
@@ -209,8 +204,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet,
-            EntityPlayer player, ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         
     }

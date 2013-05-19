@@ -84,21 +84,18 @@ public class BlockSwitchWireBlock extends BlockConductor
     @SideOnly(Side.CLIENT)
     public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon
-                : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack
-                        .getIconIndex();
+        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x,
+                y, z)).textureItemStack.getIconIndex();
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
-            float par8, float par9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityConductorBase)
         {
             if (player.inventory.getCurrentItem().itemID != this.blockID)
             {
-                ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory
-                        .getCurrentItem();
+                ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory.getCurrentItem();
                 world.markBlockForRenderUpdate(x, y, z);
                 return true;
             }

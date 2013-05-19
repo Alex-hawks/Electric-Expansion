@@ -90,22 +90,19 @@ public class BlockLogisticsWire extends BlockConductor
     }
     
     @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer,
-            int par6, float par7, float par8, float par9)
+    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
     {
         TileEntityLogisticsWire tileEntity = (TileEntityLogisticsWire) par1World.getBlockTileEntity(par2, par3, par4);
         
         if (!par1World.isRemote)
         {
-            PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 3,
-                    tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2), tileEntity.worldObj,
-                    new Vector3(tileEntity), 12);
+            PacketManager.sendPacketToClients(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 3, tileEntity.buttonStatus0, tileEntity.buttonStatus1, tileEntity.buttonStatus2),
+                    tileEntity.worldObj, new Vector3(tileEntity), 12);
             
         }
         else
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity,
-                    (byte) 7, true));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, tileEntity, (byte) 7, true));
             
             par5EntityPlayer.openGui(ElectricExpansion.instance, 3, par1World, par2, par3, par4);
             return true;
@@ -136,8 +133,7 @@ public class BlockLogisticsWire extends BlockConductor
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
         if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15
-                    : 0;
+            return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
         else
         {
             System.out.println("!tileEntity instanceof IRedstoneProvider");

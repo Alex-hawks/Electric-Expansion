@@ -43,27 +43,20 @@ public abstract class ItemBlockCableHelper extends ItemBlock
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void addInformation(ItemStack itemstack, EntityPlayer player, List par3List, boolean par4)
     {
-        par3List.add("Resistance: "
-                + ElectricityDisplay.getDisplay(EnumWireMaterial.values()[itemstack.getItemDamage()].resistance,
-                        ElectricUnit.RESISTANCE));
-        par3List.add("Max Amps: "
-                + ElectricityDisplay.getDisplay(EnumWireMaterial.values()[itemstack.getItemDamage()].maxAmps,
-                        ElectricUnit.AMPERE));
+        par3List.add("Resistance: " + ElectricityDisplay.getDisplay(EnumWireMaterial.values()[itemstack.getItemDamage()].resistance, ElectricUnit.RESISTANCE));
+        par3List.add("Max Amps: " + ElectricityDisplay.getDisplay(EnumWireMaterial.values()[itemstack.getItemDamage()].maxAmps, ElectricUnit.AMPERE));
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        if (this.getUnlocalizedName().equals("tile.HiddenWire")
-                || this.getUnlocalizedName().equals("tile.SwitchWireBlock"))
+        if (this.getUnlocalizedName().equals("tile.HiddenWire") || this.getUnlocalizedName().equals("tile.SwitchWireBlock"))
             return;
         for (int i = 0; i < EnumWireMaterial.values().length - 1; i++)
         {
-            this.icons.put(
-                    this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)),
-                    par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)).replaceAll(
-                            "tile.", ElectricExpansion.TEXTURE_NAME_PREFIX)));
+            this.icons.put(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)),
+                    par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)).replaceAll("tile.", ElectricExpansion.TEXTURE_NAME_PREFIX)));
         }
     }
     

@@ -39,8 +39,7 @@ import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityRunnable 
-implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+public class TileEntityWireMill extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
     public static final double WATTS_PER_TICK = 500;
     public static final double TRANSFER_LIMIT = 1250;
@@ -95,16 +94,13 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
             ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
             TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                    inputDirection.getOpposite());
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
             
             if (inputNetwork != null)
             {
                 if (this.joulesStored < TileEntityWireMill.maxJoules)
                 {
-                    inputNetwork.startRequesting(this,
-                            Math.min(this.getMaxJoules() - this.getJoules(), TRANSFER_LIMIT) / this.getVoltage(),
-                            this.getVoltage());
+                    inputNetwork.startRequesting(this, Math.min(this.getMaxJoules() - this.getJoules(), TRANSFER_LIMIT) / this.getVoltage(), this.getVoltage());
                     ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
                     this.setJoules(this.joulesStored + electricityPack.getWatts());
                     
@@ -134,10 +130,8 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
                 if (electricItem.getProvideRequest(this.inventory[0]).getWatts() > 0)
                 {
                     double joulesReceived = electricItem
-                            .onProvide(
-                                    ElectricityPack.getFromWatts(Math.max(
-                                            electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT),
-                                            electricItem.getVoltage(this.inventory[0])), this.inventory[0]).getWatts();
+                            .onProvide(ElectricityPack.getFromWatts(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT), electricItem.getVoltage(this.inventory[0])),
+                                    this.inventory[0]).getWatts();
                     this.setJoules(this.joulesStored + joulesReceived);
                 }
             }
@@ -147,9 +141,8 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
                 IElectricItem item = (IElectricItem) this.inventory[0].getItem();
                 if (item.canProvideEnergy(this.inventory[0]))
                 {
-                    double gain = ElectricItem.discharge(this.inventory[0],
-                            (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO),
-                            3, false, false) * UniversalElectricity.IC2_RATIO;
+                    double gain = ElectricItem.discharge(this.inventory[0], (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false)
+                            * UniversalElectricity.IC2_RATIO;
                     this.setJoules(this.getJoules() + gain);
                 }
             }
@@ -159,10 +152,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
         {
             // The left slot contains the item to
             // be processed
-            if (this.inventory[1] != null
-                    && this.canDraw()
-                    && (this.drawingTicks == 0 || this.targetID != this.inventory[1].itemID || this.targetMeta != this.inventory[1]
-                            .getItemDamage()))
+            if (this.inventory[1] != null && this.canDraw() && (this.drawingTicks == 0 || this.targetID != this.inventory[1].itemID || this.targetMeta != this.inventory[1].getItemDamage()))
             {
                 this.targetID = this.inventory[1].itemID;
                 this.targetMeta = this.inventory[1].getItemDamage();
@@ -207,13 +197,11 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks,
-                this.joulesStored);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks, this.joulesStored);
     }
     
     @Override
-    public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet,
-            EntityPlayer player, ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         try
         {
@@ -261,11 +249,9 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
             }
             else if (outputSlot != null)
             {
-                String result = WireMillRecipes.stackSizeToOne(WireMillRecipes.INSTANCE.getDrawingResult(inputSlot))
-                        + "";
+                String result = WireMillRecipes.stackSizeToOne(WireMillRecipes.INSTANCE.getDrawingResult(inputSlot)) + "";
                 String output2 = WireMillRecipes.stackSizeToOne(outputSlot) + "";
-                int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(), inputSlot.getMaxStackSize())
-                        - WireMillRecipes.INSTANCE.getDrawingResult(inputSlot).stackSize;
+                int maxSpaceForSuccess = Math.min(outputSlot.getMaxStackSize(), inputSlot.getMaxStackSize()) - WireMillRecipes.INSTANCE.getDrawingResult(inputSlot).stackSize;
                 
                 if (result.equals(output2) && !(outputSlot.stackSize <= maxSpaceForSuccess))
                 {
@@ -300,8 +286,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
                 this.inventory[2].stackSize = this.inventory[2].stackSize + resultItemStack.stackSize;
             }
             
-            this.inventory[1].stackSize = this.inventory[1].stackSize
-                    - WireMillRecipes.INSTANCE.getInputQTY(this.inventory[1]);
+            this.inventory[1].stackSize = this.inventory[1].stackSize - WireMillRecipes.INSTANCE.getInputQTY(this.inventory[1]);
             
             if (this.inventory[1].stackSize <= 0)
             {
@@ -363,7 +348,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
             }
         }
         par1NBTTagCompound.setTag("Items", var2);
-    } 
+    }
     
     @Override
     public int getSizeInventory()
@@ -556,34 +541,40 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
     {
         return false;
     }
-
+    
     @Override
     public int[] getAccessibleSlotsFromSide(int side)
     {
         return new int[] { 0, 1, 2 };
     }
-
+    
     @Override
     public boolean canInsertItem(int slot, ItemStack itemstack, int side)
     {
         switch (slot)
         {
-            case 0: return ChargeUtils.UE.isFull(itemstack);
-            case 1: return WireMillRecipes.INSTANCE.getDrawingResult(itemstack) != null;
-            
-            default: return false;
+            case 0:
+                return ChargeUtils.UE.isFull(itemstack);
+            case 1:
+                return WireMillRecipes.INSTANCE.getDrawingResult(itemstack) != null;
+                
+            default:
+                return false;
         }
     }
-
+    
     @Override
     public boolean canExtractItem(int slot, ItemStack itemstack, int side)
     {
         switch (slot)
         {
-            case 0: return ChargeUtils.UE.isEmpty(itemstack);
-            case 2: return true;
-            
-            default: return false;
+            case 0:
+                return ChargeUtils.UE.isEmpty(itemstack);
+            case 2:
+                return true;
+                
+            default:
+                return false;
         }
     }
 }

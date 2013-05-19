@@ -5,9 +5,10 @@ import net.minecraft.item.Item;
 import universalelectricity.core.item.ItemElectric;
 
 /**
- *     This class contains the variables for all of the Electric Expansion Items and Blocks.
- * <br>Before referencing these, check if they are not null, and you should check if 
- * <br>Electric Expansion is loaded as well, particularly if recipes are involved.
+ * This class contains the variables for all of the Electric Expansion Items and
+ * Blocks. <br>
+ * Before referencing these, check if they are not null, and you should check if <br>
+ * Electric Expansion is loaded as well, particularly if recipes are involved.
  * 
  * @author Alex_hawks
  * 

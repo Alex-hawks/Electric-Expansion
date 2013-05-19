@@ -41,7 +41,7 @@ public class BlockMultimeter extends BlockAdvanced
         if (side == 3)
             return this.icons.get("front");
         else
-            return this.icons.get("top");
+            return this.icons.get("machine");
     }
     
     @Override
@@ -49,17 +49,16 @@ public class BlockMultimeter extends BlockAdvanced
     {
         int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
         
-        if (side == metadata)
+        if (side == TileEntityMultimeter.rotationMatrix[metadata])
             return this.icons.get("output");
         else
-            return this.icons.get("top");
+            return this.icons.get("machine");
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
         this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
         this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
         this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
@@ -74,21 +73,20 @@ public class BlockMultimeter extends BlockAdvanced
         ElectricExpansion.log(Level.WARNING, "Pitch: ", par5EntityLiving.rotationPitch + "");
         
         int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-
+        
         world.setBlock(x, y, z, this.blockID, angle + 2, 0);
         ((TileEntityAdvanced) world.getBlockTileEntity(x, y, z)).initiate();
         world.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
     
     @Override
-    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX,
-            float hitY, float hitZ)
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         int original = world.getBlockMetadata(x, y, z);
         
         if (++original > 5)
             world.setBlock(x, y, z, this.blockID, 0, 0);
-        else 
+        else
             world.setBlock(x, y, z, this.blockID, original, 0);
         
         world.markBlockForRenderUpdate(x, y, z);

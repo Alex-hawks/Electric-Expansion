@@ -19,13 +19,8 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-    private String[] names = new String[] { 
-            "Storage1", "Storage2", "Storage3", "Storage4", 
-            "HalfVoltage", "HVUpgrade", "HVInputUpgrade", "DoubleVoltage", 
-            "Unlimiter1", "Unlimiter2", "Unlimiter3", "Unlimiter4",
-            "Pnematic", "CrossDimension", "Mekanism", "Factorization",
-            "Quantum"
-            };
+    private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade", "HVInputUpgrade", "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3",
+            "Unlimiter4", "Pnematic", "CrossDimension", "Mekanism", "Factorization", "Quantum" };
     
     private Icon[] icons = new Icon[this.names.length];
     
@@ -90,7 +85,8 @@ public class ItemUpgrade extends Item implements IModifier
             case 6:
                 return "InputVoltageModifier";
             case 7:
-                return "VoltageModifier"; // Seperate because it was added at a later point in time
+                return "VoltageModifier"; // Seperate because it was added at a
+                                          // later point in time
             case 8:
             case 9:
             case 10:
@@ -172,9 +168,7 @@ public class ItemUpgrade extends Item implements IModifier
                 strength = effectiveness + "";
             }
         }
-        par3List.add("\u00a72"
-                + StatCollector.translateToLocal("upgrades.description." + this.getType(itemstack)).replaceAll("<>",
-                        strength));
+        par3List.add("\u00a72" + StatCollector.translateToLocal("upgrades.description." + this.getType(itemstack)).replaceAll("<>", strength));
     }
     
     @Override
@@ -186,24 +180,36 @@ public class ItemUpgrade extends Item implements IModifier
             this.icons[i] = iconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
         }
     }
-
+    
     @Override
     public int getTier(ItemStack i)
     {
         switch (i.getItemDamage())
         {
-            case 0:     return 0;
-            case 1:     return 1;
-            case 2:     return 2;
-            case 3:     return 3;
-            case 4:     return 0;
-            case 5:     return 1;
-            case 6:     return 1;
-            case 7:     return 0;
-            case 8:     return 0;
-            case 9:     return 1;
-            case 10:    return 2;
-            case 11:    return 3;
+            case 0:
+                return 0;
+            case 1:
+                return 1;
+            case 2:
+                return 2;
+            case 3:
+                return 3;
+            case 4:
+                return 0;
+            case 5:
+                return 1;
+            case 6:
+                return 1;
+            case 7:
+                return 0;
+            case 8:
+                return 0;
+            case 9:
+                return 1;
+            case 10:
+                return 2;
+            case 11:
+                return 3;
         }
         return -1;
     }

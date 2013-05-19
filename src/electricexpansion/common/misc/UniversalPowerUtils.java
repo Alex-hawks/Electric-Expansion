@@ -11,18 +11,20 @@ import electricexpansion.common.ElectricExpansion;
 
 public class UniversalPowerUtils
 {
-    public static final double UE_RATIO     = 100;
-    public static final double IC2_RATIO    = 2.5;
-    public static final double MEK_RATIO    = 4;
-    public static final double RC_RATIO     = 5;
-    public static final double FZ_RATIO     = 5;        //  not used yet
-    public static final double BC_RATIO     = 1;
-    public static final double RP_RATIO     = 0;        //  not used yet
-    //  One can dream... ^
+    public static final double UE_RATIO = 100;
+    public static final double IC2_RATIO = 2.5;
+    public static final double MEK_RATIO = 4;
+    public static final double RC_RATIO = 5;
+    public static final double FZ_RATIO = 5; // not used yet
+    public static final double BC_RATIO = 1;
+    public static final double RP_RATIO = 0; // not used yet
+    // One can dream... ^
     
     public static final UniversalPowerUtils INSTANCE = new UniversalPowerUtils();
     
-    private UniversalPowerUtils() { }
+    private UniversalPowerUtils()
+    {
+    }
     
     public abstract class GenericPack
     {
@@ -49,7 +51,7 @@ public class UniversalPowerUtils
                     return ElectricityPack.getFromWatts(scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO), givenValue);
                 case AMPERE:
                     return new ElectricityPack(givenValue, (scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)) / givenValue);
-                default: 
+                default:
                     return null;
             }
         }
@@ -83,7 +85,7 @@ public class UniversalPowerUtils
         {
             return electricAmps;
         }
-
+        
         public double toUEWatts()
         {
             return this.scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO);
@@ -107,7 +109,7 @@ public class UniversalPowerUtils
     }
     
     public final class IC2TickPack extends GenericPack
-    {   
+    {
         public IC2TickPack(int euPerPacket, int packetsPerTick)
         {
             this.electricVolts = euPerPacket;
@@ -137,7 +139,7 @@ public class UniversalPowerUtils
             }
         }
     }
-
+    
     public final class BCPack extends GenericPack
     {
         public BCPack(double minecraftJoules)
@@ -149,6 +151,8 @@ public class UniversalPowerUtils
     
     public final class EmptyPack extends GenericPack
     {
-        public EmptyPack() { }
+        public EmptyPack()
+        {
+        }
     }
 }

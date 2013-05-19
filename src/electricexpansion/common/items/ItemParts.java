@@ -14,10 +14,7 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemParts extends Item
 {
-    private static String[] names = { 
-        "DrawPlates", "CondensedElectrumDust", "ElectrumIngot", "RawHVAlloy",
-        "HVAlloyIngot", "CamoPaste", "Insulation", "LeadIngot", 
-        "Coil", "SilverIngot" };
+    private static String[] names = { "DrawPlates", "CondensedElectrumDust", "ElectrumIngot", "RawHVAlloy", "HVAlloyIngot", "CamoPaste", "Insulation", "LeadIngot", "Coil", "SilverIngot" };
     private Icon[] icons = new Icon[names.length];
     
     public ItemParts(int par1, int meta)
@@ -54,8 +51,7 @@ public class ItemParts extends Item
     @Override
     public String getUnlocalizedName(ItemStack i)
     {
-        return i.getItem().getUnlocalizedName() + "."
-                + (i.getItemDamage() < names.length ? names[i.getItemDamage()] : "Unknown");
+        return i.getItem().getUnlocalizedName() + "." + (i.getItemDamage() < names.length ? names[i.getItemDamage()] : "Unknown");
     }
     
     @Override

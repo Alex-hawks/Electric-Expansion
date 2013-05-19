@@ -32,8 +32,7 @@ public class ItemMultimeter extends ItemElectric
     }
     
     @Override
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World worldObj, int x, int y, int z, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World worldObj, int x, int y, int z, int side, float hitX, float hitY, float hitZ)
     {
         if (!worldObj.isRemote && this.onUse(stack))
         {
@@ -45,10 +44,8 @@ public class ItemMultimeter extends ItemElectric
                 
                 ElectricityPack getProduced = wireTile.getNetwork().getProduced();
                 
-                player.addChatMessage("Electric Expansion: "
-                        + ElectricityDisplay.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", "
-                        + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", "
-                        + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
+                player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", "
+                        + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
                 
                 if (ElectricExpansion.debugRecipes)
                     player.addChatMessage(wireTile.getNetwork().toString());
@@ -60,14 +57,12 @@ public class ItemMultimeter extends ItemElectric
                 if (te instanceof IElectricityStorage)
                 {
                     IElectricityStorage tileStorage = (IElectricityStorage) te;
-                    player.addChatMessage("Electric Expansion: "
-                            + ElectricityDisplay.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/"
+                    player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/"
                             + ElectricityDisplay.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
                 }
                 if (te instanceof IVoltage)
                 {
-                    player.addChatMessage("Electric Expansion: "
-                            + ElectricityDisplay.getDisplay(((IVoltage) te).getVoltage(), ElectricUnit.VOLTAGE));
+                    player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(((IVoltage) te).getVoltage(), ElectricUnit.VOLTAGE));
                 }
                 
                 if (te instanceof TileEntityAdvancedBatteryBox && ElectricExpansion.debugRecipes)
@@ -111,8 +106,7 @@ public class ItemMultimeter extends ItemElectric
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.",
-                ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
     
     @Override
@@ -130,8 +124,7 @@ public class ItemMultimeter extends ItemElectric
         /**
          * Sets the damage as a percentage to render the bar properly.
          */
-        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack)
-                * this.getMaxDamage()));
+        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack) * this.getMaxDamage()));
     }
     
     @Override
@@ -145,8 +138,7 @@ public class ItemMultimeter extends ItemElectric
         /**
          * Sets the damage as a percentage to render the bar properly.
          */
-        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack)
-                * this.getMaxDamage()));
+        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack) * this.getMaxDamage()));
         return electricityStored;
     }
 }

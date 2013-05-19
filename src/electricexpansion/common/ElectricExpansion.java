@@ -156,7 +156,9 @@ public class ElectricExpansion
         ElectricExpansionItems.blockDistribution = new BlockQuantumBatteryBox(config.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
         ElectricExpansionItems.blockLead = new BlockBasic(config.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE, 2F, "LeadBlock");
         ElectricExpansionItems.blockLogisticsWire = new BlockLogisticsWire(config.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
-        // ElectricExpansionItems.blockFuseBox = new BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
+        // ElectricExpansionItems.blockFuseBox = new
+        // BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX +
+        // 16).getInt());
         ElectricExpansionItems.blockRedstoneNetworkCore = new BlockRedstoneNetworkCore(config.getBlock("RS_Network_Core", BLOCK_ID_PREFIX + 16).getInt());
         
         ElectricExpansionItems.itemUpgrade = new ItemUpgrade(config.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0);
@@ -165,7 +167,8 @@ public class ElectricExpansion
         ElectricExpansionItems.itemParts = new ItemParts(config.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
         ElectricExpansionItems.itemLinkCard = new ItemLinkCard(config.getItem("Link_Card", ITEM_ID_PREFIX + 3).getInt());
         ElectricExpansionItems.itemAdvBat = new ItemAdvancedBattery(config.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
-        // itemFuse = new ItemFuse(config.getItem("Fuses", ITEM_ID_PREFIX + 6).getInt());
+        // itemFuse = new ItemFuse(config.getItem("Fuses", ITEM_ID_PREFIX +
+        // 6).getInt());
         // +7
         ElectricExpansionItems.itemMultimeter = new ItemMultimeter(config.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt());
         
@@ -175,7 +178,8 @@ public class ElectricExpansion
         
         debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(debugRecipes);
         useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(useHashCodes);
-        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(useUeVoltageSensitivity);
+        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(
+                useUeVoltageSensitivity);
         
         if (config.hasChanged())
             config.save();
@@ -189,10 +193,8 @@ public class ElectricExpansion
     {
         meta.modId = ElectricExpansion.MOD_ID;
         meta.name = ElectricExpansion.MOD_NAME;
-        meta.description = "Electric Expansion is a Universal Electricity mod that focuses mainly on energy "
-                + "storage and transfer as well as adding more cables for better energy transfer. "
-                + "This mod will make Universal Electricity more complex and realistic. We try to " 
-                + "make all aspects as realistic as possible, whether that means the items and " 
+        meta.description = "Electric Expansion is a Universal Electricity mod that focuses mainly on energy " + "storage and transfer as well as adding more cables for better energy transfer. "
+                + "This mod will make Universal Electricity more complex and realistic. We try to " + "make all aspects as realistic as possible, whether that means the items and "
                 + "block names or the processes and materials for each aspect of Electric Expansion.";
         
         meta.url = "http://universalelectricity.com/electric%20expansion";
@@ -217,7 +219,8 @@ public class ElectricExpansion
         GameRegistry.registerBlock(ElectricExpansionItems.blockTransformer, ItemBlockTransformer.class, "blockTransformer", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockDistribution, ItemBlock.class, "blockDistribution", ElectricExpansion.MOD_ID);
-        // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
+        // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class,
+        // "blockFuseBox", this.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockRedstoneNetworkCore, ItemBlock.class, "blockRsNetworkCore", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockRawWire, ItemBlockRawWire.class, "blockRawWire", ElectricExpansion.MOD_ID);

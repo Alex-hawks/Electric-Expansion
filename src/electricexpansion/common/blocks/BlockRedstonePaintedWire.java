@@ -200,7 +200,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
             {
                 player.addChatMessage("NetRsLevel: " + ((EENetwork) te.getNetwork()).rsLevel);
             }
-            else 
+            else
             {
                 player.addChatMessage("NetRsLevel: NETWORK INVALID");
             }
@@ -218,10 +218,9 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         te.mode = !te.mode;
         
         if (!world.isRemote)
-            player.addChatMessage(StatCollector.translateToLocal("rsCable.message").replace("<>", 
+            player.addChatMessage(StatCollector.translateToLocal("rsCable.message").replace("<>",
                     (te.mode ? StatCollector.translateToLocal("rsCable.input") : StatCollector.translateToLocal("rsCable.output"))));
         return true;
     }
-    
     
 }

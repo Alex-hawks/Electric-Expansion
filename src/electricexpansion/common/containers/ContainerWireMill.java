@@ -17,9 +17,13 @@ public class ContainerWireMill extends Container
     public ContainerWireMill(InventoryPlayer par1InventoryPlayer, TileEntityWireMill tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric Input Slot
-        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be drawn into wire
-        this.addSlotToContainer(new SlotSpecific(tileEntity, 2, 108, 25, (ItemStack) null)); // Drawing result
+        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
+                                                                                       // Input
+                                                                                       // Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be drawn
+                                                                  // into wire
+        this.addSlotToContainer(new SlotSpecific(tileEntity, 2, 108, 25, (ItemStack) null)); // Drawing
+                                                                                             // result
         
         int var3;
         
@@ -27,8 +31,7 @@ public class ContainerWireMill extends Container
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18,
-                        84 + var3 * 18));
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
             }
         }
         for (var3 = 0; var3 < 9; ++var3)

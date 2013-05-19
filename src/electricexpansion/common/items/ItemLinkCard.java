@@ -62,19 +62,14 @@ public class ItemLinkCard extends Item
     
     public static boolean isDataEqual(NBTTagCompound link, TileEntity te)
     {
-        return 
-                link.getInteger("x") == te.xCoord &&
-                link.getInteger("y") == te.yCoord &&
-                link.getInteger("z") == te.zCoord &&
-                link.getInteger("dimension") == te.worldObj.provider.dimensionId;
+        return link.getInteger("x") == te.xCoord && link.getInteger("y") == te.yCoord && link.getInteger("z") == te.zCoord && link.getInteger("dimension") == te.worldObj.provider.dimensionId;
     }
     
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.",
-                ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
     
     @Override

@@ -27,8 +27,7 @@ public class EventHandler
                     int numberOfDrops = dropNumber.nextInt(4) + 1;
                     ItemStack leadIS = new ItemStack(ElectricExpansionItems.itemParts, numberOfDrops, 7);
                     
-                    event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX,
-                            event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));
+                    event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));
                 }
             }
         }

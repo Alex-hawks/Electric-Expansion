@@ -86,27 +86,22 @@ public class BlockWireBlock extends BlockConductor
     @SideOnly(Side.CLIENT)
     public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
-        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon
-                : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack
-                        .getIconIndex();
+        return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x,
+                y, z)).textureItemStack.getIconIndex();
     }
     
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7,
-            float par8, float par9)
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)
         {
             TileEntityConductorBase te = (TileEntityConductorBase) tileEntity;
-            if (player.inventory.getCurrentItem() != null
-                    && player.inventory.getCurrentItem().getItem() instanceof ItemBlock)
+            if (player.inventory.getCurrentItem() != null && player.inventory.getCurrentItem().getItem() instanceof ItemBlock)
             {
-                if (!te.mode && player.inventory.getCurrentItem().itemID != this.blockID
-                        && Block.isNormalCube(player.inventory.getCurrentItem().itemID))
+                if (!te.mode && player.inventory.getCurrentItem().itemID != this.blockID && Block.isNormalCube(player.inventory.getCurrentItem().itemID))
                 {
-                    ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory
-                            .getCurrentItem();
+                    ((TileEntityConductorBase) world.getBlockTileEntity(x, y, z)).textureItemStack = player.inventory.getCurrentItem();
                     world.markBlockForRenderUpdate(x, y, z);
                     return true;
                 }

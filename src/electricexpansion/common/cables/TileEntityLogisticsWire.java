@@ -28,14 +28,12 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
     @Override
     public void initiate()
     {
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                ElectricExpansionItems.blockLogisticsWire.blockID);
+        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansionItems.blockLogisticsWire.blockID);
         PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
         {
@@ -120,10 +118,8 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0],
-                this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
-                this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1,
-                this.buttonStatus2);
+        return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
+                this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1, this.buttonStatus2);
     }
     
     @Override
@@ -142,14 +138,12 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
                 
                 if (this.networkProduced == 0 && this.getNetwork().getProduced().getWatts() != 0)
                 {
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                            this.blockType.blockID);
+                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.blockType.blockID);
                 }
                 
                 if (this.networkProduced != 0 && this.getNetwork().getProduced().getWatts() == 0)
                 {
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord,
-                            this.blockType.blockID);
+                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.blockType.blockID);
                 }
                 
                 this.networkProduced = this.getNetwork().getProduced().getWatts();

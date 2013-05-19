@@ -73,12 +73,9 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("output",
-                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
-        this.icons.put("input",
-                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
-        this.icons.put("default",
-                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
+        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
+        this.icons.put("default", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
     }
     
     @Override
@@ -100,15 +97,12 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
      */
     
     @Override
-    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6,
-            float par7, float par8, float par9)
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
     {
         if (!par1World.isRemote)
         {
-            boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
-                    .areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
-            if (par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z))
-                    .getOwningPlayer() || isPlayerOp)
+            boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
+            if (par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).getOwningPlayer() || isPlayerOp)
             {
                 par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
                 return true;
@@ -142,11 +136,9 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
                 break;
         }
         
-        if (par5EntityLiving instanceof EntityPlayer
-                && (TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z) instanceof TileEntityQuantumBatteryBox)
+        if (par5EntityLiving instanceof EntityPlayer && (TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z) instanceof TileEntityQuantumBatteryBox)
         {
-            ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z))
-                    .setPlayer((EntityPlayer) par5EntityLiving);
+            ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).setPlayer((EntityPlayer) par5EntityLiving);
         }
         
         ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
@@ -154,8 +146,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         
@@ -200,7 +191,6 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
         
         return new ItemStack(id, 1, 0);
     }
-    
     
     @Override
     public boolean hasComparatorInputOverride()

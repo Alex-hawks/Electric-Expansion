@@ -79,8 +79,8 @@ public class WireMillRecipes
     }
     
     /**
-     * Used to get the resulting ItemStack from a source ItemStack
-     * Don't check unless Electric Expansion is loaded and this has recipes registered.
+     * Used to get the resulting ItemStack from a source ItemStack Don't check
+     * unless Electric Expansion is loaded and this has recipes registered.
      * 
      * @param item
      *            The Source ItemStack
@@ -167,10 +167,13 @@ public class WireMillRecipes
     }
     
     /**
-     * A helper method for getting the recipes for NEI 
-     * @return Map<inputItemStack, int[]>
-     * int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3: ticksRequired)
-     * requiredEnergy = ticksRequired * {@link electricexpansion.common.tile.TileEntityWireMill#WATTS_PER_TICK WATTS_PER_TICK}
+     * A helper method for getting the recipes for NEI
+     * 
+     * @return Map<inputItemStack, int[]> int[] is (0:ID of output; 1:
+     *         StackSize; 2: Metadata; 3: ticksRequired) requiredEnergy =
+     *         ticksRequired *
+     *         {@link electricexpansion.common.tile.TileEntityWireMill#WATTS_PER_TICK
+     *         WATTS_PER_TICK}
      */
     public Map<ItemStack, int[]> getRecipesForNEI()
     {

@@ -8,7 +8,7 @@ import electricexpansion.common.helpers.ItemBlockCableHelper;
 
 public class ItemBlockRedstonePaintedWire extends ItemBlockCableHelper
 {
-
+    
     public ItemBlockRedstonePaintedWire(int id)
     {
         super(id);

@@ -38,7 +38,8 @@ public class CommonProxy implements IGuiHandler
         GameRegistry.registerTileEntity(TileEntityLogisticsWire.class, "TileEntityLogisticsWire");
         GameRegistry.registerTileEntity(TileEntityWireMill.class, "TileEntityWireMill");
         GameRegistry.registerTileEntity(TileEntityRedstonePaintedWire.class, "TileEntityRedstonePaintedWire");
-        // GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class, "TileEntityRedstoneWireBlock");
+        // GameRegistry.registerTileEntity(TileEntityRedstoneWireBlock.class,
+        // "TileEntityRedstoneWireBlock");
         GameRegistry.registerTileEntity(TileEntityAdvancedBatteryBox.class, "TileEntityAdvBox");
         GameRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityVoltDet");
         GameRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer");

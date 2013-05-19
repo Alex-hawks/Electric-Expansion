@@ -25,7 +25,9 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
     public ElectricityPack electricityReading = new ElectricityPack();
     private ElectricityPack lastReading = new ElectricityPack();
     
-    private int[] rotationMatrix = { 0, 1, 2, 5, 3, 4 };
+    public static final int[] rotationMatrix = { 0, 1, 2, 5, 3, 4 };
+    
+    public static final int[] metaMatrix = { 0, 1, 2, 4, 5, 3 };
     
     @Override
     public void updateEntity()
@@ -72,13 +74,11 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this, new Object[] { Double.valueOf(this.electricityReading.amperes),
-                Double.valueOf(this.electricityReading.voltage) });
+        return PacketManager.getPacket("ElecEx", this, new Object[] { Double.valueOf(this.electricityReading.amperes), Double.valueOf(this.electricityReading.voltage) });
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
         {
@@ -102,19 +102,18 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        return direction.ordinal() - 2 == this.getBlockMetadata();
+        return direction.ordinal() == rotationMatrix[this.getBlockMetadata()];
     }
     
     @Override
     public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
     {
-        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID,
-                facingDirection.ordinal(), 0x02);
+        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, metaMatrix[facingDirection.ordinal()], 0x02);
     }
     
     @Override
     public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
     {
-        return ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z));
+        return ForgeDirection.getOrientation(rotationMatrix[world.getBlockMetadata(x, y, z)]);
     }
 }

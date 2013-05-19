@@ -45,19 +45,15 @@ public class TileEntityTransformer extends TileEntityElectrical implements IRota
         
         if (!this.worldObj.isRemote)
         {
-            ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2)
-                    .getOpposite();
+            ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2).getOpposite();
             TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
             // Check if requesting power on output
             ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                    outputDirection);
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                    outputDirection.getOpposite());
-            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
-                    outputDirection);
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
             
             if (outputNetwork != null && inputNetwork == null)
             {
@@ -136,8 +132,7 @@ public class TileEntityTransformer extends TileEntityElectrical implements IRota
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         try
         {
@@ -182,8 +177,7 @@ public class TileEntityTransformer extends TileEntityElectrical implements IRota
     @Override
     public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
     {
-        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID,
-                facingDirection.ordinal() - 2 + this.type, 0);
+        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal() - 2 + this.type, 0);
     }
     
     @Override

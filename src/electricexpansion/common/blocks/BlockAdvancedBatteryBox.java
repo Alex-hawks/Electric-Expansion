@@ -55,13 +55,13 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
             return this.icons.get("out");
         else if (side == te.getInput().ordinal())
             return this.icons.get("input");
-
+        
         if (side == 0 || side == 1)
             return this.icons.get("top");
         
         if (te.getMaxJoules() <= 8000000)
             return this.icons.get("tier1");
-        else if(te.getMaxJoules() <= 12000000)
+        else if (te.getMaxJoules() <= 12000000)
             return this.icons.get("tier2");
         else if (te.getMaxJoules() <= 16000000)
             return this.icons.get("tier3");
@@ -84,13 +84,12 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         else
             return this.icons.get("tier1");
     }
-        
+    
     /**
      * Called when the block is right clicked by the player
      */
     @Override
-    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
         if (!world.isRemote)
         {

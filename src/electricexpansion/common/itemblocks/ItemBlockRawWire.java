@@ -21,8 +21,7 @@ public class ItemBlockRawWire extends ItemBlockCableHelper
         super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
         
         par3List.add("Will shock you when near");
-        par3List.add("Shock Damage: "
-                + (double) EnumWireMaterial.values()[par1ItemStack.getItemDamage()].electrocutionDamage / 2 + " Hearts");
+        par3List.add("Shock Damage: " + (double) EnumWireMaterial.values()[par1ItemStack.getItemDamage()].electrocutionDamage / 2 + " Hearts");
         
     }
 }

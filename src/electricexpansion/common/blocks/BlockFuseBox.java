@@ -57,8 +57,7 @@ public class BlockFuseBox extends BlockAdvanced
     public void registerIcons(IconRegister par1IconRegister)
     {
         this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-        this.icons
-                .put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
+        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
         this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
         this.icons.put("side", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
         // TODO Create above texture...
@@ -92,8 +91,7 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         int original = metadata;
@@ -126,8 +124,7 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onSneakUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         return false;
     }
@@ -175,8 +172,7 @@ public class BlockFuseBox extends BlockAdvanced
     }
     
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {

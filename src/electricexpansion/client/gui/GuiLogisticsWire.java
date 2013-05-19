@@ -40,8 +40,7 @@ public class GuiLogisticsWire extends GuiScreen
     {
         super.onGuiClosed();
         
-        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
-                (byte) 7, false));
+        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) 7, false));
     }
     
     @Override
@@ -51,18 +50,15 @@ public class GuiLogisticsWire extends GuiScreen
         {
             case 0:
                 this.tileEntity.buttonStatus0 = !this.tileEntity.buttonStatus0;
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
-                        (byte) -1, this.tileEntity.buttonStatus0));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) -1, this.tileEntity.buttonStatus0));
                 break;
             case 1:
                 this.tileEntity.buttonStatus1 = !this.tileEntity.buttonStatus1;
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
-                        (byte) 0, this.tileEntity.buttonStatus1));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) 0, this.tileEntity.buttonStatus1));
                 break;
             case 2:
                 this.tileEntity.buttonStatus2 = !this.tileEntity.buttonStatus2;
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
-                        (byte) 1, this.tileEntity.buttonStatus2));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, (byte) 1, this.tileEntity.buttonStatus2));
                 break;
         }
     }
@@ -78,12 +74,9 @@ public class GuiLogisticsWire extends GuiScreen
         int posX = (this.width - this.xSizeOfTexture) / 2;
         int posY = (this.height - this.ySizeOfTexture) / 2;
         
-        this.buttonList.add(new ButtonSwitch(0, posX + 13, posY + 15, 150, 16, "Output to World",
-                this.tileEntity.buttonStatus0));
-        this.buttonList.add(new ButtonSwitch(1, posX + 13, posY + 38, 150, 16, "Output to RS Network",
-                this.tileEntity.buttonStatus1));
-        this.buttonList.add(new ButtonSwitch(2, posX + 13, posY + 61, 150, 16, "Unused",
-                this.tileEntity.buttonStatus2));
+        this.buttonList.add(new ButtonSwitch(0, posX + 13, posY + 15, 150, 16, "Output to World", this.tileEntity.buttonStatus0));
+        this.buttonList.add(new ButtonSwitch(1, posX + 13, posY + 38, 150, 16, "Output to RS Network", this.tileEntity.buttonStatus1));
+        this.buttonList.add(new ButtonSwitch(2, posX + 13, posY + 61, 150, 16, "Unused", this.tileEntity.buttonStatus2));
         
         if (!this.mc.thePlayer.isEntityAlive() || this.mc.thePlayer.isDead)
         {

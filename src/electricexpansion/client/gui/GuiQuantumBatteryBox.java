@@ -63,8 +63,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
     {
         this.textFieldFrequency.drawTextBox();
         
-        String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoulesForDisplay(),
-                ElectricUnit.JOULES);
+        String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoulesForDisplay(), ElectricUnit.JOULES);
         
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 42, 6, 4210752);
         this.fontRenderer.drawString("Current Frequency: " + this.tileEntity.getFrequency(), 10, 20, 4210752);
@@ -119,8 +118,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
         super.keyTyped(par1, par2);
         if (par2 == 28)
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
-                    this.frequency));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, this.frequency));
         }
         this.textFieldFrequency.textboxKeyTyped(par1, par2);
         
@@ -140,8 +138,7 @@ public class GuiQuantumBatteryBox extends GuiContainer
         switch (button.id)
         {
             case 0:
-                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity,
-                        this.frequency));
+                PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, this.frequency));
                 break;
             default:
         }

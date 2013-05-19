@@ -17,9 +17,13 @@ public class ContainerInsulationMachine extends Container
     public ContainerInsulationMachine(InventoryPlayer par1InventoryPlayer, TileEntityInsulatingMachine tileEntity)
     {
         this.tileEntity = tileEntity;
-        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric Input Slot
-        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be processed
-        this.addSlotToContainer(new SlotSpecific(tileEntity, 2, 108, 25, (ItemStack) null)); // Process result
+        this.addSlotToContainer(new SlotUniversalElectricItem(tileEntity, 0, 55, 49)); // Electric
+                                                                                       // Input
+                                                                                       // Slot
+        this.addSlotToContainer(new Slot(tileEntity, 1, 55, 25)); // To be
+                                                                  // processed
+        this.addSlotToContainer(new SlotSpecific(tileEntity, 2, 108, 25, (ItemStack) null)); // Process
+                                                                                             // result
         
         int var3;
         
@@ -27,8 +31,7 @@ public class ContainerInsulationMachine extends Container
         {
             for (int var4 = 0; var4 < 9; ++var4)
             {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18,
-                        84 + var3 * 18));
+                this.addSlotToContainer(new Slot(par1InventoryPlayer, var4 + var3 * 9 + 9, 8 + var4 * 18, 84 + var3 * 18));
             }
         }
         for (var3 = 0; var3 < 9; ++var3)

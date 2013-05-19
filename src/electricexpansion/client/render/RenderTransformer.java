@@ -40,8 +40,7 @@ public class RenderTransformer extends TileEntitySpecialRenderer
         {
             if (new Vector3(tileEntity).equals(new Vector3(movingPosition)))
             {
-                RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1,
-                        (float) ((float) z + .5));
+                RenderFloatingText.renderFloatingText(status, (float) ((float) x + .5), (float) y - 1, (float) ((float) z + .5));
             }
         }
         

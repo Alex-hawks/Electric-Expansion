@@ -39,8 +39,7 @@ import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.InsulationRecipes;
 
-public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable 
-implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
 {
     public static final double WATTS_PER_TICK = 500.0D;
     public static final double TRANSFER_LIMIT = 1250.0D;
@@ -92,17 +91,14 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
             ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
             TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                    inputDirection.getOpposite());
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
             
             if (inputNetwork != null)
             {
                 if (this.joulesStored < maxJoules)
                 {
-                    inputNetwork.startRequesting(
-                            this,
-                            Math.min(this.getMaxJoules(new Object[0]) - this.getJoules(new Object[0]), 1250.0D)
-                            / this.getVoltage(new Object[0]), this.getVoltage(new Object[0]));
+                    inputNetwork.startRequesting(this, Math.min(this.getMaxJoules(new Object[0]) - this.getJoules(new Object[0]), 1250.0D) / this.getVoltage(new Object[0]),
+                            this.getVoltage(new Object[0]));
                     ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
                     this.setJoules(this.joulesStored + electricityPack.getWatts(), new Object[0]);
                     
@@ -132,9 +128,8 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
                 if (electricItem.getProvideRequest(this.inventory[0]).getWatts() > 0)
                 {
                     double joulesReceived = electricItem.onProvide(
-                            ElectricityPack.getFromWatts(
-                                    Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005D, 1250.0D),
-                                    electricItem.getVoltage(this.inventory[0])), this.inventory[0]).getWatts();
+                            ElectricityPack.getFromWatts(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005D, 1250.0D), electricItem.getVoltage(this.inventory[0])), this.inventory[0])
+                            .getWatts();
                     this.setJoules(this.joulesStored + joulesReceived);
                 }
             }
@@ -143,21 +138,16 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
                 IElectricItem item = (IElectricItem) this.inventory[0].getItem();
                 if (item.canProvideEnergy(this.inventory[0]))
                 {
-                    double gain = ElectricItem.discharge(this.inventory[0],
-                            (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO),
-                            3, false, false) * UniversalElectricity.IC2_RATIO;
+                    double gain = ElectricItem.discharge(this.inventory[0], (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false)
+                            * UniversalElectricity.IC2_RATIO;
                     this.setJoules(this.getJoules() + gain);
                 }
             }
         }
         
-        
         if (this.joulesStored >= WATTS_PER_TICK - 50.0D && !this.isDisabled())
         {
-            if (this.inventory[1] != null
-                    && this.canProcess()
-                    && (this.processTicks == 0 || this.baseID != this.inventory[1].itemID || this.baseMeta != this.inventory[1]
-                            .getItemDamage()))
+            if (this.inventory[1] != null && this.canProcess() && (this.processTicks == 0 || this.baseID != this.inventory[1].itemID || this.baseMeta != this.inventory[1].getItemDamage()))
             {
                 this.baseID = this.inventory[1].itemID;
                 this.baseMeta = this.inventory[1].getItemDamage();
@@ -198,16 +188,12 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(
-                "ElecEx",
-                this,
-                new Object[] { Integer.valueOf(this.processTicks), Integer.valueOf(this.disabledTicks),
-                        Double.valueOf(this.joulesStored), Integer.valueOf(this.recipeTicks) });
+        return PacketManager.getPacket("ElecEx", this,
+                new Object[] { Integer.valueOf(this.processTicks), Integer.valueOf(this.disabledTicks), Double.valueOf(this.joulesStored), Integer.valueOf(this.recipeTicks) });
     }
     
     @Override
-    public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet,
-            EntityPlayer player, ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager inputNetwork, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         try
         {
@@ -245,8 +231,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
         int outputSlot = this.inventory[2] != null ? this.inventory[2].stackSize : 0;
         if (inputSlot != null)
         {
-            if (InsulationRecipes.INSTANCE.getProcessResult(inputSlot) > 0
-                    && InsulationRecipes.INSTANCE.getProcessResult(inputSlot) + outputSlot <= 64)
+            if (InsulationRecipes.INSTANCE.getProcessResult(inputSlot) > 0 && InsulationRecipes.INSTANCE.getProcessResult(inputSlot) + outputSlot <= 64)
             {
                 canWork = true;
             }
@@ -521,7 +506,7 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
     {
         if (i == 1)
             return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 1;
-            return false;
+        return false;
     }
     
     @Override
@@ -529,28 +514,34 @@ implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IE
     {
         return new int[] { 0, 1, 2 };
     }
-
+    
     @Override
     public boolean canInsertItem(int slot, ItemStack itemstack, int side)
     {
         switch (slot)
         {
-            case 0: return ChargeUtils.UE.isFull(itemstack);
-            case 1: return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 0;
-            
-            default: return false;
+            case 0:
+                return ChargeUtils.UE.isFull(itemstack);
+            case 1:
+                return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 0;
+                
+            default:
+                return false;
         }
     }
-
+    
     @Override
     public boolean canExtractItem(int slot, ItemStack itemstack, int side)
     {
         switch (slot)
         {
-            case 0: return ChargeUtils.UE.isEmpty(itemstack);
-            case 2: return true;
-            
-            default: return false;
+            case 0:
+                return ChargeUtils.UE.isEmpty(itemstack);
+            case 2:
+                return true;
+                
+            default:
+                return false;
         }
     }
 }

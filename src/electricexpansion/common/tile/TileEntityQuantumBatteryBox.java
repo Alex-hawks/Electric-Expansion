@@ -28,8 +28,7 @@ import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
-public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage implements IWirelessPowerMachine,
-IPacketReceiver, IInventory, IPeripheral
+public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 {
     private ItemStack[] containingItems = new ItemStack[2];
     private int playersUsing = 0;
@@ -51,20 +50,17 @@ IPacketReceiver, IInventory, IPeripheral
         if (!this.isDisabled())
         {
             ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                    outputDirection);
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
             
-            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this),
-                    outputDirection.getOpposite());
+            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile,
-                    outputDirection.getOpposite());
-            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile,
-                    outputDirection);
+            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
             
             if (outputNetwork != null && inputNetwork != outputNetwork)
             {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(),
+                        Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
                 
                 if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
                 {
@@ -97,7 +93,7 @@ IPacketReceiver, IInventory, IPeripheral
     {
         return 10000;
     }
-
+    
     public void sendPacket()
     {
         PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj);
@@ -107,16 +103,13 @@ IPacketReceiver, IInventory, IPeripheral
     public Packet getDescriptionPacket()
     {
         if (ElectricExpansion.useHashCodes)
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks,
-                    this.getJoules(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
+            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
         else
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks,
-                    this.getJoules(), this.owningPlayer);
+            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), this.owningPlayer);
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet,
-            EntityPlayer player, ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int packetType, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
         {
@@ -376,8 +369,7 @@ IPacketReceiver, IInventory, IPeripheral
     }
     
     @Override
-    public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments)
-            throws IllegalArgumentException
+    public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException
     {
         final int getVoltage = 0;
         final int isFull = 1;
@@ -399,9 +391,7 @@ IPacketReceiver, IInventory, IPeripheral
                 case getFrequency:
                     return new Object[] { this.getFrequency() };
                 case setFrequency:
-                    return new Object[] { arguments.length == 1 ? this.setFrequency(arguments[0])
-                            : "Expected args for this function is 1. You have provided %s."
-                                .replace("%s", arguments.length + "") };
+                    return new Object[] { arguments.length == 1 ? this.setFrequency(arguments[0]) : "Expected args for this function is 1. You have provided %s.".replace("%s", arguments.length + "") };
                 case getPlayer:
                     return new Object[] { this.getOwningPlayer() };
                 default:
@@ -415,8 +405,7 @@ IPacketReceiver, IInventory, IPeripheral
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2)
-                || direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
+        return direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2) || direction == ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
     }
     
     @Override

@@ -52,15 +52,16 @@ public class TileEntityRedstoneNetworkCore extends TileEntityElectrical implemen
     @Override
     public void setNetwork(IElectricityNetwork network)
     {
-        //  It is an RsNetwork with no controller.
+        // It is an RsNetwork with no controller.
         if (network instanceof EENetwork && ((EENetwork) network).coreProcessor == null)
         {
             this.network = (EENetwork) network;
             ((EENetwork) network).coreProcessor = this;
             this.network.cleanUpConductors();
         }
-        //  It is another mod's network... (f.e. Mekanism's Universal cable) or, another controller is in the network.
-        //  Either way, we're not touching it...
+        // It is another mod's network... (f.e. Mekanism's Universal cable) or,
+        // another controller is in the network.
+        // Either way, we're not touching it...
         else
         {
             

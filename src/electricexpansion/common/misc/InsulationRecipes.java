@@ -174,18 +174,22 @@ public class InsulationRecipes
     }
     
     /**
-     * A helper method for getting the recipes for NEI 
-     * @return Map<inputItemStack, int[]>
-     * int[] is (0:ID of output; 1: StackSize; 2: Metadata; 3: ticksRequired)
-     * requiredEnergy = ticksRequired * {@link electricexpansion.common.tile.TileEntityInsulatingMachine#WATTS_PER_TICK WATTS_PER_TICK}
+     * A helper method for getting the recipes for NEI
+     * 
+     * @return Map<inputItemStack, int[]> int[] is (0:ID of output; 1:
+     *         StackSize; 2: Metadata; 3: ticksRequired) requiredEnergy =
+     *         ticksRequired *
+     *         {@link electricexpansion.common.tile.TileEntityInsulatingMachine#WATTS_PER_TICK
+     *         WATTS_PER_TICK}
      */
-    public Map<ItemStack, int[]> getRecipesForNEI() //didn't work as advertised so i fixed it
+    public Map<ItemStack, int[]> getRecipesForNEI() // didn't work as advertised
+                                                    // so i fixed it
     {
         Map<ItemStack, int[]> recipes = new HashMap<ItemStack, int[]>();
         for (int i = 0; i < this.recipeToInput.size(); i++)
         {
             ItemStack input = stackSizeChange(this.recipeToInput.get(i), this.recipeToInputQTY.get(i));
-            int[] output = {RecipeRegistery.getInsulationIS().itemID, this.recipeToOutput.get(i), RecipeRegistery.getInsulationIS().getItemDamage(), this.getProcessTicks(input) };
+            int[] output = { RecipeRegistery.getInsulationIS().itemID, this.recipeToOutput.get(i), RecipeRegistery.getInsulationIS().getItemDamage(), this.getProcessTicks(input) };
             recipes.put(input, output);
         }
         return recipes;

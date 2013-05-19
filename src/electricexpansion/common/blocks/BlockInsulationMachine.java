@@ -62,8 +62,7 @@ public class BlockInsulationMachine extends BlockAdvanced
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         int metadata = par1World.getBlockMetadata(x, y, z);
         
@@ -95,8 +94,7 @@ public class BlockInsulationMachine extends BlockAdvanced
     }
     
     @Override
-    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side,
-            float hitX, float hitY, float hitZ)
+    public boolean onMachineActivated(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
     {
         if (!par1World.isRemote)
         {
@@ -159,8 +157,7 @@ public class BlockInsulationMachine extends BlockAdvanced
     {
         this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "insulatorTop"));
         this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
-        this.icons.put("insulator",
-                par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "insulatorFront"));
+        this.icons.put("insulator", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "insulatorFront"));
         this.icons.put("", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
     }
     

@@ -43,15 +43,13 @@ public class GuiFuseBox extends GuiContainer
         this.fontRenderer.drawString(this.tileEntity.getInvName(), 8, 6, 4210752);
         String displayVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
         
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.voltage") + ": " + displayVoltage, 65,
-                55, 4210752);
+        this.fontRenderer.drawString(StatCollector.translateToLocal("container.voltage") + ": " + displayVoltage, 65, 55, 4210752);
         if (this.tileEntity.getStackInSlot(0) != null)
         {
             ItemStack fuseStack = this.tileEntity.getStackInSlot(0);
             IItemFuse fuse = (IItemFuse) fuseStack.getItem();
             this.fontRenderer.drawString(this.tileEntity.getStackInSlot(0).getItemName(), 30, 18, 4210752);
-            this.fontRenderer.drawString(StatCollector.translateToLocal(fuse.getUnlocalizedName(fuseStack)), 30, 18,
-                    4210752);
+            this.fontRenderer.drawString(StatCollector.translateToLocal(fuse.getUnlocalizedName(fuseStack)), 30, 18, 4210752);
         }
     }
     

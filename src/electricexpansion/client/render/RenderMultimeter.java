@@ -35,12 +35,8 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
          */
         for (int side = 0; side < 6; side++)
         {
-            ForgeDirection relativeSide = VectorHelper.getOrientationFromSide(direction,
-                    ForgeDirection.getOrientation(side));
             
-            if (relativeSide == ForgeDirection.EAST || relativeSide == ForgeDirection.WEST
-                    || relativeSide == ForgeDirection.UP || relativeSide == ForgeDirection.DOWN
-                    || relativeSide == ForgeDirection.SOUTH)
+            if (direction.ordinal() != side)
             {
                 GL11.glPushMatrix();
                 GL11.glPolygonOffset(-10, -10);
@@ -119,12 +115,9 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
                 offsetX = (realWidth - maxWidth) / 2 + 2 + 5;
                 
                 GL11.glDisable(GL11.GL_LIGHTING);
-                fontRenderer.drawString(amperes, offsetX - realWidth / 2,
-                        1 + offsetY - realHeight / 2 - 1 * lineHeight, 1);
-                fontRenderer.drawString(voltage, offsetX - realWidth / 2,
-                        1 + offsetY - realHeight / 2 + 0 * lineHeight, 1);
-                fontRenderer
-                        .drawString(watt, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 1 * lineHeight, 1);
+                fontRenderer.drawString(amperes, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 - 1 * lineHeight, 1);
+                fontRenderer.drawString(voltage, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 0 * lineHeight, 1);
+                fontRenderer.drawString(watt, offsetX - realWidth / 2, 1 + offsetY - realHeight / 2 + 1 * lineHeight, 1);
                 
                 GL11.glEnable(GL11.GL_LIGHTING);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

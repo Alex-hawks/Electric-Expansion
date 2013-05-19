@@ -52,25 +52,25 @@ import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.UniversalPowerUtils;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
-implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
 {
     public static final double BASE_OUTPUT = 20000;
     public static final double BASE_VOLTAGE = 120;
     public static final int INVENTORY_SIZE = 6;
     
     private ItemStack[] inventory = new ItemStack[INVENTORY_SIZE];
-	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
-
+    public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
+    
     /**
-     * 0:   none
-     * 1:   Electricity (UE, IC2, and RP2 if/when permission is obtained and RP2 is up to date)
-     * 2:   Pneumatic (Intelligence depends on upgrade. BuildCraft, ThermalExpansion) (Unavailable for now)
-     * 3:   Quantum (Depends on Upgrade, Replaces Quantum Battery Box soon)
-     * 4:   Universal Cables (Depends on upgrade. Mekanism) (Unavailable for now)
-     * 5:   Factorization Cables (Depends on upgrade. Factorization) (Unavailable for now)
-     * 6:   Universal (Depends on Upgrade(s), Requires availability of Modes: 1, 2, 
-     *      4 if Mekanism is installed, 5 if Factorization is installed) (Unavailable for now)
+     * 0: none 1: Electricity (UE, IC2, and RP2 if/when permission is obtained
+     * and RP2 is up to date) 2: Pneumatic (Intelligence depends on upgrade.
+     * BuildCraft, ThermalExpansion) (Unavailable for now) 3: Quantum (Depends
+     * on Upgrade, Replaces Quantum Battery Box soon) 4: Universal Cables
+     * (Depends on upgrade. Mekanism) (Unavailable for now) 5: Factorization
+     * Cables (Depends on upgrade. Factorization) (Unavailable for now) 6:
+     * Universal (Depends on Upgrade(s), Requires availability of Modes: 1, 2, 4
+     * if Mekanism is installed, 5 if Factorization is installed) (Unavailable
+     * for now)
      */
     private byte inputMode = 0;
     private byte outputMode = 0;
@@ -108,16 +108,16 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         {
             switch (this.outputMode)
             {
-                case 1: 
+                case 1:
                     this.sendElectricalEnergy();
                     break;
                 case 2:
                     this.sendPneumaticEnergy();
                     break;
-                case 3: 
+                case 3:
                     this.sendQuantumEnergy();
                     break;
-                case 4: 
+                case 4:
                     this.sendMekanismEnergy();
                     break;
                 case 5:
@@ -132,13 +132,13 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
             
             switch (this.inputMode)
             {
-                case 1: 
+                case 1:
                     this.drainElectricalEnergy();
                     break;
                 case 2:
                     this.drainPneumaticEnergy();
                     break;
-                case 4: 
+                case 4:
                     this.drainMekanismEnergy();
                     break;
                 case 5:
@@ -169,23 +169,27 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     
     private boolean sendElectricalEnergy()
     {
-        //  Batteries (UE, then IC2. Will not call both charge methods)
+        // Batteries (UE, then IC2. Will not call both charge methods)
         if (this.inventory[0] != null)
         {
             if (this.inventory[0].getItem() instanceof IItemElectric)
             {
-                this.setJoules(this.getJoules() - (ChargeUtils.UE.charge(this.inventory[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap(), this.getJoules()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
+                this.setJoules(this.getJoules()
+                        - (ChargeUtils.UE.charge(this.inventory[0],
+                                UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap(), this.getJoules()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
                 return true;
             }
             else if (this.inventory[0].getItem() instanceof IElectricItem)
-                
+            
             {
-                this.setJoules(this.getJoules() - (ChargeUtils.IC2.charge(this.inventory[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap(), this.getJoules()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
+                this.setJoules(this.getJoules()
+                        - (ChargeUtils.IC2.charge(this.inventory[0],
+                                UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap(), this.getJoules()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
                 return true;
             }
         }
-
-        //  Cables (UE)
+        
+        // Cables (UE)
         {
             TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), output);
             IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, output);
@@ -195,7 +199,8 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
             
             if (outputNetwork != null && inputNetwork != outputNetwork)
             {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(), Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
+                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(),
+                        Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
                 
                 if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
                 {
@@ -210,7 +215,8 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
             }
         }
         
-        //  Cables (IC2, Will not work if already output to UE, will actively avoid Mekanism Cables)
+        // Cables (IC2, Will not work if already output to UE, will actively
+        // avoid Mekanism Cables)
         {
             if (this.getJoules() > 0.0D)
             {
@@ -228,7 +234,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
                     }
                 }
             }
-        }        
+        }
         return false;
     }
     
@@ -304,13 +310,15 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         {
             if (this.inventory[1].getItem() instanceof IItemElectric)
             {
-                this.setJoules(this.getJoules() + (ChargeUtils.UE.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap() / this.getVoltage(), this.getVoltage()))).toUEWatts());
+                this.setJoules(this.getJoules()
+                        + (ChargeUtils.UE.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap() / this.getVoltage(), this.getVoltage()))).toUEWatts());
                 return true;
             }
             else if (this.inventory[1].getItem() instanceof IElectricItem)
-                
+            
             {
-                this.setJoules(this.getJoules() + (ChargeUtils.IC2.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap() / this.getVoltage(), this.getVoltage()))).toUEWatts());
+                this.setJoules(this.getJoules()
+                        + (ChargeUtils.IC2.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getOutputCap() / this.getVoltage(), this.getVoltage()))).toUEWatts());
                 return true;
             }
         }
@@ -360,15 +368,15 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] {
-                Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks), 
-                Byte.valueOf(this.inputMode), Byte.valueOf(this.outputMode),
-                Byte.valueOf((byte) this.input.ordinal()), Byte.valueOf((byte) this.output.ordinal()) });
+        return PacketManager.getPacket(
+                ElectricExpansion.CHANNEL,
+                this,
+                new Object[] { Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks), Byte.valueOf(this.inputMode), Byte.valueOf(this.outputMode),
+                        Byte.valueOf((byte) this.input.ordinal()), Byte.valueOf((byte) this.output.ordinal()) });
     }
     
     @Override
-    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player,
-            ByteArrayDataInput dataStream)
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
         if (this.worldObj.isRemote)
         {
@@ -385,7 +393,9 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
                 this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
                 this.worldObj.setBlockMetadataWithNotify(this.xCoord, this.yCoord, this.zCoord, 0, 0x03);
             }
-            catch (Exception e) { }
+            catch (Exception e)
+            {
+            }
         }
         else
         {
@@ -561,18 +571,15 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         double slot2 = 0;
         double slot3 = 0;
         
-        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]) == "Capacity")
+        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier && ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]) == "Capacity")
         {
             slot1 = ((IModifier) this.inventory[2].getItem()).getEffectiveness(this.inventory[2]);
         }
-        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]) == "Capacity")
+        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier && ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]) == "Capacity")
         {
             slot2 = ((IModifier) this.inventory[3].getItem()).getEffectiveness(this.inventory[3]);
         }
-        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]) == "Capacity")
+        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier && ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]) == "Capacity")
         {
             slot3 = ((IModifier) this.inventory[4].getItem()).getEffectiveness(this.inventory[4]);
         }
@@ -629,18 +636,15 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         double slot2 = 1.0D;
         double slot3 = 1.0D;
         
-        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]) == type)
+        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier && ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]) == type)
         {
             slot1 = ((IModifier) this.inventory[2].getItem()).getEffectiveness(this.inventory[2]);
         }
-        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]) == type)
+        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier && ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]) == type)
         {
             slot2 = ((IModifier) this.inventory[3].getItem()).getEffectiveness(this.inventory[3]);
         }
-        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]) == type)
+        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier && ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]) == type)
         {
             slot3 = ((IModifier) this.inventory[4].getItem()).getEffectiveness(this.inventory[4]);
         }
@@ -653,18 +657,15 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         double slot2 = 0;
         double slot3 = 0;
         
-        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]) == "Unlimiter")
+        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier && ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]) == "Unlimiter")
         {
             slot1 = ((IModifier) this.inventory[2].getItem()).getEffectiveness(this.inventory[2]);
         }
-        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]) == "Unlimiter")
+        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier && ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]) == "Unlimiter")
         {
             slot2 = ((IModifier) this.inventory[3].getItem()).getEffectiveness(this.inventory[3]);
         }
-        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier
-                && ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]) == "Unlimiter")
+        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier && ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]) == "Unlimiter")
         {
             slot3 = ((IModifier) this.inventory[4].getItem()).getEffectiveness(this.inventory[4]);
         }
@@ -826,7 +827,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         toReturn.add((byte) 1);
         if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
         {
-            //            toReturn.add((byte) 2);
+            // toReturn.add((byte) 2);
         }
         if (this.hasUpgrade("Quantum"))
         {
@@ -834,17 +835,16 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         }
         if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
         {
-            //            toReturn.add((byte) 4);
+            // toReturn.add((byte) 4);
         }
         if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
         {
-            //            toReturn.add((byte) 5);
+            // toReturn.add((byte) 5);
         }
-        if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim"))
-                && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+        if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
                 && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
         {
-            //            toReturn.add((byte) 6);
+            // toReturn.add((byte) 6);
         }
         return toReturn;
     }
@@ -857,19 +857,19 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         {
             switch (mode)
             {
-                case 0: 
-                case 1: 
+                case 0:
+                case 1:
                     this.inputMode = mode;
                     break;
-                case 2: 
+                case 2:
                     if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
                         this.inputMode = mode;
                     break;
-                case 3: 
+                case 3:
                     if (this.hasUpgrade("Quantum"))
                         this.inputMode = mode;
                     break;
-                case 4: 
+                case 4:
                     if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
                         this.inputMode = mode;
                     break;
@@ -878,8 +878,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
                         this.inputMode = mode;
                     break;
                 case 6:
-                    if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim"))
-                            && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                    if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
                             && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
                         this.inputMode = mode;
             }
@@ -894,19 +893,19 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
         {
             switch (mode)
             {
-                case 0: 
-                case 1: 
+                case 0:
+                case 1:
                     this.outputMode = mode;
                     break;
-                case 2: 
+                case 2:
                     if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
                         this.outputMode = mode;
                     break;
-                case 3: 
+                case 3:
                     if (this.hasUpgrade("Quantum"))
                         this.outputMode = mode;
                     break;
-                case 4: 
+                case 4:
                     if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
                         this.outputMode = mode;
                     break;
@@ -915,8 +914,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
                         this.outputMode = mode;
                     break;
                 case 6:
-                    if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim"))
-                            && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
+                    if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization"))
                             && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
                         this.outputMode = mode;
             }
@@ -953,7 +951,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     {
         if (this.worldObj.isRemote)
             this.sendUpdatedModeToServer(true);
-        else 
+        else
         {
             int newInput = (this.input.ordinal() + 1) % 6;
             if (newInput == this.output.ordinal())
@@ -966,7 +964,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     {
         if (this.worldObj.isRemote)
             this.sendUpdatedModeToServer(false);
-        else 
+        else
         {
             int newOutput = (this.output.ordinal() + 1) % 6;
             if (newOutput == this.input.ordinal())
@@ -977,7 +975,7 @@ implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEn
     
     private void sendUpdatedModeToServer(boolean b)
     {
-        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 1), b } ));
+        PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 1), b }));
     }
     
     @Override

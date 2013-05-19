@@ -20,7 +20,7 @@ public class TileEntityRedstonePaintedWire extends TileEntityConductorBase imple
             int i = 0;
             for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS)
                 i = Math.max(i, this.worldObj.getBlockPowerInput(this.xCoord + side.offsetX, this.yCoord + side.offsetY, this.zCoord + side.offsetZ));
-
+            
             this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
             return i;
         }

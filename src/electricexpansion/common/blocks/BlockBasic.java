@@ -11,8 +11,7 @@ import electricexpansion.common.ElectricExpansion;
 
 public class BlockBasic extends Block
 {
-    public BlockBasic(int id, Material material, CreativeTabs tab, float hardness, float resistance, String name,
-            float lightValue, StepSound sound)
+    public BlockBasic(int id, Material material, CreativeTabs tab, float hardness, float resistance, String name, float lightValue, StepSound sound)
     {
         super(id, material);
         this.setCreativeTab(tab);
@@ -23,8 +22,7 @@ public class BlockBasic extends Block
         this.setLightValue(lightValue);
     }
     
-    public BlockBasic(int id, Material material, CreativeTabs tab, float hardness, float resistance, String name,
-            float lightValue)
+    public BlockBasic(int id, Material material, CreativeTabs tab, float hardness, float resistance, String name, float lightValue)
     {
         this(id, material, tab, hardness, resistance, name, lightValue, soundMetalFootstep);
     }
@@ -58,8 +56,7 @@ public class BlockBasic extends Block
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("tile.",
-                ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.blockIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("tile.", ElectricExpansion.TEXTURE_NAME_PREFIX));
     }
     
 }
