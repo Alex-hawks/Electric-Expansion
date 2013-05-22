@@ -289,7 +289,7 @@ public abstract class TileEntityConductorBase extends TileEntityAdvanced impleme
         
         if (!this.worldObj.isRemote)
         {
-            if (this.ticks % 300 == 0)
+            if (this.ticks % 300 == 0 || this.smartNetwork == null)
             {
                 this.getNetwork();
                 this.updateAdjacentConnections();
