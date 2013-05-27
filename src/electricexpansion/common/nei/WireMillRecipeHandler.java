@@ -5,7 +5,6 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import electricexpansion.client.gui.GuiInsulationMachine;
 import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.common.misc.WireMillRecipes;
 import electricexpansion.common.tile.TileEntityWireMill;

@@ -28,7 +28,8 @@ import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
-public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
+public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage 
+implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 {
     private ItemStack[] containingItems = new ItemStack[2];
     private int playersUsing = 0;

@@ -8,7 +8,6 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,25 +35,35 @@ import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 import electricexpansion.api.ElectricExpansionItems;
+import electricexpansion.api.hive.IHiveMachine;
+import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.InsulationRecipes;
+import electricexpansion.common.misc.UniversalPowerUtils;
+import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 
-public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable 
+implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink, IHiveMachine
 {
+    //  constants
     public static final double WATTS_PER_TICK = 500.0D;
     public static final double TRANSFER_LIMIT = 1250.0D;
+    public static final double MAX_JOULES = 150000.0D;
+    
+    //  Not saved
+    public transient int orientation;
+    private transient int recipeTicks = 0;
+    private transient int playersUsing = 0;
+    private transient int baseID = 0;
+    private transient int baseMeta = 0;
+    private transient boolean initialized;
+    private transient IHiveNetwork hiveNetwork;
+    private transient IElectricityNetwork network;
+    
+    //  Saved
     private int processTicks = 0;
     private double joulesStored = 0.0D;
-    private int recipeTicks = 0;
-    public static double maxJoules = 150000.0D;
-    
     private ItemStack[] inventory = new ItemStack[3];
-    
-    private int playersUsing = 0;
-    public int orientation;
-    private int baseID = 0;
-    private int baseMeta = 0;
-    private boolean initialized;
     
     @Override
     public void initiate()
@@ -72,12 +81,9 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
     {
         super.invalidate();
         
-        if (this.initialized)
+        if (this.initialized && Loader.isModLoaded("IC2"))
         {
-            if (Loader.isModLoaded("IC2"))
-            {
-                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
-            }
+            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
         }
     }
     
@@ -91,15 +97,14 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
             ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
             TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
+            network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
             
-            if (inputNetwork != null)
+            if (network != null)
             {
-                if (this.joulesStored < maxJoules)
+                if (this.joulesStored < MAX_JOULES)
                 {
-                    inputNetwork.startRequesting(this, Math.min(this.getMaxJoules(new Object[0]) - this.getJoules(new Object[0]), 1250.0D) / this.getVoltage(new Object[0]),
-                            this.getVoltage(new Object[0]));
-                    ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
+                    network.startRequesting(this, Math.min(this.getMaxJoules(new Object[0]) - this.getJoules(new Object[0]), 1250.0D) / this.getVoltage(new Object[0]), this.getVoltage(new Object[0]));
+                    ElectricityPack electricityPack = network.consumeElectricity(this);
                     this.setJoules(this.joulesStored + electricityPack.getWatts(), new Object[0]);
                     
                     if (UniversalElectricity.isVoltageSensitive)
@@ -112,11 +117,10 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
                 }
                 else
                 {
-                    inputNetwork.stopRequesting(this);
+                    network.stopRequesting(this);
                 }
                 
             }
-            
         }
         
         if (this.inventory[0] != null && this.joulesStored < this.getMaxJoules())
@@ -421,7 +425,7 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
     
     public double getMaxJoules(Object... data)
     {
-        return maxJoules;
+        return MAX_JOULES;
     }
     
     @Override
@@ -442,27 +446,27 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
     @Override
     public int demandsEnergy()
     {
-        return (int) ((this.getMaxJoules(new Object[0]) - this.joulesStored) * UniversalElectricity.TO_IC2_RATIO);
+        return UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxJoules() - this.joulesStored).toEU();
     }
     
     @Override
     public int injectEnergy(Direction direction, int i)
     {
-        double givenEnergy = i * UniversalElectricity.IC2_RATIO;
-        double rejects = 0.0D;
-        double neededEnergy = this.getMaxJoules(new Object[0]) - this.joulesStored;
+        GenericPack givenEnergy = UniversalPowerUtils.INSTANCE.new IC2TickPack(i, 1);
+        int rejects = 0;
+        GenericPack neededEnergy = UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxJoules() - this.joulesStored);
         
-        if (givenEnergy < neededEnergy)
+        if (givenEnergy.toUEWatts() < neededEnergy.toUEWatts())
         {
-            this.joulesStored += givenEnergy;
+            this.joulesStored += givenEnergy.toUEWatts();
         }
-        else if (givenEnergy > neededEnergy)
+        else if (givenEnergy.toUEWatts() > neededEnergy.toUEWatts())
         {
-            this.joulesStored += neededEnergy;
-            rejects = givenEnergy - neededEnergy;
+            this.joulesStored += neededEnergy.toUEWatts();
+            rejects = givenEnergy.toEU() - neededEnergy.toEU();
         }
         
-        return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
+        return rejects;
     }
     
     @Override
@@ -492,7 +496,7 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
     @Override
     public double getMaxJoules()
     {
-        return TileEntityInsulatingMachine.maxJoules;
+        return TileEntityInsulatingMachine.MAX_JOULES;
     }
     
     @Override
@@ -506,7 +510,7 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
     {
         if (i == 1)
             return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 1;
-        return false;
+            return false;
     }
     
     @Override
@@ -543,5 +547,28 @@ public class TileEntityInsulatingMachine extends TileEntityElectricityRunnable i
             default:
                 return false;
         }
+    }
+    
+    @Override
+    public IElectricityNetwork[] getNetworks()
+    {
+        return new IElectricityNetwork[] { this.network };
+    }
+    
+    @Override
+    public IHiveNetwork getHiveNetwork()
+    {
+        return this.hiveNetwork;
+    }
+    
+    @Override
+    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+    {
+        if (this.hiveNetwork == null || mustOverride)
+        {
+            this.hiveNetwork = hiveNetwork;
+            return true;
+        }
+        return false;
     }
 }

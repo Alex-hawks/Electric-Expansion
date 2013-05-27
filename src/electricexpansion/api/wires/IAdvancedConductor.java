@@ -1,4 +1,4 @@
-package electricexpansion.api;
+package electricexpansion.api.wires;
 
 import universalelectricity.core.block.IConductor;
 

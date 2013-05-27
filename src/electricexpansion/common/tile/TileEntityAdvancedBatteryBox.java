@@ -34,7 +34,6 @@ import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
@@ -46,13 +45,16 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.IModifier;
+import electricexpansion.api.hive.IHiveMachine;
+import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.items.ItemLinkCard;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.UniversalPowerUtils;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 
-public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage implements IRedstoneProvider, IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource
+public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
+implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource, IHiveMachine
 {
 	public static final double BASE_OUTPUT = 20000;
 	public static final double BASE_VOLTAGE = 120;
@@ -73,8 +75,13 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	private byte inputMode = 0;
 	private byte outputMode = 0;
 
-	private ForgeDirection output = ForgeDirection.UP;
-	private ForgeDirection input = ForgeDirection.DOWN;
+    private ForgeDirection input = ForgeDirection.UP;
+	private ForgeDirection output = ForgeDirection.DOWN;
+	
+	private transient IElectricityNetwork inputNetwork;
+    private transient IElectricityNetwork outputNetwork;
+    
+    private IHiveNetwork hiveNetwork;
 
 	@Override
 	public void initiate()
@@ -186,10 +193,10 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 		// Cables (UE)
 		{
 			TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), output);
-			IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, output);
+			this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, output);
 
 			TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), input);
-			IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, input);
+			this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, input);
 
 			if (outputNetwork != null && inputNetwork != outputNetwork)
 			{
@@ -577,18 +584,6 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
 	{
 		return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) == this;
-	}
-
-	@Override
-	public boolean isPoweringTo(ForgeDirection side)
-	{
-		return this.getJoules() >= this.getMaxJoules();
-	}
-
-	@Override
-	public boolean isIndirectlyPoweringTo(ForgeDirection side)
-	{
-		return this.isPoweringTo(side);
 	}
 
 	@Override
@@ -1008,4 +1003,31 @@ public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage i
 	{
 		return this.output;
 	}
+
+    @Override
+    public IElectricityNetwork[] getNetworks()
+    {
+        return new IElectricityNetwork[] { this.inputNetwork, this.outputNetwork };
+    }
+
+    @Override
+    public IHiveNetwork getHiveNetwork()
+    {
+        return this.hiveNetwork;
+    }
+
+    @Override
+    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+    {
+        if (this.hiveNetwork == null || mustOverride)
+        {
+            this.hiveNetwork = hiveNetwork;
+            
+            for (IElectricityNetwork net : getNetworks())
+                this.hiveNetwork.addNetwork(net);
+            
+            return true;
+        }
+        return false;
+    }
 }

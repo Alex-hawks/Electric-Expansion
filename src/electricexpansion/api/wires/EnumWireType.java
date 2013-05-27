@@ -1,4 +1,4 @@
-package electricexpansion.api;
+package electricexpansion.api.wires;
 
 /**
  * An enumerator for different wire types.

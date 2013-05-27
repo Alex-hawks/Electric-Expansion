@@ -12,7 +12,7 @@ import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.api.EnumWireMaterial;
+import electricexpansion.api.wires.EnumWireMaterial;
 import electricexpansion.common.ElectricExpansion;
 
 public abstract class ItemBlockCableHelper extends ItemBlock

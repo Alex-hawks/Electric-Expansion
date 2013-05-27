@@ -15,7 +15,7 @@ import universalelectricity.prefab.CustomDamageSource;
 import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.api.EnumWireMaterial;
+import electricexpansion.api.wires.EnumWireMaterial;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;

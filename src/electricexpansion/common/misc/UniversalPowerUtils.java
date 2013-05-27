@@ -56,6 +56,19 @@ public class UniversalPowerUtils
             }
         }
         
+        public ElectricityPack toUEPack(ElectricUnit givenType)
+        {
+            switch (givenType)
+            {
+                case VOLTAGE:
+                    return ElectricityPack.getFromWatts(scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO), this.electricVolts);
+                case AMPERE:
+                    return new ElectricityPack(this.electricAmps, (scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)) / this.electricAmps);
+                default:
+                    return null;
+            }
+        }
+        
         public int toEU()
         {
             return (int) (Math.floor(this.scaledEnergy * IC2_RATIO));
@@ -105,6 +118,14 @@ public class UniversalPowerUtils
         public UEElectricPack(ElectricityPack pack)
         {
             this(pack.amperes, pack.voltage);
+        }
+
+        public UEElectricPack(double joules)
+        {
+            this.electricVolts = 1;
+            this.electricAmps = joules;
+            this.unscaledEnergy = joules;
+            this.scaledEnergy = this.unscaledEnergy / (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO);
         }
     }
     

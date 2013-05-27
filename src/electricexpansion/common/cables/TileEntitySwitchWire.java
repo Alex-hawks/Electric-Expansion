@@ -1,9 +1,8 @@
 package electricexpansion.common.cables;
 
 import net.minecraftforge.common.ForgeDirection;
-import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntitySwitchWire extends TileEntityConductorBase
+public class TileEntitySwitchWire extends TileEntityInsulatedWire
 {
     @Override
     public boolean canConnect(ForgeDirection direction)

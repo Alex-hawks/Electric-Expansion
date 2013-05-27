@@ -10,7 +10,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.implement.IRotatable;
@@ -20,21 +22,28 @@ import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
-public class TileEntityMultimeter extends TileEntityElectrical implements IPacketReceiver, IRotatable
+import electricexpansion.api.hive.IHiveMachine;
+import electricexpansion.api.hive.IHiveNetwork;
+import electricexpansion.common.ElectricExpansion;
+
+public class TileEntityMultimeter extends TileEntityElectrical 
+implements IPacketReceiver, IRotatable, IHiveMachine
 {
-    public ElectricityPack electricityReading = new ElectricityPack();
-    private ElectricityPack lastReading = new ElectricityPack();
+    public static final int[] ROTATION_MATRIX = { 0, 1, 2, 5, 3, 4 };
+    public static final int[] META_MATRIX = { 0, 1, 2, 4, 5, 3 };
     
-    public static final int[] rotationMatrix = { 0, 1, 2, 5, 3, 4 };
+    public transient ElectricityPack electricityReading = new ElectricityPack();
+    private transient ElectricityPack lastReading = new ElectricityPack();
     
-    public static final int[] metaMatrix = { 0, 1, 2, 4, 5, 3 };
+    private transient IElectricityNetwork network;
+    private transient IHiveNetwork hiveNetwork;
     
     @Override
     public void updateEntity()
     {
         super.updateEntity();
         
-        if (this.ticks % 20L == 0L)
+        if (this.ticks % 10 == 0L)
         {
             this.lastReading = this.electricityReading;
             
@@ -42,18 +51,22 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
             {
                 if (!this.isDisabled())
                 {
-                    ForgeDirection inputDirection = ForgeDirection.getOrientation(rotationMatrix[this.getBlockMetadata()]);
+                    ForgeDirection inputDirection = ForgeDirection.getOrientation(ROTATION_MATRIX[this.getBlockMetadata()]);
                     TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
                     
-                    if (inputTile != null)
+                    if (inputTile != null && inputTile instanceof INetworkProvider)
                     {
                         if (inputTile instanceof IConductor)
                         {
-                            this.electricityReading = ((IConductor) inputTile).getNetwork().getProduced(new TileEntity[0]);
+                            this.network = ((IConductor) inputTile).getNetwork();
+                            
+                            this.electricityReading = network.getProduced(new TileEntity[0]);
                             this.electricityReading.amperes *= 20.0D;
                         }
                         else
                         {
+                            this.network = ((INetworkProvider) inputTile).getNetwork();
+                            
                             this.electricityReading = new ElectricityPack();
                         }
                     }
@@ -74,7 +87,7 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket("ElecEx", this, new Object[] { Double.valueOf(this.electricityReading.amperes), Double.valueOf(this.electricityReading.voltage) });
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Double.valueOf(this.electricityReading.amperes), Double.valueOf(this.electricityReading.voltage) });
     }
     
     @Override
@@ -102,18 +115,41 @@ public class TileEntityMultimeter extends TileEntityElectrical implements IPacke
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
-        return direction.ordinal() == rotationMatrix[this.getBlockMetadata()];
+        return direction.ordinal() == ROTATION_MATRIX[this.getBlockMetadata()];
     }
     
     @Override
     public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
     {
-        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, metaMatrix[facingDirection.ordinal()], 0x02);
+        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, META_MATRIX[facingDirection.ordinal()], 0x02);
     }
     
     @Override
     public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
     {
-        return ForgeDirection.getOrientation(rotationMatrix[world.getBlockMetadata(x, y, z)]);
+        return ForgeDirection.getOrientation(ROTATION_MATRIX[world.getBlockMetadata(x, y, z)]);
+    }
+
+    @Override
+    public IElectricityNetwork[] getNetworks()
+    {
+        return new IElectricityNetwork[] { this.network };
+    }
+    
+    @Override
+    public IHiveNetwork getHiveNetwork()
+    {
+        return this.hiveNetwork;
+    }
+    
+    @Override
+    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+    {
+        if (this.hiveNetwork == null || mustOverride)
+        {
+            this.hiveNetwork = hiveNetwork;
+            return true;
+        }
+        return false;
     }
 }

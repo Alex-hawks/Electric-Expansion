@@ -30,10 +30,10 @@ import electricexpansion.common.cables.TileEntitySwitchWireBlock;
 import electricexpansion.common.cables.TileEntityWireBlock;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityFuseBox;
+import electricexpansion.common.tile.TileEntityHiveCore;
 import electricexpansion.common.tile.TileEntityInsulatingMachine;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
-import electricexpansion.common.tile.TileEntityRedstoneNetworkCore;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -59,7 +59,7 @@ public class ClientProxy extends CommonProxy
         GameRegistry.registerTileEntity(TileEntitySwitchWireBlock.class, "TileEntitySwitchWireBlock");
         GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
         GameRegistry.registerTileEntity(TileEntityInsulatingMachine.class, "TileEntityInsulatingMachine");
-        GameRegistry.registerTileEntity(TileEntityRedstoneNetworkCore.class, "TileEntityRedstoneNetworkCore");
+        GameRegistry.registerTileEntity(TileEntityHiveCore.class, "TileEntityRedstoneNetworkCore");
         
         ClientRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer", new RenderTransformer());
         ClientRegistry.registerTileEntity(TileEntityMultimeter.class, "TileEntityMultimeter", new RenderMultimeter());

@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import electricexpansion.api.EnumWireMaterial;
+import electricexpansion.api.wires.EnumWireMaterial;
 import electricexpansion.common.helpers.ItemBlockCableHelper;
 
 public class ItemBlockRawWire extends ItemBlockCableHelper

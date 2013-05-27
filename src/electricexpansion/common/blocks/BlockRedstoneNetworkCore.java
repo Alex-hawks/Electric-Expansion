@@ -18,9 +18,8 @@ import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.misc.EENetwork;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.tile.TileEntityRedstoneNetworkCore;
+import electricexpansion.common.tile.TileEntityHiveCore;
 
 public class BlockRedstoneNetworkCore extends BlockAdvanced
 {
@@ -114,7 +113,7 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
     @Override
     public TileEntity createTileEntity(World world, int metadata)
     {
-        return new TileEntityRedstoneNetworkCore();
+        return new TileEntityHiveCore();
     }
     
     @Override
@@ -130,20 +129,5 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
             return null;
         
         return new ItemStack(id, 1, 0);
-    }
-    
-    @Override
-    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
-    {
-        TileEntityRedstoneNetworkCore te = (TileEntityRedstoneNetworkCore) world.getBlockTileEntity(x, y, z);
-        if (te.getNetwork() != null)
-        {
-            player.addChatMessage("NetRsLevel: " + ((EENetwork) te.getNetwork()).rsLevel);
-        }
-        else
-        {
-            player.addChatMessage("NetRsLevel: NETWORK INVALID");
-        }
-        return true;
     }
 }

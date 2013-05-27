@@ -21,15 +21,23 @@ import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.api.hive.IHiveMachine;
+import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.common.ElectricExpansion;
 
-public class TileEntityTransformer extends TileEntityElectrical implements IRotatable, IPacketReceiver
+@SuppressWarnings("unused")
+public class TileEntityTransformer extends TileEntityElectrical 
+implements IRotatable, IPacketReceiver, IHiveMachine
 {
-    // USING A WRENCH ONE CAN CHANGE THE TRANSFORMER TO EITHER STEP UP OR STEP
-    // DOWN.
     public boolean stepUp = false;
+    public transient int type;
     
-    public int type;
+    private ForgeDirection input = ForgeDirection.NORTH; // TODO update to "new" rotation mechanics
+    private ForgeDirection output = ForgeDirection.SOUTH; // TODO update to "new" rotation mechanics
+    
+    public transient IElectricityNetwork inputNetwork;
+    public transient IElectricityNetwork outputNetwork;
+    private transient IHiveNetwork hiveNetwork;
     
     @Override
     public void initiate()
@@ -52,8 +60,8 @@ public class TileEntityTransformer extends TileEntityElectrical implements IRota
             ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2);
             TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
-            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
+            this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+            this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
             
             if (outputNetwork != null && inputNetwork == null)
             {
@@ -186,4 +194,30 @@ public class TileEntityTransformer extends TileEntityElectrical implements IRota
         return ForgeDirection.getOrientation(this.getBlockMetadata() - this.type);
     }
     
+    @Override
+    public IElectricityNetwork[] getNetworks()
+    {
+        return new IElectricityNetwork[] { this.inputNetwork, this.outputNetwork };
+    }
+    
+    @Override
+    public IHiveNetwork getHiveNetwork()
+    {
+        return this.hiveNetwork;
+    }
+    
+    @Override
+    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+    {
+        if (this.hiveNetwork == null || mustOverride)
+        {
+            this.hiveNetwork = hiveNetwork;
+            
+            for (IElectricityNetwork net : getNetworks())
+                this.hiveNetwork.addNetwork(net);
+            
+            return true;
+        }
+        return false;
+    }
 }

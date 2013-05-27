@@ -2,7 +2,6 @@ package electricexpansion.common.blocks;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -17,15 +16,12 @@ import universalelectricity.core.block.IConductor;
 import universalelectricity.prefab.block.BlockAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
-import electricexpansion.common.misc.EENetwork;
 import electricexpansion.common.misc.EETab;
 
 public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEntityProvider
-{
-    
+{   
     public BlockRedstonePaintedWire(int id)
     {
         super(id, Material.cloth);
@@ -49,7 +45,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            return te.mode ? 0 : ((EENetwork) te.getNetwork()).rsLevel;
+            return te.mode ? 0 : te.getRsLevel();
         }
         return 0;
     }
@@ -60,7 +56,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            return te.mode ? 0 : ((EENetwork) te.getNetwork()).rsLevel;
+            return te.mode ? 0 : te.getRsLevel();
         }
         return 0;
     }
@@ -188,26 +184,6 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-    }
-    
-    @Override
-    public boolean onMachineActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
-    {
-        TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-        if (ElectricExpansion.debugRecipes)
-        {
-            if (te.getNetwork() != null)
-            {
-                player.addChatMessage("NetRsLevel: " + ((EENetwork) te.getNetwork()).rsLevel);
-            }
-            else
-            {
-                player.addChatMessage("NetRsLevel: NETWORK INVALID");
-            }
-            player.addChatMessage("WldRsLevel: " + world.getBlockPowerInput(x, y, z));
-            return true;
-        }
-        return false;
     }
     
     @Override

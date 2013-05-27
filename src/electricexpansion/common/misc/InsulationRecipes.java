@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import electricexpansion.common.RecipeRegistery;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import electricexpansion.common.RecipeRegistery;
 
 public class InsulationRecipes
 {

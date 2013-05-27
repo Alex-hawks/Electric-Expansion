@@ -19,10 +19,10 @@ import electricexpansion.common.containers.ContainerInsulationMachine;
 import electricexpansion.common.containers.ContainerWireMill;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityFuseBox;
+import electricexpansion.common.tile.TileEntityHiveCore;
 import electricexpansion.common.tile.TileEntityInsulatingMachine;
 import electricexpansion.common.tile.TileEntityMultimeter;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
-import electricexpansion.common.tile.TileEntityRedstoneNetworkCore;
 import electricexpansion.common.tile.TileEntityTransformer;
 import electricexpansion.common.tile.TileEntityWireMill;
 
@@ -45,7 +45,7 @@ public class CommonProxy implements IGuiHandler
         GameRegistry.registerTileEntity(TileEntityTransformer.class, "TileEntityTransformer");
         GameRegistry.registerTileEntity(TileEntityQuantumBatteryBox.class, "TileEntityDistribution");
         GameRegistry.registerTileEntity(TileEntityInsulatingMachine.class, "TileEntityInsulatingMachine");
-        GameRegistry.registerTileEntity(TileEntityRedstoneNetworkCore.class, "TileEntityRedstoneNetworkCore");
+        GameRegistry.registerTileEntity(TileEntityHiveCore.class, "TileEntityRedstoneNetworkCore");
     }
     
     @Override

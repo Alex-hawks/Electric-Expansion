@@ -48,7 +48,7 @@ public class BlockMultimeter extends BlockAdvanced
 	{
 		int metadata = par1IBlockAccess.getBlockMetadata(x, y, z);
 
-		if (side == TileEntityMultimeter.rotationMatrix[metadata])
+		if (side == TileEntityMultimeter.ROTATION_MATRIX[metadata])
 			return this.icons.get("output");
 		else
 			return this.icons.get("machine");

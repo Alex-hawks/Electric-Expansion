@@ -53,7 +53,7 @@ public class GuiInsulationMachine extends GuiContainer
         
         this.fontRenderer.drawString("Status: " + displayText, 82, 45, 4210752);
         this.fontRenderer.drawString("Voltage: " + ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE), 82, 56, 4210752);
-        this.fontRenderer.drawString("Require: " + ElectricityDisplay.getDisplayShort(this.tileEntity.WATTS_PER_TICK * 20, ElectricUnit.WATT), 82, 68, 4210752);
+        this.fontRenderer.drawString("Require: " + ElectricityDisplay.getDisplayShort(TileEntityInsulatingMachine.WATTS_PER_TICK * 20, ElectricUnit.WATT), 82, 68, 4210752);
         this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
     

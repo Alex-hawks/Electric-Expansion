@@ -8,7 +8,6 @@ import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,29 +34,35 @@ import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
+import electricexpansion.api.hive.IHiveMachine;
+import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.ChargeUtils;
+import electricexpansion.common.misc.UniversalPowerUtils;
+import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityRunnable implements IInventory, ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink
+public class TileEntityWireMill extends TileEntityElectricityRunnable 
+implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink, IHiveMachine
 {
-    public static final double WATTS_PER_TICK = 500;
-    public static final double TRANSFER_LIMIT = 1250;
-    private int drawingTicks = 0;
-    private double joulesStored = 0;
-    public static double maxJoules = 150000;
-    /**
-     * The ItemStacks that hold the items currently being used in the wire mill;
-     * 0 = battery; 1 = input; 2 = output;
-     */
+    //  constants
+    public static final double WATTS_PER_TICK = 500.0D;
+    public static final double TRANSFER_LIMIT = 1250.0D;
+    public static final double MAX_JOULES = 150000.0D;
+    
+    //  Not saved
+    public transient int orientation;
+    private transient int playersUsing = 0;
+    private transient int baseID = 0;
+    private transient int baseMeta = 0;
+    private transient boolean initialized;
+    private transient IHiveNetwork hiveNetwork;
+    private transient IElectricityNetwork network;
+    
+    //  Saved
+    private int processTicks = 0;
+    private double joulesStored = 0.0D;
     private ItemStack[] inventory = new ItemStack[3];
-    
-    private int playersUsing = 0;
-    public int orientation;
-    private int targetID = 0;
-    private int targetMeta = 0;
-    
-    private boolean initialized;
     
     @Override
     public void initiate()
@@ -94,14 +99,14 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
             ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
             TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
+            this.network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
             
-            if (inputNetwork != null)
+            if (network != null)
             {
-                if (this.joulesStored < TileEntityWireMill.maxJoules)
+                if (this.joulesStored < TileEntityWireMill.MAX_JOULES)
                 {
-                    inputNetwork.startRequesting(this, Math.min(this.getMaxJoules() - this.getJoules(), TRANSFER_LIMIT) / this.getVoltage(), this.getVoltage());
-                    ElectricityPack electricityPack = inputNetwork.consumeElectricity(this);
+                    network.startRequesting(this, Math.min(this.getMaxJoules() - this.getJoules(), TRANSFER_LIMIT) / this.getVoltage(), this.getVoltage());
+                    ElectricityPack electricityPack = network.consumeElectricity(this);
                     this.setJoules(this.joulesStored + electricityPack.getWatts());
                     
                     if (UniversalElectricity.isVoltageSensitive)
@@ -114,13 +119,12 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
                 }
                 else
                 {
-                    inputNetwork.stopRequesting(this);
+                    network.stopRequesting(this);
                 }
             }
         }
         
-        // The bottom slot is for portable
-        // batteries
+        // The bottom slot is for portable batteries
         if (this.inventory[0] != null && this.joulesStored < this.getMaxJoules())
         {
             if (this.inventory[0].getItem() instanceof IItemElectric)
@@ -150,35 +154,32 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
         
         if (this.joulesStored >= WATTS_PER_TICK - 50 && !this.isDisabled())
         {
-            // The left slot contains the item to
-            // be processed
-            if (this.inventory[1] != null && this.canDraw() && (this.drawingTicks == 0 || this.targetID != this.inventory[1].itemID || this.targetMeta != this.inventory[1].getItemDamage()))
+            // The left slot contains the item to be processed
+            if (this.inventory[1] != null && this.canDraw() && (this.processTicks == 0 || this.baseID != this.inventory[1].itemID 
+                    || this.baseMeta != this.inventory[1].getItemDamage()))
             {
-                this.targetID = this.inventory[1].itemID;
-                this.targetMeta = this.inventory[1].getItemDamage();
-                this.drawingTicks = this.getDrawingTime();
+                this.baseID = this.inventory[1].itemID;
+                this.baseMeta = this.inventory[1].getItemDamage();
+                this.processTicks = this.getDrawingTime();
             }
             
-            // Checks if the item can be processed
-            // and if the drawing time left is
-            // greater than 0, if so, then draw
-            // the item.
-            if (this.canDraw() && this.drawingTicks > 0)
+            // Checks if the item can be processed and if the drawing time left is
+            // greater than 0, if so, then draw the item.
+            if (this.canDraw() && this.processTicks > 0)
             {
-                this.drawingTicks--;
+                this.processTicks--;
                 
-                // When the item is finished
-                // drawing
-                if (this.drawingTicks < 1)
+                // When the item is finished drawing
+                if (this.processTicks < 1)
                 {
                     this.drawItem();
-                    this.drawingTicks = 0;
+                    this.processTicks = 0;
                 }
                 this.joulesStored -= WATTS_PER_TICK;
             }
             else
             {
-                this.drawingTicks = 0;
+                this.processTicks = 0;
             }
         }
         
@@ -197,7 +198,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.drawingTicks, this.disabledTicks, this.joulesStored);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.processTicks, this.disabledTicks, this.joulesStored);
     }
     
     @Override
@@ -205,7 +206,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     {
         try
         {
-            this.drawingTicks = dataStream.readInt();
+            this.processTicks = dataStream.readInt();
             this.disabledTicks = dataStream.readInt();
             this.joulesStored = dataStream.readDouble();
         }
@@ -302,7 +303,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     public void readFromNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.readFromNBT(par1NBTTagCompound);
-        this.drawingTicks = par1NBTTagCompound.getInteger("drawingTicks");
+        this.processTicks = par1NBTTagCompound.getInteger("drawingTicks");
         this.inventory = new ItemStack[this.getSizeInventory()];
         try
         {
@@ -332,7 +333,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setInteger("drawingTicks", this.drawingTicks);
+        par1NBTTagCompound.setInteger("drawingTicks", this.processTicks);
         par1NBTTagCompound.setDouble("joulesStored", this.getJoules());
         
         NBTTagList var2 = new NBTTagList();
@@ -455,7 +456,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     
     public int getDrawingTimeLeft()
     {
-        return this.drawingTicks;
+        return this.processTicks;
     }
     
     @Override
@@ -473,7 +474,7 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     @Override
     public double getMaxJoules()
     {
-        return TileEntityWireMill.maxJoules;
+        return TileEntityWireMill.MAX_JOULES;
     }
     
     @Override
@@ -495,27 +496,27 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
     @Override
     public int demandsEnergy()
     {
-        return (int) ((this.getMaxJoules() - this.joulesStored) * UniversalElectricity.TO_IC2_RATIO);
+        return UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxJoules() - this.joulesStored).toEU();
     }
     
     @Override
     public int injectEnergy(Direction direction, int i)
     {
-        double givenEnergy = i * UniversalElectricity.IC2_RATIO;
-        double rejects = 0;
-        double neededEnergy = this.getMaxJoules() - this.joulesStored;
+        GenericPack givenEnergy = UniversalPowerUtils.INSTANCE.new IC2TickPack(i, 1);
+        int rejects = 0;
+        GenericPack neededEnergy = UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxJoules() - this.joulesStored);
         
-        if (givenEnergy < neededEnergy)
+        if (givenEnergy.toUEWatts() < neededEnergy.toUEWatts())
         {
-            this.joulesStored += givenEnergy;
+            this.joulesStored += givenEnergy.toUEWatts();
         }
-        else if (givenEnergy > neededEnergy)
+        else if (givenEnergy.toUEWatts() > neededEnergy.toUEWatts())
         {
-            this.joulesStored += neededEnergy;
-            rejects = givenEnergy - neededEnergy;
+            this.joulesStored += neededEnergy.toUEWatts();
+            rejects = givenEnergy.toEU() - neededEnergy.toEU();
         }
         
-        return (int) (rejects * UniversalElectricity.TO_IC2_RATIO);
+        return rejects;
     }
     
     @Override
@@ -576,5 +577,28 @@ public class TileEntityWireMill extends TileEntityElectricityRunnable implements
             default:
                 return false;
         }
+    }
+
+    @Override
+    public IElectricityNetwork[] getNetworks()
+    {
+        return new IElectricityNetwork[] { this.network };
+    }
+    
+    @Override
+    public IHiveNetwork getHiveNetwork()
+    {
+        return this.hiveNetwork;
+    }
+    
+    @Override
+    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+    {
+        if (this.hiveNetwork == null || mustOverride)
+        {
+            this.hiveNetwork = hiveNetwork;
+            return true;
+        }
+        return false;
     }
 }
