@@ -86,7 +86,10 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.drawTexturedModalRect(this.guiTopLeftX, this.guiTopLeftY, 0, 0, this.xSize, this.ySize);
 
 		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 41, this.tileEntity.getInputMode() * 17, 169, 16, 16);
+		((GuiButton) this.buttonList.get(0)).enabled = (this.tileEntity.getInputMode() != 0); // Disable when mode 0
+
 		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 107, this.tileEntity.getOutputMode() * 17, 186, 16, 16);
+		((GuiButton) this.buttonList.get(1)).enabled = (this.tileEntity.getOutputMode() != 0); // Disable when mode 0
 
 		int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
 		this.drawTexturedModalRect(this.guiTopLeftX + 64, this.guiTopLeftY + 46, 0, 166, scale, 3);
