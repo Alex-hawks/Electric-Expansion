@@ -46,14 +46,14 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 
 		this.buttonList.clear();
 
-		this.buttonList.add(new GuiButton(0, this.guiTopLeftX + 180, this.guiTopLeftY + 95, 35, 20, this.tileEntity.getInput().name()));
-		this.buttonList.add(new GuiButton(1, this.guiTopLeftX + 180, this.guiTopLeftY + 120, 35, 20, this.tileEntity.getOutput().name()));
+		this.buttonList.add(new GuiButton(0, this.guiTopLeftX + 180, this.guiTopLeftY + 66, 35, 20, this.tileEntity.getInput().name()));
+		this.buttonList.add(new GuiButton(1, this.guiTopLeftX + 180, this.guiTopLeftY + 132, 35, 20, this.tileEntity.getOutput().name()));
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRenderer.drawString(this.tileEntity.getInvName(), 22, 6, 4210752);
+		this.fontRenderer.drawString(this.tileEntity.getInvName(), 4, 6, 4210752);
 		String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoules(), ElectricUnit.JOULES);
 		String displayMaxJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getMaxJoules(), ElectricUnit.JOULES);
 		String displayInputVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getInputVoltage(), ElectricUnit.VOLTAGE);
@@ -85,8 +85,8 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.guiTopLeftY = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(this.guiTopLeftX, this.guiTopLeftY, 0, 0, this.xSize, this.ySize);
 
-		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 10, this.tileEntity.getInputMode() * 17, 169, 16, 16);
-		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 34, this.tileEntity.getOutputMode() * 17, 186, 16, 16);
+		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 41, this.tileEntity.getInputMode() * 17, 169, 16, 16);
+		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 107, this.tileEntity.getOutputMode() * 17, 186, 16, 16);
 
 		int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
 		this.drawTexturedModalRect(this.guiTopLeftX + 64, this.guiTopLeftY + 46, 0, 166, scale, 3);
@@ -99,35 +99,17 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 
 		if (x >= this.guiTopLeftX + 197 && x <= this.guiTopLeftX + 212)
 		{
-			if (y >= this.guiTopLeftY + 10 && y <= this.guiTopLeftY + 25)
+			if (y >= this.guiTopLeftY + 41 && y <= this.guiTopLeftY + 56)
 			{
-				int currentMode = 0;
-				for (int i = 0; i < this.validModes.size(); i++)
-				{
-					if (this.validModes.get(i) == this.tileEntity.getInputMode())
-					{
-						currentMode = i;
-						break;
-					}
-				}
-				this.tileEntity.setInputMode((byte) (this.validModes.get(currentMode) + 1));
+				int newMode = (this.validModes.indexOf(this.tileEntity.getInputMode()) + 1) % this.validModes.size();
+				this.tileEntity.setInputMode((byte) this.validModes.get(newMode));
 				return;
 			}
 
-			if (y >= this.guiTopLeftY + 34 && y <= this.guiTopLeftY + 49)
+			if (y >= this.guiTopLeftY + 107 && y <= this.guiTopLeftY + 122)
 			{
-				int currentMode = 0;
-
-				for (int i = 0; i < this.validModes.size(); i++)
-				{
-					if (this.validModes.get(i) == this.tileEntity.getOutputMode())
-					{
-						currentMode = i;
-						break;
-					}
-				}
-
-				this.tileEntity.setOutputMode((byte) (this.validModes.get(currentMode) + 1));
+				int newMode = (this.validModes.indexOf(this.tileEntity.getOutputMode()) + 1) % this.validModes.size();
+				this.tileEntity.setOutputMode((byte) this.validModes.get(newMode));
 				return;
 			}
 		}
