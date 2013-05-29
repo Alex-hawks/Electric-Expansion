@@ -16,6 +16,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.misc.InsulationRecipes;
 import electricexpansion.common.misc.WireMillRecipes;
+import basiccomponents.common.BasicComponents;
 
 public class RecipeRegistery
 {
@@ -78,7 +79,19 @@ public class RecipeRegistery
             GameRegistry
                     .addRecipe(new ShapelessOreRecipe(camo, new Object[] { Block.cloth, Item.bucketEmpty, Item.slimeBall, Item.redstone, "dyeRed", "dyeBlue", "dyeYellow", "dyeBlack", "dyeWhite" }));
         }
-        
+
+        // We require a few things from Basic Components
+        BasicComponents.requireItem("plateBronze", 0);
+        BasicComponents.requireItem("plateCopper", 0);
+        BasicComponents.requireItem("plateSteel", 0);
+        BasicComponents.requireItem("ingotCopper", 0);
+        BasicComponents.requireItem("circuitBasic", 0);
+        BasicComponents.requireItem("circuitAdvanced", 0);
+        BasicComponents.requireItem("circuitElite", 0);
+        BasicComponents.requireItem("copperWire", 0);
+        BasicComponents.requireItem("battery", 0);
+        BasicComponents.requireItem("wrench", 0);
+
         registerRawCables();
         registerInsulatedCables();
         registerSwitchCables();
@@ -89,14 +102,14 @@ public class RecipeRegistery
         // they are broken in their special functions
         
         // Machines
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "basicCircuit", '%',
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "circuitBasic", '%',
                 new ItemStack(itemParts, 1, 0) }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%',
-                "basicCircuit", '^', Block.glass, '@', Item.stick }));
+                "circuitBasic", '^', Block.glass, '@', Item.stick }));
         for (ItemStack batt : OreDictionary.getOres("battery"))
         {
             ItemStack wildBatt = new ItemStack(batt.itemID, batt.stackSize, Integer.MIN_VALUE);
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!#!", '!', wildBatt, '@', "copperWire", '#', "basicCircuit" }));
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!#!", '!', wildBatt, '@', "copperWire", '#', "circuitBasic" }));
         }
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulationMachine), new Object[] { "!@!", "@#@", "!$!", '!', "plateSteel", '@', Block.obsidian, '#', Item.bucketLava, '$',
                 Block.furnaceIdle }));
@@ -127,22 +140,22 @@ public class RecipeRegistery
         
         // Upgrades
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object[] { "$!$", "!@!", "#!#", '!', new ItemStack(blockInsulatedWire, 1, 0), '@',
-                new ItemStack(ElectricExpansionItems.itemAdvBat, 1, Integer.MIN_VALUE), '#', "advancedCircuit", '$', "plateSteel" }));
+                new ItemStack(ElectricExpansionItems.itemAdvBat, 1, Integer.MIN_VALUE), '#', "circuitAdvanced", '$', "plateSteel" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 1), new Object[] { "$!$", "%@%", "#%#", '!', new ItemStack(ElectricExpansionItems.itemAdvBat, 1, Integer.MIN_VALUE),
-                '@', new ItemStack(itemUpgrade, 1, 0), '#', "advancedCircuit", '$', "plateSteel", '%', new ItemStack(blockInsulatedWire, 1, 0) }));
+                '@', new ItemStack(itemUpgrade, 1, 0), '#', "circuitAdvanced", '$', "plateSteel", '%', new ItemStack(blockInsulatedWire, 1, 0) }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 2), new Object[] { "#!#", "%@%", "#%#", '!', new ItemStack(ElectricExpansionItems.itemEliteBat, 1, Integer.MIN_VALUE),
-                '@', new ItemStack(itemUpgrade, 1, 1), '#', "eliteCircuit", '%', new ItemStack(blockInsulatedWire, 1, 0) }));
+                '@', new ItemStack(itemUpgrade, 1, 1), '#', "circuitElite", '%', new ItemStack(blockInsulatedWire, 1, 0) }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 3), new Object[] { "#!#", "!@!", "#!#", '!', "antimatterMilligram", '@',
-                new ItemStack(itemUltimateBat, 1, Integer.MIN_VALUE), '#', "eliteCircuit" }));
+                new ItemStack(itemUltimateBat, 1, Integer.MIN_VALUE), '#', "circuitElite" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 4), new Object[] { "#$#", "#!#", "#$#", '!', new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), '#',
-                new ItemStack(blockInsulatedWire, 1, 0), '$', "basicCircuit" }));
+                new ItemStack(blockInsulatedWire, 1, 0), '$', "circuitBasic" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 5), new Object[] { "#$#", "#!#", "#$#", '!', new ItemStack(ElectricExpansionItems.blockTransformer, 1, 8), '#',
-                new ItemStack(blockInsulatedWire, 1, 3), '$', "eliteCircuit" }));
+                new ItemStack(blockInsulatedWire, 1, 3), '$', "circuitElite" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 6), new Object[] { "@$#", "@!#", "@$#", '!', new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), '#',
-                new ItemStack(blockInsulatedWire, 1, 3), '@', new ItemStack(blockInsulatedWire, 1, 0), '$', "advancedCircuit" }));
+                new ItemStack(blockInsulatedWire, 1, 3), '@', new ItemStack(blockInsulatedWire, 1, 0), '$', "circuitAdvanced" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 7), new Object[] { "#$#", "#!#", "#$#", '!', new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), '#',
-                new ItemStack(blockInsulatedWire, 1, 2), '$', "basicCircuit" }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 8), new Object[] { "!@!", "@#@", "!@!", '!', "plateTin", '@', "plateCopper", '#', "advancedCircuit" }));
+                new ItemStack(blockInsulatedWire, 1, 2), '$', "circuitBasic" }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 8), new Object[] { "!@!", "@#@", "!@!", '!', "plateTin", '@', "plateCopper", '#', "circuitAdvanced" }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 9), new Object[] { "!@!", "@#@", "!@!", '!', "plateTin", '@', "plateCopper", '#', new ItemStack(itemUpgrade, 1, 8) }));
         GameRegistry
                 .addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 10), new Object[] { "!@!", "@#@", "!@!", '!', "plateTin", '@', "plateCopper", '#', new ItemStack(itemUpgrade, 1, 9) }));
@@ -151,10 +164,10 @@ public class RecipeRegistery
         
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 13), new Object[] { "!@!", "@#@", "!@!", '!', "antimatterMilligram", '@', "plateSteel", '#',
                 new ItemStack(itemUpgrade, 1, 16) }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 16), new Object[] { "!@!", "@#@", "!@!", '!', "antimatterMilligram", '@', "plateSteel", '#', "eliteCircuit" }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 16), new Object[] { "!@!", "@#@", "!@!", '!', "antimatterMilligram", '@', "plateSteel", '#', "circuitElite" }));
         
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.itemLinkCard), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(Item.ingotIron), '@',
-                new ItemStack(Item.paper), '#', "advancedCircuit" }));
+                new ItemStack(Item.paper), '#', "circuitAdvanced" }));
         
         // Batteries
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAdvBat), new Object[] { " T ", "TRT", "TRT", 'T', "ingotSilver", 'R', Item.lightStoneDust }));
@@ -178,7 +191,7 @@ public class RecipeRegistery
         // Tools
         for (ItemStack batt : OreDictionary.getOres("battery"))
         {
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', "copperWire", '%', "advancedCircuit", '^',
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', "copperWire", '%', "circuitAdvanced", '^',
                     Block.glass, '@', batt }));
         }
     }
