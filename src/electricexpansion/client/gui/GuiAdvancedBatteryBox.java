@@ -15,6 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
+import electricexpansion.common.misc.EnumAdvBattBoxMode;
 
 @SideOnly(Side.CLIENT)
 public class GuiAdvancedBatteryBox extends GuiContainer
@@ -24,7 +25,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	private int guiTopLeftX;
 	private int guiTopLeftY;
 
-	private ArrayList<Byte> validModes;
+	private ArrayList<EnumAdvBattBoxMode> validModes;
 
 	public GuiAdvancedBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox te)
 	{
@@ -85,11 +86,15 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.guiTopLeftY = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(this.guiTopLeftX, this.guiTopLeftY, 0, 0, this.xSize, this.ySize);
 
-		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 41, this.tileEntity.getInputMode() * 17, 169, 16, 16);
-		((GuiButton) this.buttonList.get(0)).enabled = (this.tileEntity.getInputMode() != 0); // Disable when mode 0
+		EnumAdvBattBoxMode mode = this.tileEntity.getInputMode();
+		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 41, mode.ordinal() * 17, 169, 16, 16);
+		((GuiButton) this.buttonList.get(0)).enabled = 
+			(mode != EnumAdvBattBoxMode.OFF && mode != EnumAdvBattBoxMode.QUANTUM) ;
 
-		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 107, this.tileEntity.getOutputMode() * 17, 186, 16, 16);
-		((GuiButton) this.buttonList.get(1)).enabled = (this.tileEntity.getOutputMode() != 0); // Disable when mode 0
+		mode = this.tileEntity.getOutputMode();
+		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 107, mode.ordinal() * 17, 186, 16, 16);
+		((GuiButton) this.buttonList.get(1)).enabled = 
+			(mode != EnumAdvBattBoxMode.OFF && mode != EnumAdvBattBoxMode.QUANTUM) ;
 
 		int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
 		this.drawTexturedModalRect(this.guiTopLeftX + 64, this.guiTopLeftY + 46, 0, 166, scale, 3);
@@ -104,15 +109,16 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		{
 			if (y >= this.guiTopLeftY + 41 && y <= this.guiTopLeftY + 56)
 			{
+
 				int newMode = (this.validModes.indexOf(this.tileEntity.getInputMode()) + 1) % this.validModes.size();
-				this.tileEntity.setInputMode((byte) this.validModes.get(newMode));
+				this.tileEntity.setInputMode(this.validModes.get(newMode));
 				return;
 			}
 
 			if (y >= this.guiTopLeftY + 107 && y <= this.guiTopLeftY + 122)
 			{
 				int newMode = (this.validModes.indexOf(this.tileEntity.getOutputMode()) + 1) % this.validModes.size();
-				this.tileEntity.setOutputMode((byte) this.validModes.get(newMode));
+				this.tileEntity.setOutputMode(this.validModes.get(newMode));
 				return;
 			}
 		}

@@ -52,6 +52,7 @@ import electricexpansion.common.items.ItemLinkCard;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.UniversalPowerUtils;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
+import electricexpansion.common.misc.EnumAdvBattBoxMode;
 
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
 implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource, IHiveMachine
@@ -72,8 +73,8 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	 * Upgrade(s), Requires availability of Modes: 1, 2, 4 if Mekanism is installed, 5 if
 	 * Factorization is installed) (Unavailable for now)
 	 */
-	private byte inputMode = 0;
-	private byte outputMode = 0;
+	private EnumAdvBattBoxMode inputMode = EnumAdvBattBoxMode.OFF;
+	private EnumAdvBattBoxMode outputMode = EnumAdvBattBoxMode.OFF;
 
     private ForgeDirection input = ForgeDirection.UP;
 	private ForgeDirection output = ForgeDirection.DOWN;
@@ -113,22 +114,22 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		{
 			switch (this.outputMode)
 			{
-				case 1:
+				case BASIC:
 					this.sendElectricalEnergy();
 					break;
-				case 2:
+				case BUILDCRAFT:
 					this.sendPneumaticEnergy();
 					break;
-				case 3:
+				case QUANTUM:
 					this.sendQuantumEnergy();
 					break;
-				case 4:
+				case MEKANISM:
 					this.sendMekanismEnergy();
 					break;
-				case 5:
+				case FACTORIZATION:
 					this.sendFzEnergy();
 					break;
-				case 6:
+				case UNIVERSAL:
 					this.sendUniversalEnergy();
 					break;
 				default:
@@ -137,19 +138,19 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 			switch (this.inputMode)
 			{
-				case 1:
+				case BASIC:
 					this.drainElectricalEnergy();
 					break;
-				case 2:
+				case BUILDCRAFT:
 					this.drainPneumaticEnergy();
 					break;
-				case 4:
+				case MEKANISM:
 					this.drainMekanismEnergy();
 					break;
-				case 5:
+				case FACTORIZATION:
 					this.drainFzEnergy();
 					break;
-				case 6:
+				case UNIVERSAL:
 					this.drainUniversalEnergy();
 					break;
 				default:
@@ -262,7 +263,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					if (DimensionManager.getWorld(dimensionId).getBlockTileEntity(x, y, z) instanceof TileEntityAdvancedBatteryBox)
 					{
 						TileEntityAdvancedBatteryBox target = (TileEntityAdvancedBatteryBox) DimensionManager.getWorld(dimensionId).getBlockTileEntity(x, y, z);
-						if (target.getInputMode() == 3)
+						if (target.getInputMode() == EnumAdvBattBoxMode.QUANTUM)
 						{
 							GenericPack thisRequest = UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap() / 2, this.getJoules()) / this.getVoltage(), this.getVoltage());
 							GenericPack targetRequest = UniversalPowerUtils.INSTANCE.new UEElectricPack(target.getRequest());
@@ -366,7 +367,9 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks), Byte.valueOf(this.inputMode), Byte.valueOf(this.outputMode), Byte.valueOf((byte) this.input.ordinal()), Byte.valueOf((byte) this.output.ordinal()) });
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks), 
+			Byte.valueOf((byte) this.inputMode.ordinal()), Byte.valueOf((byte) this.outputMode.ordinal()), 
+				Byte.valueOf((byte) this.input.ordinal()), Byte.valueOf((byte) this.output.ordinal()) });
 	}
 
 	@Override
@@ -378,8 +381,8 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 			{
 				this.setJoules(dataStream.readDouble());
 				this.disabledTicks = dataStream.readInt();
-				this.inputMode = dataStream.readByte();
-				this.outputMode = dataStream.readByte();
+				this.inputMode = EnumAdvBattBoxMode.fromValue(dataStream.readByte());
+				this.outputMode = EnumAdvBattBoxMode.fromValue(dataStream.readByte());
 				this.input = ForgeDirection.getOrientation(dataStream.readByte());
 				this.output = ForgeDirection.getOrientation(dataStream.readByte());
 
@@ -408,9 +411,9 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 						break;
 					case 2:
 						if (b)
-							this.setInputMode(dataStream.readByte());
+							this.setInputMode(EnumAdvBattBoxMode.fromValue(dataStream.readByte()));
 						else
-							this.setOutputMode(dataStream.readByte());
+							this.setOutputMode(EnumAdvBattBoxMode.fromValue(dataStream.readByte()));
 						break;
 				}
 			}
@@ -452,8 +455,8 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 			}
 		}
 
-		this.outputMode = par1NBTTagCompound.getByte("outputMode");
-		this.inputMode = par1NBTTagCompound.getByte("inputMode");
+		this.outputMode = EnumAdvBattBoxMode.fromValue(par1NBTTagCompound.getByte("outputMode"));
+		this.inputMode = EnumAdvBattBoxMode.fromValue(par1NBTTagCompound.getByte("inputMode"));
 
 		this.output = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("output"));
 		this.input = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("input"));
@@ -478,8 +481,8 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 		par1NBTTagCompound.setTag("Items", var2);
 
-		par1NBTTagCompound.setByte("outputMode", this.outputMode);
-		par1NBTTagCompound.setByte("inputMode", this.inputMode);
+		par1NBTTagCompound.setByte("outputMode", (byte) this.outputMode.ordinal());
+		par1NBTTagCompound.setByte("inputMode", (byte) this.inputMode.ordinal());
 
 		par1NBTTagCompound.setByte("output", (byte) this.output.ordinal());
 		par1NBTTagCompound.setByte("input", (byte) this.input.ordinal());
@@ -792,112 +795,112 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		this.inventory[5] = is;
 	}
 
-	public byte getInputMode()
+	public EnumAdvBattBoxMode getInputMode()
 	{
 		return this.inputMode;
 	}
 
-	public byte getOutputMode()
+	public EnumAdvBattBoxMode getOutputMode()
 	{
 		return this.outputMode;
 	}
 
-	public ArrayList<Byte> getAvailableModes()
+	public ArrayList<EnumAdvBattBoxMode> getAvailableModes()
 	{
-		ArrayList<Byte> toReturn = new ArrayList<Byte>();
-		toReturn.add((byte) 0);
-		toReturn.add((byte) 1);
+		ArrayList<EnumAdvBattBoxMode> toReturn = new ArrayList<EnumAdvBattBoxMode>();
+		toReturn.add(EnumAdvBattBoxMode.OFF);
+		toReturn.add(EnumAdvBattBoxMode.BASIC);
 		if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
 		{
-			// toReturn.add((byte) 2);
+			// toReturn.add(EnumAdvBattBoxModeMode.BUILDCRAFT);
 		}
 		if (this.hasUpgrade("Quantum"))
 		{
-			toReturn.add((byte) 3);
+			toReturn.add(EnumAdvBattBoxMode.QUANTUM);
 		}
 		if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
 		{
-			// toReturn.add((byte) 4);
+			// toReturn.add(EnumAdvBattBoxModeMod.MEKANISM);
 		}
 		if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
 		{
-			// toReturn.add((byte) 5);
+			// toReturn.add(EnumAdvBattBoxModeMod.FACTORIZATION);
 		}
 		if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
 		{
-			// toReturn.add((byte) 6);
+			// toReturn.add(EnumAdvBattBoxModeMod.UNIVERSAL);
 		}
 		return toReturn;
 	}
 
-	public void setInputMode(byte mode)
+	public void setInputMode(EnumAdvBattBoxMode mode)
 	{
 		if (this.worldObj.isRemote)
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), true, Byte.valueOf(mode) }));
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), true, Byte.valueOf((byte) mode.ordinal()) }));
 		else
 		{
 			switch (mode)
 			{
 				default:
-					this.inputMode = 0;
+					this.inputMode = EnumAdvBattBoxMode.OFF;
 					break;
-				case 1:
+				case BASIC:
 					this.inputMode = mode;
 					break;
-				case 2:
+				case BUILDCRAFT:
 					if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
 						this.inputMode = mode;
 					break;
-				case 3:
+				case QUANTUM:
 					if (this.hasUpgrade("Quantum"))
 						this.inputMode = mode;
 					break;
-				case 4:
+				case MEKANISM:
 					if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
 						this.inputMode = mode;
 					break;
-				case 5:
+				case FACTORIZATION:
 					if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
 						this.inputMode = mode;
 					break;
-				case 6:
+				case UNIVERSAL:
 					if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
 						this.inputMode = mode;
 			}
 		}
 	}
 
-	public void setOutputMode(byte mode)
+	public void setOutputMode(EnumAdvBattBoxMode mode)
 	{
 		if (this.worldObj.isRemote)
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), false, Byte.valueOf(mode) }));
+			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), false, Byte.valueOf((byte) mode.ordinal()) }));
 		else
 		{
 			switch (mode)
 			{
 				default:
-					this.outputMode = 0;
+					this.outputMode = EnumAdvBattBoxMode.OFF;
 					break;
-				case 1:
+				case BASIC:
 					this.outputMode = mode;
 					break;
-				case 2:
+				case BUILDCRAFT:
 					if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
 						this.outputMode = mode;
 					break;
-				case 3:
+				case QUANTUM:
 					if (this.hasUpgrade("Quantum"))
 						this.outputMode = mode;
 					break;
-				case 4:
+				case MEKANISM:
 					if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
 						this.outputMode = mode;
 					break;
-				case 5:
+				case FACTORIZATION:
 					if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
 						this.outputMode = mode;
 					break;
-				case 6:
+				case UNIVERSAL:
 					if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
 						this.outputMode = mode;
 			}
