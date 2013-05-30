@@ -75,15 +75,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
-        try
-        {
-            this.textureItemStack = ItemStack.loadItemStackFromNBT(tag);
-        }
-        catch (Exception e)
-        {
-            this.textureItemStack = null;
-        }
-        
+
         try
         {
             this.mode = tag.getBoolean("mode");
@@ -98,6 +90,16 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
             {
                 this.mode = false;
             }
+        }
+
+        try
+        {
+            this.textureItemStack = ItemStack.loadItemStackFromNBT(tag);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            this.textureItemStack = null;
         }
     }
     
