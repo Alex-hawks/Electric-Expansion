@@ -134,6 +134,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					this.sendUniversalEnergy();
 					break;
 				default:
+					this.sendBatteryEnergy();
 					break;
 			}
 
@@ -155,6 +156,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					this.drainUniversalEnergy();
 					break;
 				default:
+					this.drainBatteryEnergy();
 					break;
 			}
 		}
@@ -174,7 +176,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		}
 	}
 
-	private boolean sendElectricalEnergy()
+	private boolean sendBatteryEnergy()
 	{
 		// Batteries (UE, then IC2. Will not call both charge methods)
 		if (this.inventory[0] != null)
@@ -185,12 +187,18 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 				return true;
 			}
 			else if (this.inventory[0].getItem() instanceof IElectricItem)
-
 			{
 				this.setJoules(this.getJoules() - (ChargeUtils.IC2.charge(this.inventory[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap(), this.getJoules()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean sendElectricalEnergy()
+	{
+		if (sendBatteryEnergy())
+			return true;
 
 		// Cables (UE)
 		{
@@ -306,7 +314,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		return false;
 	}
 
-	private boolean drainElectricalEnergy()
+	private boolean drainBatteryEnergy()
 	{
 		if (this.inventory[1] != null)
 		{
@@ -322,6 +330,13 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean drainElectricalEnergy()
+	{
+		if (drainBatteryEnergy())
+			return true;
 		return false;
 	}
 
