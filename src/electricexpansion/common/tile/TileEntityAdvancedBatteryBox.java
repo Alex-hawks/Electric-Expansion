@@ -37,6 +37,7 @@ import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
+import universalelectricity.prefab.tile.TileEntityConductor;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -77,8 +78,10 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	private EnumAdvBattBoxMode inputMode = EnumAdvBattBoxMode.OFF;
 	private EnumAdvBattBoxMode outputMode = EnumAdvBattBoxMode.OFF;
 
-    private ForgeDirection inputDir = ForgeDirection.UP;
+	private ForgeDirection inputDir = ForgeDirection.UP;
 	private ForgeDirection outputDir = ForgeDirection.DOWN;
+	private TileEntity inputTile;
+	private TileEntity outputTile;
 	
 	private transient IElectricityNetwork inputNetwork;
     private transient IElectricityNetwork outputNetwork;
@@ -176,6 +179,15 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		}
 	}
 
+	public void refreshConnections() 
+	{
+		this.outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDir);
+		this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDir);
+
+		this.inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDir);
+		this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDir);
+	}
+
 	private boolean sendBatteryEnergy()
 	{
 		// Batteries (UE, then IC2. Will not call both charge methods)
@@ -202,11 +214,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 		// Cables (UE)
 		{
-			TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDir);
-			this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDir);
-
-			TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDir);
-			this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDir);
+			refreshConnections();
 
 			if (outputNetwork != null && inputNetwork != outputNetwork)
 			{
@@ -377,7 +385,9 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	@Override
 	protected EnumSet<ForgeDirection> getConsumingSides()
 	{
-		return EnumSet.of(inputDir);
+		if (this.inputMode != EnumAdvBattBoxMode.OFF && this.inputMode != EnumAdvBattBoxMode.QUANTUM)
+			return EnumSet.of(inputDir);
+		return EnumSet.noneOf(ForgeDirection.class);
 	}
 
 	@Override
@@ -890,6 +900,16 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
 						this.inputMode = mode;
 			}
+			refreshConnections();
+			if (inputNetwork != null)
+			{
+				inputNetwork.stopRequesting(this);
+			}
+			if (inputTile instanceof TileEntityConductor)
+			{
+				((TileEntityConductor) inputTile).updateAdjacentConnections();
+			}
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 		}
 	}
 
@@ -927,6 +947,16 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
 						this.outputMode = mode;
 			}
+			refreshConnections();
+			if (outputNetwork != null)
+			{
+				outputNetwork.stopProducing(this);
+			}
+			if (outputTile instanceof TileEntityConductor)
+			{
+				((TileEntityConductor) outputTile).updateAdjacentConnections();
+			}
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 		}
 	}
 
@@ -970,6 +1000,15 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 			if (newInput != this.inputDir.ordinal())
 			{
+				refreshConnections();
+				if (inputNetwork != null)
+				{
+					inputNetwork.stopRequesting(this);
+				}
+				if (inputTile instanceof TileEntityConductor)
+				{
+					((TileEntityConductor) inputTile).updateAdjacentConnections();
+				}
 				this.inputDir = ForgeDirection.getOrientation(newInput);
 				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 			}
@@ -991,6 +1030,15 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 			if (newOutput != this.outputDir.ordinal())
 			{
+				refreshConnections();
+				if (outputNetwork != null)
+				{
+					outputNetwork.stopProducing(this);
+				}
+				if (outputTile instanceof TileEntityConductor)
+				{
+					((TileEntityConductor) outputTile).updateAdjacentConnections();
+				}
 				this.outputDir = ForgeDirection.getOrientation(newOutput);
 				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 			}
