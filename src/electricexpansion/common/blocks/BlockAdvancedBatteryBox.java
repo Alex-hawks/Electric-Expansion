@@ -52,9 +52,9 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
     {
         TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) iBlockAccess.getBlockTileEntity(x, y, z);
-        if (side == te.getOutput().ordinal() && te.getOutputMode() != EnumAdvBattBoxMode.OFF && te.getOutputMode() != EnumAdvBattBoxMode.QUANTUM)
+        if (side == te.getOutputDir().ordinal() && te.getOutputMode() != EnumAdvBattBoxMode.OFF && te.getOutputMode() != EnumAdvBattBoxMode.QUANTUM)
             return this.icons.get("out");
-        else if (side == te.getInput().ordinal() && te.getInputMode() != EnumAdvBattBoxMode.OFF && te.getInputMode() != EnumAdvBattBoxMode.QUANTUM)
+        else if (side == te.getInputDir().ordinal() && te.getInputMode() != EnumAdvBattBoxMode.OFF && te.getInputMode() != EnumAdvBattBoxMode.QUANTUM)
             return this.icons.get("input");
         
         if (side == 0 || side == 1)
