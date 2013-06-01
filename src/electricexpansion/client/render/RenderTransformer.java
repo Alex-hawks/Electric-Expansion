@@ -58,13 +58,12 @@ public class RenderTransformer extends TileEntitySpecialRenderer
             case 5:
             case 6:
             case 7:
-            case 8:
                 this.textureToUse = this.textureToUse + "transformer2.png";
                 break;
+            case 8:
             case 9:
             case 10:
             case 11:
-            case 12:
                 this.textureToUse = this.textureToUse + "transformer3.png";
                 break;
         }
