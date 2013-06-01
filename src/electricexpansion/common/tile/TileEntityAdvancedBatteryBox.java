@@ -137,7 +137,6 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					this.sendUniversalEnergy();
 					break;
 				default:
-					this.sendBatteryEnergy();
 					break;
 			}
 
@@ -159,7 +158,6 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					this.drainUniversalEnergy();
 					break;
 				default:
-					this.drainBatteryEnergy();
 					break;
 			}
 		}

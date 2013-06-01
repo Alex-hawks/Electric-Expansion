@@ -134,6 +134,10 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 
 			if (x >= targetX && x <= (targetX + 16) && y >= targetY && y <= (targetY + 16))
 			{
+
+				// When put in contstructor, doesn't properly load everything first time gui is opened
+				this.validModes = this.tileEntity.getAvailableModes(); 
+
 				if (entry.getKey() == "INPUT")
 				{
 					int newMode = (this.validModes.indexOf(this.tileEntity.getInputMode()) + 1) % this.validModes.size();
