@@ -136,7 +136,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 			{
 
 				// When put in contstructor, doesn't properly load everything first time gui is opened
-				this.validModes = this.tileEntity.getAvailableModes(); 
+				this.validModes = this.tileEntity.getAvailableModes();
 
 				if (entry.getKey() == "INPUT")
 				{
@@ -162,7 +162,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 				ForgeDirection dir = entry.getKey();
 				if (this.tileEntity.getInputDir() != dir && this.tileEntity.getOutputDir() != dir)
 				{
-					if (buttonID == 2 || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+					if (buttonID == 1 || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 					{
 						this.tileEntity.setOutputDir(dir);
 					} 
