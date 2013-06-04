@@ -37,6 +37,7 @@ import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectricityStorage;
+import universalelectricity.prefab.tile.TileEntityConductor;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -52,6 +53,7 @@ import electricexpansion.common.items.ItemLinkCard;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.UniversalPowerUtils;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
+import electricexpansion.common.misc.EnumAdvBattBoxMode;
 
 public class TileEntityAdvancedBatteryBox extends TileEntityElectricityStorage 
 implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySource, IHiveMachine
@@ -64,19 +66,22 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	public final Set<EntityPlayer> playersUsing = new HashSet<EntityPlayer>();
 
 	/**
-	 * 0: none 1: Electricity (UE, IC2, and RP2 if/when permission is obtained and RP2 is up to
-	 * date) 2: Pneumatic (Intelligence depends on upgrade. BuildCraft, ThermalExpansion)
-	 * (Unavailable for now) 3: Quantum (Depends on Upgrade, Replaces Quantum Battery Box soon) 4:
-	 * Universal Cables (Depends on upgrade. Mekanism) (Unavailable for now) 5: Factorization Cables
-	 * (Depends on upgrade. Factorization) (Unavailable for now) 6: Universal (Depends on
-	 * Upgrade(s), Requires availability of Modes: 1, 2, 4 if Mekanism is installed, 5 if
+	 * 0: OFF: none 
+	 * 1: BASIC: Electricity (UE, IC2, and RP2 if/when permission is obtained and RP2 is up to date) 
+	 * 2: PNEUMATIC: Pneumatic (Intelligence depends on upgrade. BuildCraft, ThermalExpansion)
+	 * 3: QUANTUM: Quantum (Depends on Upgrade, Replaces Quantum Battery Box soon)
+	 * 4: MEKANISM: Universal Cables (Depends on upgrade. Mekanism) (Unavailable for now) 
+	 * 5: FACTORIZATION: Factorization Cables (Depends on upgrade. Factorization) (Unavailable for now) 
+	 * 6: UNIVERSAL (Depends on Upgrade(s), Requires availability of Modes: 1, 2, 4 if Mekanism is installed, 5 if
 	 * Factorization is installed) (Unavailable for now)
 	 */
-	private byte inputMode = 0;
-	private byte outputMode = 0;
+	private EnumAdvBattBoxMode inputMode = EnumAdvBattBoxMode.OFF;
+	private EnumAdvBattBoxMode outputMode = EnumAdvBattBoxMode.OFF;
 
-    private ForgeDirection input = ForgeDirection.UP;
-	private ForgeDirection output = ForgeDirection.DOWN;
+	private ForgeDirection inputDir = ForgeDirection.UP;
+	private ForgeDirection outputDir = ForgeDirection.DOWN;
+	private TileEntity inputTile;
+	private TileEntity outputTile;
 	
 	private transient IElectricityNetwork inputNetwork;
     private transient IElectricityNetwork outputNetwork;
@@ -113,22 +118,22 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		{
 			switch (this.outputMode)
 			{
-				case 1:
+				case BASIC:
 					this.sendElectricalEnergy();
 					break;
-				case 2:
+				case PNEUMATIC:
 					this.sendPneumaticEnergy();
 					break;
-				case 3:
+				case QUANTUM:
 					this.sendQuantumEnergy();
 					break;
-				case 4:
+				case MEKANISM:
 					this.sendMekanismEnergy();
 					break;
-				case 5:
+				case FACTORIZATION:
 					this.sendFzEnergy();
 					break;
-				case 6:
+				case UNIVERSAL:
 					this.sendUniversalEnergy();
 					break;
 				default:
@@ -137,19 +142,19 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 			switch (this.inputMode)
 			{
-				case 1:
+				case BASIC:
 					this.drainElectricalEnergy();
 					break;
-				case 2:
+				case PNEUMATIC:
 					this.drainPneumaticEnergy();
 					break;
-				case 4:
+				case MEKANISM:
 					this.drainMekanismEnergy();
 					break;
-				case 5:
+				case FACTORIZATION:
 					this.drainFzEnergy();
 					break;
-				case 6:
+				case UNIVERSAL:
 					this.drainUniversalEnergy();
 					break;
 				default:
@@ -172,7 +177,16 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		}
 	}
 
-	private boolean sendElectricalEnergy()
+	public void refreshConnections() 
+	{
+		this.outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDir);
+		this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDir);
+
+		this.inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDir);
+		this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDir);
+	}
+
+	private boolean sendBatteryEnergy()
 	{
 		// Batteries (UE, then IC2. Will not call both charge methods)
 		if (this.inventory[0] != null)
@@ -183,20 +197,22 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 				return true;
 			}
 			else if (this.inventory[0].getItem() instanceof IElectricItem)
-
 			{
 				this.setJoules(this.getJoules() - (ChargeUtils.IC2.charge(this.inventory[0], UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap(), this.getJoules()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean sendElectricalEnergy()
+	{
+		if (sendBatteryEnergy())
+			return true;
 
 		// Cables (UE)
 		{
-			TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), output);
-			this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, output);
-
-			TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), input);
-			this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, input);
+			refreshConnections();
 
 			if (outputNetwork != null && inputNetwork != outputNetwork)
 			{
@@ -262,7 +278,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 					if (DimensionManager.getWorld(dimensionId).getBlockTileEntity(x, y, z) instanceof TileEntityAdvancedBatteryBox)
 					{
 						TileEntityAdvancedBatteryBox target = (TileEntityAdvancedBatteryBox) DimensionManager.getWorld(dimensionId).getBlockTileEntity(x, y, z);
-						if (target.getInputMode() == 3)
+						if (target.getInputMode() == EnumAdvBattBoxMode.QUANTUM)
 						{
 							GenericPack thisRequest = UniversalPowerUtils.INSTANCE.new UEElectricPack(Math.min(this.getOutputCap() / 2, this.getJoules()) / this.getVoltage(), this.getVoltage());
 							GenericPack targetRequest = UniversalPowerUtils.INSTANCE.new UEElectricPack(target.getRequest());
@@ -304,7 +320,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		return false;
 	}
 
-	private boolean drainElectricalEnergy()
+	private boolean drainBatteryEnergy()
 	{
 		if (this.inventory[1] != null)
 		{
@@ -320,6 +336,13 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 				return true;
 			}
 		}
+		return false;
+	}
+
+	private boolean drainElectricalEnergy()
+	{
+		if (drainBatteryEnergy())
+			return true;
 		return false;
 	}
 
@@ -360,13 +383,22 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	@Override
 	protected EnumSet<ForgeDirection> getConsumingSides()
 	{
-		return EnumSet.of(input);
+		if (this.inputMode != EnumAdvBattBoxMode.OFF && this.inputMode != EnumAdvBattBoxMode.QUANTUM)
+			return EnumSet.of(inputDir);
+		return EnumSet.noneOf(ForgeDirection.class);
 	}
 
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Double.valueOf(this.getJoules()), Integer.valueOf(this.disabledTicks), Byte.valueOf(this.inputMode), Byte.valueOf(this.outputMode), Byte.valueOf((byte) this.input.ordinal()), Byte.valueOf((byte) this.output.ordinal()) });
+		return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { 
+			Double.valueOf(this.getJoules()),
+					 Integer.valueOf(this.disabledTicks),
+					 Byte.valueOf((byte) this.inputMode.ordinal()),
+					 Byte.valueOf((byte) this.outputMode.ordinal()),
+					 Byte.valueOf((byte) this.inputDir.ordinal()),
+					 Byte.valueOf((byte) this.outputDir.ordinal()) 
+		});
 	}
 
 	@Override
@@ -378,10 +410,10 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 			{
 				this.setJoules(dataStream.readDouble());
 				this.disabledTicks = dataStream.readInt();
-				this.inputMode = dataStream.readByte();
-				this.outputMode = dataStream.readByte();
-				this.input = ForgeDirection.getOrientation(dataStream.readByte());
-				this.output = ForgeDirection.getOrientation(dataStream.readByte());
+				this.inputMode = EnumAdvBattBoxMode.fromValue(dataStream.readByte());
+				this.outputMode = EnumAdvBattBoxMode.fromValue(dataStream.readByte());
+				this.inputDir = ForgeDirection.getOrientation(dataStream.readByte());
+				this.outputDir = ForgeDirection.getOrientation(dataStream.readByte());
 
 				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.blockType.blockID);
 				this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
@@ -395,24 +427,20 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		{
 			try
 			{
-				byte i = dataStream.readByte();
-				boolean b = dataStream.readBoolean();
+        ForgeDirection newInputDir = ForgeDirection.getOrientation(dataStream.readByte());
+				ForgeDirection newOutputDir = ForgeDirection.getOrientation(dataStream.readByte());
+				EnumAdvBattBoxMode newInputMode = EnumAdvBattBoxMode.fromValue(dataStream.readByte());
+				EnumAdvBattBoxMode newOutputMode = EnumAdvBattBoxMode.fromValue(dataStream.readByte());
 
-				switch (i)
-				{
-					case 1:
-						if (b)
-							this.setInputNext();
-						else
-							this.setOutputNext();
-						break;
-					case 2:
-						if (b)
-							this.setInputMode(dataStream.readByte());
-						else
-							this.setOutputMode(dataStream.readByte());
-						break;
-				}
+				if (this.inputDir != newInputDir) 
+					this.setInputDir(newInputDir);
+				if (this.outputDir != newOutputDir) 
+					this.setOutputDir(newOutputDir);
+
+				if (this.inputMode != newInputMode) 
+					this.setInputMode(newInputMode);
+				if (this.outputMode != newOutputMode) 
+					this.setOutputMode(newOutputMode);
 			}
 			catch (Exception e)
 			{
@@ -452,11 +480,11 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 			}
 		}
 
-		this.outputMode = par1NBTTagCompound.getByte("outputMode");
-		this.inputMode = par1NBTTagCompound.getByte("inputMode");
+		this.outputMode = EnumAdvBattBoxMode.fromValue(par1NBTTagCompound.getByte("outputMode"));
+		this.inputMode = EnumAdvBattBoxMode.fromValue(par1NBTTagCompound.getByte("inputMode"));
 
-		this.output = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("output"));
-		this.input = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("input"));
+		this.outputDir = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("output"));
+		this.inputDir = ForgeDirection.getOrientation(par1NBTTagCompound.getByte("input"));
 	}
 
 	@Override
@@ -478,11 +506,11 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 
 		par1NBTTagCompound.setTag("Items", var2);
 
-		par1NBTTagCompound.setByte("outputMode", this.outputMode);
-		par1NBTTagCompound.setByte("inputMode", this.inputMode);
+		par1NBTTagCompound.setByte("outputMode", (byte) this.outputMode.ordinal());
+		par1NBTTagCompound.setByte("inputMode", (byte) this.inputMode.ordinal());
 
-		par1NBTTagCompound.setByte("output", (byte) this.output.ordinal());
-		par1NBTTagCompound.setByte("input", (byte) this.input.ordinal());
+		par1NBTTagCompound.setByte("output", (byte) this.outputDir.ordinal());
+		par1NBTTagCompound.setByte("input", (byte) this.inputDir.ordinal());
 	}
 
 	@Override
@@ -757,7 +785,14 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 	@Override
 	public boolean canConnect(ForgeDirection direction)
 	{
-		return direction == this.input || direction == this.output;
+		if (direction == this.inputDir)
+		{
+			return this.inputMode != EnumAdvBattBoxMode.OFF && this.inputMode != EnumAdvBattBoxMode.QUANTUM;
+		} else if (direction == this.outputDir)
+		{
+			return this.outputMode != EnumAdvBattBoxMode.OFF && this.outputMode != EnumAdvBattBoxMode.QUANTUM;
+		}
+		return false;
 	}
 
 	@Override
@@ -792,115 +827,138 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		this.inventory[5] = is;
 	}
 
-	public byte getInputMode()
+	public EnumAdvBattBoxMode getInputMode()
 	{
 		return this.inputMode;
 	}
 
-	public byte getOutputMode()
+	public EnumAdvBattBoxMode getOutputMode()
 	{
 		return this.outputMode;
 	}
 
-	public ArrayList<Byte> getAvailableModes()
+	public ArrayList<EnumAdvBattBoxMode> getAvailableModes()
 	{
-		ArrayList<Byte> toReturn = new ArrayList<Byte>();
-		toReturn.add((byte) 0);
-		toReturn.add((byte) 1);
+		ArrayList<EnumAdvBattBoxMode> toReturn = new ArrayList<EnumAdvBattBoxMode>();
+		toReturn.add(EnumAdvBattBoxMode.OFF);
+		toReturn.add(EnumAdvBattBoxMode.BASIC);
 		if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
 		{
-			// toReturn.add((byte) 2);
+			// toReturn.add(EnumAdvBattBoxModeMode.PNEUMATIC);
 		}
 		if (this.hasUpgrade("Quantum"))
 		{
-			toReturn.add((byte) 3);
+			toReturn.add(EnumAdvBattBoxMode.QUANTUM);
 		}
 		if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
 		{
-			// toReturn.add((byte) 4);
+			// toReturn.add(EnumAdvBattBoxModeMod.MEKANISM);
 		}
 		if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
 		{
-			// toReturn.add((byte) 5);
+			// toReturn.add(EnumAdvBattBoxModeMod.FACTORIZATION);
 		}
 		if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
 		{
-			// toReturn.add((byte) 6);
+			// toReturn.add(EnumAdvBattBoxModeMod.UNIVERSAL);
 		}
 		return toReturn;
 	}
 
-	public void setInputMode(byte mode)
+	public void setInputMode(EnumAdvBattBoxMode newMode)
 	{
 		if (this.worldObj.isRemote)
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), true, Byte.valueOf(mode) }));
+		{
+			this.sendUpdateToServer(inputDir, outputDir, newMode, outputMode);
+		}
 		else
 		{
-			switch (mode)
+			switch (newMode)
 			{
 				default:
-					this.inputMode = 0;
+					this.inputMode = EnumAdvBattBoxMode.OFF;
 					break;
-				case 1:
-					this.inputMode = mode;
+				case BASIC:
+					this.inputMode = newMode;
 					break;
-				case 2:
+				case PNEUMATIC:
 					if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
-						this.inputMode = mode;
+						this.inputMode = newMode;
 					break;
-				case 3:
+				case QUANTUM:
 					if (this.hasUpgrade("Quantum"))
-						this.inputMode = mode;
+						this.inputMode = newMode;
 					break;
-				case 4:
+				case MEKANISM:
 					if (Loader.isModLoaded("Mekanism|Core") && this.hasUpgrade("Mekansim"))
-						this.inputMode = mode;
+						this.inputMode = newMode;
 					break;
-				case 5:
+				case FACTORIZATION:
 					if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
-						this.inputMode = mode;
+						this.inputMode = newMode;
 					break;
-				case 6:
+				case UNIVERSAL:
 					if ((!Loader.isModLoaded("Mekanism|Core") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
-						this.inputMode = mode;
+						this.inputMode = newMode;
 			}
+			refreshConnections();
+			if (inputNetwork != null)
+			{
+				inputNetwork.stopRequesting(this);
+			}
+			if (inputTile instanceof TileEntityConductor)
+			{
+				((TileEntityConductor) inputTile).updateAdjacentConnections();
+			}
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 		}
 	}
 
-	public void setOutputMode(byte mode)
+	public void setOutputMode(EnumAdvBattBoxMode newMode)
 	{
-		if (this.worldObj.isRemote)
-			PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 2), false, Byte.valueOf(mode) }));
+		if (this.worldObj.isRemote) {
+			this.sendUpdateToServer(inputDir, outputDir, inputMode, newMode);
+		}
 		else
 		{
-			switch (mode)
+			switch (newMode)
 			{
 				default:
-					this.outputMode = 0;
+					this.outputMode = EnumAdvBattBoxMode.OFF;
 					break;
-				case 1:
-					this.outputMode = mode;
+				case BASIC:
+					this.outputMode = newMode;
 					break;
-				case 2:
+				case PNEUMATIC:
 					if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
-						this.outputMode = mode;
+						this.outputMode = newMode;
 					break;
-				case 3:
+				case QUANTUM:
 					if (this.hasUpgrade("Quantum"))
-						this.outputMode = mode;
+						this.outputMode = newMode;
 					break;
-				case 4:
+				case MEKANISM:
 					if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
-						this.outputMode = mode;
+						this.outputMode = newMode;
 					break;
-				case 5:
+				case FACTORIZATION:
 					if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
-						this.outputMode = mode;
+						this.outputMode = newMode;
 					break;
-				case 6:
+				case UNIVERSAL:
 					if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
-						this.outputMode = mode;
+						this.outputMode = newMode;
 			}
+			refreshConnections();
+			if (outputNetwork != null)
+			{
+				outputNetwork.stopProducing(this);
+			}
+			if (outputTile instanceof TileEntityConductor)
+			{
+				((TileEntityConductor) outputTile).updateAdjacentConnections();
+			}
+			this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 		}
 	}
 
@@ -930,50 +988,65 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		return false;
 	}
 
-	public void setInputNext()
+	public void setInputDir(ForgeDirection newDirection)
 	{
 		if (this.worldObj.isRemote)
 		{
-			this.sendUpdatedModeToServer(true);
+			this.sendUpdateToServer(newDirection, outputDir, inputMode, outputMode);
 		}
 		else
 		{
-			int newInput = (this.input.ordinal() + 1) % 6;
-			if (newInput == this.output.ordinal())
-				newInput = (newInput + 1) % 6;
-
-			if (newInput != this.input.ordinal())
+			if (newDirection != this.inputDir)
 			{
-				this.input = ForgeDirection.getOrientation(newInput);
+				refreshConnections();
+				if (inputNetwork != null)
+				{
+					inputNetwork.stopRequesting(this);
+				}
+				if (inputTile instanceof TileEntityConductor)
+				{
+					((TileEntityConductor) inputTile).updateAdjacentConnections();
+				}
+				this.inputDir = newDirection;
 				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 			}
 
 		}
 	}
 
-	public void setOutputNext()
+	public void setOutputDir(ForgeDirection newDirection)
 	{
 		if (this.worldObj.isRemote)
 		{
-			this.sendUpdatedModeToServer(false);
+			this.sendUpdateToServer(inputDir, newDirection, inputMode, outputMode);
 		}
 		else
 		{
-			int newOutput = (this.output.ordinal() + 1) % 6;
-			if (newOutput == this.input.ordinal())
-				newOutput = (newOutput + 1) % 6;
-
-			if (newOutput != this.output.ordinal())
+			if (newDirection != this.outputDir)
 			{
-				this.output = ForgeDirection.getOrientation(newOutput);
+				refreshConnections();
+				if (outputNetwork != null)
+				{
+					outputNetwork.stopProducing(this);
+				}
+				if (outputTile instanceof TileEntityConductor)
+				{
+					((TileEntityConductor) outputTile).updateAdjacentConnections();
+				}
+				this.outputDir = newDirection;
 				this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID);
 			}
 		}
 	}
 
-	private void sendUpdatedModeToServer(boolean b)
+	private void sendUpdateToServer(ForgeDirection inputDir, ForgeDirection outputDir, EnumAdvBattBoxMode inputMode, EnumAdvBattBoxMode outputMode)
 	{
-		PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { Byte.valueOf((byte) 1), b }));
+		PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, new Object[] { 
+			Byte.valueOf((byte) inputDir.ordinal()), 
+			Byte.valueOf((byte) outputDir.ordinal()),
+			Byte.valueOf((byte) inputMode.ordinal()), 
+			Byte.valueOf((byte) outputMode.ordinal()) 
+		}));
 	}
 
 	@Override
@@ -994,40 +1067,40 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
 		return i == j && (i == 0 || i == 1);
 	}
 
-	public ForgeDirection getInput()
+	public ForgeDirection getInputDir()
 	{
-		return this.input;
+		return this.inputDir;
 	}
 
-	public ForgeDirection getOutput()
+	public ForgeDirection getOutputDir()
 	{
-		return this.output;
+		return this.outputDir;
 	}
 
-    @Override
-    public IElectricityNetwork[] getNetworks()
-    {
-        return new IElectricityNetwork[] { this.inputNetwork, this.outputNetwork };
-    }
+	@Override
+	public IElectricityNetwork[] getNetworks()
+	{
+			return new IElectricityNetwork[] { this.inputNetwork, this.outputNetwork };
+	}
 
-    @Override
-    public IHiveNetwork getHiveNetwork()
-    {
-        return this.hiveNetwork;
-    }
+	@Override
+	public IHiveNetwork getHiveNetwork()
+	{
+			return this.hiveNetwork;
+	}
 
-    @Override
-    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
-    {
-        if (this.hiveNetwork == null || mustOverride)
-        {
-            this.hiveNetwork = hiveNetwork;
-            
-            for (IElectricityNetwork net : getNetworks())
-                this.hiveNetwork.addNetwork(net);
-            
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+	{
+			if (this.hiveNetwork == null || mustOverride)
+			{
+					this.hiveNetwork = hiveNetwork;
+					
+					for (IElectricityNetwork net : getNetworks())
+							this.hiveNetwork.addNetwork(net);
+					
+					return true;
+			}
+			return false;
+	}
 }
