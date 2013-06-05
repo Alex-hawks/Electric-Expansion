@@ -1,5 +1,6 @@
 package electricexpansion.client.gui;
 
+import java.util.Map;
 import java.util.ArrayList;
 
 import net.minecraft.client.gui.GuiButton;
@@ -7,6 +8,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.input.Keyboard;
 
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
@@ -15,6 +17,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
+import electricexpansion.common.misc.EnumAdvBattBoxMode;
+import net.minecraftforge.common.ForgeDirection;
+import com.google.common.collect.ImmutableMap;
 
 @SideOnly(Side.CLIENT)
 public class GuiAdvancedBatteryBox extends GuiContainer
@@ -24,7 +29,24 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	private int guiTopLeftX;
 	private int guiTopLeftY;
 
-	private ArrayList<Byte> validModes;
+	static final Map<ForgeDirection, int[]> dirChooserCoords = ImmutableMap.<ForgeDirection, int[]>builder()
+		.put(ForgeDirection.UP, new int[]{386, 214})
+		.put(ForgeDirection.DOWN, new int[]{386, 272})
+		.put(ForgeDirection.NORTH, new int[]{404, 226})
+		.put(ForgeDirection.SOUTH, new int[]{368, 260})
+		.put(ForgeDirection.EAST, new int[]{416, 244})
+		.put(ForgeDirection.WEST, new int[]{356, 244}).build();
+
+	static final Map<String, int[]> dirChooserSprites = ImmutableMap.<String, int[]>builder()
+		.put("INPUT", new int[]{0, 406})
+		.put("OUTPUT", new int[]{16, 406}).build();
+
+	static final Map<String, int[]> modeChangeCoords = ImmutableMap.<String, int[]>builder()
+		.put("INPUT", new int[]{394, 82})
+		.put("OUTPUT", new int[]{394, 130}).build();
+
+
+	private ArrayList<EnumAdvBattBoxMode> validModes;
 
 	public GuiAdvancedBatteryBox(InventoryPlayer par1InventoryPlayer, TileEntityAdvancedBatteryBox te)
 	{
@@ -44,16 +66,12 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.guiTopLeftX = (this.width - this.xSize) / 2;
 		this.guiTopLeftY = (this.height - this.ySize) / 2;
 
-		this.buttonList.clear();
-
-		this.buttonList.add(new GuiButton(0, this.guiTopLeftX + 180, this.guiTopLeftY + 95, 35, 20, this.tileEntity.getInput().name()));
-		this.buttonList.add(new GuiButton(1, this.guiTopLeftX + 180, this.guiTopLeftY + 120, 35, 20, this.tileEntity.getOutput().name()));
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
-		this.fontRenderer.drawString(this.tileEntity.getInvName(), 22, 6, 4210752);
+		this.fontRenderer.drawString(this.tileEntity.getInvName(), 4, 6, 4210752);
 		String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoules(), ElectricUnit.JOULES);
 		String displayMaxJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getMaxJoules(), ElectricUnit.JOULES);
 		String displayInputVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getInputVoltage(), ElectricUnit.VOLTAGE);
@@ -69,8 +87,6 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.fontRenderer.drawString("Output: " + displayOutputVoltage, 40, 55, 4210752);
 		this.fontRenderer.drawString("Input: " + displayInputVoltage, 40, 65, 4210752);
 
-		((GuiButton) this.buttonList.get(0)).displayString = this.tileEntity.getInput().name();
-		((GuiButton) this.buttonList.get(1)).displayString = this.tileEntity.getOutput().name();
 	}
 
 	@Override
@@ -85,67 +101,78 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		this.guiTopLeftY = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(this.guiTopLeftX, this.guiTopLeftY, 0, 0, this.xSize, this.ySize);
 
-		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 10, this.tileEntity.getInputMode() * 17, 169, 16, 16);
-		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 34, this.tileEntity.getOutputMode() * 17, 186, 16, 16);
+		EnumAdvBattBoxMode mode = this.tileEntity.getInputMode();
+		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 41, mode.ordinal() * 17, 169, 16, 16);
+
+		mode = this.tileEntity.getOutputMode();
+		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 65, mode.ordinal() * 17, 186, 16, 16);
 
 		int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
 		this.drawTexturedModalRect(this.guiTopLeftX + 64, this.guiTopLeftY + 46, 0, 166, scale, 3);
+
+		// Draw input/output sprites on the direction chooser
+		int[] sprite = dirChooserSprites.get("INPUT");
+		int[] pos = dirChooserCoords.get(this.tileEntity.getInputDir());
+		this.drawTexturedModalRect(this.guiTopLeftX + pos[0] / 2, this.guiTopLeftY + pos[1] / 2, sprite[0] / 2, sprite[1] / 2, 7, 7);
+
+		sprite = dirChooserSprites.get("OUTPUT");
+		pos = dirChooserCoords.get(this.tileEntity.getOutputDir());
+		this.drawTexturedModalRect(this.guiTopLeftX + pos[0] / 2, this.guiTopLeftY + pos[1] / 2, sprite[0] / 2, sprite[1] / 2, 7, 7);
+
 	}
 
 	@Override
 	protected void mouseClicked(int x, int y, int buttonID)
 	{
 		super.mouseClicked(x, y, buttonID);
+		int targetX, targetY;
 
-		if (x >= this.guiTopLeftX + 197 && x <= this.guiTopLeftX + 212)
-		{
-			if (y >= this.guiTopLeftY + 10 && y <= this.guiTopLeftY + 25)
+		for (Map.Entry<String, int[]> entry : modeChangeCoords.entrySet()) {
+			int[] coords = entry.getValue();
+			targetX = coords[0] / 2 + this.guiTopLeftX;
+			targetY = coords[1] / 2 + this.guiTopLeftY;
+
+			if (x >= targetX && x <= (targetX + 16) && y >= targetY && y <= (targetY + 16))
 			{
-				int currentMode = 0;
-				for (int i = 0; i < this.validModes.size(); i++)
+
+				// When put in contstructor, doesn't properly load everything first time gui is opened
+				this.validModes = this.tileEntity.getAvailableModes();
+
+				if (entry.getKey() == "INPUT")
 				{
-					if (this.validModes.get(i) == this.tileEntity.getInputMode())
-					{
-						currentMode = i;
-						break;
-					}
-				}
-				this.tileEntity.setInputMode((byte) (this.validModes.get(currentMode) + 1));
-				return;
-			}
-
-			if (y >= this.guiTopLeftY + 34 && y <= this.guiTopLeftY + 49)
-			{
-				int currentMode = 0;
-
-				for (int i = 0; i < this.validModes.size(); i++)
+					int newMode = (this.validModes.indexOf(this.tileEntity.getInputMode()) + 1) % this.validModes.size();
+					this.tileEntity.setInputMode(this.validModes.get(newMode));
+					return;
+				} 
+				else if (entry.getKey() == "OUTPUT")
 				{
-					if (this.validModes.get(i) == this.tileEntity.getOutputMode())
-					{
-						currentMode = i;
-						break;
-					}
+					int newMode = (this.validModes.indexOf(this.tileEntity.getOutputMode()) + 1) % this.validModes.size();
+					this.tileEntity.setOutputMode(this.validModes.get(newMode));
+					return;
 				}
-
-				this.tileEntity.setOutputMode((byte) (this.validModes.get(currentMode) + 1));
-				return;
 			}
 		}
-	}
 
-	@Override
-	public void actionPerformed(GuiButton button)
-	{
-		switch (button.id)
-		{
-			case 0:
-				this.tileEntity.setInputNext();
-				break;
-			case 1:
-				this.tileEntity.setOutputNext();
-				break;
-			default:
-				break;
+		for (Map.Entry<ForgeDirection, int[]> entry : dirChooserCoords.entrySet()) {
+			int[] coords = entry.getValue();
+			targetX = coords[0] / 2 + this.guiTopLeftX;
+			targetY = coords[1] / 2 + this.guiTopLeftY;
+			if (x >= targetX && x <= (targetX + 7) && y >= targetY && y <= (targetY + 7))
+			{
+				ForgeDirection dir = entry.getKey();
+				if (this.tileEntity.getInputDir() != dir && this.tileEntity.getOutputDir() != dir)
+				{
+					if (buttonID == 1 || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+					{
+						this.tileEntity.setOutputDir(dir);
+					} 
+					else 
+					{
+						this.tileEntity.setInputDir(dir);
+					}
+				}
+				return;
+			}
 		}
 	}
 

@@ -21,13 +21,13 @@ public class ContainerAdvancedBatteryBox extends Container
         this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, -11, 24));
         this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, -11, 48));
         // 1st Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 151, 10, IModifier.class));
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 129, 9, IModifier.class));
         // 2nd Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 151, 34, IModifier.class));
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 151, 9, IModifier.class));
         // 3rd Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 151, 58, IModifier.class));
-        // 3rd Mode slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 175, 58, ItemLinkCard.class));
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 173, 9, IModifier.class));
+        //  Link slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 129, 31, ItemLinkCard.class));
         
         int var3;
         
