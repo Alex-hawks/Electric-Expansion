@@ -39,6 +39,8 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     public boolean mode = false;
     
     protected IHiveNetwork hiveNetwork;
+
+    private EnumWireMaterial cachedMaterial;
     
     public TileEntityConductorBase()
     {
@@ -57,9 +59,20 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     @Override
     public double getResistance()
     {
-        return this.getWireMaterial(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord)).resistance;
+        return this.getWireMaterial().resistance;
     }
-    
+
+    // Tries to use the local cached wire material, otherwise it retrieves it from the chunk
+    private EnumWireMaterial getWireMaterial()
+    {
+        if (cachedMaterial == null)
+        {
+            cachedMaterial = this.getWireMaterial(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
+        }
+
+        return cachedMaterial;
+    }
+
     @Override
     public void writeToNBT(NBTTagCompound tag)
     {
@@ -107,11 +120,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     public double getCurrentCapcity()
     {
         // Amps, not Volts or Watts
-        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        if (meta < EnumWireMaterial.values().length - 1)
-            return EnumWireMaterial.values()[meta].maxAmps;
-        else
-            return EnumWireMaterial.UNKNOWN.maxAmps;
+        return getWireMaterial().maxAmps;
     }
     
     @Override
@@ -238,6 +247,9 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
                  */
                 if (!Arrays.areEqual(previousConnections, this.visuallyConnected))
                 {
+                    // Clear the material cache to provide an easy way to fix issues (by changing adjacent wires)
+                    cachedMaterial = null;
+
                     this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
                 }
             }
