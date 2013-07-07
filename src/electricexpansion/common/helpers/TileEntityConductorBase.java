@@ -1,7 +1,9 @@
 package electricexpansion.common.helpers;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
@@ -80,7 +82,10 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
         tag.setBoolean("mode", this.mode);
         if (this.textureItemStack != null)
         {
-            this.textureItemStack.writeToNBT(tag);
+            // Write the item stack to a separate tag to avoid namespace clashes in the tag
+            NBTTagCompound textureTag = new NBTTagCompound();
+            this.textureItemStack.writeToNBT(textureTag);
+            tag.setCompoundTag("texture", textureTag);
         }
     }
     
@@ -105,14 +110,30 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
             }
         }
 
-        try
-        {
-            this.textureItemStack = ItemStack.loadItemStackFromNBT(tag);
+        // This is for legacy compatibility with old worlds
+        NBTBase idTag = tag.getTag("id");
+        if (idTag instanceof NBTTagShort) {
+            try
+            {
+                this.textureItemStack = ItemStack.loadItemStackFromNBT(tag);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                this.textureItemStack = null;
+            }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            this.textureItemStack = null;
+
+        NBTBase textureTag = tag.getTag("texture");
+        if (textureTag instanceof NBTTagCompound) {
+            try {
+                this.textureItemStack = ItemStack.loadItemStackFromNBT((NBTTagCompound) textureTag);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+                this.textureItemStack = null;
+            }
         }
     }
     
