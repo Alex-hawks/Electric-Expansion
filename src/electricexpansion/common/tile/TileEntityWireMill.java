@@ -1,12 +1,13 @@
 package electricexpansion.common.tile;
 
-import ic2.api.Direction;
-import ic2.api.ElectricItem;
-import ic2.api.IElectricItem;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySink;
 import ic2.api.energy.tile.IEnergyTile;
+import ic2.api.item.IElectricItem;
+
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -20,38 +21,40 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 import universalelectricity.core.UniversalElectricity;
-import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
+import universalelectricity.core.block.IElectricalStorage;
+import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.item.IItemElectric;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityElectricityRunnable;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.Loader;
 import electricexpansion.api.hive.IHiveMachine;
 import electricexpansion.api.hive.IHiveNetwork;
+import electricexpansion.api.tile.ITileRunnable;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.ChargeUtils;
 import electricexpansion.common.misc.UniversalPowerUtils;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 import electricexpansion.common.misc.WireMillRecipes;
 
-public class TileEntityWireMill extends TileEntityElectricityRunnable 
-implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, IEnergySink, IHiveMachine
+public class TileEntityWireMill extends TileEntityElectrical 
+implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IEnergySink, IHiveMachine, ITileRunnable
 {
     //  constants
-    public static final double WATTS_PER_TICK = 500.0D;
-    public static final double TRANSFER_LIMIT = 1250.0D;
-    public static final double MAX_JOULES = 150000.0D;
+    public static final float WATTS_PER_TICK = 0.500F;
+    public static final float TRANSFER_LIMIT = 1.250F;
+    public static final float MAX_JOULES = 150.0F;
     
     //  Not saved
     public transient int orientation;
+    private transient int recipeTicks = 0;
     private transient int playersUsing = 0;
     private transient int baseID = 0;
     private transient int baseMeta = 0;
@@ -61,7 +64,6 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
     
     //  Saved
     private int processTicks = 0;
-    private double joulesStored = 0.0D;
     private ItemStack[] inventory = new ItemStack[3];
     
     @Override
@@ -99,68 +101,35 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
             ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
             TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
             
-            this.network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection.getOpposite());
-            
-            if (network != null)
-            {
-                if (this.joulesStored < TileEntityWireMill.MAX_JOULES)
-                {
-                    network.startRequesting(this, Math.min(this.getMaxJoules() - this.getJoules(), TRANSFER_LIMIT) / this.getVoltage(), this.getVoltage());
-                    ElectricityPack electricityPack = network.consumeElectricity(this);
-                    this.setJoules(this.joulesStored + electricityPack.getWatts());
-                    
-                    if (UniversalElectricity.isVoltageSensitive)
-                    {
-                        if (electricityPack.voltage > this.getVoltage())
-                        {
-                            this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2f, true);
-                        }
-                    }
-                }
-                else
-                {
-                    network.stopRequesting(this);
-                }
-            }
+            if (inputTile instanceof INetworkProvider)
+                this.network = ((INetworkProvider) inputTile).getNetwork();
+            else
+                this.network = null;
         }
         
-        // The bottom slot is for portable batteries
-        if (this.inventory[0] != null && this.joulesStored < this.getMaxJoules())
+        if (this.inventory[0] != null && this.energyStored < this.getMaxEnergyStored())
         {
-            if (this.inventory[0].getItem() instanceof IItemElectric)
+            if (this.inventory[1].getItem() instanceof IItemElectric)
             {
-                IItemElectric electricItem = (IItemElectric) this.inventory[0].getItem();
-                
-                if (electricItem.getProvideRequest(this.inventory[0]).getWatts() > 0)
-                {
-                    double joulesReceived = electricItem
-                            .onProvide(ElectricityPack.getFromWatts(Math.max(electricItem.getMaxJoules(this.inventory[0]) * 0.005, TRANSFER_LIMIT), electricItem.getVoltage(this.inventory[0])),
-                                    this.inventory[0]).getWatts();
-                    this.setJoules(this.joulesStored + joulesReceived);
-                }
+                this.setEnergyStored(this.getEnergyStored() + (ChargeUtils.UE.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
+            }
+            else if (this.inventory[1].getItem() instanceof IElectricItem)
+            {
+                this.setEnergyStored(this.getEnergyStored() + (ChargeUtils.IC2.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
             }
             
-            else if (this.inventory[0].getItem() instanceof IElectricItem)
-            {
-                IElectricItem item = (IElectricItem) this.inventory[0].getItem();
-                if (item.canProvideEnergy(this.inventory[0]))
-                {
-                    double gain = ElectricItem.discharge(this.inventory[0], (int) ((int) (this.getMaxJoules() - this.getJoules()) * UniversalElectricity.TO_IC2_RATIO), 3, false, false)
-                            * UniversalElectricity.IC2_RATIO;
-                    this.setJoules(this.getJoules() + gain);
-                }
-            }
         }
         
-        if (this.joulesStored >= WATTS_PER_TICK - 50 && !this.isDisabled())
+        if (this.energyStored >= WATTS_PER_TICK - .0500F)
         {
             // The left slot contains the item to be processed
             if (this.inventory[1] != null && this.canDraw() && (this.processTicks == 0 || this.baseID != this.inventory[1].itemID 
-                    || this.baseMeta != this.inventory[1].getItemDamage()))
+                || this.baseMeta != this.inventory[1].getItemDamage()))
             {
                 this.baseID = this.inventory[1].itemID;
                 this.baseMeta = this.inventory[1].getItemDamage();
                 this.processTicks = this.getDrawingTime();
+                this.recipeTicks = this.getDrawingTime();
             }
             
             // Checks if the item can be processed and if the drawing time left is
@@ -175,7 +144,7 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
                     this.drawItem();
                     this.processTicks = 0;
                 }
-                this.joulesStored -= WATTS_PER_TICK;
+                this.energyStored -= WATTS_PER_TICK;
             }
             else
             {
@@ -191,14 +160,39 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
             }
         }
         
-        this.joulesStored = Math.min(this.joulesStored, this.getMaxJoules());
-        this.joulesStored = Math.max(this.joulesStored, 0d);
+        this.energyStored = Math.min(this.energyStored, this.getMaxEnergyStored());
+        this.energyStored = Math.max(this.energyStored, 0f);
+    }
+    
+    @Override
+    public EnumSet<ForgeDirection> getInputDirections()
+    {
+        return EnumSet.of(ForgeDirection.getOrientation(this.getBlockMetadata() + 2));
+    }
+    
+    @Override
+    public float receiveElectricity(ElectricityPack receive, boolean doReceive)
+    {
+        if (receive.getWatts() + this.energyStored > this.getMaxEnergyStored())
+            this.setEnergyStored(this.getMaxEnergyStored());
+        else
+            this.setEnergyStored(this.energyStored + receive.getWatts());
+        
+        if (UniversalElectricity.isVoltageSensitive)
+        {
+            if (receive.voltage > this.getVoltage())
+            {
+                this.worldObj.createExplosion(null, this.xCoord, this.yCoord, this.zCoord, 2.0F, true);
+            }
+        }
+
+        return receive.getWatts() - (this.getMaxEnergyStored() - this.getEnergyStored());
     }
     
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.processTicks, this.disabledTicks, this.joulesStored);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.processTicks, this.energyStored);
     }
     
     @Override
@@ -207,8 +201,7 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
         try
         {
             this.processTicks = dataStream.readInt();
-            this.disabledTicks = dataStream.readInt();
-            this.joulesStored = dataStream.readDouble();
+            this.energyStored = dataStream.readFloat();
         }
         catch (Exception e)
         {
@@ -307,7 +300,7 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
         this.inventory = new ItemStack[this.getSizeInventory()];
         try
         {
-            this.joulesStored = par1NBTTagCompound.getDouble("joulesStored");
+            this.energyStored = par1NBTTagCompound.getFloat("energyStored");
         }
         catch (Exception e)
         {
@@ -334,7 +327,7 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
     {
         super.writeToNBT(par1NBTTagCompound);
         par1NBTTagCompound.setInteger("drawingTicks", this.processTicks);
-        par1NBTTagCompound.setDouble("joulesStored", this.getJoules());
+        par1NBTTagCompound.setFloat("energyStored", this.getEnergyStored());
         
         NBTTagList var2 = new NBTTagList();
         
@@ -432,13 +425,13 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
         return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false
-                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+            : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
     
     @Override
-    public double getVoltage()
+    public float getVoltage()
     {
-        return 120;
+        return 0.120F;
     }
     
     /**
@@ -454,65 +447,47 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
         return -1;
     }
     
-    public int getDrawingTimeLeft()
+    @Override
+    public float getEnergyStored()
     {
-        return this.processTicks;
+        return this.energyStored;
     }
     
     @Override
-    public double getJoules()
-    {
-        return this.joulesStored;
-    }
-    
-    @Override
-    public void setJoules(double joules)
-    {
-        this.joulesStored = joules;
-    }
-    
-    @Override
-    public double getMaxJoules()
+    public float getMaxEnergyStored()
     {
         return TileEntityWireMill.MAX_JOULES;
     }
     
     @Override
-    public boolean isAddedToEnergyNet()
+    public boolean acceptsEnergyFrom(TileEntity emitter, ForgeDirection direction)
     {
-        return this.initialized;
-    }
-    
-    @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, Direction direction)
-    {
-        
-        if (direction.toForgeDirection() == ForgeDirection.getOrientation(this.getBlockMetadata() + 2))
+        if (this.getInputDirections().contains(direction))
             return true;
-        else
-            return false;
+        
+        return false;
     }
     
     @Override
-    public int demandsEnergy()
+    public double demandedEnergyUnits()
     {
-        return UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxJoules() - this.joulesStored).toEU();
+        return UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxEnergyStored() - this.energyStored).toEU();
     }
     
     @Override
-    public int injectEnergy(Direction direction, int i)
+    public double injectEnergyUnits(ForgeDirection directionFrom, double amount)
     {
-        GenericPack givenEnergy = UniversalPowerUtils.INSTANCE.new IC2TickPack(i, 1);
+        GenericPack givenEnergy = UniversalPowerUtils.INSTANCE.new IC2Pack(amount, 1);
         int rejects = 0;
-        GenericPack neededEnergy = UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxJoules() - this.joulesStored);
+        GenericPack neededEnergy = UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxEnergyStored() - this.energyStored);
         
         if (givenEnergy.toUEWatts() < neededEnergy.toUEWatts())
         {
-            this.joulesStored += givenEnergy.toUEWatts();
+            this.energyStored += givenEnergy.toUEWatts();
         }
         else if (givenEnergy.toUEWatts() > neededEnergy.toUEWatts())
         {
-            this.joulesStored += neededEnergy.toUEWatts();
+            this.energyStored += neededEnergy.toUEWatts();
             rejects = givenEnergy.toEU() - neededEnergy.toEU();
         }
         
@@ -538,8 +513,11 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
     }
     
     @Override
-    public boolean isStackValidForSlot(int i, ItemStack itemstack)
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
+        if (i == 1)
+            return WireMillRecipes.INSTANCE.getDrawingResult(itemstack) != null;
+        
         return false;
     }
     
@@ -578,7 +556,7 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
                 return false;
         }
     }
-
+    
     @Override
     public IElectricityNetwork[] getNetworks()
     {
@@ -600,5 +578,35 @@ implements ISidedInventory, IPacketReceiver, IElectricityStorage, IEnergyTile, I
             return true;
         }
         return false;
+    }
+
+    @Override
+    public float getRequest(ForgeDirection direction)
+    {
+        return MAX_JOULES - this.energyStored;
+    }
+    
+    @Override
+    public float getProvide(ForgeDirection direction)
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getProcessTime()
+    {
+        return this.recipeTicks;
+    }
+    
+    @Override
+    public int getTimeRemaining()
+    {
+        return this.recipeTicks - this.processTicks;
+    }
+    
+    @Override
+    public int getCurrentProgress()
+    {
+        return this.processTicks;
     }
 }

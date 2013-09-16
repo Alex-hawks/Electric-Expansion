@@ -1,8 +1,7 @@
 package electricexpansion.common.misc;
 
-import ic2.api.ElectricItem;
+import ic2.api.item.ElectricItem;
 import net.minecraft.item.ItemStack;
-import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.item.IItemElectric;
 import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
 import electricexpansion.common.misc.UniversalPowerUtils.UEElectricPack;
@@ -80,10 +79,10 @@ public class ChargeUtils
             {
                 IItemElectric item = (IItemElectric) toCharge.getItem();
                 
-                UEElectricPack request = UniversalPowerUtils.INSTANCE.new UEElectricPack(item.getReceiveRequest(toCharge));
+                UEElectricPack request = UniversalPowerUtils.INSTANCE.new UEElectricPack(item.getTransfer(toCharge));
                 GenericPack actualTransmitted = getSmallest(pack, request);
                 
-                item.onReceive(actualTransmitted.toUEPack(request.getVolts(), ElectricUnit.VOLTAGE), toCharge);
+                item.recharge(toCharge, actualTransmitted.toUEWatts(), true);
                 
                 return actualTransmitted;
             }
@@ -102,10 +101,10 @@ public class ChargeUtils
             {
                 IItemElectric item = (IItemElectric) toDischarge.getItem();
                 
-                UEElectricPack request = UniversalPowerUtils.INSTANCE.new UEElectricPack(item.getProvideRequest(toDischarge));
+                UEElectricPack request = UniversalPowerUtils.INSTANCE.new UEElectricPack(item.discharge(toDischarge, maxRequest.toUEWatts(), false));
                 GenericPack actualTransmitted = getSmallest(maxRequest, request);
                 
-                item.onProvide(actualTransmitted.toUEPack(request.getVolts(), ElectricUnit.VOLTAGE), toDischarge);
+                item.discharge(toDischarge, actualTransmitted.toUEWatts(), true);
                 
                 return actualTransmitted;
             }
@@ -118,7 +117,7 @@ public class ChargeUtils
         {
             if (toCheck != null && toCheck.getItem() instanceof IItemElectric)
             {
-                return ((IItemElectric) toCheck.getItem()).getJoules(toCheck) == ((IItemElectric) toCheck.getItem()).getMaxJoules(toCheck);
+                return ((IItemElectric) toCheck.getItem()).getElectricityStored(toCheck) == ((IItemElectric) toCheck.getItem()).getMaxElectricityStored(toCheck);
             }
             return false;
         }
@@ -128,7 +127,7 @@ public class ChargeUtils
         {
             if (toCheck != null && toCheck.getItem() instanceof IItemElectric)
             {
-                return ((IItemElectric) toCheck.getItem()).getJoules(toCheck) == 0D;
+                return ((IItemElectric) toCheck.getItem()).getElectricityStored(toCheck) == 0D;
             }
             return false;
         }
@@ -141,7 +140,7 @@ public class ChargeUtils
         {
             try
             {
-                return UniversalPowerUtils.INSTANCE.new IC2TickPack(ElectricItem.charge(toCharge, pack.toEU(), 3, false, false), 1);
+                return UniversalPowerUtils.INSTANCE.new IC2Pack(ElectricItem.manager.charge(toCharge, pack.toEU(), 3, false, false), 1);
             }
             catch (Throwable e)
             {
@@ -154,7 +153,7 @@ public class ChargeUtils
         {
             try
             {
-                return UniversalPowerUtils.INSTANCE.new IC2TickPack(ElectricItem.discharge(toDischarge, pack.toEU(), 3, false, false), 1);
+                return UniversalPowerUtils.INSTANCE.new IC2Pack(ElectricItem.manager.discharge(toDischarge, pack.toEU(), 3, false, false), 1);
             }
             catch (Throwable e)
             {
@@ -165,13 +164,13 @@ public class ChargeUtils
         @Override
         public boolean isFull(ItemStack toCheck)
         {
-            return ElectricItem.charge(toCheck, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) == 0;
+            return ElectricItem.manager.charge(toCheck, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) == 0;
         }
         
         @Override
         public boolean isEmpty(ItemStack toCheck)
         {
-            return ElectricItem.discharge(toCheck, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) == 0;
+            return ElectricItem.manager.discharge(toCheck, Integer.MAX_VALUE, Integer.MAX_VALUE, true, true) == 0;
         }
     }
 }

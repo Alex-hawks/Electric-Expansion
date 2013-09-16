@@ -48,10 +48,10 @@ public class ContainerAdvancedBatteryBox extends Container
     }
     
     @Override
-    public void onCraftGuiClosed(EntityPlayer entityplayer)
+    public void onContainerClosed(EntityPlayer entityplayer)
     {
         this.tileEntity.playersUsing.remove(entityplayer);
-        super.onCraftGuiClosed(entityplayer);
+        super.onContainerClosed(entityplayer);
     }
     
     @Override
@@ -79,7 +79,8 @@ public class ContainerAdvancedBatteryBox extends Container
             {
                 if (var4.getItem() instanceof IItemElectric)
                 {
-                    if (((IItemElectric) var4.getItem()).getProvideRequest(var2).getWatts() > 0)
+                    float max = ((IItemElectric) var4.getItem()).getMaxElectricityStored(var2);
+                    if (((IItemElectric) var4.getItem()).discharge(var2, max / 2, false) > 0)
                     {
                         if (!this.mergeItemStack(var4, 1, 2, false))
                             return null;

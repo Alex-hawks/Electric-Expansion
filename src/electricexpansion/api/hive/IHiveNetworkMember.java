@@ -1,11 +1,12 @@
 package electricexpansion.api.hive;
 
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.block.IConnector;
+import universalelectricity.core.grid.IElectricityNetwork;
 /**
  * @author Alex_hawks
  * Implement this on your TileEntities
  */
-public interface IHiveNetworkMember 
+public interface IHiveNetworkMember extends IConnector
 {
     /**
      * @return EVERY Electricity network that the TileEntity is connected to

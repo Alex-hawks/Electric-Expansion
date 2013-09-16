@@ -10,7 +10,7 @@ public class TileEntityRawWire extends TileEntityConductorBase
      * one meant to be greater, will be.
      */
     @Override
-    public double getResistance()
+    public float getResistance()
     {
         return super.getResistance() * 2;
     }

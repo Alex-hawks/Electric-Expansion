@@ -19,8 +19,12 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemUpgrade extends Item implements IModifier
 {
-    private String[] names = new String[] { "Storage1", "Storage2", "Storage3", "Storage4", "HalfVoltage", "HVUpgrade", "HVInputUpgrade", "DoubleVoltage", "Unlimiter1", "Unlimiter2", "Unlimiter3",
-            "Unlimiter4", "Pnematic", "CrossDimension", "Mekanism", "Factorization", "Quantum" };
+    private String[] names = new String[] { 
+                                           "Storage1",          "Storage2",         "Storage3",         "Storage4", 
+                                           "HalfVoltage",       "HVUpgrade",        "HVInputUpgrade",   "DoubleVoltage", 
+                                           "Unlimiter1",        "Unlimiter2",       "Unlimiter3",       "Unlimiter4", 
+                                           "Pnematic",          "CrossDimension",   "Mekanism",         "Factorization", 
+                                           "Quantum" };
     
     private Icon[] icons = new Icon[this.names.length];
     
@@ -85,8 +89,7 @@ public class ItemUpgrade extends Item implements IModifier
             case 6:
                 return "InputVoltageModifier";
             case 7:
-                return "VoltageModifier"; // Seperate because it was added at a
-                                          // later point in time
+                return "VoltageModifier"; // Seperate because it was added at a later point in time
             case 8:
             case 9:
             case 10:
@@ -108,7 +111,7 @@ public class ItemUpgrade extends Item implements IModifier
     }
     
     @Override
-    public double getEffectiveness(ItemStack itemstack)
+    public float getEffectiveness(ItemStack itemstack)
     {
         switch (itemstack.getItemDamage())
         {
@@ -121,7 +124,7 @@ public class ItemUpgrade extends Item implements IModifier
             case 3:
                 return 5000000;
             case 4:
-                return 0.5;
+                return 0.5f;
             case 5:
                 return 20;
             case 6:

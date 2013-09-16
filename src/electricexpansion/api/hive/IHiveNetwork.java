@@ -2,7 +2,7 @@ package electricexpansion.api.hive;
 
 import java.util.Set;
 
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 
 /**
  * @author Alex_hawks

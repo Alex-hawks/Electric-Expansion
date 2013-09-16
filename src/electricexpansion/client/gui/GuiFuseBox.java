@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import electricexpansion.api.IItemFuse;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.common.containers.ContainerFuseBox;
 import electricexpansion.common.tile.TileEntityFuseBox;
 
@@ -31,7 +31,7 @@ public class GuiFuseBox extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(GuiFuseBox.getTexture());
+        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_FUSE_BOX);
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
@@ -52,10 +52,4 @@ public class GuiFuseBox extends GuiContainer
             this.fontRenderer.drawString(StatCollector.translateToLocal(fuse.getUnlocalizedName(fuseStack)), 30, 18, 4210752);
         }
     }
-    
-    public static String getTexture()
-    {
-        return ElectricExpansion.GUI_PATH + "GuiFuseBox.png";
-    }
-    
 }

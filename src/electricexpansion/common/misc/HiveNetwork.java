@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import electricexpansion.api.hive.IHiveConductor;
 import electricexpansion.api.hive.IHiveController;
 import electricexpansion.api.hive.IHiveMachine;

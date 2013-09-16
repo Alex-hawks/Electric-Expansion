@@ -2,6 +2,8 @@ package electricexpansion.common;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,12 +22,9 @@ import universalelectricity.prefab.ore.OreGenReplaceStone;
 import universalelectricity.prefab.ore.OreGenerator;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.Metadata;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.ModMetadata;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -70,7 +69,7 @@ import electricexpansion.common.items.ItemUltimateBattery;
 import electricexpansion.common.items.ItemUpgrade;
 import electricexpansion.common.misc.DistributionNetworks;
 import electricexpansion.common.misc.EETab;
-import electricexpansion.common.misc.EventHandler;
+import electricexpansion.common.misc.ElectricExpansionEventHandler;
 
 @Mod(modid = ElectricExpansion.MOD_ID, name = ElectricExpansion.MOD_NAME, version = ElectricExpansion.VERSION, dependencies = "after:BasicComponents;after:AtomicScience;after:ICBM|Contraption;after:MineFactoryReloaded;after:IC2", useMetadata = true)
 @NetworkMod(channels = { ElectricExpansion.CHANNEL }, clientSideRequired = true, serverSideRequired = false, packetHandler = PacketManager.class)
@@ -100,15 +99,22 @@ public class ElectricExpansion
     private static final int BLOCK_ID_PREFIX = 3980;
     private static final int ITEM_ID_PREFIX = 15970;
     
-    public static final String GUI_PATH = "/mods/electricexpansion/textures/gui/";
-    public static final String MODEL_PATH = "/mods/electricexpansion/textures/models/";
-    public static final String LANGUAGE_PATH = "/mods/electricexpansion/language/";
+    public static final String DOMAIN = "electricexpansion";
+    public static final String PREFIX = DOMAIN + ":";
+    
+    public static final String RESOURCE_PATH = "/mods/" + DOMAIN + "/";
+    public static final String LANGUAGE_PATH = RESOURCE_PATH + "languages/";
+
+    public static final String TEXTURE_PATH = "textures/";
+    public static final String BLOCK_PATH = TEXTURE_PATH + "blocks/";
+    public static final String ITEM_PATH = TEXTURE_PATH + "items/";
+    public static final String MODEL_PATH = TEXTURE_PATH + "models/";
+    public static final String GUI_PATH = TEXTURE_PATH + "gui/";
     
     public static final String TEXTURE_NAME_PREFIX = "electricexpansion:";
     
-    private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US", "pl_PL" };
-    
-    public static OreGenBase silverOreGeneration;
+    private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
+    private static final Set<String> LANGUAGES_LOADED = new HashSet<String>();
     
     public static final Configuration CONFIG = new Configuration(new File(Loader.instance().getConfigDir(), "UniversalElectricity/ElectricExpansion.cfg"));
     public static boolean configLoaded = false;
@@ -149,16 +155,14 @@ public class ElectricExpansion
         // +6
         ElectricExpansionItems.blockAdvBatteryBox = new BlockAdvancedBatteryBox(config.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0);
         ElectricExpansionItems.blockMultimeter = new BlockMultimeter(config.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0);
-        ElectricExpansionItems.blockSilverOre = new BlockBasic(config.getBlock("Silver Ore", BLOCK_ID_PREFIX + 9).getInt(), Material.rock, EETab.INSTANCE, 2F, "SilverOre");
+        // +9
         ElectricExpansionItems.blockInsulationMachine = new BlockInsulationMachine(config.getBlock("Insulation_Refiner", BLOCK_ID_PREFIX + 10).getInt());
         ElectricExpansionItems.blockWireMill = new BlockWireMill(config.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt());
         ElectricExpansionItems.blockTransformer = new BlockTransformer(config.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt());
         ElectricExpansionItems.blockDistribution = new BlockQuantumBatteryBox(config.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
         ElectricExpansionItems.blockLead = new BlockBasic(config.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE, 2F, "LeadBlock");
         ElectricExpansionItems.blockLogisticsWire = new BlockLogisticsWire(config.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
-        // ElectricExpansionItems.blockFuseBox = new
-        // BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX +
-        // 16).getInt());
+        // ElectricExpansionItems.blockFuseBox = new BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
         ElectricExpansionItems.blockRedstoneNetworkCore = new BlockRedstoneNetworkCore(config.getBlock("RS_Network_Core", BLOCK_ID_PREFIX + 16).getInt());
         
         ElectricExpansionItems.itemUpgrade = new ItemUpgrade(config.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0);
@@ -167,14 +171,11 @@ public class ElectricExpansion
         ElectricExpansionItems.itemParts = new ItemParts(config.getItem("Parts", ITEM_ID_PREFIX + 3).getInt(), 0);
         ElectricExpansionItems.itemLinkCard = new ItemLinkCard(config.getItem("Link_Card", ITEM_ID_PREFIX + 3).getInt());
         ElectricExpansionItems.itemAdvBat = new ItemAdvancedBattery(config.getItem("Advanced_Battery", ITEM_ID_PREFIX + 5).getInt());
-        // itemFuse = new ItemFuse(config.getItem("Fuses", ITEM_ID_PREFIX +
-        // 6).getInt());
+        // itemFuse = new ItemFuse(config.getItem("Fuses", ITEM_ID_PREFIX + 6).getInt());
         // +7
         ElectricExpansionItems.itemMultimeter = new ItemMultimeter(config.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt());
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockSilverOre, ItemBlock.class, "blockSilverOre", ElectricExpansion.MOD_ID);
-        
-        silverOreGeneration = new OreGenReplaceStone("Silver Ore", "oreSilver", new ItemStack(ElectricExpansionItems.blockSilverOre), 36, 10, 3).enable(config);
         
         debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(debugRecipes);
         useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(useHashCodes);
@@ -188,7 +189,7 @@ public class ElectricExpansion
         return true; // returns true to configLoaded VAR
     }
     
-    @PreInit
+    @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         meta.modId = ElectricExpansion.MOD_ID;
@@ -219,8 +220,7 @@ public class ElectricExpansion
         GameRegistry.registerBlock(ElectricExpansionItems.blockTransformer, ItemBlockTransformer.class, "blockTransformer", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockDistribution, ItemBlock.class, "blockDistribution", ElectricExpansion.MOD_ID);
-        // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class,
-        // "blockFuseBox", this.MOD_ID);
+        // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockRedstoneNetworkCore, ItemBlock.class, "blockRsNetworkCore", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockRawWire, ItemBlockRawWire.class, "blockRawWire", ElectricExpansion.MOD_ID);
@@ -259,7 +259,7 @@ public class ElectricExpansion
         }
     }
     
-    @Init
+    @EventHandler
     public void load(FMLInitializationEvent event)
     {
         log(Level.INFO, "Initializing ElectricExpansion v." + VERSION);
@@ -270,36 +270,18 @@ public class ElectricExpansion
         
         int languages = 0;
         
-        /**
-         * Load all languages.
-         */
-        for (String language : LANGUAGES_SUPPORTED)
-        {
-            LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
-            
-            if (LanguageRegistry.instance().getStringLocalization("children", language) != "")
-            {
-                try
-                {
-                    String[] children = LanguageRegistry.instance().getStringLocalization("children", language).split(",");
-                    
-                    for (String child : children)
-                    {
-                        if (child != null && child != "")
-                        {
-                            LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", child, false);
-                            languages++;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
+        //  Load all languages.
         int unofficialLanguages = 0;
         unofficialLanguages = langLoad();
+        
+        for (String language : LANGUAGES_SUPPORTED)
+        {
+            if (LANGUAGES_LOADED.add(language.toLowerCase()))
+            {
+                LanguageRegistry.instance().loadLocalization(LANGUAGE_PATH + language + ".properties", language, false);
+                languages++;
+            }
+        }
         
         EELogger.info("Loaded " + languages + " Official and " + unofficialLanguages + " unofficial languages");
         
@@ -309,21 +291,20 @@ public class ElectricExpansion
             EELogger.finest("Successfully toggled Voltage Sensitivity!");
         }
         
-        OreGenerator.addOre(silverOreGeneration);
         UniversalElectricity.isNetworkActive = true;
     }
     
-    @PostInit
+    @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
         log(Level.INFO, "PostInitializing ElectricExpansion v." + VERSION);
         
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        MinecraftForge.EVENT_BUS.register(new ElectricExpansionEventHandler());
         RecipeRegistery.drawing();
         RecipeRegistery.insulation();
     }
     
-    @ServerStarting
+    @EventHandler
     public void onServerStarting(FMLServerStartingEvent event)
     {
         ElectricExpansion.DistributionNetworksInstance = new DistributionNetworks();
@@ -333,7 +314,7 @@ public class ElectricExpansion
     {
         if (side.isClient())
         {
-            dir = Minecraft.getMinecraftDir() + File.separator + dir;
+            dir = Minecraft.getMinecraft().mcDataDir + File.separator + dir;
         }
         
         File folder = new File(dir);
@@ -364,13 +345,14 @@ public class ElectricExpansion
                         String lang = name.substring(0, name.length() - 4);
                         LanguageRegistry.instance().loadLocalization(langFile.toString(), lang, false);
                         unofficialLanguages++;
+                        LANGUAGES_LOADED.add(lang.toLowerCase());
                     }
                 }
             }
         }
         catch (Exception e)
         {
-            // the folder is likely empty, so what...
+            // the folder is likely empty or non-existant, so what...
         }
         return unofficialLanguages;
     }

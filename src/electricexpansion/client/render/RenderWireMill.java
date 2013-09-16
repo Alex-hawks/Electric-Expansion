@@ -7,8 +7,8 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.client.model.ModelWireMill;
-import electricexpansion.common.ElectricExpansion;
 
 @SideOnly(Side.CLIENT)
 public class RenderWireMill extends TileEntitySpecialRenderer
@@ -23,7 +23,7 @@ public class RenderWireMill extends TileEntitySpecialRenderer
     @Override
     public void renderTileEntityAt(TileEntity var1, double var2, double var3, double var4, float var5)
     {
-        this.bindTextureByName(ElectricExpansion.MODEL_PATH + "wiremill.png");
+        this.func_110628_a(TextureLocations.GUI_BAT_BOX);
         GL11.glPushMatrix();
         GL11.glTranslatef((float) var2 + 0.5F, (float) var3 + 1.5F, (float) var4 + 0.5F);
         switch (var1.worldObj.getBlockMetadata(var1.xCoord, var1.yCoord, var1.zCoord))

@@ -46,8 +46,7 @@ public class RecipeRegistery
     private static final ItemElectric itemUltimateBat = ElectricExpansionItems.itemUltimateBat;
     
     // InterMod Blocks
-    private static ItemStack camo; // Will be ICBM Camouflage if ICBM is
-                                   // installed
+    private static ItemStack camo; // Will be ICBM Camouflage if ICBM is installed
     
     private static final ItemStack insulationIS = new ItemStack(itemParts, 1, 6);
     
@@ -76,8 +75,7 @@ public class RecipeRegistery
             ElectricExpansion.log(Level.INFO, "Failed to detect ICBM|Contraption");
             ElectricExpansion.log(Level.INFO, "Using %s's items instead.", ElectricExpansion.MOD_NAME);
             camo = new ItemStack(itemParts, 1, 5);
-            GameRegistry
-                    .addRecipe(new ShapelessOreRecipe(camo, new Object[] { Block.cloth, Item.bucketEmpty, Item.slimeBall, Item.redstone, "dyeRed", "dyeBlue", "dyeYellow", "dyeBlack", "dyeWhite" }));
+            GameRegistry.addRecipe(new ShapelessOreRecipe(camo, new Object[] { Block.cloth, Item.bucketEmpty, Item.slimeBall, Item.redstone, "dyeRed", "dyeBlue", "dyeYellow", "dyeBlack", "dyeWhite" }));
         }
 
         // We require a few things from Basic Components
@@ -170,7 +168,7 @@ public class RecipeRegistery
                 new ItemStack(Item.paper), '#', "circuitAdvanced" }));
         
         // Batteries
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAdvBat), new Object[] { " T ", "TRT", "TRT", 'T', "ingotSilver", 'R', Item.lightStoneDust }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemAdvBat), new Object[] { " T ", "TRT", "TRT", 'T', "ingotSilver", 'R', Item.glowstone }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemEliteBat), new Object[] { "!@!", "#$#", "!@!", '!', "plateSteel", '@', new ItemStack(blockInsulatedWire, 1, 0), '#', "ingotLead",
                 '$', Item.ghastTear }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUltimateBat), new Object[] { "!@!", "#$#", "!@!", '!', "plateGold", '@', new ItemStack(blockInsulatedWire, 1, 4), '#',

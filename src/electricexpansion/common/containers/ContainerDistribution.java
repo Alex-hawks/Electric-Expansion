@@ -32,9 +32,10 @@ public class ContainerDistribution extends Container
     }
     
     @Override
-    public void onCraftGuiClosed(EntityPlayer entityplayer)
+    public void onContainerClosed(EntityPlayer entityplayer)
     {
         this.tileEntity.closeChest();
+        super.onContainerClosed(entityplayer);
     }
     
     @Override

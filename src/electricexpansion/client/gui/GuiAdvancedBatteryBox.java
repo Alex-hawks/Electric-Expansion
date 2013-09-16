@@ -3,7 +3,6 @@ package electricexpansion.client.gui;
 import java.util.Map;
 import java.util.ArrayList;
 
-import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -14,7 +13,7 @@ import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.common.containers.ContainerAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.misc.EnumAdvBattBoxMode;
@@ -56,7 +55,6 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public void initGui()
 	{
 		super.initGui();
@@ -72,15 +70,10 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	protected void drawGuiContainerForegroundLayer(int par1, int par2)
 	{
 		this.fontRenderer.drawString(this.tileEntity.getInvName(), 4, 6, 4210752);
-		String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoules(), ElectricUnit.JOULES);
-		String displayMaxJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getMaxJoules(), ElectricUnit.JOULES);
+		String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getEnergyStored(), ElectricUnit.JOULES);
+		String displayMaxJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getMaxEnergyStored(), ElectricUnit.JOULES);
 		String displayInputVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getInputVoltage(), ElectricUnit.VOLTAGE);
 		String displayOutputVoltage = ElectricityDisplay.getDisplayShort(this.tileEntity.getVoltage(), ElectricUnit.VOLTAGE);
-
-		if (this.tileEntity.isDisabled())
-		{
-			displayMaxJoules = "Disabled";
-		}
 
 		this.fontRenderer.drawString(displayJoules + " of", 73 - displayJoules.length(), 25, 4210752);
 		this.fontRenderer.drawString(displayMaxJoules, 70, 35, 4210752);
@@ -93,7 +86,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.bindTexture(GuiAdvancedBatteryBox.getTexture());
+        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_BAT_BOX);
 
 		this.xSize = 220;
 
@@ -107,7 +100,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 		mode = this.tileEntity.getOutputMode();
 		this.drawTexturedModalRect(this.guiTopLeftX + 197, guiTopLeftY + 65, mode.ordinal() * 17, 186, 16, 16);
 
-		int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 72.0D);
+		int scale = (int) (this.tileEntity.getEnergyStored() / this.tileEntity.getMaxEnergyStored() * 72.0D);
 		this.drawTexturedModalRect(this.guiTopLeftX + 64, this.guiTopLeftY + 46, 0, 166, scale, 3);
 
 		// Draw input/output sprites on the direction chooser
@@ -174,10 +167,5 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 				return;
 			}
 		}
-	}
-
-	public static String getTexture()
-	{
-		return ElectricExpansion.GUI_PATH + "GuiBatBox.png";
 	}
 }

@@ -10,7 +10,7 @@ import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.common.containers.ContainerInsulationMachine;
 import electricexpansion.common.tile.TileEntityInsulatingMachine;
 
@@ -38,11 +38,7 @@ public class GuiInsulationMachine extends GuiContainer
         this.fontRenderer.drawString("Insulation Refiner", 60, 6, 4210752);
         String displayText = "";
         
-        if (this.tileEntity.isDisabled())
-        {
-            displayText = "Disabled!";
-        }
-        else if (this.tileEntity.getProcessTimeLeft() > 0)
+        if (this.tileEntity.getTimeRemaining() > 0)
         {
             displayText = "Working";
         }
@@ -65,26 +61,21 @@ public class GuiInsulationMachine extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(GuiInsulationMachine.getTexture());
+        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_MACHINE);
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
         
-        if (this.tileEntity.getProcessTimeLeft() >= 0)
+        if (this.tileEntity.getTimeRemaining() >= 0)
         {
-            int scale = (int) ((double) this.tileEntity.getProcessTimeLeft() / this.tileEntity.getProcessingTime() * 23);
+            int scale = (int) ((double) this.tileEntity.getTimeRemaining() / this.tileEntity.getProcessingTime() * 23);
             this.drawTexturedModalRect(this.containerWidth + 77, this.containerHeight + 27, 176, 0, 23 - scale, 13);
         }
         
-        if (this.tileEntity.getJoules() >= 0)
+        if (this.tileEntity.getEnergyStored() >= 0)
         {
-            int scale = (int) (this.tileEntity.getJoules() / this.tileEntity.getMaxJoules() * 50);
+            int scale = (int) (this.tileEntity.getEnergyStored() / this.tileEntity.getMaxEnergyStored() * 50);
             this.drawTexturedModalRect(this.containerWidth + 35, this.containerHeight + 20, 176, 13, 4, 50 - scale);
         }
-    }
-    
-    public static String getTexture()
-    {
-        return ElectricExpansion.GUI_PATH + "GuiEEMachine.png";
     }
 }

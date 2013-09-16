@@ -18,7 +18,7 @@ public interface IModifier
     /**
      * @return - How much effect does this modifier have?
      */
-    public double getEffectiveness(ItemStack itemstack);
+    public float getEffectiveness(ItemStack itemstack);
     
     /**
      * @return - What UE tier is the Modifier?

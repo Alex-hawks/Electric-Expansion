@@ -1,6 +1,6 @@
 package electricexpansion.common.containers;
 
-import ic2.api.IElectricItem;
+import ic2.api.item.IElectricItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

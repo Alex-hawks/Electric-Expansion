@@ -3,6 +3,7 @@ package electricexpansion.common.nei;
 import java.awt.Rectangle;
 import java.util.Map;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
 import electricexpansion.client.gui.GuiInsulationMachine;
@@ -25,19 +26,13 @@ public class InsulatingMachineRecipeHandler extends EEMachineRecipeHandler
     }
     
     @Override
-    public String getGuiTexture()
-    {
-        return "/mods/electricexpansion/textures/gui/GuiEEMachine.png";
-    }
-    
-    @Override
     public void loadTransferRects()
     {
         transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(77, 27, 22, 12), "insulation", new Object[0]));
     }
     
     @Override
-    public Class getGuiClass()
+    public Class<? extends GuiContainer> getGuiClass()
     {
         return GuiInsulationMachine.class;
     }

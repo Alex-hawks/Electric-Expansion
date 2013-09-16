@@ -5,21 +5,22 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.client.model.ModelTransformer;
-import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.tile.TileEntityTransformer;
 
 @SideOnly(Side.CLIENT)
 public class RenderTransformer extends TileEntitySpecialRenderer
 {
     private ModelTransformer model;
-    private String textureToUse;
+    private ResourceLocation textureToUse;
     
     public RenderTransformer()
     {
@@ -29,7 +30,6 @@ public class RenderTransformer extends TileEntitySpecialRenderer
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float var5)
     {
-        this.textureToUse = ElectricExpansion.MODEL_PATH;
         String status = ((TileEntityTransformer) tileEntity).stepUp ? "Step Up" : "Step Down";
         
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -52,23 +52,23 @@ public class RenderTransformer extends TileEntitySpecialRenderer
             case 1:
             case 2:
             case 3:
-                this.textureToUse = this.textureToUse + "transformer1.png";
+                this.textureToUse = TextureLocations.MODEL_TRANSFORMER_1;
                 break;
             case 4:
             case 5:
             case 6:
             case 7:
             case 8:
-                this.textureToUse = this.textureToUse + "transformer2.png";
+                this.textureToUse = TextureLocations.MODEL_TRANSFORMER_2;
                 break;
             case 9:
             case 10:
             case 11:
             case 12:
-                this.textureToUse = this.textureToUse + "transformer3.png";
+                this.textureToUse = TextureLocations.MODEL_TRANSFORMER_3;
                 break;
         }
-        this.bindTextureByName(this.textureToUse);
+        this.func_110628_a(textureToUse);
         
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);

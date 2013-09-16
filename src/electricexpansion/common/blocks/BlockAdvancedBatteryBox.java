@@ -60,13 +60,13 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         if (side == 0 || side == 1)
             return this.icons.get("top");
         
-        if (te.getMaxJoules() <= 8000000)
+        if (te.getMaxEnergyStored() <= 8000000)
             return this.icons.get("tier1");
-        else if (te.getMaxJoules() <= 12000000)
+        else if (te.getMaxEnergyStored() <= 12000000)
             return this.icons.get("tier2");
-        else if (te.getMaxJoules() <= 16000000)
+        else if (te.getMaxEnergyStored() <= 16000000)
             return this.icons.get("tier3");
-        else if (te.getMaxJoules() > 16000000)
+        else if (te.getMaxEnergyStored() > 16000000)
             return this.icons.get("tier4");
         
         return this.icons.get("tier1");
@@ -162,8 +162,8 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         if (tileEntity instanceof TileEntityAdvancedBatteryBox)
         {
             TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) tileEntity;
-            double max = te.getMaxJoules();
-            double current = te.getJoules();
+            float max = te.getMaxEnergyStored();
+            float current = te.getEnergyStored();
             return (int) (current / max * 15);
         }
         

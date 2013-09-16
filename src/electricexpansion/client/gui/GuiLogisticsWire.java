@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityLogisticsWire;
 
@@ -27,7 +28,7 @@ public class GuiLogisticsWire extends GuiScreen
     {
         this.drawDefaultBackground();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(GuiLogisticsWire.getTexture());
+        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_LOGISTICS);
         int posX = (this.width - this.xSizeOfTexture) / 2;
         int posY = (this.height - this.ySizeOfTexture) / 2;
         this.drawTexturedModalRect(posX, posY, 0, 0, this.xSizeOfTexture, this.ySizeOfTexture);
@@ -82,10 +83,5 @@ public class GuiLogisticsWire extends GuiScreen
         {
             this.mc.thePlayer.closeScreen();
         }
-    }
-    
-    public static String getTexture()
-    {
-        return ElectricExpansion.GUI_PATH + "GuiLogistics.png";
     }
 }

@@ -113,7 +113,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         {
             if (tileEntity instanceof IConductor)
             {
-                ((IConductor) tileEntity).updateAdjacentConnections();
+                ((IConductor) tileEntity).refresh();
                 this.updateWireSwitch(world, x, y, z);
             }
         }
@@ -157,7 +157,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
                 
                 if (tileEntity1 instanceof IConductor)
                 {
-                    ((IConductor) tileEntity1).updateAdjacentConnections();
+                    ((IConductor) tileEntity1).refresh();
                     tileEntity1.worldObj.markBlockForUpdate(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord);
                 }
             }
@@ -171,12 +171,12 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         if (tileEntity instanceof TileEntityConductorBase)
         {
             TileEntityConductorBase te = (TileEntityConductorBase) tileEntity;
-            this.minX = te.connectedBlocks[4] != null ? 0F : 0.3F;
-            this.minY = te.connectedBlocks[0] != null ? 0F : 0.3F;
-            this.minZ = te.connectedBlocks[2] != null ? 0F : 0.3F;
-            this.maxX = te.connectedBlocks[5] != null ? 1F : 0.7F;
-            this.maxY = te.connectedBlocks[1] != null ? 1F : 0.7F;
-            this.maxZ = te.connectedBlocks[3] != null ? 1F : 0.7F;
+            this.minX = te.getAdjacentConnections()[4] != null ? 0F : 0.3F;
+            this.minY = te.getAdjacentConnections()[0] != null ? 0F : 0.3F;
+            this.minZ = te.getAdjacentConnections()[2] != null ? 0F : 0.3F;
+            this.maxX = te.getAdjacentConnections()[5] != null ? 1F : 0.7F;
+            this.maxY = te.getAdjacentConnections()[1] != null ? 1F : 0.7F;
+            this.maxZ = te.getAdjacentConnections()[3] != null ? 1F : 0.7F;
         }
     }
     

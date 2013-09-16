@@ -10,9 +10,8 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
@@ -218,6 +217,34 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
     @Override
     public boolean isStackValidForSlot(int i, ItemStack itemstack)
     {
+        return false;
+    }
+
+    @Override
+    public float getRequest(ForgeDirection direction)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public float getProvide(ForgeDirection direction)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public float getMaxEnergyStored()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
+    {
+        // TODO Auto-generated method stub
         return false;
     }
 }

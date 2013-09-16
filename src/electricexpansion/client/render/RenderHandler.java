@@ -12,9 +12,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.client.ClientProxy;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.client.model.ModelTransformer;
 import electricexpansion.client.model.ModelWireMill;
-import electricexpansion.common.ElectricExpansion;
 
 @SideOnly(Side.CLIENT)
 public class RenderHandler implements ISimpleBlockRenderingHandler
@@ -29,7 +29,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
         
         if (block.blockID == ElectricExpansionItems.blockWireMill.blockID)
         {
-            GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MODEL_PATH + "wiremill.png"));
+            FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_WIRE_MILL);
             GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(0.5F, .8F, 0.5F);
             GL11.glScalef(1F, -1F, -1F);
@@ -41,13 +41,13 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
             switch (metadata / 4)
             {
                 case 0:
-                    GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MODEL_PATH + "transformer1.png"));
+                    FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_TRANSFORMER_1);
                     break;
                 case 1:
-                    GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MODEL_PATH + "transformer2.png"));
+                    FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_TRANSFORMER_2);
                     break;
                 case 2:
-                    GL11.glBindTexture(3553, FMLClientHandler.instance().getClient().renderEngine.getTexture(ElectricExpansion.MODEL_PATH + "transformer3.png"));
+                    FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_TRANSFORMER_3);
                     break;
             }
             GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);

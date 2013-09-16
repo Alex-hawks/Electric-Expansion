@@ -3,16 +3,16 @@ package electricexpansion.common.tile;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.tile.TileEntityDisableable;
+import universalelectricity.prefab.tile.TileEntityAdvanced;
 import electricexpansion.api.hive.IHiveController;
 import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.api.hive.IHiveNetworkMember;
 import electricexpansion.common.misc.HiveNetwork;
 
-public class TileEntityHiveCore extends TileEntityDisableable implements INetworkProvider, IHiveController
+public class TileEntityHiveCore extends TileEntityAdvanced implements INetworkProvider, IHiveController
 {
     private IHiveNetwork hiveNetwork;
     private IElectricityNetwork network;
@@ -47,9 +47,6 @@ public class TileEntityHiveCore extends TileEntityDisableable implements INetwor
     public void updateEntity()
     {
         super.updateEntity();
-        
-        if (this.isDisabled())
-            return;
     }
     
     @Override

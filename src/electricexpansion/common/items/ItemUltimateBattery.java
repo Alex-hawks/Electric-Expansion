@@ -18,13 +18,13 @@ public class ItemUltimateBattery extends ItemElectric
     }
     
     @Override
-    public double getMaxJoules(ItemStack i)
+    public float getMaxElectricityStored(ItemStack i)
     {
         return 5000000;
     }
     
     @Override
-    public double getVoltage(ItemStack i)
+    public float getVoltage(ItemStack i)
     {
         return 75;
     }

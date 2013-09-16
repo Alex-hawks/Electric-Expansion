@@ -13,7 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.block.BlockConductor;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
@@ -117,12 +116,8 @@ public class BlockLogisticsWire extends BlockConductor
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
-        if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
-        else
-        {
-            System.out.println("!tileEntity instanceof IRedstoneProvider");
-        }
+        if (tileEntity instanceof TileEntityLogisticsWire)
+            return ((TileEntityLogisticsWire) tileEntity).isPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
         
         return 0;
     }
@@ -132,12 +127,8 @@ public class BlockLogisticsWire extends BlockConductor
     {
         TileEntity tileEntity = par1IBlockAccess.getBlockTileEntity(x, y, z);
         
-        if (tileEntity instanceof IRedstoneProvider)
-            return ((IRedstoneProvider) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
-        else
-        {
-            System.out.println("!tileEntity instanceof IRedstoneProvider");
-        }
+        if (tileEntity instanceof TileEntityLogisticsWire)
+            return ((TileEntityLogisticsWire) tileEntity).isIndirectlyPoweringTo(ForgeDirection.getOrientation(side)) ? 15 : 0;
         
         return 0;
     }
@@ -149,12 +140,12 @@ public class BlockLogisticsWire extends BlockConductor
         if (tileEntity instanceof TileEntityConductorBase)
         {
             TileEntityConductorBase te = (TileEntityConductorBase) tileEntity;
-            this.minX = te.connectedBlocks[4] != null ? 0F : 0.3F;
-            this.minY = te.connectedBlocks[0] != null ? 0F : 0.3F;
-            this.minZ = te.connectedBlocks[2] != null ? 0F : 0.3F;
-            this.maxX = te.connectedBlocks[5] != null ? 1F : 0.7F;
-            this.maxY = te.connectedBlocks[1] != null ? 1F : 0.7F;
-            this.maxZ = te.connectedBlocks[3] != null ? 1F : 0.7F;
+            this.minX = te.getAdjacentConnections()[4] != null ? 0F : 0.3F;
+            this.minY = te.getAdjacentConnections()[0] != null ? 0F : 0.3F;
+            this.minZ = te.getAdjacentConnections()[2] != null ? 0F : 0.3F;
+            this.maxX = te.getAdjacentConnections()[5] != null ? 1F : 0.7F;
+            this.maxY = te.getAdjacentConnections()[1] != null ? 1F : 0.7F;
+            this.maxZ = te.getAdjacentConnections()[3] != null ? 1F : 0.7F;
         }
     }
     

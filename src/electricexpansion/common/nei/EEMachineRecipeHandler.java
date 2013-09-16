@@ -2,11 +2,13 @@ package electricexpansion.common.nei;
 
 import java.util.Map;
 
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
-import codechicken.nei.forge.GuiContainerManager;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+
+import static codechicken.core.gui.GuiDraw.*;
 
 public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
 {
@@ -18,7 +20,7 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
     public abstract String getOverlayIdentifier();
     
     @Override
-    public abstract Class getGuiClass();
+    public abstract Class<? extends GuiContainer> getGuiClass();
     
     @Override
     public abstract void loadTransferRects();
@@ -36,7 +38,6 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
     @Override
     public void loadCraftingRecipes(String outputId, Object... results)
     {
-        
         if (outputId.equals(this.getOverlayIdentifier()))
         {
             boolean woolAdded = false;
@@ -113,10 +114,10 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
     }
     
     @Override
-    public void drawExtras(GuiContainerManager gui, int recipe)
+    public void drawExtras(int recipe)
     {
-        drawProgressBar(gui, 72, 16, 176, 0, 22, 13, 48, 0);
-        drawProgressBar(gui, 30, 9, 176, 13, 4, 10, 48, 1);
+        drawProgressBar(72, 16, 176, 0, 22, 13, 48, 0);
+        drawProgressBar(30, 9, 176, 13, 4, 10, 48, 1);
         double energy = ((EEMachineRecipe) arecipes.get(recipe)).getEnergy();
         String energyString = "Uses ";
         if (energy >= 2000000)
@@ -131,7 +132,7 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
         {
             energyString += String.valueOf(energy) + " J";
         }
-        gui.drawTextCentered(energyString, 115, 42, 0xFFFFFFFF);
+        gui.drawCenteredString(fontRenderer, energyString, 115, 42, 0xFFFFFFFF);
     }
     
     public class EEMachineRecipe extends TemplateRecipeHandler.CachedRecipe

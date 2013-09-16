@@ -13,6 +13,7 @@ import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerDistribution;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
@@ -86,14 +87,14 @@ public class GuiQuantumBatteryBox extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture(GuiQuantumBatteryBox.getTexture());
+        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_WPT);
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
         
         if (this.tileEntity.getJoulesForDisplay() > 0)
         {
-            int scale = (int) (this.tileEntity.getJoulesForDisplay() / this.tileEntity.getMaxJoules() * 72);
+            int scale = (int) (this.tileEntity.getJoulesForDisplay() / this.tileEntity.getMaxEnergyStored() * 72);
             this.drawTexturedModalRect(this.containerWidth + 70, this.containerHeight + 51, 0, 166, scale, 5);
         }
     }
@@ -151,10 +152,5 @@ public class GuiQuantumBatteryBox extends GuiContainer
         {
             this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
         }
-    }
-    
-    public static String getTexture()
-    {
-        return ElectricExpansion.GUI_PATH + "GuiWPT.png";
     }
 }

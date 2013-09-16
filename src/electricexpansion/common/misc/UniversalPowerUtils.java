@@ -11,13 +11,13 @@ import electricexpansion.common.ElectricExpansion;
 
 public class UniversalPowerUtils
 {
-    public static final double UE_RATIO = 100;
-    public static final double IC2_RATIO = 2.5;
-    public static final double MEK_RATIO = 4;
-    public static final double RC_RATIO = 5;
-    public static final double FZ_RATIO = 5; // not used yet
-    public static final double BC_RATIO = 1;
-    public static final double RP_RATIO = 0; // not used yet
+    public static final float UE_RATIO = 100;
+    public static final float IC2_RATIO = 2.5f;
+    public static final float MEK_RATIO = 4;
+    public static final float RC_RATIO = 5;
+    public static final float FZ_RATIO = 5; // not used yet
+    public static final float BC_RATIO = 1;
+    public static final float RP_RATIO = 0; // not used yet
     // One can dream... ^
     
     public static final UniversalPowerUtils INSTANCE = new UniversalPowerUtils();
@@ -41,16 +41,16 @@ public class UniversalPowerUtils
         /**
          * Amps, no. of EU packets
          */
-        protected double electricAmps = 0;
+        protected float electricAmps = 0;
         
-        public ElectricityPack toUEPack(double givenValue, ElectricUnit givenType)
+        public ElectricityPack toUEPack(float givenValue, ElectricUnit givenType)
         {
             switch (givenType)
             {
                 case VOLTAGE:
-                    return ElectricityPack.getFromWatts(scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO), givenValue);
+                    return ElectricityPack.getFromWatts((float) (scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)), givenValue);
                 case AMPERE:
-                    return new ElectricityPack(givenValue, (scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)) / givenValue);
+                    return new ElectricityPack(givenValue, (float) ((scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)) / givenValue));
                 default:
                     return null;
             }
@@ -61,9 +61,9 @@ public class UniversalPowerUtils
             switch (givenType)
             {
                 case VOLTAGE:
-                    return ElectricityPack.getFromWatts(scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO), this.electricVolts);
+                    return ElectricityPack.getFromWatts(((float) scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)), (float) this.electricVolts);
                 case AMPERE:
-                    return new ElectricityPack(this.electricAmps, (scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)) / this.electricAmps);
+                    return new ElectricityPack(this.electricAmps, (float) ((scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO)) / this.electricAmps));
                 default:
                     return null;
             }
@@ -79,35 +79,35 @@ public class UniversalPowerUtils
             return LiquidDictionary.getLiquid("Steam", (int) (Math.floor(scaledEnergy * RC_RATIO + 0.5)));
         }
         
-        public double toMinecraftJoules()
+        public float toMinecraftJoules()
         {
-            return scaledEnergy * BC_RATIO;
+            return (float) (scaledEnergy * BC_RATIO);
         }
         
-        public double getScaledEnergy()
+        public float getScaledEnergy()
         {
-            return this.scaledEnergy;
+            return (float) this.scaledEnergy;
         }
         
-        public double getVolts()
+        public float getVolts()
         {
-            return electricVolts;
+            return (float) electricVolts;
         }
         
-        public double getAmps()
+        public float getAmps()
         {
             return electricAmps;
         }
         
-        public double toUEWatts()
+        public float toUEWatts()
         {
-            return this.scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO);
+            return (float) (this.scaledEnergy * (Loader.isModLoaded("Mekanism") ? MEK_RATIO : UE_RATIO));
         }
     }
     
     public final class UEElectricPack extends GenericPack
     {
-        public UEElectricPack(double amps, double volts)
+        public UEElectricPack(float amps, float volts)
         {
             this.electricAmps = amps;
             this.electricVolts = volts;
@@ -120,7 +120,7 @@ public class UniversalPowerUtils
             this(pack.amperes, pack.voltage);
         }
 
-        public UEElectricPack(double joules)
+        public UEElectricPack(float joules)
         {
             this.electricVolts = 1;
             this.electricAmps = joules;
@@ -129,9 +129,9 @@ public class UniversalPowerUtils
         }
     }
     
-    public final class IC2TickPack extends GenericPack
+    public final class IC2Pack extends GenericPack
     {
-        public IC2TickPack(int euPerPacket, int packetsPerTick)
+        public IC2Pack(double euPerPacket, int packetsPerTick)
         {
             this.electricVolts = euPerPacket;
             this.electricAmps = packetsPerTick;
@@ -163,7 +163,7 @@ public class UniversalPowerUtils
     
     public final class BCPack extends GenericPack
     {
-        public BCPack(double minecraftJoules)
+        public BCPack(float minecraftJoules)
         {
             this.unscaledEnergy = minecraftJoules;
             this.scaledEnergy = minecraftJoules / BC_RATIO;

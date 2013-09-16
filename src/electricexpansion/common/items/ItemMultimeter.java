@@ -7,8 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.block.IVoltage;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -21,7 +19,7 @@ import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class ItemMultimeter extends ItemElectric
 {
-    public final int JOULES_PER_USE = 5000;
+    public final float JOULES_PER_USE = 5;
     
     public ItemMultimeter(int par1)
     {
@@ -57,8 +55,8 @@ public class ItemMultimeter extends ItemElectric
                 if (te instanceof IElectricityStorage)
                 {
                     IElectricityStorage tileStorage = (IElectricityStorage) te;
-                    player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(tileStorage.getJoules(), ElectricUnit.JOULES) + "/"
-                            + ElectricityDisplay.getDisplay(tileStorage.getMaxJoules(), ElectricUnit.JOULES));
+                    player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(tileStorage.getEnergyStored(), ElectricUnit.JOULES) + "/"
+                            + ElectricityDisplay.getDisplay(tileStorage.getMaxEnergyStored(), ElectricUnit.JOULES));
                 }
                 if (te instanceof IVoltage)
                 {
@@ -81,9 +79,9 @@ public class ItemMultimeter extends ItemElectric
     
     private boolean onUse(ItemStack itemStack)
     {
-        if (this.getJoules(itemStack) >= this.JOULES_PER_USE)
+        if (this.getElectricityStored(itemStack) >= this.JOULES_PER_USE)
         {
-            this.setJoules(this.getJoules(itemStack) - this.JOULES_PER_USE, itemStack);
+            this.setElectricity(itemStack, this.getElectricityStored(itemStack) - this.JOULES_PER_USE);
             return true;
         }
         else
@@ -91,13 +89,13 @@ public class ItemMultimeter extends ItemElectric
     }
     
     @Override
-    public double getMaxJoules(ItemStack itemStack)
+    public float getMaxElectricityStored(ItemStack itemStack)
     {
         return 1000000;
     }
     
     @Override
-    public double getVoltage(ItemStack itemStack)
+    public float getVoltage(ItemStack itemStack)
     {
         return 35;
     }
@@ -110,7 +108,7 @@ public class ItemMultimeter extends ItemElectric
     }
     
     @Override
-    public void setJoules(double joules, ItemStack itemStack)
+    public void setElectricity(ItemStack itemStack, float joules)
     {
         // Saves the frequency in the ItemStack
         if (itemStack.getTagCompound() == null)
@@ -118,27 +116,27 @@ public class ItemMultimeter extends ItemElectric
             itemStack.setTagCompound(new NBTTagCompound());
         }
         
-        double electricityStored = Math.max(Math.min(joules, this.getMaxJoules(itemStack)), 0);
+        double electricityStored = Math.max(Math.min(joules, this.getMaxElectricityStored(itemStack)), 0);
         itemStack.getTagCompound().setDouble("electricity", electricityStored);
         
         /**
          * Sets the damage as a percentage to render the bar properly.
          */
-        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack) * this.getMaxDamage()));
+        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxElectricityStored(itemStack) * this.getMaxDamage()));
     }
     
     @Override
-    public double getJoules(ItemStack itemStack)
+    public float getElectricityStored(ItemStack itemStack)
     {
         if (itemStack.getTagCompound() == null)
             return 0;
         
-        double electricityStored = itemStack.getTagCompound().getDouble("electricity");
+        float electricityStored = itemStack.getTagCompound().getFloat("electricity");
         
         /**
          * Sets the damage as a percentage to render the bar properly.
          */
-        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxJoules(itemStack) * this.getMaxDamage()));
+        itemStack.setItemDamage((int) (this.getMaxDamage() - electricityStored / this.getMaxElectricityStored(itemStack) * this.getMaxDamage()));
         return electricityStored;
     }
 }

@@ -1,9 +1,11 @@
 package electricexpansion.common.helpers;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagShort;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.ForgeDirection;
@@ -13,11 +15,15 @@ import org.bouncycastle.util.Arrays;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
+import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityConductor;
+
+import com.google.common.io.ByteArrayDataInput;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.hive.IHiveConductor;
@@ -27,6 +33,7 @@ import electricexpansion.api.wires.EnumWireType;
 import electricexpansion.api.wires.IAdvancedConductor;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityInsulatedWire;
+import electricexpansion.common.misc.EnumWireFrequency;
 
 /**
  * @author Alex_hawks Helper Class used by me to make adding methods to all
@@ -35,6 +42,7 @@ import electricexpansion.common.cables.TileEntityInsulatedWire;
 public abstract class TileEntityConductorBase extends TileEntityConductor 
 implements IPacketReceiver, IAdvancedConductor, IHiveConductor
 {
+    protected static final String CHANNEL = ElectricExpansion.CHANNEL;
     public ItemStack textureItemStack;
     
     /** Locked Icon for hidden wires. RS input/output mode for RS wires (true is input) */
@@ -43,23 +51,25 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     protected IHiveNetwork hiveNetwork;
 
     private EnumWireMaterial cachedMaterial;
+    protected boolean[] visuallyConnected = new boolean[6];
+    /** Color for cables that use color, RS Frequency for cable that use RS Frequency   */
+    protected EnumWireFrequency frequency;
     
     public TileEntityConductorBase()
     {
         super();
-        this.channel = ElectricExpansion.CHANNEL;
     }
     
     @Override
     public void initiate()
     {
         super.initiate();
-        this.updateAdjacentConnections();
+        this.refresh();
         this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
     }
     
     @Override
-    public double getResistance()
+    public float getResistance()
     {
         return this.getWireMaterial().resistance;
     }
@@ -80,6 +90,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     {
         super.writeToNBT(tag);
         tag.setBoolean("mode", this.mode);
+        tag.setByte("frequency", this.frequency.getIndex());
         if (this.textureItemStack != null)
         {
             // Write the item stack to a separate tag to avoid namespace clashes in the tag
@@ -109,19 +120,14 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
                 this.mode = false;
             }
         }
-
-        // This is for legacy compatibility with old worlds
-        NBTBase idTag = tag.getTag("id");
-        if (idTag instanceof NBTTagShort) {
-            try
-            {
-                this.textureItemStack = ItemStack.loadItemStackFromNBT(tag);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                this.textureItemStack = null;
-            }
+        
+        try
+        {
+            this.frequency = EnumWireFrequency.getFromIndex(tag.getByte("frequency"));
+        }
+        catch (Exception e)
+        {
+            this.frequency = EnumWireFrequency.NONE;
         }
 
         NBTBase textureTag = tag.getTag("texture");
@@ -138,7 +144,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     }
     
     @Override
-    public double getCurrentCapcity()
+    public float getCurrentCapacity()
     {
         // Amps, not Volts or Watts
         return getWireMaterial().maxAmps;
@@ -182,17 +188,16 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
             {
                 TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
                 
-                if ((tileEntityIns.colorByte == ((TileEntityInsulatedWire) this).colorByte || ((TileEntityInsulatedWire) this).colorByte == -1 || tileEntityIns.colorByte == -1)
+                if ((tileEntityIns.frequency == ((TileEntityInsulatedWire) this).frequency || ((TileEntityInsulatedWire) this).frequency.getIndex() == -1 || tileEntityIns.frequency.getIndex() == -1)
                         && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(this.getBlockMetadata()))
                 {
                     if (((IConnector) tileEntity).canConnect(side.getOpposite()))
                     {
-                        this.connectedBlocks[side.ordinal()] = tileEntity;
-                        this.visuallyConnected[side.ordinal()] = true;
+                        this.adjacentConnections[side.ordinal()] = tileEntity;
                         
                         if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
                         {
-                            this.getNetwork().mergeConnection(((INetworkProvider) tileEntity).getNetwork());
+                            this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
                         }
                         
                         return;
@@ -209,12 +214,11 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
                     
                     if (((IConnector) tileEntity).canConnect(side.getOpposite()))
                     {
-                        this.connectedBlocks[side.ordinal()] = tileEntity;
-                        this.visuallyConnected[side.ordinal()] = true;
+                        this.adjacentConnections[side.ordinal()] = tileEntity;
                         
                         if (tileEntity instanceof IConductor && tileEntity instanceof INetworkProvider)
                         {
-                            this.getNetwork().mergeConnection(((INetworkProvider) tileEntity).getNetwork());
+                            this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
                         }
                         
                         return;
@@ -225,12 +229,11 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
             {
                 if (((IConnector) tileEntity).canConnect(side.getOpposite()))
                 {
-                    this.connectedBlocks[side.ordinal()] = tileEntity;
-                    this.visuallyConnected[side.ordinal()] = true;
+                    this.adjacentConnections[side.ordinal()] = tileEntity;
                     
                     if (tileEntity instanceof IConductor && tileEntity instanceof INetworkProvider)
                     {
-                        this.getNetwork().mergeConnection(((INetworkProvider) tileEntity).getNetwork());
+                        this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
                     }
                     
                     return;
@@ -238,8 +241,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
             }
         }
         
-        this.connectedBlocks[side.ordinal()] = null;
-        this.visuallyConnected[side.ordinal()] = false;
+        this.adjacentConnections[side.ordinal()] = null;
     }
     
     @Override
@@ -250,7 +252,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     }
     
     @Override
-    public void updateAdjacentConnections()
+    public void refresh()
     {
         if (this.worldObj != null)
         {
@@ -298,5 +300,30 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+    {
+        for (int i = 0; i < this.visuallyConnected.length; i++)
+            this.visuallyConnected[i] = dataStream.readBoolean();
+        this.frequency = EnumWireFrequency.getFromIndex(dataStream.readByte());
+    }
+
+    public boolean[] getVisualConnections()
+    {
+        return this.visuallyConnected;
+    }
+
+    public EnumWireFrequency getFrequency()
+    {
+        return this.frequency;
+    }
+
+    public void setFrequency(byte frequency)
+    {
+        this.frequency = EnumWireFrequency.getFromIndex(frequency);
+        
+        PacketManager.sendPacketToClients(this.getDescriptionPacket());
     }
 }

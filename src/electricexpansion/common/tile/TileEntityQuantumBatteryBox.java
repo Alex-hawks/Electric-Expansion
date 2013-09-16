@@ -9,32 +9,32 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.TileEntityElectricityStorage;
+import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.IWirelessPowerMachine;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
-public class TileEntityQuantumBatteryBox extends TileEntityElectricityStorage 
+public class TileEntityQuantumBatteryBox extends TileEntityElectrical
 implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 {
     private ItemStack[] containingItems = new ItemStack[2];
     private int playersUsing = 0;
     private byte frequency = 0;
-    private double joulesForDisplay = 0;
+    private float joulesForDisplay = 0;
     private String owningPlayer = null;
     
     @Override
@@ -48,30 +48,27 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     {
         super.updateEntity();
         
-        if (!this.isDisabled())
+        ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
+        TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+        
+        TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
+        
+        IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+        IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
+        
+        if (outputNetwork != null && inputNetwork != outputNetwork)
         {
-            ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+            ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(),
+                Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
             
-            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
-            
-            IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
-            IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
-            
-            if (outputNetwork != null && inputNetwork != outputNetwork)
+            if (this.getEnergyStored() > 0 && actualOutput.getWatts() > 0)
             {
-                ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(),
-                        Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
-                
-                if (this.getJoules() > 0 && actualOutput.getWatts() > 0)
-                {
-                    outputNetwork.startProducing(this, actualOutput);
-                    this.setJoules(this.getJoules() - actualOutput.getWatts());
-                }
-                else
-                {
-                    outputNetwork.stopProducing(this);
-                }
+                outputNetwork.startProducing(this, actualOutput);
+                this.setEnergyStored(this.getEnergyStored() - actualOutput.getWatts());
+            }
+            else
+            {
+                outputNetwork.stopProducing(this);
             }
         }
         
@@ -84,15 +81,20 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         }
     }
     
+    
+    
     @Override
-    public ElectricityPack getRequest()
+    public float getRequest(ForgeDirection direction)
     {
-        return new ElectricityPack(Math.min((this.getMaxJoules() - this.getJoules()) / this.getVoltage(), this.getOutputCap() / 2.0), this.getVoltage());
+        if (this.getOutputDirections().contains(direction))
+            return Math.min((this.getMaxEnergyStored() - this.getEnergyStored()), this.getOutputCap());
+        else 
+            return 0;
     }
     
-    private double getOutputCap()
+    private float getOutputCap()
     {
-        return 10000;
+        return 10;
     }
     
     public void sendPacket()
@@ -104,9 +106,9 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     public Packet getDescriptionPacket()
     {
         if (ElectricExpansion.useHashCodes)
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
+            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.getEnergyStored(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
         else
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.disabledTicks, this.getJoules(), this.owningPlayer);
+            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.getEnergyStored(), this.owningPlayer);
     }
     
     @Override
@@ -117,8 +119,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
             try
             {
                 this.frequency = dataStream.readByte();
-                this.disabledTicks = dataStream.readInt();
-                this.joulesForDisplay = dataStream.readDouble();
+                this.joulesForDisplay = dataStream.readFloat();
                 this.owningPlayer = dataStream.readUTF();
             }
             catch (Exception e)
@@ -183,30 +184,30 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     }
     
     @Override
-    public double getJoules()
+    public float getEnergyStored()
     {
         return ElectricExpansion.DistributionNetworksInstance.getJoules(this.owningPlayer, this.frequency);
     }
     
     @Override
-    public void removeJoules(double outputWatts)
+    public void removeJoules(float outputWatts)
     {
         ElectricExpansion.DistributionNetworksInstance.removeJoules(this.owningPlayer, this.frequency, outputWatts);
     }
     
     @Override
-    public void setJoules(double joules)
+    public void setEnergyStored(float joules)
     {
         ElectricExpansion.DistributionNetworksInstance.setJoules(this.owningPlayer, this.frequency, joules);
     }
     
     @Override
-    public double getMaxJoules()
+    public float getMaxEnergyStored()
     {
         return DistributionNetworks.getMaxJoules();
     }
     
-    public double getJoulesForDisplay(Object... data)
+    public float getJoulesForDisplay()
     {
         return this.joulesForDisplay;
     }
@@ -292,7 +293,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     public boolean isUseableByPlayer(EntityPlayer par1EntityPlayer)
     {
         return this.worldObj.getBlockTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false
-                : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+            : par1EntityPlayer.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
     }
     
     @Override
@@ -370,7 +371,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     }
     
     @Override
-    public Object[] callMethod(IComputerAccess computer, int method, Object[] arguments) throws IllegalArgumentException
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws IllegalArgumentException
     {
         final int getVoltage = 0;
         final int isFull = 1;
@@ -379,28 +380,23 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         final int setFrequency = 4;
         final int getPlayer = 5;
         
-        if (!this.isDisabled())
+        switch (method)
         {
-            switch (method)
-            {
-                case getVoltage:
-                    return new Object[] { this.getVoltage() };
-                case isFull:
-                    return new Object[] { this.getJoules() >= this.getMaxJoules() };
-                case getJoules:
-                    return new Object[] { this.getJoules() };
-                case getFrequency:
-                    return new Object[] { this.getFrequency() };
-                case setFrequency:
-                    return new Object[] { arguments.length == 1 ? this.setFrequency(arguments[0]) : "Expected args for this function is 1. You have provided %s.".replace("%s", arguments.length + "") };
-                case getPlayer:
-                    return new Object[] { this.getOwningPlayer() };
-                default:
-                    return new Object[] { "Function unimplemented" };
-            }
+            case getVoltage:
+                return new Object[] { this.getVoltage() };
+            case isFull:
+                return new Object[] { this.getEnergyStored() >= this.getMaxEnergyStored() };
+            case getJoules:
+                return new Object[] { this.getEnergyStored() };
+            case getFrequency:
+                return new Object[] { this.getFrequency() };
+            case setFrequency:
+                return new Object[] { arguments.length == 1 ? this.setFrequency(arguments[0]) : "Expected args for this function is 1. You have provided %s.".replace("%s", arguments.length + "") };
+            case getPlayer:
+                return new Object[] { this.getOwningPlayer() };
+            default:
+                return new Object[] { "Function unimplemented" };
         }
-        else
-            return new Object[] { "Please wait for the EMP to run out." };
     }
     
     @Override
@@ -416,9 +412,15 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     }
     
     @Override
-    public boolean isStackValidForSlot(int i, ItemStack itemstack)
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return false;
     }
-    
+
+    @Override
+    public float getProvide(ForgeDirection direction)
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }

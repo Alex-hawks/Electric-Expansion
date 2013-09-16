@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
+import electricexpansion.client.misc.TextureLocations;
 
 @SideOnly(Side.CLIENT)
 public class ButtonSwitch extends GuiButton
@@ -43,7 +43,7 @@ public class ButtonSwitch extends GuiButton
     public void drawButton(Minecraft par1Minecraft, int par2, int par3)
     {
         FontRenderer fontrenderer = par1Minecraft.fontRenderer;
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, par1Minecraft.renderEngine.getTexture(ElectricExpansion.GUI_PATH + "SwitchButton.png"));
+        par1Minecraft.func_110434_K().func_110577_a(TextureLocations.BTN_SWITCH);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.field_82253_i = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
         

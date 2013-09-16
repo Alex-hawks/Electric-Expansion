@@ -15,9 +15,9 @@ public class TileEntityWireBlock extends TileEntityConductorBase
     // this class MUST remain existent...
 
     @Override
-    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) {
+    public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
+    {
         super.handlePacketData(network, type, packet, player, dataStream);
-
         if (this.worldObj.isRemote)
         {
             if (dataStream.readBoolean()) {
@@ -31,13 +31,17 @@ public class TileEntityWireBlock extends TileEntityConductorBase
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public Packet getDescriptionPacket() 
+    {
         ItemStack itemStack = this.textureItemStack;
-        if (itemStack != null) {
-            return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5],
+        if (itemStack != null) 
+        {
+            return PacketManager.getPacket(CHANNEL, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5],
                     true, itemStack.itemID, itemStack.stackSize, itemStack.getItemDamage());
-        } else {
-            return PacketManager.getPacket(this.channel, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5],
+        } 
+        else 
+        {
+            return PacketManager.getPacket(CHANNEL, this, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3], this.visuallyConnected[4], this.visuallyConnected[5],
                     false);
         }
     }

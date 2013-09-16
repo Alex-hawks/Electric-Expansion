@@ -7,7 +7,6 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.prefab.implement.IRedstoneProvider;
 import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -15,7 +14,7 @@ import com.google.common.io.ByteArrayDataInput;
 import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityLogisticsWire extends TileEntityConductorBase implements IRedstoneProvider
+public class TileEntityLogisticsWire extends TileEntityConductorBase
 {
     public boolean buttonStatus0 = false;
     public boolean buttonStatus1 = false;
@@ -118,7 +117,7 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(this.channel, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
+        return PacketManager.getPacket(CHANNEL, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
                 this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1, this.buttonStatus2);
     }
     
@@ -152,7 +151,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
         
     }
     
-    @Override
     public boolean isPoweringTo(ForgeDirection side)
     {
         if (this.buttonStatus0 && this.getNetwork().getProduced().getWatts() > 0)
@@ -161,7 +159,6 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase implements 
         return false;
     }
     
-    @Override
     public boolean isIndirectlyPoweringTo(ForgeDirection side)
     {
         return this.isPoweringTo(side);

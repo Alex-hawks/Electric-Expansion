@@ -16,48 +16,48 @@ import electricexpansion.common.ElectricExpansion;
 public class DistributionNetworks
 {
     private MinecraftServer server = MinecraftServer.getServer();
-    private static final double maxJoules = 5000000;
+    private static final float maxJoules = 5_000;
     public static final byte maxFrequencies = (byte) 128;
-    private Map<String, double[]> playerFrequencies = new HashMap<String, double[]>();
+    private Map<String, float[]> playerFrequencies = new HashMap<String, float[]>();
     
-    public double getJoules(String player, byte frequency)
+    public float getJoules(String player, byte frequency)
     {
         if (player != null)
         {
             if (!this.playerFrequencies.containsKey(player))
             {
-                this.playerFrequencies.put(player, new double[128]);
+                this.playerFrequencies.put(player, new float[128]);
             }
             return this.playerFrequencies.get(player)[frequency];
         }
         return 0;
     }
     
-    public void setJoules(String player, short frequency, double newJoules)
+    public void setJoules(String player, short frequency, float newJoules)
     {
         if (player != null)
         {
             if (!this.playerFrequencies.containsKey(player))
             {
-                this.playerFrequencies.put(player, new double[128]);
+                this.playerFrequencies.put(player, new float[128]);
             }
             this.playerFrequencies.get(player)[frequency] = newJoules;
         }
     }
     
-    public void addJoules(String player, short frequency, double addedJoules)
+    public void addJoules(String player, short frequency, float addedJoules)
     {
         if (player != null)
         {
             if (!this.playerFrequencies.containsKey(player))
             {
-                this.playerFrequencies.put(player, new double[128]);
+                this.playerFrequencies.put(player, new float[128]);
             }
             this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency] + addedJoules;
         }
     }
     
-    public void removeJoules(String player, short frequency, double removedJoules)
+    public void removeJoules(String player, short frequency, float removedJoules)
     {
         try
         {
@@ -71,7 +71,7 @@ public class DistributionNetworks
         }
     }
     
-    public static double getMaxJoules()
+    public static float getMaxJoules()
     {
         return maxJoules;
     }
@@ -85,7 +85,7 @@ public class DistributionNetworks
         }
         else
         {
-            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + this.server.getFolderName();
+            folder = Minecraft.getMinecraft().mcDataDir + File.separator + "saves" + File.separator + this.server.getFolderName();
         }
         
         if (!event.world.isRemote)
@@ -153,12 +153,12 @@ public class DistributionNetworks
                             name = name.substring(0, name.length() - 4);
                         }
                         
-                        this.playerFrequencies.put(name, new double[128]);
+                        this.playerFrequencies.put(name, new float[128]);
                         for (int i = 0; i < 128; i++)
                         {
                             try
                             {
-                                this.playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getDouble(i + "");
+                                this.playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getFloat(i + "");
                             }
                             catch (Exception e)
                             {
@@ -193,7 +193,7 @@ public class DistributionNetworks
         }
         else if (!this.server.isDedicatedServer())
         {
-            folder = Minecraft.getMinecraftDir() + File.separator + "saves" + File.separator + this.server.getFolderName() + File.separator + "ElectricExpansion";
+            folder = Minecraft.getMinecraft().mcDataDir + File.separator + "saves" + File.separator + this.server.getFolderName() + File.separator + "ElectricExpansion";
         }
         
         File folderToUse = new File(folder);

@@ -12,12 +12,12 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.electricity.IElectricityNetwork;
+import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
-import universalelectricity.prefab.implement.IRotatable;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
+import universalelectricity.prefab.tile.IRotatable;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
@@ -49,31 +49,28 @@ implements IPacketReceiver, IRotatable, IHiveMachine
             
             if (!this.worldObj.isRemote)
             {
-                if (!this.isDisabled())
+                ForgeDirection inputDirection = ForgeDirection.getOrientation(ROTATION_MATRIX[this.getBlockMetadata()]);
+                TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+                
+                if (inputTile != null && inputTile instanceof INetworkProvider)
                 {
-                    ForgeDirection inputDirection = ForgeDirection.getOrientation(ROTATION_MATRIX[this.getBlockMetadata()]);
-                    TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
-                    
-                    if (inputTile != null && inputTile instanceof INetworkProvider)
+                    if (inputTile instanceof IConductor)
                     {
-                        if (inputTile instanceof IConductor)
-                        {
-                            this.network = ((IConductor) inputTile).getNetwork();
-                            
-                            this.electricityReading = network.getProduced(new TileEntity[0]);
-                            this.electricityReading.amperes *= 20.0D;
-                        }
-                        else
-                        {
-                            this.network = ((INetworkProvider) inputTile).getNetwork();
-                            
-                            this.electricityReading = new ElectricityPack();
-                        }
+                        this.network = ((IConductor) inputTile).getNetwork();
+                        
+                        this.electricityReading = network.getProduced(new TileEntity[0]);
+                        this.electricityReading.amperes *= 20.0D;
                     }
                     else
                     {
+                        this.network = ((INetworkProvider) inputTile).getNetwork();
+                        
                         this.electricityReading = new ElectricityPack();
                     }
+                }
+                else
+                {
+                    this.electricityReading = new ElectricityPack();
                 }
                 
                 if (this.electricityReading.amperes != this.lastReading.amperes)
@@ -97,8 +94,8 @@ implements IPacketReceiver, IRotatable, IHiveMachine
         {
             try
             {
-                this.electricityReading.amperes = dataStream.readDouble();
-                this.electricityReading.voltage = dataStream.readDouble();
+                this.electricityReading.amperes = dataStream.readFloat();
+                this.electricityReading.voltage = dataStream.readFloat();
             }
             catch (Exception e)
             {
@@ -129,7 +126,7 @@ implements IPacketReceiver, IRotatable, IHiveMachine
     {
         return ForgeDirection.getOrientation(ROTATION_MATRIX[world.getBlockMetadata(x, y, z)]);
     }
-
+    
     @Override
     public IElectricityNetwork[] getNetworks()
     {
