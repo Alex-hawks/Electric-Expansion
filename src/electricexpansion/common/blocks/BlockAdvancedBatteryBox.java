@@ -38,13 +38,13 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-        this.icons.put("out", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
-        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
-        this.icons.put("tier1", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT1"));
-        this.icons.put("tier2", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT2"));
-        this.icons.put("tier3", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT3"));
-        this.icons.put("tier4", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "batBoxT4"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineTop"));
+        this.icons.put("out", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineOutput"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineInput"));
+        this.icons.put("tier1", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "batBoxT1"));
+        this.icons.put("tier2", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "batBoxT2"));
+        this.icons.put("tier3", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "batBoxT3"));
+        this.icons.put("tier4", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "batBoxT4"));
     }
     
     @Override
@@ -60,13 +60,13 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
         if (side == 0 || side == 1)
             return this.icons.get("top");
         
-        if (te.getMaxEnergyStored() <= 8000000)
+        if (te.getMaxEnergyStored() <= 8_000)
             return this.icons.get("tier1");
-        else if (te.getMaxEnergyStored() <= 12000000)
+        else if (te.getMaxEnergyStored() <= 12_000)
             return this.icons.get("tier2");
-        else if (te.getMaxEnergyStored() <= 16000000)
+        else if (te.getMaxEnergyStored() <= 16_000)
             return this.icons.get("tier3");
-        else if (te.getMaxEnergyStored() > 16000000)
+        else if (te.getMaxEnergyStored() > 16_000)
             return this.icons.get("tier4");
         
         return this.icons.get("tier1");

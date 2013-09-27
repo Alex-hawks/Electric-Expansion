@@ -155,10 +155,10 @@ public class BlockInsulationMachine extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "insulatorTop"));
-        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
-        this.icons.put("insulator", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "insulatorFront"));
-        this.icons.put("", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "insulatorTop"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineInput"));
+        this.icons.put("insulator", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "insulatorFront"));
+        this.icons.put("", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineTop"));
     }
     
     @Override

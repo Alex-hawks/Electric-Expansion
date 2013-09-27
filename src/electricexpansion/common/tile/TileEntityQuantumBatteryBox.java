@@ -7,12 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.TranslationHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
@@ -49,27 +45,10 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         super.updateEntity();
         
         ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2);
-        TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
         
-        TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection.getOpposite());
-        
-        IElectricityNetwork inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
-        IElectricityNetwork outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
-        
-        if (outputNetwork != null && inputNetwork != outputNetwork)
+        if (!this.produceUE(outputDirection))
         {
-            ElectricityPack actualOutput = new ElectricityPack(Math.min(outputNetwork.getLowestCurrentCapacity(),
-                Math.min(this.getOutputCap(), outputNetwork.getRequest().getWatts()) / this.getVoltage()), this.getVoltage());
-            
-            if (this.getEnergyStored() > 0 && actualOutput.getWatts() > 0)
-            {
-                outputNetwork.startProducing(this, actualOutput);
-                this.setEnergyStored(this.getEnergyStored() - actualOutput.getWatts());
-            }
-            else
-            {
-                outputNetwork.stopProducing(this);
-            }
+            // TODO Produce other electrical
         }
         
         if (!this.worldObj.isRemote)
@@ -86,7 +65,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     @Override
     public float getRequest(ForgeDirection direction)
     {
-        if (this.getOutputDirections().contains(direction))
+        if (this.getOutputDirections().contains(ForgeDirection.OPPOSITES[direction.ordinal()]))
             return Math.min((this.getMaxEnergyStored() - this.getEnergyStored()), this.getOutputCap());
         else 
             return 0;
@@ -351,7 +330,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     @Override
     public String[] getMethodNames()
     {
-        return new String[] { "getVoltage", "isFull", "getJoules", "getFrequency", "setFrequency", "getPlayer" };
+        return new String[] { "getVoltage", "isFull", "getEnergyStored", "getFrequency", "setFrequency", "getPlayer" };
     }
     
     @Override
@@ -375,7 +354,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     {
         final int getVoltage = 0;
         final int isFull = 1;
-        final int getJoules = 2;
+        final int getEnergyStored = 2;
         final int getFrequency = 3;
         final int setFrequency = 4;
         final int getPlayer = 5;
@@ -386,7 +365,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
                 return new Object[] { this.getVoltage() };
             case isFull:
                 return new Object[] { this.getEnergyStored() >= this.getMaxEnergyStored() };
-            case getJoules:
+            case getEnergyStored:
                 return new Object[] { this.getEnergyStored() };
             case getFrequency:
                 return new Object[] { this.getFrequency() };
@@ -420,7 +399,6 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     @Override
     public float getProvide(ForgeDirection direction)
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return Math.max(0, Math.min(this.getEnergyStored(), this.getOutputCap()));
     }
 }

@@ -17,9 +17,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.ore.OreGenBase;
-import universalelectricity.prefab.ore.OreGenReplaceStone;
-import universalelectricity.prefab.ore.OreGenerator;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -111,8 +108,6 @@ public class ElectricExpansion
     public static final String MODEL_PATH = TEXTURE_PATH + "models/";
     public static final String GUI_PATH = TEXTURE_PATH + "gui/";
     
-    public static final String TEXTURE_NAME_PREFIX = "electricexpansion:";
-    
     private static final String[] LANGUAGES_SUPPORTED = new String[] { "en_US" };
     private static final Set<String> LANGUAGES_LOADED = new HashSet<String>();
     
@@ -175,7 +170,7 @@ public class ElectricExpansion
         // +7
         ElectricExpansionItems.itemMultimeter = new ItemMultimeter(config.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt());
         
-        GameRegistry.registerBlock(ElectricExpansionItems.blockSilverOre, ItemBlock.class, "blockSilverOre", ElectricExpansion.MOD_ID);
+//        GameRegistry.registerBlock(ElectricExpansionItems.blockSilverOre, ItemBlock.class, "blockSilverOre", ElectricExpansion.MOD_ID);
         
         debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(debugRecipes);
         useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(useHashCodes);
@@ -259,6 +254,7 @@ public class ElectricExpansion
         }
     }
     
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void load(FMLInitializationEvent event)
     {
@@ -299,7 +295,7 @@ public class ElectricExpansion
     {
         log(Level.INFO, "PostInitializing ElectricExpansion v." + VERSION);
         
-        MinecraftForge.EVENT_BUS.register(new ElectricExpansionEventHandler());
+        MinecraftForge.EVENT_BUS.register(ElectricExpansionEventHandler.INSTANCE);
         RecipeRegistery.drawing();
         RecipeRegistery.insulation();
     }

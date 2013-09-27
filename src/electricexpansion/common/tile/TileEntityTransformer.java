@@ -1,5 +1,9 @@
 package electricexpansion.common.tile;
 
+import ic2.api.energy.tile.IEnergySource;
+
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
@@ -9,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.electricity.ElectricityHelper;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
@@ -28,6 +33,8 @@ import electricexpansion.common.ElectricExpansion;
 public class TileEntityTransformer extends TileEntityElectrical 
 implements IRotatable, IPacketReceiver, IHiveMachine
 {
+    public static final float MAX_OUTPUT = 1_000;
+    
     public boolean stepUp = false;
     public transient int type;
     
@@ -59,70 +66,8 @@ implements IRotatable, IPacketReceiver, IHiveMachine
             ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2);
             TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
             
-            this.inputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
-            this.outputNetwork = ElectricityNetworkHelper.getNetworkFromTileEntity(outputTile, outputDirection);
-            
-            if (outputNetwork != null && inputNetwork == null)
-            {
-                outputNetwork.stopProducing(this);
-            }
-            else if (outputNetwork == null && inputNetwork != null)
-            {
-                inputNetwork.stopRequesting(this);
-            }
-            
-            if (outputNetwork != null && inputNetwork != null)
-            {
-                if (outputNetwork != inputNetwork)
-                {
-                    if (outputNetwork.getRequest().getWatts() > 0)
-                    {
-                        inputNetwork.startRequesting(this, outputNetwork.getRequest());
-                        ElectricityPack actualEnergy = inputNetwork.consumeElectricity(this);
-                        
-                        if (actualEnergy.getWatts() > 0)
-                        {
-                            double typeChange = 0;
-                            
-                            if (this.type == 0)
-                            {
-                                typeChange = 2;
-                            }
-                            else if (this.type == 4)
-                            {
-                                typeChange = 4;
-                            }
-                            else if (this.type == 8)
-                            {
-                                typeChange = 8;
-                            }
-                            
-                            double newVoltage = actualEnergy.voltage * typeChange;
-                            
-                            if (!this.stepUp)
-                            {
-                                newVoltage = actualEnergy.voltage / typeChange;
-                            }
-                            
-                            outputNetwork.startProducing(this, actualEnergy.getWatts() / newVoltage, newVoltage);
-                        }
-                        else
-                        {
-                            outputNetwork.stopProducing(this);
-                        }
-                    }
-                    else
-                    {
-                        inputNetwork.stopRequesting(this);
-                        outputNetwork.stopProducing(this);
-                    }
-                }
-                else
-                {
-                    inputNetwork.stopRequesting(this);
-                    outputNetwork.stopProducing(this);
-                }
-            }
+            this.inputNetwork = ElectricityHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
+            this.outputNetwork = ElectricityHelper.getNetworkFromTileEntity(outputTile, outputDirection);
             
             if (!this.worldObj.isRemote)
             {
@@ -182,13 +127,13 @@ implements IRotatable, IPacketReceiver, IHiveMachine
     }
     
     @Override
-    public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
+    public void setDirection(ForgeDirection facingDirection)
     {
         this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal() - 2 + this.type, 0);
     }
     
     @Override
-    public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
+    public ForgeDirection getDirection()
     {
         return ForgeDirection.getOrientation(this.getBlockMetadata() - this.type);
     }
@@ -218,5 +163,61 @@ implements IRotatable, IPacketReceiver, IHiveMachine
             return true;
         }
         return false;
+    }
+    
+    @Override
+    public float getRequest(ForgeDirection direction)
+    {
+        if (direction != this.input)
+            return 0;
+        else if (this.inputNetwork == null || this.outputNetwork == null)
+            return 0;
+        else if (this.inputNetwork.equals(this.outputNetwork))
+            return 0;
+        else
+            return outputNetwork.getRequest().getWatts();
+    }
+    
+    @Override
+    public float getProvide(ForgeDirection direction)
+    {
+        if (direction != this.output)
+            return 0;
+        else if (this.inputNetwork == null || this.outputNetwork == null)
+            return 0;
+        else if (this.inputNetwork.equals(this.outputNetwork))
+            return 0;
+        else
+            return MAX_OUTPUT;
+    }
+    
+    @Override
+    public float getMaxEnergyStored()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getSerialQuantity()
+    {
+        return 0;
+    }
+    
+    @Override
+    public int getInputQuantity()
+    {
+        return 1;
+    }
+    
+    @Override
+    public int getOutputQuantity()
+    {
+        return 1;
+    }
+    
+    @Override
+    public EnumSet<ForgeDirection> getSerialDirections()
+    {
+        return EnumSet.noneOf(ForgeDirection.class);
     }
 }

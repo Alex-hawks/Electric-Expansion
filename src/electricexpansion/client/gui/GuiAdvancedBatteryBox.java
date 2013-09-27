@@ -86,7 +86,7 @@ public class GuiAdvancedBatteryBox extends GuiContainer
 	protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
 	{
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_BAT_BOX);
+        this.mc.getTextureManager().bindTexture(TextureLocations.GUI_BAT_BOX);
 
 		this.xSize = 220;
 

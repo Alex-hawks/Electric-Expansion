@@ -38,7 +38,7 @@ public class ItemParts extends Item
     {
         for (int i = 0; i < names.length; i++)
         {
-            this.icons[i] = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + names[i]);
+            this.icons[i] = par1IconRegister.registerIcon(ElectricExpansion.PREFIX + names[i]);
         }
     }
     

@@ -50,6 +50,6 @@ public class Recipes {
 	public static IListRecipeManager recyclerBlacklist;
 	public static ICraftingRecipeManager advRecipes;
 
-	public static ISemiFluidEuOutputManager semifluidGenerator;
+	public static ISemiFluidFuelManager semiFluidGenerator;
 
 }

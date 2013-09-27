@@ -1,107 +1,56 @@
 package electricexpansion.common.cables;
 
+import static electricexpansion.api.hive.HiveSignal.DEVICE_TYPE.*;
+import static electricexpansion.api.hive.HiveSignal.PACKET_TYPE.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.vector.Vector3;
 import universalelectricity.prefab.network.PacketManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import dan200.computer.api.IComputerAccess;
+import dan200.computer.api.ILuaContext;
+import dan200.computer.api.IPeripheral;
 import electricexpansion.api.ElectricExpansionItems;
+import electricexpansion.api.hive.IHiveSignalIO;
+import electricexpansion.common.compatibility.LuaDataInputStream;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
-public class TileEntityLogisticsWire extends TileEntityConductorBase
+public class TileEntityLogisticsWire extends TileEntityConductorBase implements IHiveSignalIO, IPeripheral
 {
-    public boolean buttonStatus0 = false;
-    public boolean buttonStatus1 = false;
-    public boolean buttonStatus2 = false;
-    
-    private double networkProduced = 0;
-    
+    @SuppressWarnings("unused")
     private byte tick = 0;
+    private IComputerAccess computer;
+    private byte uniqueID;
     
     @Override
     public void initiate()
     {
         this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansionItems.blockLogisticsWire.blockID);
         PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+        this.uniqueID = this.hiveNetwork.registerIO(this);
     }
     
     @Override
     public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream)
     {
-        if (this.worldObj.isRemote)
-        {
-            try
-            {
-                byte id = dataStream.readByte();
-                
-                if (id == 5)
-                {
-                    this.visuallyConnected[0] = dataStream.readBoolean();
-                    this.visuallyConnected[1] = dataStream.readBoolean();
-                    this.visuallyConnected[2] = dataStream.readBoolean();
-                    this.visuallyConnected[3] = dataStream.readBoolean();
-                    this.visuallyConnected[4] = dataStream.readBoolean();
-                    this.visuallyConnected[5] = dataStream.readBoolean();
-                    
-                    this.buttonStatus0 = dataStream.readBoolean();
-                    this.buttonStatus1 = dataStream.readBoolean();
-                    this.buttonStatus2 = dataStream.readBoolean();
-                }
-                
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            
-        }
-        else
-        {
-            try
-            {
-                byte id = dataStream.readByte();
-                if (id == -1)
-                {
-                    this.buttonStatus0 = dataStream.readBoolean();
-                }
-                if (id == 0)
-                {
-                    this.buttonStatus1 = dataStream.readBoolean();
-                }
-                if (id == 1)
-                {
-                    this.buttonStatus2 = dataStream.readBoolean();
-                }
-                if (id == 7)
-                {
-                    if (dataStream.readBoolean() == true)
-                    {
-                    }
-                    else
-                    {
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
+        super.handlePacketData(network, type, packet, player, dataStream);
     }
     
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
-        this.buttonStatus0 = nbt.getBoolean("buttonStatus0");
-        this.buttonStatus1 = nbt.getBoolean("buttonStatus1");
-        this.buttonStatus2 = nbt.getBoolean("buttonStatus2");
         
     }
     
@@ -109,58 +58,113 @@ public class TileEntityLogisticsWire extends TileEntityConductorBase
     public void writeToNBT(NBTTagCompound nbt)
     {
         super.writeToNBT(nbt);
-        nbt.setBoolean("buttonStatus0", this.buttonStatus0);
-        nbt.setBoolean("buttonStatus1", this.buttonStatus1);
-        nbt.setBoolean("buttonStatus2", this.buttonStatus2);
-    }
-    
-    @Override
-    public Packet getDescriptionPacket()
-    {
-        return PacketManager.getPacket(CHANNEL, this, (byte) 5, this.visuallyConnected[0], this.visuallyConnected[1], this.visuallyConnected[2], this.visuallyConnected[3],
-                this.visuallyConnected[4], this.visuallyConnected[5], this.buttonStatus0, this.buttonStatus1, this.buttonStatus2);
     }
     
     @Override
     public void updateEntity()
     {
         super.updateEntity();
-        
-        if (!this.worldObj.isRemote)
-        {
-            
-            this.tick++;
-            
-            if (this.tick == 20)
+    }
+    
+    @Override
+    @SuppressWarnings("unused")
+    public void processData(byte[] data)
+    {
+        try (
+            ByteArrayInputStream bs = new ByteArrayInputStream(data.clone());
+            DataInputStream ds = new DataInputStream(bs); )
             {
-                this.tick = 0;
-                
-                if (this.networkProduced == 0 && this.getNetwork().getProduced().getWatts() != 0)
+            byte senderType = ds.readByte();
+            byte endType = ds.readByte();
+            byte sender = ds.readByte();
+            byte end = ds.readByte();
+            byte packetType = ds.readByte();
+            
+            if (packetType == BROADCAST)
+            {
+                if (senderType == CORE)
                 {
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.blockType.blockID);
+                    sendDiscoverReply(senderType, sender);
                 }
-                
-                if (this.networkProduced != 0 && this.getNetwork().getProduced().getWatts() == 0)
-                {
-                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.blockType.blockID);
-                }
-                
-                this.networkProduced = this.getNetwork().getProduced().getWatts();
             }
+            else if (this.computer != null)
+            {
+                this.computer.queueEvent("recievedDataStream", new Object[] { new LuaDataInputStream(data) });
+            }
+            } 
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
-        
     }
-    
-    public boolean isPoweringTo(ForgeDirection side)
+
+    private void sendDiscoverReply(byte destinationType, byte destination)
     {
-        if (this.buttonStatus0 && this.getNetwork().getProduced().getWatts() > 0)
-            return true;
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        DataOutputStream ds = new DataOutputStream(bs);
         
-        return false;
+        try
+        {
+            ds.writeByte(destinationType);
+            ds.writeByte(LOGISTICS_WIRE);
+            ds.writeByte(destination);
+            ds.writeByte(this.uniqueID);
+            ds.writeByte(DISCOVER_REPLY);
+            ds.writeBoolean(this.computer != null);
+            
+            ds.close();
+            bs.close();
+            
+            byte[] data = bs.toByteArray();
+
+            this.hiveNetwork.sendData(data);
+        } 
+        catch (IOException e) { }
     }
-    
-    public boolean isIndirectlyPoweringTo(ForgeDirection side)
+
+    @Override
+    public String getType()
     {
-        return this.isPoweringTo(side);
+        return "Logistics Wire";
+    }
+
+    @Override
+    public String[] getMethodNames()
+    {
+        return new String[] { "sendData" };
+    }
+
+    @Override
+    public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws Exception
+    {
+        // TODO Make the computer able to send data.
+        return null;
+    }
+
+    @Override
+    public boolean canAttachToSide(int side)
+    {
+        return this.computer == null;
+    }
+
+    @Override
+    public void attach(IComputerAccess computer)
+    {
+        this.computer = computer;
+    }
+
+    @Override
+    public void detach(IComputerAccess computer)
+    {
+        synchronized (this.computer)
+        {
+            this.computer = null;
+        }
+    }
+
+    @Override
+    public byte getDeviceTypeID()
+    {
+        return LOGISTICS_WIRE;
     }
 }

@@ -174,7 +174,7 @@ public class BlockTransformer extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachine");
+        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "darkMachine");
     }
     
     @Override

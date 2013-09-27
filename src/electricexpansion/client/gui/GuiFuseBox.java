@@ -31,7 +31,7 @@ public class GuiFuseBox extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_FUSE_BOX);
+        this.mc.getTextureManager().bindTexture(TextureLocations.GUI_FUSE_BOX);
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);
@@ -48,7 +48,7 @@ public class GuiFuseBox extends GuiContainer
         {
             ItemStack fuseStack = this.tileEntity.getStackInSlot(0);
             IItemFuse fuse = (IItemFuse) fuseStack.getItem();
-            this.fontRenderer.drawString(this.tileEntity.getStackInSlot(0).getItemName(), 30, 18, 4210752);
+            this.fontRenderer.drawString(this.tileEntity.getStackInSlot(0).getDisplayName(), 30, 18, 4210752);
             this.fontRenderer.drawString(StatCollector.translateToLocal(fuse.getUnlocalizedName(fuseStack)), 30, 18, 4210752);
         }
     }

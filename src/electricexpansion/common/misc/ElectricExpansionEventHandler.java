@@ -1,6 +1,12 @@
 package electricexpansion.common.misc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+import universalelectricity.core.electricity.ElectricalEvent;
+import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.grid.IElectricityNetwork;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -15,6 +21,12 @@ import electricexpansion.common.ElectricExpansion;
 
 public class ElectricExpansionEventHandler
 {
+    private Map<IElectricityNetwork, ElectricityPack> electricityMap = new HashMap<IElectricityNetwork, ElectricityPack>();
+    
+    public static ElectricExpansionEventHandler INSTANCE = new ElectricExpansionEventHandler();
+    
+    private ElectricExpansionEventHandler() { }
+    
     @ForgeSubscribe
     public void onEntityDropItems(LivingDropsEvent event)
     {
@@ -53,5 +65,23 @@ public class ElectricExpansionEventHandler
     public void onWorldUnload(WorldEvent.Unload event)
     {
         ElectricExpansion.DistributionNetworksInstance.onWorldSave(event);
+    }
+    
+    @ForgeSubscribe
+    @SideOnly(Side.SERVER)
+    public void handleElectricityPacket(ElectricalEvent.NetworkEvent e)
+    {
+        this.electricityMap.get(e.network);
+        this.electricityMap.put(e.network, ElectricityPack.merge(this.electricityMap.get(e.network), e.electricityPack));
+    }
+    
+    public void cleanNetworkStat(IElectricityNetwork net)
+    {
+        this.electricityMap.remove(net);
+    }
+    
+    public ElectricityPack getNetworkStat(IElectricityNetwork net)
+    {
+        return this.electricityMap.get(net);
     }
 }

@@ -37,8 +37,8 @@ public class BlockRedstoneNetworkCore extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "rsMachine"));
-        this.icons.put("out", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "rsMachineOutput"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "rsMachine"));
+        this.icons.put("out", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "rsMachineOutput"));
     }
     
     @Override

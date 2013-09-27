@@ -49,7 +49,7 @@ public class RenderRawWire extends TileEntitySpecialRenderer
         
         // Texture file
         if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.MODEL_PATH)
-            this.func_110628_a(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + textureToUse));
+            this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + textureToUse));
         else
             return;
 

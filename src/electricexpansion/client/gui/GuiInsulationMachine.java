@@ -61,7 +61,7 @@ public class GuiInsulationMachine extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3)
     {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.func_110434_K().func_110577_a(TextureLocations.GUI_MACHINE);
+        this.mc.getTextureManager().bindTexture(TextureLocations.GUI_MACHINE);
         this.containerWidth = (this.width - this.xSize) / 2;
         this.containerHeight = (this.height - this.ySize) / 2;
         this.drawTexturedModalRect(this.containerWidth, this.containerHeight, 0, 0, this.xSize, this.ySize);

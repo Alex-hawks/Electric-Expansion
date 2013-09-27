@@ -11,7 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.client.gui.GuiAdvancedBatteryBox;
 import electricexpansion.client.gui.GuiFuseBox;
 import electricexpansion.client.gui.GuiInsulationMachine;
-import electricexpansion.client.gui.GuiLogisticsWire;
 import electricexpansion.client.gui.GuiQuantumBatteryBox;
 import electricexpansion.client.gui.GuiWireMill;
 import electricexpansion.client.render.RenderHandler;
@@ -80,8 +79,8 @@ public class ClientProxy extends CommonProxy
                     break; // What's this used for?
                 case 2:
                     return new GuiWireMill(player.inventory, (TileEntityWireMill) tileEntity);
-                case 3:
-                    return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
+//                case 3:
+//                    return new GuiLogisticsWire((TileEntityLogisticsWire) tileEntity);
                 case 4:
                     return new GuiQuantumBatteryBox(player.inventory, (TileEntityQuantumBatteryBox) tileEntity);
                 case 5:

@@ -45,7 +45,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            return te.mode ? 0 : te.getRsLevel();
+            return te.getRsLevel();
         }
         return 0;
     }
@@ -56,7 +56,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            return te.mode ? 0 : te.getRsLevel();
+            return te.getRsLevel();
         }
         return 0;
     }

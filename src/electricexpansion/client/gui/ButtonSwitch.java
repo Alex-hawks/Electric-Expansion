@@ -43,7 +43,7 @@ public class ButtonSwitch extends GuiButton
     public void drawButton(Minecraft par1Minecraft, int par2, int par3)
     {
         FontRenderer fontrenderer = par1Minecraft.fontRenderer;
-        par1Minecraft.func_110434_K().func_110577_a(TextureLocations.BTN_SWITCH);
+        par1Minecraft.getTextureManager().bindTexture(TextureLocations.BTN_SWITCH);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.field_82253_i = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
         

@@ -180,7 +180,7 @@ public class ItemUpgrade extends Item implements IModifier
     {
         for (int i = 0; i < this.names.length; i++)
         {
-            this.icons[i] = iconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + this.names[i]);
+            this.icons[i] = iconRegister.registerIcon(ElectricExpansion.PREFIX + this.names[i]);
         }
     }
     

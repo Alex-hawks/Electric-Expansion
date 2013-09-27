@@ -56,10 +56,10 @@ public class BlockFuseBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineTop"));
-        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
-        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineInput"));
-        this.icons.put("side", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "fusebox"));
+        this.icons.put("top", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineTop"));
+        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineOutput"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineInput"));
+        this.icons.put("side", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "fusebox"));
         // TODO Create above texture...
     }
     

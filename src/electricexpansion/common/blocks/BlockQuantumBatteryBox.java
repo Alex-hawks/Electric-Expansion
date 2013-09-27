@@ -73,9 +73,9 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineOutput"));
-        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineInput"));
-        this.icons.put("default", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "darkMachineTop"));
+        this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "darkMachineOutput"));
+        this.icons.put("input", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "darkMachineInput"));
+        this.icons.put("default", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "darkMachineTop"));
     }
     
     @Override
@@ -101,7 +101,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     {
         if (!par1World.isRemote)
         {
-            boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(par5EntityPlayer.getCommandSenderName());
+            boolean isPlayerOp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(par5EntityPlayer.getCommandSenderName());
             if (par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).getOwningPlayer() || isPlayerOp)
             {
                 par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);

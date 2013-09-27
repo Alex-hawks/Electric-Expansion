@@ -33,13 +33,13 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
                 switch (metadata)
                 {
                     case 0:
-                        textureToUse= "InsulatedCopperWire.png";
+                        textureToUse = "InsulatedCopperWire.png";
                         break;
                     case 1:
-                        textureToUse= "InsulatedTinWire.png";
+                        textureToUse = "InsulatedTinWire.png";
                         break;
                     case 2:
-                        textureToUse= "InsulatedSilverWire.png";
+                        textureToUse = "InsulatedSilverWire.png";
                         break;
                     case 3:
                         textureToUse = "InsulatedHVWire.png";
@@ -148,7 +148,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         boolean[] connectedSides = tileEntity.getVisualConnections();
         
         if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.MODEL_PATH)
-            this.func_110628_a(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + textureToUse));
+            this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + textureToUse));
         else
             return;
         
@@ -224,7 +224,7 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
             GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
             GL11.glScalef(1.0F, -1F, -1F);
             
-            this.func_110628_a(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + "WirePaintOverlay.png"));
+            this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + "WirePaintOverlay.png"));
             
             byte colorByte = ((TileEntityInsulatedWire) tileEntity).getFrequency().getIndex();
             

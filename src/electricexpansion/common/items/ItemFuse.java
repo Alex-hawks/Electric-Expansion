@@ -129,7 +129,7 @@ public class ItemFuse extends Item implements IItemFuse
     {
         for (int i = 0; i < this.icons.length; i++)
         {
-            this.icons[i] = par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 0, i)).replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+            this.icons[i] = par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 0, i)).replaceAll("item.", ElectricExpansion.PREFIX));
         }
     }
 }

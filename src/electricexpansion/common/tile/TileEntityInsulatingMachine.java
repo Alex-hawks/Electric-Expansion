@@ -40,10 +40,10 @@ import electricexpansion.api.hive.IHiveMachine;
 import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.api.tile.ITileRunnable;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.misc.ChargeUtils;
+import electricexpansion.common.misc.PowerUtils;
 import electricexpansion.common.misc.InsulationRecipes;
-import electricexpansion.common.misc.UniversalPowerUtils;
-import electricexpansion.common.misc.UniversalPowerUtils.GenericPack;
+import electricexpansion.common.misc.PowerConversionUtils;
+import electricexpansion.common.misc.PowerConversionUtils.GenericPack;
 
 public class TileEntityInsulatingMachine extends TileEntityElectrical
 implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IEnergySink, IHiveMachine, ITileRunnable
@@ -109,11 +109,11 @@ implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IE
         {
             if (this.inventory[1].getItem() instanceof IItemElectric)
             {
-                this.setEnergyStored(this.getEnergyStored() + (ChargeUtils.UE.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
+                this.setEnergyStored(this.getEnergyStored() + (PowerUtils.UE.discharge(this.inventory[1], PowerConversionUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()), 2).toUEWatts()));
             }
             else if (this.inventory[1].getItem() instanceof IElectricItem)
             {
-                this.setEnergyStored(this.getEnergyStored() + (ChargeUtils.IC2.discharge(this.inventory[1], UniversalPowerUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()))).toUEWatts());
+                this.setEnergyStored(this.getEnergyStored() + (PowerUtils.IC2.discharge(this.inventory[1], PowerConversionUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()), 2).toUEWatts()));
             }
             
         }
@@ -414,15 +414,15 @@ implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IE
     @Override
     public double demandedEnergyUnits()
     {
-        return UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxEnergyStored() - this.energyStored).toEU();
+        return PowerConversionUtils.INSTANCE.new UEElectricPack(this.getMaxEnergyStored() - this.energyStored).toEU();
     }
     
     @Override
     public double injectEnergyUnits(ForgeDirection directionFrom, double amount)
     {
-        GenericPack givenEnergy = UniversalPowerUtils.INSTANCE.new IC2Pack(amount, 1);
-        int rejects = 0;
-        GenericPack neededEnergy = UniversalPowerUtils.INSTANCE.new UEElectricPack(this.getMaxEnergyStored() - this.energyStored);
+        GenericPack givenEnergy = PowerConversionUtils.INSTANCE.new IC2Pack(amount, 1);
+        double rejects = 0;
+        GenericPack neededEnergy = PowerConversionUtils.INSTANCE.new UEElectricPack(this.getMaxEnergyStored() - this.energyStored);
         
         if (givenEnergy.toUEWatts() < neededEnergy.toUEWatts())
         {
@@ -488,7 +488,7 @@ implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IE
         switch (slot)
         {
             case 0:
-                return ChargeUtils.UE.isFull(itemstack);
+                return PowerUtils.UE.isFull(itemstack);
             case 1:
                 return InsulationRecipes.INSTANCE.getProcessResult(itemstack) >= 0;
                 
@@ -503,7 +503,7 @@ implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IE
         switch (slot)
         {
             case 0:
-                return ChargeUtils.UE.isEmpty(itemstack);
+                return PowerUtils.UE.isEmpty(itemstack);
             case 2:
                 return true;
                 
@@ -564,4 +564,20 @@ implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IE
     {
         return this.processTicks;
     }
+
+    @Override
+    public int getSerialQuantity() 
+    { return 0; }
+
+    @Override
+    public int getInputQuantity()
+    { return 1; }
+
+    @Override
+    public int getOutputQuantity()
+    { return 0; }
+
+    @Override
+    public EnumSet<ForgeDirection> getSerialDirections()
+    { return null; }
 }

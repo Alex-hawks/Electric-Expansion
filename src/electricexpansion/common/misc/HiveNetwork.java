@@ -1,6 +1,8 @@
 package electricexpansion.common.misc;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import universalelectricity.core.block.IConductor;
@@ -9,6 +11,7 @@ import electricexpansion.api.hive.IHiveConductor;
 import electricexpansion.api.hive.IHiveController;
 import electricexpansion.api.hive.IHiveMachine;
 import electricexpansion.api.hive.IHiveNetwork;
+import electricexpansion.api.hive.IHiveSignalIO;
 
 public class HiveNetwork implements IHiveNetwork 
 {
@@ -17,6 +20,8 @@ public class HiveNetwork implements IHiveNetwork
     
     private Set<IHiveConductor> conductors = new HashSet<IHiveConductor>();
     private Set<IHiveMachine> machines = new HashSet<IHiveMachine>();
+    
+    private Map<Byte, Map<Byte, IHiveSignalIO>> signalIOs = new HashMap<>();
     
     @Override
     public Set<IElectricityNetwork> getElectricNetworks()
@@ -83,17 +88,50 @@ public class HiveNetwork implements IHiveNetwork
     {
         this.machines.remove(machine);
     }
-
+    
     @Override
     public Set<IHiveMachine> getMachines()
     {
         return machines;
     }
-
+    
     @Override
     public Set<IHiveConductor> getConductors()
     {
         return conductors;
+    }
+    
+    @Override
+    public void sendData(byte[] data)
+    {
+        for (short s = 0; s < 256; s++)
+        {
+            if (!this.signalIOs.get(s).isEmpty())
+            {
+                Map<Byte, IHiveSignalIO> map = this.signalIOs.get(s);
+                for (short s2 = 0; s2 < 256; s2++)
+                {
+                    IHiveSignalIO io = map.get(s2);
+                    io.processData(data);
+                }
+            }
+        }
+    }
+    
+    @Override
+    public Byte registerIO(IHiveSignalIO io)
+    {
+        byte ioID = io.getDeviceTypeID();
+        
+        for (short s = 0; s < 256; s++)
+        {
+            if (!this.signalIOs.get(ioID).keySet().contains((byte) s))
+            {
+                this.signalIOs.get(ioID).put((byte) s, io);
+                return (byte) s;
+            }
+        }
+        return null;
     }
     
 }

@@ -33,4 +33,11 @@ public interface IHiveNetwork
     
     public Set<IHiveMachine> getMachines();
     public Set<IHiveConductor> getConductors();
+    
+    /**
+     * MUST BE THREAD SAFE!!!
+     */
+    public void sendData(byte[] data);
+
+    public Byte registerIO(IHiveSignalIO io);
 }

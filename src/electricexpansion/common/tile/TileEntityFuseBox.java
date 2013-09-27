@@ -7,13 +7,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.grid.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityElectrical;
@@ -22,7 +18,8 @@ import com.google.common.io.ByteArrayDataInput;
 
 import electricexpansion.api.IItemFuse;
 
-public class TileEntityFuseBox extends TileEntityElectrical implements IPacketReceiver, IInventory
+public class TileEntityFuseBox extends TileEntityElectrical 
+implements IPacketReceiver, IInventory
 {
     public ItemStack[] inventory = new ItemStack[1];
     
@@ -33,6 +30,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
         
         if (!this.worldObj.isRemote)
         {
+            /*
             if (this.hasFuse())
             {
                 ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() + 2).getOpposite();
@@ -67,7 +65,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
                     inputNetwork.stopRequesting(this);
                 }
             }
-            
+            */
             if (!this.worldObj.isRemote)
             {
                 PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12.0D);
@@ -215,7 +213,7 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
     }
     
     @Override
-    public boolean isStackValidForSlot(int i, ItemStack itemstack)
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return false;
     }
@@ -223,28 +221,18 @@ public class TileEntityFuseBox extends TileEntityElectrical implements IPacketRe
     @Override
     public float getRequest(ForgeDirection direction)
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public float getProvide(ForgeDirection direction)
     {
-        // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
     public float getMaxEnergyStored()
     {
-        // TODO Auto-generated method stub
         return 0;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack)
-    {
-        // TODO Auto-generated method stub
-        return false;
     }
 }

@@ -1,13 +1,13 @@
 package electricexpansion.common.tile;
 
+import java.util.EnumSet;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.INetworkProvider;
@@ -25,6 +25,7 @@ import com.google.common.io.ByteArrayDataInput;
 import electricexpansion.api.hive.IHiveMachine;
 import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.misc.ElectricExpansionEventHandler;
 
 public class TileEntityMultimeter extends TileEntityElectrical 
 implements IPacketReceiver, IRotatable, IHiveMachine
@@ -58,7 +59,7 @@ implements IPacketReceiver, IRotatable, IHiveMachine
                     {
                         this.network = ((IConductor) inputTile).getNetwork();
                         
-                        this.electricityReading = network.getProduced(new TileEntity[0]);
+                        this.electricityReading = ElectricExpansionEventHandler.INSTANCE.getNetworkStat(this.network);
                         this.electricityReading.amperes *= 20.0D;
                     }
                     else
@@ -116,15 +117,15 @@ implements IPacketReceiver, IRotatable, IHiveMachine
     }
     
     @Override
-    public void setDirection(World world, int x, int y, int z, ForgeDirection facingDirection)
+    public void setDirection(ForgeDirection facingDirection)
     {
         this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, META_MATRIX[facingDirection.ordinal()], 0x02);
     }
     
     @Override
-    public ForgeDirection getDirection(IBlockAccess world, int x, int y, int z)
+    public ForgeDirection getDirection()
     {
-        return ForgeDirection.getOrientation(ROTATION_MATRIX[world.getBlockMetadata(x, y, z)]);
+        return ForgeDirection.getOrientation(ROTATION_MATRIX[this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord)]);
     }
     
     @Override
@@ -148,5 +149,47 @@ implements IPacketReceiver, IRotatable, IHiveMachine
             return true;
         }
         return false;
+    }
+
+    @Override
+    public float getRequest(ForgeDirection direction)
+    {
+        return 0;
+    }
+
+    @Override
+    public float getProvide(ForgeDirection direction)
+    {
+        return 0;
+    }
+
+    @Override
+    public float getMaxEnergyStored()
+    {
+        return 0;
+    }
+
+    @Override
+    public int getSerialQuantity()
+    {
+        return 1;
+    }
+
+    @Override
+    public int getInputQuantity()
+    {
+        return 1;
+    }
+
+    @Override
+    public int getOutputQuantity()
+    {
+        return 0;
+    }
+
+    @Override
+    public EnumSet<ForgeDirection> getSerialDirections()
+    {
+        return EnumSet.of(this.getDirection());
     }
 }

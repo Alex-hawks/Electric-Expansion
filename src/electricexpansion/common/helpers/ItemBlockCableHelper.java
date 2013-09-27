@@ -56,7 +56,7 @@ public abstract class ItemBlockCableHelper extends ItemBlock
         for (int i = 0; i < EnumWireMaterial.values().length - 1; i++)
         {
             this.icons.put(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)),
-                    par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)).replaceAll("tile.", ElectricExpansion.TEXTURE_NAME_PREFIX)));
+                    par1IconRegister.registerIcon(this.getUnlocalizedName(new ItemStack(this.itemID, 1, i)).replaceAll("tile.", ElectricExpansion.PREFIX)));
         }
     }
     

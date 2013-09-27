@@ -37,7 +37,7 @@ public class BlockInsulatedWire extends BlockConductor
     @Override
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "InsulatedWire.Copper");
+        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "InsulatedWire.Copper");
     }
     
     @Override

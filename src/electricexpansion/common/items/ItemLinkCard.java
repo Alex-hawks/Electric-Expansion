@@ -69,7 +69,7 @@ public class ItemLinkCard extends Item
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("item.", ElectricExpansion.PREFIX));
     }
     
     @Override

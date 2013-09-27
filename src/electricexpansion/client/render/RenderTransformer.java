@@ -68,7 +68,7 @@ public class RenderTransformer extends TileEntitySpecialRenderer
                 this.textureToUse = TextureLocations.MODEL_TRANSFORMER_3;
                 break;
         }
-        this.func_110628_a(textureToUse);
+        this.bindTexture(textureToUse);
         
         GL11.glPushMatrix();
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);

@@ -58,9 +58,9 @@ public class BlockMultimeter extends BlockAdvanced
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister)
 	{
-		this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machineOutput"));
-		this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "machine"));
-		this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "multimeter"));
+		this.icons.put("output", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machineOutput"));
+		this.icons.put("machine", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "machine"));
+		this.icons.put("front", par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "multimeter"));
 	}
 
 	/**

@@ -7,9 +7,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
+import universalelectricity.core.block.IElectrical;
+import universalelectricity.core.block.IElectricalStorage;
 import universalelectricity.core.electricity.ElectricityDisplay;
 import universalelectricity.core.electricity.ElectricityDisplay.ElectricUnit;
-import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.item.ItemElectric;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -40,10 +41,10 @@ public class ItemMultimeter extends ItemElectric
             {
                 IConductor wireTile = (IConductor) te;
                 
-                ElectricityPack getProduced = wireTile.getNetwork().getProduced();
-                
-                player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", "
-                        + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
+//                ElectricityPack getProduced = wireTile.getNetwork().getProduced();
+//                
+//                player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(getProduced.amperes, ElectricUnit.AMPERE) + ", "
+//                        + ElectricityDisplay.getDisplay(getProduced.voltage, ElectricUnit.VOLTAGE) + ", " + ElectricityDisplay.getDisplay(getProduced.getWatts() * 20, ElectricUnit.WATT));
                 
                 if (ElectricExpansion.debugRecipes)
                     player.addChatMessage(wireTile.getNetwork().toString());
@@ -52,15 +53,15 @@ public class ItemMultimeter extends ItemElectric
             }
             else
             {
-                if (te instanceof IElectricityStorage)
+                if (te instanceof IElectricalStorage)
                 {
-                    IElectricityStorage tileStorage = (IElectricityStorage) te;
+                    IElectricalStorage tileStorage = (IElectricalStorage) te;
                     player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(tileStorage.getEnergyStored(), ElectricUnit.JOULES) + "/"
                             + ElectricityDisplay.getDisplay(tileStorage.getMaxEnergyStored(), ElectricUnit.JOULES));
                 }
-                if (te instanceof IVoltage)
+                if (te instanceof IElectrical)
                 {
-                    player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(((IVoltage) te).getVoltage(), ElectricUnit.VOLTAGE));
+                    player.addChatMessage("Electric Expansion: " + ElectricityDisplay.getDisplay(((IElectrical) te).getVoltage(), ElectricUnit.VOLTAGE));
                 }
                 
                 if (te instanceof TileEntityAdvancedBatteryBox && ElectricExpansion.debugRecipes)
@@ -104,7 +105,7 @@ public class ItemMultimeter extends ItemElectric
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.itemIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replaceAll("item.", ElectricExpansion.PREFIX));
     }
     
     @Override

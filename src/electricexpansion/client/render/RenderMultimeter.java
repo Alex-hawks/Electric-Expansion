@@ -26,7 +26,7 @@ public class RenderMultimeter extends TileEntitySpecialRenderer
     public void renderTileEntityAt(TileEntity var1, double x, double y, double z, float var8)
     {
         TileEntityMultimeter te = (TileEntityMultimeter) var1;
-        ForgeDirection direction = te.getDirection(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+        ForgeDirection direction = te.getDirection();
         
         /**
          * Render from side 2 to 6. This means render all sides excluding top

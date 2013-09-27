@@ -5,17 +5,13 @@ import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import universalelectricity.prefab.CustomDamageSource;
 import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.api.wires.EnumWireMaterial;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
@@ -58,19 +54,19 @@ public class BlockRawWire extends BlockConductor
         return -1;
     }
     
-    @Override
-    public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity entity)
-    {
-        if (entity instanceof EntityLiving)
-        {
-            TileEntityRawWire tileEntity = (TileEntityRawWire) par1World.getBlockTileEntity(x, y, z);
-            
-            if (tileEntity.getNetwork().getProduced().getWatts() > 0)
-            {
-                ((EntityLiving) entity).attackEntityFrom(CustomDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
-            }
-        }
-    }
+//    @Override
+//    public void onEntityCollidedWithBlock(World par1World, int x, int y, int z, Entity entity)
+//    {
+//        if (entity instanceof EntityLiving)
+//        {
+//            TileEntityRawWire tileEntity = (TileEntityRawWire) par1World.getBlockTileEntity(x, y, z);
+//            
+//            if (tileEntity.getNetwork().getProduced().getWatts() > 0)
+//            {
+//                ((EntityLiving) entity).attackEntityFrom(CustomDamageSource.electrocution, EnumWireMaterial.values()[par1World.getBlockMetadata(x, y, z)].electrocutionDamage);
+//            }
+//        }
+//    }
     
     @Override
     public TileEntity createNewTileEntity(World var1)
@@ -109,6 +105,6 @@ public class BlockRawWire extends BlockConductor
     @Override
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.TEXTURE_NAME_PREFIX + "InsulatedWire.Copper");
+        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "InsulatedWire.Copper");
     }
 }

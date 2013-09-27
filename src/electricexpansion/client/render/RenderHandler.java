@@ -29,7 +29,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
         
         if (block.blockID == ElectricExpansionItems.blockWireMill.blockID)
         {
-            FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_WIRE_MILL);
+            FMLClientHandler.instance().getClient().renderEngine.bindTexture(TextureLocations.MODEL_WIRE_MILL);
             GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(0.5F, .8F, 0.5F);
             GL11.glScalef(1F, -1F, -1F);
@@ -41,13 +41,13 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
             switch (metadata / 4)
             {
                 case 0:
-                    FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_TRANSFORMER_1);
+                    FMLClientHandler.instance().getClient().renderEngine.bindTexture(TextureLocations.MODEL_TRANSFORMER_1);
                     break;
                 case 1:
-                    FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_TRANSFORMER_2);
+                    FMLClientHandler.instance().getClient().renderEngine.bindTexture(TextureLocations.MODEL_TRANSFORMER_2);
                     break;
                 case 2:
-                    FMLClientHandler.instance().getClient().renderEngine.func_110577_a(TextureLocations.MODEL_TRANSFORMER_3);
+                    FMLClientHandler.instance().getClient().renderEngine.bindTexture(TextureLocations.MODEL_TRANSFORMER_3);
                     break;
             }
             GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);

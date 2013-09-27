@@ -56,7 +56,7 @@ public class BlockBasic extends Block
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("tile.", ElectricExpansion.TEXTURE_NAME_PREFIX));
+        this.blockIcon = par1IconRegister.registerIcon(this.getUnlocalizedName().replace("tile.", ElectricExpansion.PREFIX));
     }
     
 }
