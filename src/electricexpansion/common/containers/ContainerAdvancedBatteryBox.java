@@ -20,14 +20,14 @@ public class ContainerAdvancedBatteryBox extends Container
         this.tileEntity = AdvBatteryBox;
         this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 0, -11, 24));
         this.addSlotToContainer(new SlotUniversalElectricItem(AdvBatteryBox, 1, -11, 48));
-        // 1st Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 129, 9, IModifier.class));
-        // 2nd Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 151, 9, IModifier.class));
-        // 3rd Upgrade slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 173, 9, IModifier.class));
         //  Link slot
-        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 129, 31, ItemLinkCard.class));
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 2, 129, 31, ItemLinkCard.class));
+        // 1st Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 3, 129, 9, IModifier.class));
+        // 2nd Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 4, 151, 9, IModifier.class));
+        // 3rd Upgrade slot
+        this.addSlotToContainer(new SlotSpecific(AdvBatteryBox, 5, 173, 9, IModifier.class));
         
         int var3;
         
@@ -75,27 +75,32 @@ public class ContainerAdvancedBatteryBox extends Container
             ItemStack var4 = var3.getStack();
             var2 = var4.copy();
             
-            if (par1 > 4)
+            if (par1 > 5)
             {
                 if (var4.getItem() instanceof IItemElectric)
                 {
                     float max = ((IItemElectric) var4.getItem()).getMaxElectricityStored(var2);
                     if (((IItemElectric) var4.getItem()).discharge(var2, max / 2, false) > 0)
                     {
-                        if (!this.mergeItemStack(var4, 1, 2, false))
+                        if (!this.mergeItemStack(var4, 1, 1, false))
                             return null;
                     }
                     else
                     {
-                        if (!this.mergeItemStack(var4, 0, 1, false))
+                        if (!this.mergeItemStack(var4, 0, 0, false))
                             return null;
                     }
                 }
-                
-                else if (!this.mergeItemStack(var4, 2, 4, false))
-                    return null;
+                else if (var4.getItem() instanceof IModifier)
+                {
+                    if (!this.mergeItemStack(var4, 2, 4, false))
+                        return null;
+                }
+                else if (var4.getItem() instanceof ItemLinkCard)
+                    if (!this.mergeItemStack(var4, 5, 5, false))
+                        return null;
             }
-            else if (!this.mergeItemStack(var4, 5, 38, false))
+            else if (!this.mergeItemStack(var4, 6, 38, false))
                 return null;
             
             if (var4.stackSize == 0)

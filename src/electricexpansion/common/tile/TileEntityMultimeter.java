@@ -39,6 +39,8 @@ implements IPacketReceiver, IRotatable, IHiveMachine
     private transient IElectricityNetwork network;
     private transient IHiveNetwork hiveNetwork;
     
+    private static final ElectricityPack EMPTY_PACK = new ElectricityPack();
+    
     @Override
     public void updateEntity()
     {
@@ -59,19 +61,29 @@ implements IPacketReceiver, IRotatable, IHiveMachine
                     {
                         this.network = ((IConductor) inputTile).getNetwork();
                         
-                        this.electricityReading = ElectricExpansionEventHandler.INSTANCE.getNetworkStat(this.network);
-                        this.electricityReading.amperes *= 20.0D;
+                        ElectricityPack temp = ElectricExpansionEventHandler.INSTANCE.getNetworkStat(this.network);
+                        ElectricExpansionEventHandler.INSTANCE.cleanNetworkStat(this.network);
+                        
+                        if (temp != null)
+                        {
+                            this.electricityReading = temp.clone();
+                            this.electricityReading.amperes *= 20.0F;
+                        }
+                        else
+                        {
+                            this.electricityReading = EMPTY_PACK.clone();
+                        }
                     }
                     else
                     {
                         this.network = ((INetworkProvider) inputTile).getNetwork();
                         
-                        this.electricityReading = new ElectricityPack();
+                        this.electricityReading = EMPTY_PACK.clone();
                     }
                 }
                 else
                 {
-                    this.electricityReading = new ElectricityPack();
+                    this.electricityReading = EMPTY_PACK.clone();
                 }
                 
                 if (this.electricityReading.amperes != this.lastReading.amperes)
@@ -150,43 +162,43 @@ implements IPacketReceiver, IRotatable, IHiveMachine
         }
         return false;
     }
-
+    
     @Override
     public float getRequest(ForgeDirection direction)
     {
         return 0;
     }
-
+    
     @Override
     public float getProvide(ForgeDirection direction)
     {
         return 0;
     }
-
+    
     @Override
     public float getMaxEnergyStored()
     {
         return 0;
     }
-
+    
     @Override
     public int getSerialQuantity()
     {
         return 1;
     }
-
+    
     @Override
     public int getInputQuantity()
     {
         return 1;
     }
-
+    
     @Override
     public int getOutputQuantity()
     {
         return 0;
     }
-
+    
     @Override
     public EnumSet<ForgeDirection> getSerialDirections()
     {

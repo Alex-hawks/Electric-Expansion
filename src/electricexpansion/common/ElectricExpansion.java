@@ -99,8 +99,8 @@ public class ElectricExpansion
     public static final String DOMAIN = "electricexpansion";
     public static final String PREFIX = DOMAIN + ":";
     
-    public static final String RESOURCE_PATH = "/mods/" + DOMAIN + "/";
-    public static final String LANGUAGE_PATH = RESOURCE_PATH + "languages/";
+    public static final String RESOURCE_PATH = "/assets/" + DOMAIN + "/";
+    public static final String LANGUAGE_PATH = RESOURCE_PATH + "language/";
 
     public static final String TEXTURE_PATH = "textures/";
     public static final String BLOCK_PATH = TEXTURE_PATH + "blocks/";

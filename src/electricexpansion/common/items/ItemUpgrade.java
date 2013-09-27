@@ -116,13 +116,13 @@ public class ItemUpgrade extends Item implements IModifier
         switch (itemstack.getItemDamage())
         {
             case 0:
-                return 1000000;
+                return 1_000;
             case 1:
-                return 2000000;
+                return 2_000;
             case 2:
-                return 3000000;
+                return 3_000;
             case 3:
-                return 5000000;
+                return 5_000;
             case 4:
                 return 0.5f;
             case 5:

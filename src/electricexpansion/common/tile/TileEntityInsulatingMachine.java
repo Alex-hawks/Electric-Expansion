@@ -107,13 +107,13 @@ implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IE
         
         if (this.inventory[0] != null && this.energyStored < this.getMaxEnergyStored())
         {
-            if (this.inventory[1].getItem() instanceof IItemElectric)
+            if (this.inventory[0].getItem() instanceof IItemElectric)
             {
-                this.setEnergyStored(this.getEnergyStored() + (PowerUtils.UE.discharge(this.inventory[1], PowerConversionUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()), 2).toUEWatts()));
+                this.setEnergyStored(this.getEnergyStored() + (PowerUtils.UE.discharge(this.inventory[0], PowerConversionUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()), 2).toUEWatts()));
             }
-            else if (this.inventory[1].getItem() instanceof IElectricItem)
+            else if (this.inventory[0].getItem() instanceof IElectricItem)
             {
-                this.setEnergyStored(this.getEnergyStored() + (PowerUtils.IC2.discharge(this.inventory[1], PowerConversionUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()), 2).toUEWatts()));
+                this.setEnergyStored(this.getEnergyStored() + (PowerUtils.IC2.discharge(this.inventory[0], PowerConversionUtils.INSTANCE.new UEElectricPack((this.getMaxEnergyStored() - this.getEnergyStored()) / this.getVoltage(), this.getVoltage()), 2).toUEWatts()));
             }
             
         }

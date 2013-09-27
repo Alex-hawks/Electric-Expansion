@@ -3,6 +3,7 @@ package electricexpansion.common.blocks;
 import java.util.HashMap;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityMultimeter;
 
-public class BlockMultimeter extends BlockAdvanced
+public class BlockMultimeter extends BlockAdvanced implements ITileEntityProvider
 {
 	private HashMap<String, Icon> icons = new HashMap<String, Icon>();
 
@@ -105,7 +106,7 @@ public class BlockMultimeter extends BlockAdvanced
 	}
 
 	@Override
-	public TileEntity createTileEntity(World var1, int metadata)
+	public TileEntity createNewTileEntity(World var1)
 	{
 		return new TileEntityMultimeter();
 	}

@@ -2,6 +2,7 @@ package electricexpansion.common.blocks;
 
 import java.util.HashMap;
 
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -22,7 +23,7 @@ import electricexpansion.common.misc.EETab;
 import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.misc.EnumAdvBattBoxMode;
 
-public class BlockAdvancedBatteryBox extends BlockAdvanced
+public class BlockAdvancedBatteryBox extends BlockAdvanced implements ITileEntityProvider
 {
     private HashMap<String, Icon> icons = new HashMap<String, Icon>();
     
@@ -52,6 +53,9 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     public Icon getBlockTexture(IBlockAccess iBlockAccess, int x, int y, int z, int side)
     {
         TileEntityAdvancedBatteryBox te = (TileEntityAdvancedBatteryBox) iBlockAccess.getBlockTileEntity(x, y, z);
+        if (te == null)
+            return this.icons.get("top");
+        
         if (side == te.getOutputDir().ordinal() && te.getOutputMode() != EnumAdvBattBoxMode.OFF && te.getOutputMode() != EnumAdvBattBoxMode.QUANTUM)
             return this.icons.get("out");
         else if (side == te.getInputDir().ordinal() && te.getInputMode() != EnumAdvBattBoxMode.OFF && te.getInputMode() != EnumAdvBattBoxMode.QUANTUM)
@@ -128,7 +132,7 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public TileEntity createTileEntity(World world, int metadata)
+    public TileEntity createNewTileEntity(World world)
     {
         return new TileEntityAdvancedBatteryBox();
     }
@@ -156,7 +160,6 @@ public class BlockAdvancedBatteryBox extends BlockAdvanced
     
     public int getComparatorInputOverride(World par1World, int x, int y, int z, int meta)
     {
-        
         TileEntity tileEntity = par1World.getBlockTileEntity(x, y, z);
         
         if (tileEntity instanceof TileEntityAdvancedBatteryBox)

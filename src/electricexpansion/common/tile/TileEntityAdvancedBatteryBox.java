@@ -67,8 +67,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     public static final int                 UPGRADE_SIZE    = 3;
     public static final int                 OTHER_SIZE      = 3;
     
-    private ItemStack[]                     upgrades        = new ItemStack[UPGRADE_SIZE];
-    private ItemStack[]                     inventory       = new ItemStack[OTHER_SIZE];
+    private ItemStack[]                     inventory       = new ItemStack[OTHER_SIZE + UPGRADE_SIZE];
     
     public final Set<EntityPlayer>          playersUsing    = new HashSet<EntityPlayer>();
     
@@ -418,8 +417,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
         super.readFromNBT(par1NBTTagCompound);
         
         NBTTagList var2 = par1NBTTagCompound.getTagList("Items");
-        this.inventory = new ItemStack[OTHER_SIZE];
-        this.upgrades = new ItemStack[UPGRADE_SIZE];
+        this.inventory = new ItemStack[OTHER_SIZE + UPGRADE_SIZE];
         
         for (int i = 0; i < var2.tagCount(); i++)
         {
@@ -474,7 +472,10 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     @Override
     public ItemStack getStackInSlot(int par1)
     {
-        return this.inventory[par1];
+        if (par1 < this.inventory.length)
+            return this.inventory[par1];
+        else
+            return null;
     }
     
     @Override
@@ -543,11 +544,11 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     {
         float energy = BASE_STORAGE;
         
-        for (int i = 0; i < this.upgrades.length; i++)
+        for (int i = 0; i < UPGRADE_SIZE; i++)
         {
-            if (this.inventory[i] != null && this.inventory[i].getItem() instanceof IModifier && ((IModifier) this.inventory[i].getItem()).getType(this.inventory[i]) == "Capacity")
+            if (this.inventory[i + OTHER_SIZE] != null && this.inventory[i + OTHER_SIZE].getItem() instanceof IModifier && ((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getType(this.inventory[i + OTHER_SIZE]) == "Capacity")
             {
-                energy += ((IModifier) this.inventory[i].getItem()).getEffectiveness(this.inventory[i]);
+                energy += ((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getEffectiveness(this.inventory[i + OTHER_SIZE]);
             }
         }
         return energy;
@@ -598,11 +599,11 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     {
         float multiplier = 1;
         
-        for (int i = 0; i < this.upgrades.length; i++)
+        for (int i = 0; i < UPGRADE_SIZE; i++)
         {
-            if (this.inventory[i] != null && this.inventory[i].getItem() instanceof IModifier && ((IModifier) this.inventory[i].getItem()).getType(this.inventory[i]).equalsIgnoreCase(type))
+            if (this.inventory[i + OTHER_SIZE] != null && this.inventory[i + OTHER_SIZE].getItem() instanceof IModifier && ((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getType(this.inventory[i + OTHER_SIZE]).equalsIgnoreCase(type))
             {
-                multiplier *= ((IModifier) this.inventory[i].getItem()).getEffectiveness(this.inventory[i]);
+                multiplier *= ((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getEffectiveness(this.inventory[i + OTHER_SIZE]);
             }
         }
         return multiplier;
@@ -612,16 +613,16 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     {
         float cap = BASE_OUTPUT;
         
-        for (int i = 0; i < this.upgrades.length; i++)
+        for (int i = 0; i < UPGRADE_SIZE; i++)
         {
-            if (this.inventory[i] != null && this.inventory[i].getItem() instanceof IModifier && "Unlimiter".equalsIgnoreCase(((IModifier) this.inventory[i].getItem()).getType(this.inventory[i])))
+            if (this.inventory[i + OTHER_SIZE] != null && this.inventory[i + OTHER_SIZE].getItem() instanceof IModifier && "Unlimiter".equalsIgnoreCase(((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getType(this.inventory[i + OTHER_SIZE])))
             {
-                cap *= 100 + ((IModifier) this.inventory[i].getItem()).getEffectiveness(this.inventory[i]);
+                cap *= 100 + ((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getEffectiveness(this.inventory[i + OTHER_SIZE]);
                 cap /= 100;
             }
         }
         return cap;
-  }
+    }
     
     @Override
     public String getType()
@@ -875,25 +876,14 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     
     public boolean hasUpgrade(String upgrade)
     {
-        if (this.inventory[2] != null && this.inventory[2].getItem() instanceof IModifier)
+        for (int i = 0; i < UPGRADE_SIZE; i++)
         {
-            String type = ((IModifier) this.inventory[2].getItem()).getType(this.inventory[2]);
-            if (type != null && type.equals(upgrade))
-                return true;
-        }
-        
-        if (this.inventory[3] != null && this.inventory[3].getItem() instanceof IModifier)
-        {
-            String type = ((IModifier) this.inventory[3].getItem()).getType(this.inventory[3]);
-            if (type != null && type.equals(upgrade))
-                return true;
-        }
-        
-        if (this.inventory[4] != null && this.inventory[4].getItem() instanceof IModifier)
-        {
-            String type = ((IModifier) this.inventory[4].getItem()).getType(this.inventory[4]);
-            if (type != null && type.equals(upgrade))
-                return true;
+            if (this.inventory[i + OTHER_SIZE] != null && this.inventory[i + OTHER_SIZE].getItem() instanceof IModifier)
+            {
+                String type = ((IModifier) this.inventory[i + OTHER_SIZE].getItem()).getType(this.inventory[i + OTHER_SIZE]);
+                if (type != null && type.equals(upgrade))
+                    return true;
+            }
         }
         
         return false;

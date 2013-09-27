@@ -20,13 +20,13 @@ public class ItemEliteBattery extends ItemElectric
     @Override
     public float getMaxElectricityStored(ItemStack i)
     {
-        return 3000000;
+        return 3_000;
     }
     
     @Override
     public float getVoltage(ItemStack i)
     {
-        return 45;
+        return 0.045f;
     }
     
     @Override

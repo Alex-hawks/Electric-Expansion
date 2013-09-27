@@ -53,11 +53,12 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     private EnumWireMaterial cachedMaterial;
     protected boolean[] visuallyConnected = new boolean[6];
     /** Color for cables that use color, RS Frequency for cable that use RS Frequency   */
-    protected EnumWireFrequency frequency;
+    protected EnumWireFrequency frequency = EnumWireFrequency.NONE;
     
     public TileEntityConductorBase()
     {
         super();
+        this.adjacentConnections = new TileEntity[6];
     }
     
     @Override
