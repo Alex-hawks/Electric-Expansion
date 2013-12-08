@@ -1,17 +1,18 @@
 package electricexpansion.api;
 
+import electricexpansion.api.tile.EnergyCoordinates;
 import net.minecraft.entity.player.EntityPlayer;
 import universalelectricity.core.block.IElectricalStorage;
 
 public interface IWirelessPowerMachine extends IElectricalStorage
 {
-    public byte getFrequency();
+    public EnergyCoordinates getFrequency();
     
-    public void setFrequency(byte newFrequency);
+    public void setFrequency(EnergyCoordinates newFrequency);
     
     public String getType();
     
-    void removeJoules(float outputWatts);
+    void removeJoules(float removedEnergy);
     
     void setPlayer(EntityPlayer player);
 }

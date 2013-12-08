@@ -3,72 +3,76 @@ package electricexpansion.common.misc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.world.WorldEvent;
+import electricexpansion.api.tile.EnergyCoordinates;
 import electricexpansion.common.ElectricExpansion;
 
 public class DistributionNetworks
+implements Serializable
 {
-    private MinecraftServer server = MinecraftServer.getServer();
+    private static final long serialVersionUID = 1501129754883884546L;
+    
     private static final float maxJoules = 5_000;
     public static final byte maxFrequencies = (byte) 128;
-    private Map<String, float[]> playerFrequencies = new HashMap<String, float[]>();
     
-    public float getJoules(String player, byte frequency)
+    private transient static MinecraftServer server = MinecraftServer.getServer();
+    private HashMap<EnergyCoordinates, Float> energyStorage = new HashMap<EnergyCoordinates, Float>();
+    
+    public float getJoules(EnergyCoordinates coords)
     {
-        if (player != null)
+        if (coords != null)
         {
-            if (!this.playerFrequencies.containsKey(player))
+            if (!this.energyStorage.containsKey(coords))
             {
-                this.playerFrequencies.put(player, new float[128]);
+                this.energyStorage.put(coords, 0f);
             }
-            return this.playerFrequencies.get(player)[frequency];
+            return this.energyStorage.get(coords);
         }
         return 0;
     }
     
-    public void setJoules(String player, short frequency, float newJoules)
+    public void setJoules(EnergyCoordinates coords, float newJoules)
     {
-        if (player != null)
+        if (coords != null)
         {
-            if (!this.playerFrequencies.containsKey(player))
+            if (!this.energyStorage.containsKey(coords))
             {
-                this.playerFrequencies.put(player, new float[128]);
+                this.energyStorage.put(coords, 0f);
             }
-            this.playerFrequencies.get(player)[frequency] = newJoules;
+            this.energyStorage.put(coords, newJoules);
         }
     }
     
-    public void addJoules(String player, short frequency, float addedJoules)
+    public void addJoules(EnergyCoordinates coords, float addedJoules)
     {
-        if (player != null)
+        if (coords != null)
         {
-            if (!this.playerFrequencies.containsKey(player))
+            if (!this.energyStorage.containsKey(coords))
             {
-                this.playerFrequencies.put(player, new float[128]);
+                this.energyStorage.put(coords, 0f);
             }
-            this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency] + addedJoules;
+            this.energyStorage.put(coords, this.energyStorage.get(coords) + addedJoules);
         }
     }
     
-    public void removeJoules(String player, short frequency, float removedJoules)
+    public float removeJoules(EnergyCoordinates coords, float removedJoules)
     {
-        try
-        {
-            if (player != null)
-            {
-                this.playerFrequencies.get(player)[frequency] = this.playerFrequencies.get(player)[frequency] - removedJoules;
-            }
-        }
-        catch (Exception e)
-        {
-        }
+        if (coords == null)
+            return 0;
+        if (removedJoules > this.energyStorage.get(coords))
+            removedJoules = this.energyStorage.get(coords);
+        if (!this.energyStorage.containsKey(coords))
+            this.energyStorage.put(coords, 0f);
+        this.energyStorage.put(coords, this.energyStorage.get(coords) - removedJoules);
+        return removedJoules;
     }
     
     public static float getMaxJoules()
@@ -79,13 +83,13 @@ public class DistributionNetworks
     public void onWorldSave(WorldEvent event)
     {
         String folder = "";
-        if (this.server.isDedicatedServer())
+        if (server.isDedicatedServer())
         {
-            folder = this.server.getFolderName();
+            folder = server.getFolderName();
         }
         else
         {
-            folder = Minecraft.getMinecraft().mcDataDir + File.separator + "saves" + File.separator + this.server.getFolderName();
+            folder = Minecraft.getMinecraft().mcDataDir + File.separator + "saves" + File.separator + server.getFolderName();
         }
         
         if (!event.world.isRemote)
@@ -98,32 +102,32 @@ public class DistributionNetworks
                     file.mkdirs();
                 }
                 
-                String[] players = new String[this.playerFrequencies.size()];
-                players = this.playerFrequencies.keySet().toArray(players);
-                
-                for (int i = 0; i < this.playerFrequencies.size(); i++)
                 {
-                    File var3 = new File(file + File.separator + players[i] + "_tmp.dat");
-                    File var4 = new File(file + File.separator + players[i] + ".dat");
-                    File var5 = new File(file + File.separator + players[i] + "_Backup.dat");
-                    NBTTagCompound nbt = new NBTTagCompound();
-                    for (int j = 0; j < this.playerFrequencies.get(players[i]).length; j++)
+                    try
                     {
-                        if (this.playerFrequencies.get(players[i])[j] > 0)
+                        File var3 = new File(file + File.separator + "Quantum_Storage_tmp.ser");
+                        File var4 = new File(file + File.separator + "Quantum_Storage.ser");
+                        File var5 = new File(file + File.separator + "Quantum_Storage_Backup.ser");
+                        
+                        FileOutputStream fileOut = new FileOutputStream(var3);
+                        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                        out.writeObject(this);
+                        out.close();
+                        fileOut.close();
+                        
+                        if (var5.exists())
                         {
-                            nbt.setDouble(j + "", this.playerFrequencies.get(players[i])[j]);
-                            CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(var3));
+                            var5.delete();
                         }
-                    }
-                    if (var5.exists())
+                        if (var4.exists())
+                        {
+                            var4.renameTo(var5);
+                        }
+                        var3.renameTo(var4);
+                    } catch(IOException i)
                     {
-                        var5.delete();
+                        i.printStackTrace();
                     }
-                    if (var4.exists())
-                    {
-                        var4.renameTo(var5);
-                    }
-                    var3.renameTo(var4);
                 }
             }
             catch (Exception e)
@@ -133,72 +137,45 @@ public class DistributionNetworks
         }
         if (event instanceof WorldEvent.Unload)
         {
-            this.playerFrequencies.clear();
+            this.energyStorage.clear();
         }
     }
     
-    public void onWorldLoad()
-    {
-        try
-        {
-            for (File playerFile : this.ListSaves())
-            {
-                if (playerFile.exists())
-                {
-                    String name = playerFile.getName();
-                    if (!name.contains("_Backup"))
-                    {
-                        if (name.endsWith(".dat"))
-                        {
-                            name = name.substring(0, name.length() - 4);
-                        }
-                        
-                        this.playerFrequencies.put(name, new float[128]);
-                        for (int i = 0; i < 128; i++)
-                        {
-                            try
-                            {
-                                this.playerFrequencies.get(name)[i] = CompressedStreamTools.readCompressed(new FileInputStream(playerFile)).getFloat(i + "");
-                            }
-                            catch (Exception e)
-                            {
-                                this.playerFrequencies.get(name)[i] = 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
-            ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
-        }
-        String[] players = new String[this.playerFrequencies.size()];
-        players = this.playerFrequencies.keySet().toArray(players);
-        String playerString = "";
-        for (String player : players)
-        {
-            playerString = playerString + ", " + player;
-        }
-        ElectricExpansion.EELogger.warning(playerString);
-    }
-    
-    public File[] ListSaves()
+    public static DistributionNetworks onWorldLoad(WorldEvent event)
     {
         String folder = "";
-        if (this.server.isDedicatedServer())
+        DistributionNetworks toReturn = null;
+        
+        if (server.isDedicatedServer())
         {
-            folder = this.server.getFolderName() + File.separator + "ElectricExpansion";
+            folder = server.getFolderName();
         }
-        else if (!this.server.isDedicatedServer())
+        else
         {
-            folder = Minecraft.getMinecraft().mcDataDir + File.separator + "saves" + File.separator + this.server.getFolderName() + File.separator + "ElectricExpansion";
+            folder = Minecraft.getMinecraft().mcDataDir + File.separator + "saves" + File.separator + server.getFolderName();
         }
         
-        File folderToUse = new File(folder);
-        File[] listOfFiles = folderToUse.listFiles();
+        if (!event.world.isRemote)
+        {
+            try
+            {
+                File file = new File(folder + File.separator + "ElectricExpansion");
+                File var3 = new File(file + File.separator + "Quantum_Storage.ser");
+                
+                FileInputStream fileIn = new FileInputStream(var3);
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                toReturn = (DistributionNetworks) in.readObject();
+                in.close();
+                fileIn.close();
+            }
+            catch (Exception e)
+            {
+                ElectricExpansion.EELogger.warning("Failed to load the Quantum Battery Box Electricity Storage Data!");
+                ElectricExpansion.EELogger.warning("If this is the first time loading the world after the mod was installed, there are no problems.");
+                e.printStackTrace();
+            }
+        }
         
-        return listOfFiles;
+        return toReturn;
     }
 }

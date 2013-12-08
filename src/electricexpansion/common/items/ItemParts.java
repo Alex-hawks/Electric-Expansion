@@ -14,7 +14,10 @@ import electricexpansion.common.misc.EETab;
 
 public class ItemParts extends Item
 {
-    private static String[] names = { "DrawPlates", "CondensedElectrumDust", "ElectrumIngot", "RawHVAlloy", "HVAlloyIngot", "CamoPaste", "Insulation", "LeadIngot", "Coil", "SilverIngot" };
+    private static String[] names = { 
+                                      "DrawPlates", "CondensedElectrumDust", "ElectrumIngot", "RawHVAlloy", 
+                                      "HVAlloyIngot", "CamoPaste", "Insulation", "LeadIngot", 
+                                      "Coil", "SilverIngot", "LeadNugget", "SilverNugget" }; // TODO use the nuggets...
     private Icon[] icons = new Icon[names.length];
     
     public ItemParts(int par1, int meta)

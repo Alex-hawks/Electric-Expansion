@@ -1,5 +1,6 @@
 package electricexpansion.common.cables;
 
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class TileEntityRawWire extends TileEntityConductorBase
@@ -13,5 +14,11 @@ public class TileEntityRawWire extends TileEntityConductorBase
     public float getResistance()
     {
         return super.getResistance() * 2;
+    }
+
+    @Override
+    protected int getID()
+    {
+        return ElectricExpansionItems.blockRawWire.blockID;
     }
 }

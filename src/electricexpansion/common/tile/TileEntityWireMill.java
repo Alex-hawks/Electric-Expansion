@@ -39,10 +39,10 @@ import electricexpansion.api.hive.IHiveMachine;
 import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.api.tile.ITileRunnable;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.misc.PowerUtils;
 import electricexpansion.common.misc.PowerConversionUtils;
-import electricexpansion.common.misc.WireMillRecipes;
 import electricexpansion.common.misc.PowerConversionUtils.GenericPack;
+import electricexpansion.common.misc.PowerUtils;
+import electricexpansion.common.misc.WireMillRecipes;
 
 public class TileEntityWireMill extends TileEntityElectrical 
 implements ISidedInventory, IPacketReceiver, IElectricalStorage, IEnergyTile, IEnergySink, IHiveMachine, ITileRunnable

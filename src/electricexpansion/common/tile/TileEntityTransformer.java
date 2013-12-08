@@ -1,7 +1,5 @@
 package electricexpansion.common.tile;
 
-import ic2.api.energy.tile.IEnergySource;
-
 import java.util.EnumSet;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,8 +8,6 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityHelper;
 import universalelectricity.core.electricity.ElectricityPack;
@@ -20,67 +16,62 @@ import universalelectricity.core.vector.Vector3;
 import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
-import universalelectricity.prefab.tile.IRotatable;
 import universalelectricity.prefab.tile.TileEntityElectrical;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.api.hive.IHiveMachine;
 import electricexpansion.api.hive.IHiveNetwork;
 import electricexpansion.common.ElectricExpansion;
 
-@SuppressWarnings("unused")
 public class TileEntityTransformer extends TileEntityElectrical 
-implements IRotatable, IPacketReceiver, IHiveMachine
+implements IPacketReceiver, IHiveMachine
 {
     public static final float MAX_OUTPUT = 1_000;
     
     public boolean stepUp = false;
-    public transient int type;
+    public transient int tier;
     
-    private ForgeDirection input = ForgeDirection.NORTH; // TODO update to "new" rotation mechanics
-    private ForgeDirection output = ForgeDirection.SOUTH; // TODO update to "new" rotation mechanics
+    private ForgeDirection input = ForgeDirection.NORTH;
+    private ForgeDirection output = ForgeDirection.SOUTH;
     
     public transient IElectricityNetwork inputNetwork;
     public transient IElectricityNetwork outputNetwork;
     private transient IHiveNetwork hiveNetwork;
+    private transient float voltsNextSend;
     
-    @Override
-    public void initiate()
+    public TileEntityTransformer(int tier)
     {
-        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        this.type = meta - (meta & 3);
+        this.tier = tier;
     }
+    
+    public TileEntityTransformer() { }
     
     @Override
     public void updateEntity()
     {
         super.updateEntity();
         
-        if (!this.worldObj.isRemote)
+        if (!this.worldObj.isRemote && this.ticks % 3 == 0)
         {
-            ForgeDirection inputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2).getOpposite();
-            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), inputDirection);
+            TileEntity inputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), this.input);
             
             // Check if requesting power on output
-            ForgeDirection outputDirection = ForgeDirection.getOrientation(this.getBlockMetadata() - this.type + 2);
-            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), outputDirection);
+            TileEntity outputTile = VectorHelper.getTileEntityFromSide(this.worldObj, new Vector3(this), this.output);
             
-            this.inputNetwork = ElectricityHelper.getNetworkFromTileEntity(inputTile, outputDirection.getOpposite());
-            this.outputNetwork = ElectricityHelper.getNetworkFromTileEntity(outputTile, outputDirection);
+            this.inputNetwork = ElectricityHelper.getNetworkFromTileEntity(inputTile, this.input);
+            this.outputNetwork = ElectricityHelper.getNetworkFromTileEntity(outputTile, this.output);
             
-            if (!this.worldObj.isRemote)
-            {
-                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
-            }
-            
+            PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
         }
+        this.produceUE(this.output);
     }
     
     @Override
     public Packet getDescriptionPacket()
     {
-        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.stepUp, this.type);
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.stepUp, this.tier, this.input.ordinal(), this.output.ordinal());
     }
     
     @Override
@@ -89,7 +80,9 @@ implements IRotatable, IPacketReceiver, IHiveMachine
         try
         {
             this.stepUp = dataStream.readBoolean();
-            this.type = dataStream.readInt();
+            this.tier = dataStream.readInt();
+            this.setInput(ForgeDirection.getOrientation(dataStream.readInt()));
+            this.setOutput(ForgeDirection.getOrientation(dataStream.readInt()));
         }
         catch (Exception e)
         {
@@ -101,41 +94,32 @@ implements IRotatable, IPacketReceiver, IHiveMachine
      * Reads a tile entity from NBT.
      */
     @Override
-    public void readFromNBT(NBTTagCompound par1NBTTagCompound)
+    public void readFromNBT(NBTTagCompound tag)
     {
-        super.readFromNBT(par1NBTTagCompound);
-        this.stepUp = par1NBTTagCompound.getBoolean("stepUp");
-        this.type = par1NBTTagCompound.getInteger("type");
+        super.readFromNBT(tag);
+        this.stepUp = tag.getBoolean("stepUp");
+        this.tier = tag.getInteger("tier");
+        this.input = ForgeDirection.getOrientation(tag.getByte("input"));
+        this.output = ForgeDirection.getOrientation(tag.getByte("output"));
     }
     
     /**
      * Writes a tile entity to NBT.
      */
     @Override
-    public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+    public void writeToNBT(NBTTagCompound tag)
     {
-        super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setBoolean("stepUp", this.stepUp);
-        par1NBTTagCompound.setInteger("type", this.type);
+        super.writeToNBT(tag);
+        tag.setBoolean("stepUp", this.stepUp);
+        tag.setInteger("tier", this.tier);
+        tag.setByte("input", (byte) this.input.ordinal());
+        tag.setByte("output", (byte) this.output.ordinal());
     }
     
     @Override
-    public boolean canConnect(ForgeDirection direction)
+    public boolean canConnect(ForgeDirection dir)
     {
-        int meta = this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord);
-        return direction.ordinal() - 2 + this.type == meta || direction.getOpposite().ordinal() - 2 + this.type == meta;
-    }
-    
-    @Override
-    public void setDirection(ForgeDirection facingDirection)
-    {
-        this.worldObj.setBlock(this.xCoord, this.yCoord, this.zCoord, this.getBlockType().blockID, facingDirection.ordinal() - 2 + this.type, 0);
-    }
-    
-    @Override
-    public ForgeDirection getDirection()
-    {
-        return ForgeDirection.getOrientation(this.getBlockMetadata() - this.type);
+        return this.input == dir || this.output == dir;
     }
     
     @Override
@@ -168,33 +152,19 @@ implements IRotatable, IPacketReceiver, IHiveMachine
     @Override
     public float getRequest(ForgeDirection direction)
     {
-        if (direction != this.input)
-            return 0;
-        else if (this.inputNetwork == null || this.outputNetwork == null)
-            return 0;
-        else if (this.inputNetwork.equals(this.outputNetwork))
-            return 0;
-        else
-            return outputNetwork.getRequest().getWatts();
+        return Math.min(this.getMaxEnergyStored() - this.getEnergyStored(), MAX_OUTPUT);
     }
     
     @Override
     public float getProvide(ForgeDirection direction)
     {
-        if (direction != this.output)
-            return 0;
-        else if (this.inputNetwork == null || this.outputNetwork == null)
-            return 0;
-        else if (this.inputNetwork.equals(this.outputNetwork))
-            return 0;
-        else
-            return MAX_OUTPUT;
+        return this.energyStored;
     }
     
     @Override
     public float getMaxEnergyStored()
     {
-        return 0;
+        return (float) Math.pow(2, this.tier + 2) * 10;
     }
     
     @Override
@@ -219,5 +189,69 @@ implements IRotatable, IPacketReceiver, IHiveMachine
     public EnumSet<ForgeDirection> getSerialDirections()
     {
         return EnumSet.noneOf(ForgeDirection.class);
+    }
+    
+    @Override
+    public EnumSet<ForgeDirection> getInputDirections()
+    {
+        return EnumSet.of(this.input, this.output);
+    }
+    
+    @Override
+    public EnumSet<ForgeDirection> getOutputDirections()
+    {
+        return EnumSet.of(this.output);
+    }
+    
+    public void setInput(ForgeDirection dir)
+    {
+        if (this.output != dir)
+        {
+            this.input = dir;
+            if (!this.worldObj.isRemote)
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+            this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansionItems.blockTransformer.blockID);
+        }
+    }
+    
+    public void setOutput(ForgeDirection dir)
+    {
+        if (this.input != dir)
+        {
+            this.output = dir;
+            if (!this.worldObj.isRemote)
+                PacketManager.sendPacketToClients(this.getDescriptionPacket(), this.worldObj, new Vector3(this), 12);
+            this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, ElectricExpansionItems.blockTransformer.blockID);
+        }
+    }
+    
+    public ForgeDirection getInput()
+    {
+        return this.input;
+    }
+    
+    public ForgeDirection getOutput()
+    {
+        return this.output;
+    }
+    
+    @Override
+    public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive)
+    {
+        if (this.getInputDirections().contains(from))
+        {
+            this.voltsNextSend = (float) (this.stepUp ? receive.voltage * Math.pow(2, this.tier + 1) : receive.voltage / Math.pow(2, this.tier + 1));
+            return this.receiveElectricity(receive, doReceive);
+        }
+
+        return 0;
+    }
+
+    @Override
+    public float getVoltage()
+    {
+        return this.voltsNextSend;
     }
 }

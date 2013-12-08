@@ -1,23 +1,19 @@
 package electricexpansion.common.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityRawWire;
+import electricexpansion.common.helpers.BlockWireBase;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import electricexpansion.common.misc.EETab;
 
-public class BlockRawWire extends BlockConductor
+public class BlockRawWire extends BlockWireBase
 {
     public BlockRawWire(int id)
     {
@@ -75,14 +71,9 @@ public class BlockRawWire extends BlockConductor
     }
     
     @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
+    public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
-        for (int var4 = 0; var4 < 5; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
+        return false;
     }
     
     @Override
@@ -105,6 +96,6 @@ public class BlockRawWire extends BlockConductor
     @Override
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.blockIcon = par1IconRegister.registerIcon(ElectricExpansion.PREFIX + "InsulatedWire.Copper");
+
     }
 }

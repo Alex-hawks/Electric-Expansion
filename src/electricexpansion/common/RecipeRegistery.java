@@ -30,7 +30,7 @@ public class RecipeRegistery
     
     private static final Block blockBatBox = ElectricExpansionItems.blockAdvBatteryBox;
     private static final Block blockWireMill = ElectricExpansionItems.blockWireMill;
-    private static final Block blockMultimeter = ElectricExpansionItems.blockMultimeter;
+    //private static final Block blockMultimeter = ElectricExpansionItems.blockMultimeter;
     private static final Block blockDistribution = ElectricExpansionItems.blockDistribution;
     private static final Block blockInsulationMachine = ElectricExpansionItems.blockInsulationMachine;
     
@@ -74,7 +74,7 @@ public class RecipeRegistery
             ElectricExpansion.log(Level.INFO, "Failed to detect ICBM|Contraption");
             ElectricExpansion.log(Level.INFO, "Using %s's items instead.", ElectricExpansion.MOD_NAME);
             camo = new ItemStack(itemParts, 1, 5);
-            GameRegistry.addRecipe(new ShapelessOreRecipe(camo, new Object[] { Block.cloth, Item.bucketEmpty, Item.slimeBall, Item.redstone, "dyeRed", "dyeBlue", "dyeYellow", "dyeBlack", "dyeWhite" }));
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(itemParts, 4, 5), new Object[] { Block.cloth, Item.bucketEmpty, Item.slimeBall, Item.redstone, "dyeRed", "dyeBlue", "dyeYellow", "dyeBlack", "dyeWhite" }));
         }
         
         registerRawCables();
@@ -83,21 +83,17 @@ public class RecipeRegistery
         registerLogisticsCables();
         registerCamoCables();
         registerCamoSwitchCables();
-        // registerRedstoneCables();
-        // they are broken in their special functions
+        registerRedstoneCables();
         
         // Machines
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "circuitBasic", '%',
-                new ItemStack(itemParts, 1, 0) }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%',
-                "circuitBasic", '^', Block.glass, '@', Item.stick }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockWireMill), new Object[] { "#$#", "!%!", "@!@", '!', "motor", '#', "plateSteel", '@', "plateBronze", '$', "circuitBasic", '%', new ItemStack(itemParts, 1, 0) }));
+        // GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockMultimeter), new Object[] { "$^$", "!@!", "$%$", '!', "plateCopper", '$', new ItemStack(blockInsulatedWire, 1, 0), '%', "circuitBasic", '^', Block.glass, '@', Item.stick }));
         for (ItemStack batt : OreDictionary.getOres("battery"))
         {
             ItemStack wildBatt = new ItemStack(batt.itemID, batt.stackSize, Integer.MIN_VALUE);
             GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockBatBox), new Object[] { "!!!", "@@@", "!#!", '!', wildBatt, '@', "copperWire", '#', "circuitBasic" }));
         }
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulationMachine), new Object[] { "!@!", "@#@", "!$!", '!', "plateSteel", '@', Block.obsidian, '#', Item.bucketLava, '$',
-                Block.furnaceIdle }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockInsulationMachine), new Object[] { "!@!", "@#@", "!$!", '!', "plateSteel", '@', Block.obsidian, '#', Item.bucketLava, '$', Block.furnaceIdle }));
         
         if (OreDictionary.getOres("antimatterGram").size() > 0)
         {
@@ -109,19 +105,9 @@ public class RecipeRegistery
         }
         
         // Transformers
-        // T1
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.blockTransformer, 1, 0), new Object[] { "$&$", "#x#", "@@@", '@', "plateSteel", '#',
-                new ItemStack(ElectricExpansionItems.itemParts, 1, 6), '$', new ItemStack(ElectricExpansionItems.itemParts, 1, 8), '&', "ingotCopper", 'x', "dyeGreen" }));
-        
-        // T2
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), new Object[] { "$&$", "#x#", "@!@", '!',
-                new ItemStack(ElectricExpansionItems.blockTransformer, 1, 0), '@', "plateSteel", '#', new ItemStack(ElectricExpansionItems.itemParts, 1, 6), '$',
-                new ItemStack(ElectricExpansionItems.itemParts, 1, 8), '&', "ingotCopper", 'x', "dyeRed" }));
-        
-        // T3
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.blockTransformer, 1, 8), new Object[] { "$&$", "#x#", "@!@", '!',
-                new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), '@', "plateSteel", '#', new ItemStack(ElectricExpansionItems.itemParts, 1, 6), '$',
-                new ItemStack(ElectricExpansionItems.itemParts, 1, 8), '&', "ingotCopper", 'x', "dyeBlue" }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.blockTransformer, 1, 0), new Object[] { "$&$", "#x#", "@@@", '@', "plateSteel", '#', new ItemStack(ElectricExpansionItems.itemParts, 1, 6), '$', new ItemStack(ElectricExpansionItems.itemParts, 1, 8), '&', "ingotCopper", 'x', "dyeGreen" }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), new Object[] { "$&$", "#x#", "@!@", '!', new ItemStack(ElectricExpansionItems.blockTransformer, 1, 0), '@', "plateSteel", '#', new ItemStack(ElectricExpansionItems.itemParts, 1, 6), '$', new ItemStack(ElectricExpansionItems.itemParts, 1, 8), '&', "ingotCopper", 'x', "dyeRed" }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ElectricExpansionItems.blockTransformer, 1, 8), new Object[] { "$&$", "#x#", "@!@", '!', new ItemStack(ElectricExpansionItems.blockTransformer, 1, 4), '@', "plateSteel", '#', new ItemStack(ElectricExpansionItems.itemParts, 1, 6), '$', new ItemStack(ElectricExpansionItems.itemParts, 1, 8), '&', "ingotCopper", 'x', "dyeBlue" }));
         
         // Upgrades
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemUpgrade, 1, 0), new Object[] { "$!$", "!@!", "#!#", '!', new ItemStack(blockInsulatedWire, 1, 0), '@',
@@ -166,12 +152,12 @@ public class RecipeRegistery
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '!', Item.ingotGold, '#', "ingotSilver", '@', Item.eyeOfEnder }));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 1), new Object[] { "!#!", "#@#", "!#!", '#', Item.ingotGold, '!', "ingotSilver", '@', Item.eyeOfEnder }));
         FurnaceRecipes.smelting().addSmelting(itemParts.itemID, 1, new ItemStack(itemParts, 4, 2), 0);
-        GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansionItems.itemParts, 9, 7), new Object[] { ElectricExpansionItems.blockLead });
+        GameRegistry.addShapelessRecipe(new ItemStack(ElectricExpansionItems.itemParts, 9, 7), new Object[] { ElectricExpansionItems.blockIngotStorage });
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(itemParts, 1, 8), new Object[] { "AAA", "ABA", "AAA", 'B', Item.ingotIron, 'A', new ItemStack(blockInsulatedWire, 1, 0) }));
         //GameRegistry.addSmelting(ElectricExpansionItems.blockSilverOre.blockID, new ItemStack(ElectricExpansionItems.itemParts, 1, 9), 0.8F);
         
         // Storage Blocks
-        GameRegistry.addRecipe(new ItemStack(ElectricExpansionItems.blockLead, 1), new Object[] { "@@@", "@@@", "@@@", '@', new ItemStack(ElectricExpansionItems.itemParts, 1, 7) });
+        GameRegistry.addRecipe(new ItemStack(ElectricExpansionItems.blockIngotStorage, 1), new Object[] { "@@@", "@@@", "@@@", '@', new ItemStack(ElectricExpansionItems.itemParts, 1, 7) });
         
         // Tools
         for (ItemStack batt : OreDictionary.getOres("battery"))
@@ -260,7 +246,7 @@ public class RecipeRegistery
         GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), insulationIS });
         GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), insulationIS });
         GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), insulationIS });
-        GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 7) });
+        GameRegistry.addShapelessRecipe(new ItemStack(blockInsulatedWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 6) });
     }
     
     public static void registerSwitchCables()
@@ -271,7 +257,7 @@ public class RecipeRegistery
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), insulationIS, Block.lever });
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), insulationIS, Block.lever });
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), insulationIS, Block.lever });
-        GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 7), Block.lever });
+        GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 6), Block.lever });
         
         // Switch Wire Recipes (From a lever and the corresponding Insulated
         // Wire)
@@ -289,7 +275,7 @@ public class RecipeRegistery
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), insulationIS, Block.torchRedstoneActive, Item.redstone }));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), insulationIS, Block.torchRedstoneActive, Item.redstone }));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), insulationIS, Block.torchRedstoneActive, Item.redstone }));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 7), Block.torchRedstoneActive, Item.redstone }));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 6), Block.torchRedstoneActive, Item.redstone }));
         
         // Logistics Wire Recipes (From a unit of Redstone Dust, an on RS torch, and the corresponding Insulated Wire)
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0), Block.torchRedstoneActive, Item.redstone }));
@@ -303,7 +289,7 @@ public class RecipeRegistery
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), insulationIS, Block.torchRedstoneIdle, Item.redstone }));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), insulationIS, Block.torchRedstoneIdle, Item.redstone }));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), insulationIS, Block.torchRedstoneIdle, Item.redstone }));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 7), Block.torchRedstoneIdle, Item.redstone }));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 6), Block.torchRedstoneIdle, Item.redstone }));
         
         // Logistics Wire Recipes (From a unit of Redstone Dust, an off RS torch, and the corresponding Insulated Wire)
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockLogisticsWire, 1, 0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0), Block.torchRedstoneIdle, Item.redstone }));
@@ -320,7 +306,7 @@ public class RecipeRegistery
         GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), insulationIS, camo });
         GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), insulationIS, camo });
         GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), insulationIS, camo });
-        GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 7), camo });
+        GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 6), camo });
         
         // Wire Block Recipes (From Camouflage, and the corresponding Insulated Wire)
         GameRegistry.addShapelessRecipe(new ItemStack(blockWireBlock, 1, 0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0), camo });
@@ -337,7 +323,7 @@ public class RecipeRegistery
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 1), new Object[] { new ItemStack(blockRawWire, 1, 1), insulationIS, camo, Block.lever });
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 2), new Object[] { new ItemStack(blockRawWire, 1, 2), insulationIS, camo, Block.lever });
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 3), new Object[] { new ItemStack(blockRawWire, 1, 3), insulationIS, camo, Block.lever });
-        GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 7), camo, Block.lever });
+        GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 4), new Object[] { new ItemStack(blockRawWire, 1, 4), new ItemStack(itemParts, 3, 6), camo, Block.lever });
         
         // Switch Wire Block Recipes (From Camouflage, Block.lever, and the corresponding Insulated Wire)
         GameRegistry.addShapelessRecipe(new ItemStack(blockSwitchWireBlock, 1, 0), new Object[] { new ItemStack(blockInsulatedWire, 1, 0), camo, Block.lever });
@@ -363,27 +349,17 @@ public class RecipeRegistery
     
     public static void registerRedstoneCables()
     {
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 0), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 0), '@', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 1), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 1), '@', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 2), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 2), '@', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 3), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 3), '@', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 4), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 4), '@', Item.redstone, '#',
-                Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 0), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 0), '@', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 1), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 1), '@', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 2), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 2), '@', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 3), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 3), '@', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 4), new Object[] { "!@!", "@#@", "!@!", '!', new ItemStack(blockInsulatedWire, 1, 4), '@', Item.redstone, '#', Item.slimeBall }));
         
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 0), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 0), '!', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 1), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 1), '!', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 2), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 2), '!', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 3), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 3), '!', Item.redstone, '#',
-                Item.slimeBall }));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 4), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 4), '!', Item.redstone, '#',
-                Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 0), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 0), '!', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 1), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 1), '!', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 2), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 2), '!', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 3), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 3), '!', Item.redstone, '#', Item.slimeBall }));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRedstoneWire, 4, 4), new Object[] { "!@!", "@#@", "!@!", '@', new ItemStack(blockInsulatedWire, 1, 4), '!', Item.redstone, '#', Item.slimeBall }));
     }
     
     public static ItemStack getInsulationIS()

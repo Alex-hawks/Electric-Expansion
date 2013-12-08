@@ -1,26 +1,20 @@
 package electricexpansion.common.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import universalelectricity.core.block.IConductor;
-import universalelectricity.prefab.block.BlockAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.cables.TileEntityRedstonePaintedWire;
+import electricexpansion.common.helpers.BlockWireBase;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import electricexpansion.common.misc.EETab;
 
-public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEntityProvider
+public class BlockRedstonePaintedWire extends BlockWireBase implements ITileEntityProvider
 {   
     public BlockRedstonePaintedWire(int id)
     {
@@ -56,7 +50,7 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
         if (world.getBlockTileEntity(x, y, z) instanceof TileEntityRedstonePaintedWire)
         {
             TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-            return te.getRsLevel();
+            return te.getIrsLevel();
         }
         return 0;
     }
@@ -92,17 +86,6 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
     }
     
     @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < 5; var4++)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
-    }
-    
-    @Override
     public void onBlockAdded(World world, int x, int y, int z)
     {
         super.onBlockAdded(world, x, y, z);
@@ -118,50 +101,6 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
             }
         }
         
-    }
-    
-    private void updateWireSwitch(World world, int x, int y, int z)
-    {
-        TileEntityRedstonePaintedWire tileEntity = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
-        
-        TileEntity tileEntity1;
-        
-        if (!world.isRemote && tileEntity != null)
-        {
-            
-            for (byte i = 0; i < 6; i++)
-            {
-                switch (i)
-                {
-                    case 0:
-                        tileEntity1 = world.getBlockTileEntity(x + 1, y, z);
-                        break;
-                    case 1:
-                        tileEntity1 = world.getBlockTileEntity(x - 1, y, z);
-                        break;
-                    case 2:
-                        tileEntity1 = world.getBlockTileEntity(x, y + 1, z);
-                        break;
-                    case 3:
-                        tileEntity1 = world.getBlockTileEntity(x, y - 1, z);
-                        break;
-                    case 4:
-                        tileEntity1 = world.getBlockTileEntity(x, y, z + 1);
-                        break;
-                    case 5:
-                        tileEntity1 = world.getBlockTileEntity(x, y, z - 1);
-                        break;
-                    default:
-                        tileEntity1 = world.getBlockTileEntity(x, y, z);
-                }
-                
-                if (tileEntity1 instanceof IConductor)
-                {
-                    ((IConductor) tileEntity1).refresh();
-                    tileEntity1.worldObj.markBlockForUpdate(tileEntity1.xCoord, tileEntity1.yCoord, tileEntity1.zCoord);
-                }
-            }
-        }
     }
     
     @Override
@@ -185,18 +124,5 @@ public class BlockRedstonePaintedWire extends BlockAdvanced implements ITileEnti
     public void registerIcons(IconRegister par1IconRegister)
     {
     }
-    
-    @Override
-    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
-    {
-        TileEntityRedstonePaintedWire te = (TileEntityRedstonePaintedWire) world.getBlockTileEntity(x, y, z);
         
-        te.mode = !te.mode;
-        
-        if (!world.isRemote)
-            player.addChatMessage(StatCollector.translateToLocal("rsCable.message").replace("<>",
-                    (te.mode ? StatCollector.translateToLocal("rsCable.input") : StatCollector.translateToLocal("rsCable.output"))));
-        return true;
-    }
-    
 }

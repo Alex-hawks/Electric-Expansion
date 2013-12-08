@@ -1,23 +1,18 @@
 package electricexpansion.common.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.cables.TileEntityLogisticsWire;
+import electricexpansion.common.helpers.BlockWireBase;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import electricexpansion.common.misc.EETab;
 
-public class BlockLogisticsWire extends BlockConductor
+public class BlockLogisticsWire extends BlockWireBase
 {
     public BlockLogisticsWire(int id, int meta)
     {
@@ -69,23 +64,6 @@ public class BlockLogisticsWire extends BlockConductor
     @Override
     public boolean canProvidePower()
     {
-        return true;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < 5; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
-    }
-    
-    @Override
-    public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-    {
         return false;
     }
     
@@ -96,12 +74,13 @@ public class BlockLogisticsWire extends BlockConductor
         if (tileEntity instanceof TileEntityConductorBase)
         {
             TileEntityConductorBase te = (TileEntityConductorBase) tileEntity;
-            this.minX = te.getAdjacentConnections()[4] != null ? 0F : 0.3F;
-            this.minY = te.getAdjacentConnections()[0] != null ? 0F : 0.3F;
-            this.minZ = te.getAdjacentConnections()[2] != null ? 0F : 0.3F;
-            this.maxX = te.getAdjacentConnections()[5] != null ? 1F : 0.7F;
-            this.maxY = te.getAdjacentConnections()[1] != null ? 1F : 0.7F;
-            this.maxZ = te.getAdjacentConnections()[3] != null ? 1F : 0.7F;
+            boolean[] connections = te.getVisualConnections();
+            this.minX = connections[4] ? 0F : 0.3F;
+            this.minY = connections[0] ? 0F : 0.3F;
+            this.minZ = connections[2] ? 0F : 0.3F;
+            this.maxX = connections[5] ? 1F : 0.7F;
+            this.maxY = connections[1] ? 1F : 0.7F;
+            this.maxZ = connections[3] ? 1F : 0.7F;
         }
     }
     

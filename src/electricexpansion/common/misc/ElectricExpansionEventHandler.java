@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import universalelectricity.core.electricity.ElectricalEvent;
-import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.core.grid.IElectricityNetwork;
-
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import universalelectricity.core.electricity.ElectricalEvent;
+import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.core.grid.IElectricityNetwork;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.ElectricExpansionItems;
@@ -30,17 +30,37 @@ public class ElectricExpansionEventHandler
     @ForgeSubscribe
     public void onEntityDropItems(LivingDropsEvent event)
     {
-        if (event.entity != null)
+        if (event.entityLiving != null && !(event.entityLiving instanceof EntityPlayer) 
+            && event.source instanceof EntityDamageSource && ((EntityDamageSource) event.source).getEntity() instanceof EntityPlayer)
         {
-            if (event.entity instanceof EntitySkeleton && ((EntitySkeleton) event.entity).getSkeletonType() == 1)
+            Random rand = new Random();
+            int numberOfDrops = 0;
+            boolean rare = rand.nextInt(400) < 5 + event.lootingLevel;
+            
+            if (event.entityLiving.dimension == -1)
             {
-                {
-                    Random dropNumber = new Random();
-                    int numberOfDrops = dropNumber.nextInt(4) + 1;
-                    ItemStack leadIS = new ItemStack(ElectricExpansionItems.itemParts, numberOfDrops, 7);
-                    
-                    event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));
-                }
+                numberOfDrops = rand.nextInt((int) event.entityLiving.getMaxHealth() / 5 + event.lootingLevel);
+                ItemStack leadIS = new ItemStack(ElectricExpansionItems.itemParts, Math.max(2, numberOfDrops), 10);
+                
+                event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, leadIS.copy()));
+                
+                if (rare)
+                    event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, new ItemStack(ElectricExpansionItems.itemParts, 1, 7)));
+            }
+            else if (event.entityLiving.dimension == 1)
+            {
+                numberOfDrops = rand.nextInt((int) event.entityLiving.getMaxHealth() / 20 + event.lootingLevel);
+                ItemStack silverIS = new ItemStack(ElectricExpansionItems.itemParts, Math.max(2, numberOfDrops), 11);
+                
+                event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, silverIS.copy()));
+                
+                if (rare)
+                    event.drops.add(new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, new ItemStack(ElectricExpansionItems.itemParts, 1, 7)));
+            }
+            
+            if (rand.nextInt(50_000) <= event.entityLiving.getMaxHealth() * (numberOfDrops + (rare ? 9 : 0)))
+            {
+                event.entityLiving.worldObj.createExplosion(event.entityLiving, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, 3, false);
             }
         }
     }
@@ -56,8 +76,7 @@ public class ElectricExpansionEventHandler
     @SideOnly(Side.SERVER)
     public void onWorldLoad(WorldEvent.Load event)
     {
-        ElectricExpansion.DistributionNetworksInstance = new DistributionNetworks();
-        ElectricExpansion.DistributionNetworksInstance.onWorldLoad();
+        ElectricExpansion.DistributionNetworksInstance = DistributionNetworks.onWorldLoad(event);
     }
     
     @ForgeSubscribe

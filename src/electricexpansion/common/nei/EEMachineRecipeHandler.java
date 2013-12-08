@@ -2,11 +2,14 @@ package electricexpansion.common.nei;
 
 import java.util.Map;
 
+import universalelectricity.core.electricity.ElectricityDisplay;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.ItemStack;
 import codechicken.nei.NEIServerUtils;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import electricexpansion.client.misc.TextureLocations;
 
 import static codechicken.core.gui.GuiDraw.*;
 
@@ -25,14 +28,14 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
     @Override
     public abstract void loadTransferRects();
     
-    public abstract double getWattsPerTick();
+    public abstract float getWattsPerTick();
     
     public abstract Map<ItemStack, int[]> getRecipes();
     
     @Override
     public String getGuiTexture()
     {
-        return "/mods/electricexpansion/textures/gui/GuiEEMachine.png";
+        return TextureLocations.GUI_MACHINE.toString();
     }
     
     @Override
@@ -116,22 +119,10 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
     @Override
     public void drawExtras(int recipe)
     {
-        drawProgressBar(72, 16, 176, 0, 22, 13, 48, 0);
-        drawProgressBar(30, 9, 176, 13, 4, 10, 48, 1);
-        double energy = ((EEMachineRecipe) arecipes.get(recipe)).getEnergy();
-        String energyString = "Uses ";
-        if (energy >= 2000000)
-        {
-            energyString += String.valueOf(energy / 1000000) + " MJ";
-        }
-        else if (energy >= 2000)
-        {
-            energyString += String.valueOf(energy / 1000) + " kJ";
-        }
-        else
-        {
-            energyString += String.valueOf(energy) + " J";
-        }
+        drawProgressBar(72, 16, 176, 0, 25, 13, (int) (((EEMachineRecipe) arecipes.get(recipe)).getEnergy() / this.getWattsPerTick()), 0);
+        drawProgressBar(30, 9, 176, 13, 4, 51, 300, 1);
+        float energy = ((EEMachineRecipe) arecipes.get(recipe)).getEnergy();
+        String energyString = "Uses " + ElectricityDisplay.getDisplay(energy, ElectricityDisplay.ElectricUnit.JOULES, 2, true);
         gui.drawCenteredString(fontRenderer, energyString, 115, 42, 0xFFFFFFFF);
     }
     
@@ -140,9 +131,9 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
         
         private PositionedStack input;
         private PositionedStack output;
-        private double energy;
+        private float energy;
         
-        public double getEnergy()
+        public float getEnergy()
         {
             return energy;
         }
@@ -157,7 +148,7 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
         public PositionedStack getIngredient()
         {
             if (input.item.itemID == 35)
-            { // hax for rotating colored wool stax
+            { // hacks for rotating colored wool stacks
                 int cycle = cycleticks / 48;
                 PositionedStack stack = input.copy();
                 stack.item.setItemDamage(cycle % 14);
@@ -166,7 +157,7 @@ public abstract class EEMachineRecipeHandler extends TemplateRecipeHandler
             return input;
         }
         
-        public EEMachineRecipe(Map.Entry<ItemStack, int[]> recipe, double wattsPerTick)
+        public EEMachineRecipe(Map.Entry<ItemStack, int[]> recipe, float wattsPerTick)
         {
             this.input = new PositionedStack(recipe.getKey(), 50, 14);
             this.output = new PositionedStack(new ItemStack(recipe.getValue()[0], recipe.getValue()[1], recipe.getValue()[2]), 103, 14);

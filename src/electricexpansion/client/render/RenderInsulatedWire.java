@@ -11,8 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.client.model.ModelInsulatedWire;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.cables.TileEntityInsulatedWire;
-import electricexpansion.common.cables.TileEntitySwitchWire;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 
 @SideOnly(Side.CLIENT)
@@ -147,8 +145,11 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         TileEntityConductorBase tileEntity = (TileEntityConductorBase) t;
         boolean[] connectedSides = tileEntity.getVisualConnections();
         
-        if (textureToUse != null && textureToUse != "" && textureToUse != ElectricExpansion.MODEL_PATH)
-            this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + textureToUse));
+        if (textureToUse != null && textureToUse != "")
+            if (textureToUse.contains(ElectricExpansion.MODEL_PATH))
+                this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, textureToUse));
+            else
+                this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + textureToUse));
         else
             return;
         
@@ -156,162 +157,125 @@ public class RenderInsulatedWire extends TileEntitySpecialRenderer
         GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
         GL11.glScalef(1.0F, -1F, -1F);
         
-        if (tileEntity instanceof TileEntitySwitchWire)
+        if (connectedSides[0])
         {
-            if (tileEntity.getWorldObj().isBlockIndirectlyGettingPowered(t.xCoord, t.yCoord, t.zCoord))
-            {
-                if (connectedSides[0])
-                {
-                    model.renderBottom();
-                }
-                if (connectedSides[1])
-                {
-                    model.renderTop();
-                }
-                if (connectedSides[2])
-                {
-                    model.renderBack();
-                }
-                if (connectedSides[3])
-                {
-                    model.renderFront();
-                }
-                if (connectedSides[4])
-                {
-                    model.renderLeft();
-                }
-                if (connectedSides[5])
-                {
-                    model.renderRight();
-                }
-            }
+            model.renderBottom();
         }
-        
-        else
+        if (connectedSides[1])
         {
-            if (connectedSides[0])
-            {
-                model.renderBottom();
-            }
-            if (connectedSides[1])
-            {
-                model.renderTop();
-            }
-            if (connectedSides[2])
-            {
-                model.renderBack();
-            }
-            if (connectedSides[3])
-            {
-                model.renderFront();
-            }
-            if (connectedSides[4])
-            {
-                model.renderLeft();
-            }
-            if (connectedSides[5])
-            {
-                model.renderRight();
-            }
+            model.renderTop();
+        }
+        if (connectedSides[2])
+        {
+            model.renderBack();
+        }
+        if (connectedSides[3])
+        {
+            model.renderFront();
+        }
+        if (connectedSides[4])
+        {
+            model.renderLeft();
+        }
+        if (connectedSides[5])
+        {
+            model.renderRight();
         }
         
         model.renderMiddle();
         GL11.glPopMatrix();
         
-        if (tileEntity instanceof TileEntityInsulatedWire)
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+        GL11.glScalef(1.0F, -1F, -1F);
+        
+        this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + "WirePaintOverlay.png"));
+        
+        byte colorByte = ((TileEntityConductorBase) tileEntity).getFrequency().getIndex();
+        
+        switch (colorByte)
         {
-            GL11.glPushMatrix();
-            GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-            GL11.glScalef(1.0F, -1F, -1F);
-            
-            this.bindTexture(new ResourceLocation(ElectricExpansion.DOMAIN, ElectricExpansion.MODEL_PATH + "WirePaintOverlay.png"));
-            
-            byte colorByte = ((TileEntityInsulatedWire) tileEntity).getFrequency().getIndex();
-            
-            switch (colorByte)
-            {
-                case 0:
-                    GL11.glColor4f(0.1F, 0.1F, 0.1F, 1f);
-                    break;
-                case 1:
-                    GL11.glColor4f(1F, 0F, 0F, 1f);
-                    break;
-                case 2:
-                    GL11.glColor4f(0F, 0.2F, 0F, 1f);
-                    break;
-                case 3:
-                    GL11.glColor4f(0.2F, 0F, 0F, 1f);
-                    break;
-                case 4:
-                    GL11.glColor4f(0F, 0F, 1.0F, 1f);
-                    break;
-                case 5:
-                    GL11.glColor4f(0.6F, 0F, 0.4F, 1f);
-                    break;
-                case 6:
-                    GL11.glColor4f(0.2F, 0.8F, 1.0F, 1f);
-                    break;
-                case 7:
-                    GL11.glColor4f(0.6F, 0.6F, 0.6F, 1f);
-                    break;
-                case 8:
-                    GL11.glColor4f(0.4F, 0.4F, 0.4F, 1f);
-                    break;
-                case 9:
-                    GL11.glColor4f(1.0F, 0.2F, 0.6F, 1f);
-                    break;
-                case 10:
-                    GL11.glColor4f(0.0F, 1F, 0.0F, 1f);
-                    break;
-                case 11:
-                    GL11.glColor4f(1.0F, 1.0F, 0F, 1f);
-                    break;
-                case 12:
-                    GL11.glColor4f(0.3F, 0.3F, 0.8F, 1f);
-                    break;
-                case 13:
-                    GL11.glColor4f(0.8F, 0.2F, 0.4F, 1f);
-                    break;
-                case 14:
-                    GL11.glColor4f(0.8F, 0.3F, 0F, 1f);
-                    break;
-                case 15:
-                    GL11.glColor4f(1F, 1F, 1F, 1f);
-                    break;
-                    
-                default:
-                    GL11.glColor4f(0.2F, 0.2F, 0.2F, 1f);
-                    break;
-            }
-            
-            if (connectedSides[0])
-            {
-                model.renderBottom();
-            }
-            if (connectedSides[1])
-            {
-                model.renderTop();
-            }
-            if (connectedSides[2])
-            {
-                model.renderBack();
-            }
-            if (connectedSides[3])
-            {
-                model.renderFront();
-            }
-            if (connectedSides[4])
-            {
-                model.renderLeft();
-            }
-            if (connectedSides[5])
-            {
-                model.renderRight();
-            }
-            
-            model.renderMiddle();
-            GL11.glPopMatrix();
+            case 0:
+                GL11.glColor4f(0.1F, 0.1F, 0.1F, 1f);
+                break;
+            case 1:
+                GL11.glColor4f(1F, 0F, 0F, 1f);
+                break;
+            case 2:
+                GL11.glColor4f(0F, 0.2F, 0F, 1f);
+                break;
+            case 3:
+                GL11.glColor4f(0.2F, 0F, 0F, 1f);
+                break;
+            case 4:
+                GL11.glColor4f(0F, 0F, 1.0F, 1f);
+                break;
+            case 5:
+                GL11.glColor4f(0.6F, 0F, 0.4F, 1f);
+                break;
+            case 6:
+                GL11.glColor4f(0.2F, 0.8F, 1.0F, 1f);
+                break;
+            case 7:
+                GL11.glColor4f(0.6F, 0.6F, 0.6F, 1f);
+                break;
+            case 8:
+                GL11.glColor4f(0.4F, 0.4F, 0.4F, 1f);
+                break;
+            case 9:
+                GL11.glColor4f(1.0F, 0.2F, 0.6F, 1f);
+                break;
+            case 10:
+                GL11.glColor4f(0.0F, 1F, 0.0F, 1f);
+                break;
+            case 11:
+                GL11.glColor4f(1.0F, 1.0F, 0F, 1f);
+                break;
+            case 12:
+                GL11.glColor4f(0.3F, 0.3F, 0.8F, 1f);
+                break;
+            case 13:
+                GL11.glColor4f(0.8F, 0.2F, 0.4F, 1f);
+                break;
+            case 14:
+                GL11.glColor4f(0.8F, 0.3F, 0F, 1f);
+                break;
+            case 15:
+                GL11.glColor4f(1F, 1F, 1F, 1f);
+                break;
+                
+            default:
+                GL11.glColor4f(0.2F, 0.2F, 0.2F, 1f);
+                break;
         }
+        
+        if (connectedSides[0])
+        {
+            model.renderBottom();
+        }
+        if (connectedSides[1])
+        {
+            model.renderTop();
+        }
+        if (connectedSides[2])
+        {
+            model.renderBack();
+        }
+        if (connectedSides[3])
+        {
+            model.renderFront();
+        }
+        if (connectedSides[4])
+        {
+            model.renderLeft();
+        }
+        if (connectedSides[5])
+        {
+            model.renderRight();
+        }
+        
+        model.renderMiddle();
+        GL11.glPopMatrix();
         
     }
     

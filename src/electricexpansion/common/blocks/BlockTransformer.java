@@ -4,20 +4,17 @@ import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.UniversalElectricity;
 import universalelectricity.prefab.block.BlockAdvanced;
-import universalelectricity.prefab.tile.TileEntityAdvanced;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.client.ClientProxy;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.EETab;
@@ -25,6 +22,7 @@ import electricexpansion.common.tile.TileEntityTransformer;
 
 public class BlockTransformer extends BlockAdvanced
 {
+    // TODO rewrite for changes to the TileEntity class
     public BlockTransformer(int id)
     {
         super(id, UniversalElectricity.machine);
@@ -32,68 +30,29 @@ public class BlockTransformer extends BlockAdvanced
         this.setCreativeTab(EETab.INSTANCE);
         this.setUnlocalizedName("transformer");
     }
-    
-    /**
-     * Called when the block is placed in the world.
-     */
-    @Override
-    public void onBlockPlacedBy(World par1World, int x, int y, int z, EntityLivingBase par5EntityLiving, ItemStack itemStack)
+        
+    public TileEntity createTileEntity(World world, int metadata)
     {
-        int metadata = par1World.getBlockMetadata(x, y, z);
-        int tierStart = metadata - (metadata & 3);
-        
-        int angle = MathHelper.floor_double(par5EntityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-        switch (angle)
-        {
-            case 0:
-                par1World.setBlock(x, y, z, this.blockID, tierStart + 3, 0);
-                break;
-            case 1:
-                par1World.setBlock(x, y, z, this.blockID, tierStart + 1, 0);
-                break;
-            case 2:
-                par1World.setBlock(x, y, z, this.blockID, tierStart + 2, 0);
-                break;
-            case 3:
-                par1World.setBlock(x, y, z, this.blockID, tierStart + 0, 0);
-                break;
-        }
-        
-        ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-        par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
+        return new TileEntityTransformer(metadata);
     }
     
     @Override
-    public boolean onUseWrench(World par1World, int x, int y, int z, EntityPlayer par5EntityPlayer, int side, float hitX, float hitY, float hitZ)
+    public boolean onUseWrench(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)
     {
-        int metadata = par1World.getBlockMetadata(x, y, z);
-        int tierStart = metadata - (metadata & 3);
-        int original = metadata & 3;
-        
-        int change = 0;
-        
-        // Re-orient the block
-        switch (original)
+        if (!world.isRemote && world.getBlockTileEntity(x, y, z) instanceof TileEntityTransformer)
         {
-            case 0:
-                change = 3;
-                break;
-            case 3:
-                change = 1;
-                break;
-            case 1:
-                change = 2;
-                break;
-            case 2:
-                change = 0;
-                break;
+            TileEntityTransformer te = (TileEntityTransformer) world.getBlockTileEntity(x, y, z);
+            if (side > 1)
+                if (hitY > 0.5)
+                    te.setOutput(ForgeDirection.getOrientation(side));
+                else
+                    te.setInput(ForgeDirection.getOrientation(side));
+            else
+                if (hitZ > 0.5)
+                    te.setOutput(ForgeDirection.getOrientation(side));
+                else
+                    te.setInput(ForgeDirection.getOrientation(side));
         }
-        
-        par1World.setBlock(x, y, z, this.blockID, change + tierStart, 0);
-        par1World.markBlockForRenderUpdate(x, y, z);
-        
-        ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
-        
         return true;
     }
     
@@ -105,10 +64,9 @@ public class BlockTransformer extends BlockAdvanced
             TileEntityTransformer tileEntity = (TileEntityTransformer) par1World.getBlockTileEntity(x, y, z);
             
             tileEntity.stepUp = !tileEntity.stepUp;
-            return true;
         }
         
-        return false;
+        return true;
     }
     
     @Override
@@ -120,7 +78,7 @@ public class BlockTransformer extends BlockAdvanced
     @Override
     public boolean isBlockSolidOnSide(World world, int x, int y, int z, ForgeDirection side)
     {
-        return side.equals(ForgeDirection.DOWN);
+        return false;
     }
     
     @Override
@@ -137,16 +95,10 @@ public class BlockTransformer extends BlockAdvanced
     }
     
     @Override
-    public TileEntity createTileEntity(World var1, int metadata)
-    {
-        return new TileEntityTransformer();
-    }
-    
-    @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
     {
-        for (int i = 0; i < 9; i += 4)
+        for (int i = 0; i < 3; i++)
         {
             par3List.add(new ItemStack(this, 1, i));
         }
@@ -155,19 +107,9 @@ public class BlockTransformer extends BlockAdvanced
     @Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
     {
-        int id = this.idPicked(world, x, y, z);
-        
-        if (id == 0)
-            return null;
-        
-        Item item = Item.itemsList[id];
-        if (item == null)
-            return null;
-        
         int metadata = world.getBlockMetadata(x, y, z);
-        int tierStart = metadata - (metadata & 3);
         
-        return new ItemStack(id, 1, tierStart);
+        return new ItemStack(ElectricExpansionItems.blockTransformer, 1, metadata);
     }
     
     @Override
@@ -180,7 +122,12 @@ public class BlockTransformer extends BlockAdvanced
     @Override
     public int damageDropped(int metadata)
     {
-        return metadata - (metadata & 3);
+        return metadata;
     }
     
+    @Override
+    public boolean hasTileEntity(int metadata)
+    {
+        return true;
+    }
 }

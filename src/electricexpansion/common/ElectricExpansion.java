@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -39,10 +40,8 @@ import electricexpansion.common.blocks.BlockBasic;
 import electricexpansion.common.blocks.BlockInsulatedWire;
 import electricexpansion.common.blocks.BlockInsulationMachine;
 import electricexpansion.common.blocks.BlockLogisticsWire;
-import electricexpansion.common.blocks.BlockMultimeter;
 import electricexpansion.common.blocks.BlockQuantumBatteryBox;
 import electricexpansion.common.blocks.BlockRawWire;
-import electricexpansion.common.blocks.BlockRedstoneNetworkCore;
 import electricexpansion.common.blocks.BlockRedstonePaintedWire;
 import electricexpansion.common.blocks.BlockSwitchWire;
 import electricexpansion.common.blocks.BlockSwitchWireBlock;
@@ -128,13 +127,13 @@ public class ElectricExpansion
     @SidedProxy(clientSide = "electricexpansion.client.ClientProxy", serverSide = "electricexpansion.common.CommonProxy")
     public static CommonProxy proxy;
     
-    public static void log(Level level, String msg, String... replacements)
+    public static void log(Level level, Object msg, Object... replacements)
     {
-        for (String replace : replacements)
+        for (Object replace : replacements)
         {
-            msg = msg.replace("%s", replace);
+            msg = msg.toString().replace("%s", replace.toString());
         }
-        EELogger.log(level, msg);
+        EELogger.log(level, msg.toString());
     }
     
     public static boolean configLoad(Configuration config)
@@ -149,16 +148,16 @@ public class ElectricExpansion
         ElectricExpansionItems.blockRedstonePaintedWire = new BlockRedstonePaintedWire(config.getBlock("Redstone_Wire", BLOCK_ID_PREFIX + 5).getInt());
         // +6
         ElectricExpansionItems.blockAdvBatteryBox = new BlockAdvancedBatteryBox(config.getBlock("Advanced_Battery_Box", BLOCK_ID_PREFIX + 7).getInt(), 0);
-        ElectricExpansionItems.blockMultimeter = new BlockMultimeter(config.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0);
+        // ElectricExpansionItems.blockMultimeter = new BlockMultimeter(config.getBlock("Multimeter", BLOCK_ID_PREFIX + 8).getInt(), 0);    //  Cal broke them in the MC 1.6 update
         // +9
         ElectricExpansionItems.blockInsulationMachine = new BlockInsulationMachine(config.getBlock("Insulation_Refiner", BLOCK_ID_PREFIX + 10).getInt());
         ElectricExpansionItems.blockWireMill = new BlockWireMill(config.getBlock("Wire_Mill", BLOCK_ID_PREFIX + 11).getInt());
-        ElectricExpansionItems.blockTransformer = new BlockTransformer(config.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt());
+        ElectricExpansionItems.blockTransformer = new BlockTransformer(config.getBlock("Transformer", BLOCK_ID_PREFIX + 12).getInt());    //  Cal broke them in the MC 1.6 update
         ElectricExpansionItems.blockDistribution = new BlockQuantumBatteryBox(config.getBlock("Wireless_Transfer_Machines", BLOCK_ID_PREFIX + 13).getInt());
-        ElectricExpansionItems.blockLead = new BlockBasic(config.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE, 2F, "LeadBlock");
+        ElectricExpansionItems.blockIngotStorage = new BlockBasic(config.getBlock("Lead_Block", BLOCK_ID_PREFIX + 14).getInt(), Material.iron, EETab.INSTANCE, 2F, "LeadBlock");
         ElectricExpansionItems.blockLogisticsWire = new BlockLogisticsWire(config.getBlock("Logistics_Wire", BLOCK_ID_PREFIX + 15).getInt(), 0);
         // ElectricExpansionItems.blockFuseBox = new BlockFuseBox(config.getBlock("Fuse_Box", BLOCK_ID_PREFIX + 16).getInt());
-        ElectricExpansionItems.blockRedstoneNetworkCore = new BlockRedstoneNetworkCore(config.getBlock("RS_Network_Core", BLOCK_ID_PREFIX + 16).getInt());
+        // ElectricExpansionItems.blockRedstoneNetworkCore = new BlockRedstoneNetworkCore(config.getBlock("RS_Network_Core", BLOCK_ID_PREFIX + 16).getInt());   //  Redundant for now
         
         ElectricExpansionItems.itemUpgrade = new ItemUpgrade(config.getItem("Advanced_Bat_Box_Upgrade", ITEM_ID_PREFIX).getInt(), 0);
         ElectricExpansionItems.itemEliteBat = new ItemEliteBattery(config.getItem("Elite_Battery", ITEM_ID_PREFIX + 1).getInt());
@@ -170,12 +169,9 @@ public class ElectricExpansion
         // +7
         ElectricExpansionItems.itemMultimeter = new ItemMultimeter(config.getItem("Item_Multimeter", ITEM_ID_PREFIX + 8).getInt());
         
-//        GameRegistry.registerBlock(ElectricExpansionItems.blockSilverOre, ItemBlock.class, "blockSilverOre", ElectricExpansion.MOD_ID);
-        
         debugRecipes = config.get("General", "Debug_Recipes", false, "Set to true for debug Recipes. This is considdered cheating.").getBoolean(debugRecipes);
         useHashCodes = config.get("General", "Use_Hashcodes", true, "Set to true to make clients use hash codes for the Quantum Battery Box Owner data.").getBoolean(useHashCodes);
-        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(
-                useUeVoltageSensitivity);
+        useUeVoltageSensitivity = config.get("General", "Use_UeVoltageSensitivity", false, "Set to true to use the setting in the UE config file for Voltage Sensitivity.").getBoolean(useUeVoltageSensitivity);
         
         if (config.hasChanged())
             config.save();
@@ -210,13 +206,13 @@ public class ElectricExpansion
         GameRegistry.registerBlock(ElectricExpansionItems.blockAdvBatteryBox, ItemBlock.class, "blockAdvBatteryBox", ElectricExpansion.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockWireMill, ItemBlock.class, "blockWireMill", ElectricExpansion.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockInsulationMachine, ItemBlock.class, "blockInsulationMachine", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(ElectricExpansionItems.blockMultimeter, ItemBlock.class, "blockMultimeter", ElectricExpansion.MOD_ID);
-        GameRegistry.registerBlock(ElectricExpansionItems.blockLead, ItemBlock.class, "blockLead", ElectricExpansion.MOD_ID);
+        //  GameRegistry.registerBlock(ElectricExpansionItems.blockMultimeter, ItemBlock.class, "blockMultimeter", ElectricExpansion.MOD_ID);
+        GameRegistry.registerBlock(ElectricExpansionItems.blockIngotStorage, ItemBlock.class, "blockIngotStorage", ElectricExpansion.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockTransformer, ItemBlockTransformer.class, "blockTransformer", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockDistribution, ItemBlock.class, "blockDistribution", ElectricExpansion.MOD_ID);
-        // GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
-        GameRegistry.registerBlock(ElectricExpansionItems.blockRedstoneNetworkCore, ItemBlock.class, "blockRsNetworkCore", ElectricExpansion.MOD_ID);
+        //  GameRegistry.registerBlock(blockFuseBox, ItemBlock.class, "blockFuseBox", this.MOD_ID);
+        //  GameRegistry.registerBlock(ElectricExpansionItems.blockRedstoneNetworkCore, ItemBlock.class, "blockRsNetworkCore", ElectricExpansion.MOD_ID);
         
         GameRegistry.registerBlock(ElectricExpansionItems.blockRawWire, ItemBlockRawWire.class, "blockRawWire", ElectricExpansion.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockInsulatedWire, ItemBlockInsulatedWire.class, "blockInsulatedWire", ElectricExpansion.MOD_ID);
@@ -226,13 +222,13 @@ public class ElectricExpansion
         GameRegistry.registerBlock(ElectricExpansionItems.blockLogisticsWire, ItemBlockLogisticsWire.class, "blockLogisticsWire", ElectricExpansion.MOD_ID);
         GameRegistry.registerBlock(ElectricExpansionItems.blockRedstonePaintedWire, ItemBlockRedstonePaintedWire.class, "blockRedstonePaintedWire", ElectricExpansion.MOD_ID);
         
-        OreDictionary.registerOre("blockLead", ElectricExpansionItems.blockLead);
+        OreDictionary.registerOre("blockIngotStorage", ElectricExpansionItems.blockIngotStorage);
         OreDictionary.registerOre("advancedBattery", ElectricExpansionItems.itemAdvBat);
         OreDictionary.registerOre("eliteBattery", ElectricExpansionItems.itemEliteBat);
         OreDictionary.registerOre("advancedBattery", ElectricExpansionItems.itemAdvBat);
         OreDictionary.registerOre("transformer", ElectricExpansionItems.blockTransformer);
         OreDictionary.registerOre("wireMill", ElectricExpansionItems.blockWireMill);
-        OreDictionary.registerOre("multimeter", ElectricExpansionItems.blockMultimeter);
+        //OreDictionary.registerOre("multimeter", ElectricExpansionItems.blockMultimeter);
         OreDictionary.registerOre("itemMultimeter", ElectricExpansionItems.itemMultimeter);
         OreDictionary.registerOre("ingotElectrum", new ItemStack(ElectricExpansionItems.itemParts, 1, 2));
         OreDictionary.registerOre("ingotLead", new ItemStack(ElectricExpansionItems.itemParts, 1, 7));
@@ -250,7 +246,14 @@ public class ElectricExpansion
         
         if (!Loader.isModLoaded("BasicComponents"))
         {
-            EELogger.fine("Basic Components NOT detected! Basic Components is REQUIRED for survival crafting and gameplay!");
+            try 
+            {
+                basiccomponents.api.BasicRegistry.requestAll();
+            }
+            catch(NoClassDefFoundError e)
+            {
+                EELogger.warning(StatCollector.translateToLocal("error.BasicComponents"));
+            }
         }
     }
     

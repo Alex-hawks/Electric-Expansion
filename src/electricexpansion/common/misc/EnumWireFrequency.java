@@ -11,17 +11,24 @@ public enum EnumWireFrequency
     BLUE(4),
     PURPLE(5),
     CYAN(6),
-    LIGHT_GRAY(8),
+    LIGHT_GRAY(7),
+    GRAY(8),
     PINK(9),
     LIGHT_GREEN(10),
     YELLOW(11),
     LIGHT_BLUE(12),
     MAGENTA(13),
-    ORANGE(14), 
+    ORANGE(14),
     WHITE(15);
     
-    private final byte index;
-    private static EnumWireFrequency[] indexToName = new EnumWireFrequency[16];
+    private final byte                 index;
+    private static EnumWireFrequency[] indexToName =
+                                                   {
+                                                   BLACK, RED, DARK_GREEN, BROWN,
+                                                   BLUE, PURPLE, CYAN, LIGHT_GRAY,
+                                                   GRAY, PINK, LIGHT_GREEN, YELLOW,
+                                                   LIGHT_BLUE, MAGENTA, ORANGE, WHITE
+                                                   };
     
     private EnumWireFrequency(byte i)
     {
@@ -44,6 +51,7 @@ public enum EnumWireFrequency
         {
             return indexToName[i];
         }
-        else return NONE;
+        else
+            return NONE;
     }
 }

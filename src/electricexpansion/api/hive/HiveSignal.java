@@ -11,10 +11,10 @@ public class HiveSignal
         public static final byte PART_REDSTONE_STATE        = 0b0000_0010;
         public static final byte FULL_REDSTONE_STATE        = 0b0000_0011;
         public static final byte DISCOVER_REPLY             = 0b0000_0100;
-        
-        public static final byte TO_CC_COMPUTER             = 0b0001_0000;
-        public static final byte FROM_CC_COMPUTER           = 0b0001_0001;
-        
+
+        public static final byte DISCOVER_CC_COMPUTERS      = 0b0001_0000;
+        public static final byte TO_CC_COMPUTER             = 0b0001_0001;
+        public static final byte FROM_CC_COMPUTER           = 0b0001_0010;
     }
     
     public static final class DEVICE_TYPE

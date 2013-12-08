@@ -24,18 +24,16 @@ public class ElectricExpansionItems
     public static Block blockSwitchWireBlock;
     public static Block blockLogisticsWire;
     public static Block blockRedstonePaintedWire;
-    // public static final Block blockRedstoneWireBlock = new BlockRedstoneWireBlock(redstoneWireBlock, 0);
     
     public static Block blockAdvBatteryBox;
-    public static Block blockMultimeter;
+    @Deprecated public static Block blockMultimeter;
     public static Block blockWireMill;
     public static Block blockTransformer;
     public static Block blockDistribution;
-    public static Block blockLead;
-    //public static Block blockSilverOre;
+    public static Block blockIngotStorage;
     public static Block blockInsulationMachine;
-    // public static Block blockFuseBox;
-    public static Block blockRedstoneNetworkCore;
+    @Deprecated public static Block blockFuseBox;
+    @Deprecated public static Block blockRedstoneNetworkCore;
     
     // Items
     public static Item itemParts;

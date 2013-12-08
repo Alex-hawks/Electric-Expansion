@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -16,8 +17,6 @@ import universalelectricity.core.block.IConductor;
 import universalelectricity.core.block.IConnector;
 import universalelectricity.core.block.INetworkProvider;
 import universalelectricity.core.grid.IElectricityNetwork;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
 import universalelectricity.prefab.network.IPacketReceiver;
 import universalelectricity.prefab.network.PacketManager;
 import universalelectricity.prefab.tile.TileEntityConductor;
@@ -28,12 +27,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.hive.IHiveConductor;
 import electricexpansion.api.hive.IHiveNetwork;
+import electricexpansion.api.hive.IHiveNetworkMember;
 import electricexpansion.api.wires.EnumWireMaterial;
 import electricexpansion.api.wires.EnumWireType;
 import electricexpansion.api.wires.IAdvancedConductor;
 import electricexpansion.common.ElectricExpansion;
-import electricexpansion.common.cables.TileEntityInsulatedWire;
 import electricexpansion.common.misc.EnumWireFrequency;
+import electricexpansion.common.misc.HiveNetwork;
 
 /**
  * @author Alex_hawks Helper Class used by me to make adding methods to all
@@ -45,11 +45,11 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     protected static final String CHANNEL = ElectricExpansion.CHANNEL;
     public ItemStack textureItemStack;
     
-    /** Locked Icon for hidden wires. RS input/output mode for RS wires (true is input) */
+    /** Locked Icon for hidden wires. */
     public boolean mode = false;
     
     protected IHiveNetwork hiveNetwork;
-
+    
     private EnumWireMaterial cachedMaterial;
     protected boolean[] visuallyConnected = new boolean[6];
     /** Color for cables that use color, RS Frequency for cable that use RS Frequency   */
@@ -66,7 +66,17 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     {
         super.initiate();
         this.refresh();
+        this.getHiveNetwork();
         this.worldObj.markBlockForRenderUpdate(this.xCoord, this.yCoord, this.zCoord);
+    }
+    
+    @Override
+    public void invalidate()
+    {
+        super.invalidate();
+        
+        if (this.hiveNetwork != null)
+            this.hiveNetwork.clear();
     }
     
     @Override
@@ -74,7 +84,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     {
         return this.getWireMaterial().resistance;
     }
-
+    
     // Tries to use the local cached wire material, otherwise it retrieves it from the chunk
     private EnumWireMaterial getWireMaterial()
     {
@@ -82,10 +92,10 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
         {
             cachedMaterial = this.getWireMaterial(this.worldObj.getBlockMetadata(this.xCoord, this.yCoord, this.zCoord));
         }
-
+        
         return cachedMaterial;
     }
-
+    
     @Override
     public void writeToNBT(NBTTagCompound tag)
     {
@@ -105,7 +115,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
-
+        
         try
         {
             this.mode = tag.getBoolean("mode");
@@ -130,7 +140,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
         {
             this.frequency = EnumWireFrequency.NONE;
         }
-
+        
         NBTBase textureTag = tag.getTag("texture");
         if (textureTag instanceof NBTTagCompound) {
             try {
@@ -181,61 +191,68 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
      * setToID); } }
      */
     
-    public void updateConnection(TileEntity tileEntity, ForgeDirection side)
+    public void updateConnection(TileEntity that, ForgeDirection side)
     {
-        if (!this.worldObj.isRemote && tileEntity != null)
+        if (!this.worldObj.isRemote && that != null)
         {
-            if (tileEntity instanceof TileEntityInsulatedWire && this instanceof TileEntityInsulatedWire)
+            if (that instanceof TileEntityConductorBase)
             {
-                TileEntityInsulatedWire tileEntityIns = (TileEntityInsulatedWire) tileEntity;
+                TileEntityConductorBase tileEntityIns = (TileEntityConductorBase) that;
                 
-                if ((tileEntityIns.frequency == ((TileEntityInsulatedWire) this).frequency || ((TileEntityInsulatedWire) this).frequency.getIndex() == -1 || tileEntityIns.frequency.getIndex() == -1)
-                        && tileEntityIns.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(this.getBlockMetadata()))
+                if ((tileEntityIns.frequency == ((TileEntityConductorBase) this).frequency || ((TileEntityConductorBase) this).frequency.getIndex() == -1 || tileEntityIns.frequency.getIndex() == -1)
+                    && tileEntityIns.getWireMaterial(that.getBlockMetadata()) == this.getWireMaterial(this.getBlockMetadata()))
                 {
-                    if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+                    if (((IConnector) that).canConnect(side.getOpposite()))
                     {
-                        this.adjacentConnections[side.ordinal()] = tileEntity;
+                        this.adjacentConnections[side.ordinal()] = that;
+                        this.visuallyConnected[side.ordinal()] = true;
                         
-                        if (tileEntity.getClass() == this.getClass() && tileEntity instanceof INetworkProvider)
-                        {
-                            this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
-                        }
+                        this.networkLogic(that);
                         
                         return;
                     }
                 }
             }
             
-            else if (tileEntity instanceof IAdvancedConductor)
+            else if (that instanceof IAdvancedConductor)
             {
-                IAdvancedConductor tileEntityWire = (IAdvancedConductor) tileEntity;
+                IAdvancedConductor tileEntityWire = (IAdvancedConductor) that;
                 
-                if (tileEntityWire.getWireMaterial(tileEntity.getBlockMetadata()) == this.getWireMaterial(this.getBlockMetadata()))
+                if (tileEntityWire.getWireMaterial(that.getBlockMetadata()) == this.getWireMaterial(this.getBlockMetadata()))
                 {
                     
-                    if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+                    if (((IConnector) that).canConnect(side.getOpposite()))
                     {
-                        this.adjacentConnections[side.ordinal()] = tileEntity;
+                        this.adjacentConnections[side.ordinal()] = that;
+                        this.visuallyConnected[side.ordinal()] = true;
                         
-                        if (tileEntity instanceof IConductor && tileEntity instanceof INetworkProvider)
-                        {
-                            this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
-                        }
+                        this.networkLogic(that);
                         
                         return;
                     }
                 }
             }
-            else
+            else if (that instanceof IConductor)
             {
-                if (((IConnector) tileEntity).canConnect(side.getOpposite()))
+                if (((IConnector) that).canConnect(side.getOpposite()))
                 {
-                    this.adjacentConnections[side.ordinal()] = tileEntity;
+                    this.adjacentConnections[side.ordinal()] = that;
+                    this.visuallyConnected[side.ordinal()] = true;
                     
-                    if (tileEntity instanceof IConductor && tileEntity instanceof INetworkProvider)
-                    {
-                        this.getNetwork().merge(((INetworkProvider) tileEntity).getNetwork());
-                    }
+                    this.networkLogic(that);
+                    
+                    return;
+                }
+            }
+            
+            else if (that instanceof IConnector)
+            {
+                if (((IConnector) that).canConnect(side.getOpposite()))
+                {
+                    this.adjacentConnections[side.ordinal()] = that;
+                    this.visuallyConnected[side.ordinal()] = true;
+                    
+                    this.networkLogic(that);
                     
                     return;
                 }
@@ -243,6 +260,44 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
         }
         
         this.adjacentConnections[side.ordinal()] = null;
+        this.visuallyConnected[side.ordinal()] = false;
+    }
+    
+    private void networkLogic(TileEntity that)
+    {
+        if (that instanceof INetworkProvider)
+        {
+            INetworkProvider thatN = (INetworkProvider) that;
+            if (this.getNetwork() != null && thatN.getNetwork() != null)
+            {
+                this.getNetwork().merge(thatN.getNetwork());
+            }
+            else if (this.getNetwork() == null && thatN.getNetwork() != null)
+            {
+                this.setNetwork(thatN.getNetwork());
+            }
+            else if (this.getNetwork() != null && thatN.getNetwork() == null)
+            {
+                thatN.setNetwork(this.getNetwork());
+            }
+        }
+        
+        if (that instanceof IHiveNetworkMember)
+        {
+            IHiveNetworkMember thatN = (IHiveNetworkMember) that;
+            if (this.getHiveNetwork() != null && thatN.getHiveNetwork() != null)
+            {
+                this.getHiveNetwork().merge(thatN.getHiveNetwork());
+            }
+            else if (this.getHiveNetwork() == null && thatN.getHiveNetwork() != null)
+            {
+                this.setHiveNetwork(thatN.getHiveNetwork(), false);
+            }
+            else if (this.getHiveNetwork() != null && thatN.getHiveNetwork() == null)
+            {
+                thatN.setHiveNetwork(this.getHiveNetwork(), false);
+            }
+        }
     }
     
     @Override
@@ -263,7 +318,8 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
                 
                 for (byte i = 0; i < 6; i++)
                 {
-                    this.updateConnection(VectorHelper.getConnectorFromSide(this.worldObj, new Vector3(this), ForgeDirection.getOrientation(i)), ForgeDirection.getOrientation(i));
+                    ForgeDirection dir = ForgeDirection.getOrientation(i);
+                    this.updateConnection(this.worldObj.getBlockTileEntity(this.xCoord + dir.offsetX, this.yCoord + dir.offsetY, this.zCoord + dir.offsetZ), dir);
                 }
                 
                 /**
@@ -273,12 +329,15 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
                 {
                     // Clear the material cache to provide an easy way to fix issues (by changing adjacent wires)
                     cachedMaterial = null;
-
+                    
                     this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+                    this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getID());
                 }
             }
         }
     }
+    
+    protected abstract int getID();
     
     @Override
     public IElectricityNetwork[] getNetworks()
@@ -289,42 +348,80 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     @Override
     public IHiveNetwork getHiveNetwork()
     {
+        if (this.hiveNetwork == null)
+        {
+            new HiveNetwork().addNetwork(this.getNetwork());
+        }
         return this.hiveNetwork;
     }
     
     @Override
-    public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride)
+    public boolean setHiveNetwork(IHiveNetwork newHiveNetwork, boolean mustOverride)
     {
         if (this.hiveNetwork == null || mustOverride)
         {
-            this.hiveNetwork = hiveNetwork;
+            this.onHiveChanged(this.hiveNetwork, newHiveNetwork);
+            this.hiveNetwork = newHiveNetwork;
             return true;
         }
         return false;
     }
     
+    public void onHiveChanged(IHiveNetwork oldNetwork, IHiveNetwork newNetwork) { }
+    
     @Override
     public void handlePacketData(INetworkManager network, int type, Packet250CustomPayload packet, EntityPlayer player, ByteArrayDataInput dataStream) 
     {
+        byte b = dataStream.readByte();
+        
         for (int i = 0; i < this.visuallyConnected.length; i++)
-            this.visuallyConnected[i] = dataStream.readBoolean();
+            this.visuallyConnected[i] = ((b & (1 << i)) == 1 << i);
+        
         this.frequency = EnumWireFrequency.getFromIndex(dataStream.readByte());
+        
+        this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
     }
-
+    
     public boolean[] getVisualConnections()
     {
         return this.visuallyConnected;
     }
-
+    
     public EnumWireFrequency getFrequency()
     {
         return this.frequency;
     }
-
+    
     public void setFrequency(byte frequency)
     {
         this.frequency = EnumWireFrequency.getFromIndex(frequency);
         
         PacketManager.sendPacketToClients(this.getDescriptionPacket());
+    }
+    
+    public void setFrequency(EnumWireFrequency dye)
+    {
+        this.frequency = dye;
+        
+        PacketManager.sendPacketToClients(this.getDescriptionPacket());
+    }
+    
+    @Override
+    public Packet getDescriptionPacket()
+    {
+        byte b = 0;
+        
+        for (int i = 0; i < this.visuallyConnected.length; i++)
+        {
+            b += (byte) ((this.visuallyConnected[i] ? ((byte) 0b0000_0001) : ((byte) 0b0000_0000)) << i);
+        }
+        
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, b, this.frequency.getIndex());
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "[" + this.getBlockType().getUnlocalizedName() + "::" + this.xCoord + "," + this.yCoord + "," + this.zCoord + "]";
     }
 }

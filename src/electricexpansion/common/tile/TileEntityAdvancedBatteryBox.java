@@ -220,7 +220,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     
     private boolean sendQuantumEnergy()
     {
-        ItemStack is = this.inventory[5];
+        ItemStack is = this.inventory[2];
         if (is != null && is.getItem() instanceof ItemLinkCard)
         {
             ItemLinkCard item = (ItemLinkCard) is.getItem();
@@ -706,10 +706,10 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
     {
         if (direction == this.inputDir)
         {
-            return this.inputMode != EnumAdvBattBoxMode.OFF && this.inputMode != EnumAdvBattBoxMode.QUANTUM;
+            return this.inputMode == EnumAdvBattBoxMode.BASIC;
         } else if (direction == this.outputDir)
         {
-            return this.outputMode != EnumAdvBattBoxMode.OFF && this.outputMode != EnumAdvBattBoxMode.QUANTUM;
+            return this.outputMode == EnumAdvBattBoxMode.BASIC;
         }
         return false;
     }
@@ -763,7 +763,7 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
         toReturn.add(EnumAdvBattBoxMode.BASIC);
         if ((Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic"))
         {
-            // toReturn.add(EnumAdvBattBoxModeMode.PNEUMATIC);
+            // toReturn.add(EnumAdvBattBoxMode.PNEUMATIC);
         }
         if (this.hasUpgrade("Quantum"))
         {
@@ -771,15 +771,15 @@ implements IPacketReceiver, ISidedInventory, IPeripheral, IEnergySink, IEnergySo
         }
         if (Loader.isModLoaded("Mekanism") && this.hasUpgrade("Mekansim"))
         {
-            // toReturn.add(EnumAdvBattBoxModeMod.MEKANISM);
+            // toReturn.add(EnumAdvBattBoxMode.MEKANISM);
         }
         if (Loader.isModLoaded("factorization") && this.hasUpgrade("Factorization"))
         {
-            // toReturn.add(EnumAdvBattBoxModeMod.FACTORIZATION);
+            // toReturn.add(EnumAdvBattBoxMode.FACTORIZATION);
         }
         if ((!Loader.isModLoaded("Mekanism") || this.hasUpgrade("Mekansim")) && (!Loader.isModLoaded("factorization") || this.hasUpgrade("Factorization")) && (!(Loader.isModLoaded("BuildCraft|Energy") || Loader.isModLoaded("ThermalExpansion")) && this.hasUpgrade("Pnematic")))
         {
-            // toReturn.add(EnumAdvBattBoxModeMod.UNIVERSAL);
+            // toReturn.add(EnumAdvBattBoxMode.UNIVERSAL);
         }
         return toReturn;
     }

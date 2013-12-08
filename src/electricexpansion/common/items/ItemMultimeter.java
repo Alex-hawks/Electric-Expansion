@@ -20,7 +20,7 @@ import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 
 public class ItemMultimeter extends ItemElectric
 {
-    public final float JOULES_PER_USE = 5;
+    public final float JOULES_PER_USE = 0.005F;
     
     public ItemMultimeter(int par1)
     {
@@ -92,13 +92,13 @@ public class ItemMultimeter extends ItemElectric
     @Override
     public float getMaxElectricityStored(ItemStack itemStack)
     {
-        return 1000000;
+        return 1000;
     }
     
     @Override
     public float getVoltage(ItemStack itemStack)
     {
-        return 35;
+        return 0.035f;
     }
     
     @Override
@@ -117,8 +117,8 @@ public class ItemMultimeter extends ItemElectric
             itemStack.setTagCompound(new NBTTagCompound());
         }
         
-        double electricityStored = Math.max(Math.min(joules, this.getMaxElectricityStored(itemStack)), 0);
-        itemStack.getTagCompound().setDouble("electricity", electricityStored);
+        float electricityStored = Math.max(Math.min(joules, this.getMaxElectricityStored(itemStack)), 0);
+        itemStack.getTagCompound().setFloat("electricity", electricityStored);
         
         /**
          * Sets the damage as a percentage to render the bar properly.

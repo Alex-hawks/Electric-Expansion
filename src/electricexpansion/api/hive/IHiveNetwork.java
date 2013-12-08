@@ -35,9 +35,17 @@ public interface IHiveNetwork
     public Set<IHiveConductor> getConductors();
     
     /**
-     * MUST BE THREAD SAFE!!!
+     * MUST BE THREAD SAFE!!! This method can be called from another thread, and may start it's own thread...
      */
     public void sendData(byte[] data);
 
     public Byte registerIO(IHiveSignalIO io);
+    /**
+     * @return should always return {@code (Byte) null} to make it easier to manage the Network Unique ID in your {@link IHiveSignalIO}
+     */
+    public Byte unregisterIO(IHiveSignalIO io);
+    
+    public void clear();
+    
+    public void merge(IHiveNetwork otherNetwork);
 }

@@ -21,6 +21,7 @@ import dan200.computer.api.IComputerAccess;
 import dan200.computer.api.ILuaContext;
 import dan200.computer.api.IPeripheral;
 import electricexpansion.api.IWirelessPowerMachine;
+import electricexpansion.api.tile.EnergyCoordinates;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.misc.DistributionNetworks;
 
@@ -29,9 +30,9 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
 {
     private ItemStack[] containingItems = new ItemStack[2];
     private int playersUsing = 0;
-    private byte frequency = 0;
     private float joulesForDisplay = 0;
     private String owningPlayer = null;
+    private EnergyCoordinates coords = null;
     
     @Override
     public void setPlayer(EntityPlayer player)
@@ -84,10 +85,12 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     @Override
     public Packet getDescriptionPacket()
     {
-        if (ElectricExpansion.useHashCodes)
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.getEnergyStored(), Integer.valueOf(this.owningPlayer.hashCode()).toString());
-        else
-            return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.getFrequency(), this.getEnergyStored(), this.owningPlayer);
+        EnergyCoordinates freq = this.getFrequency();
+        float x = freq.x, y = freq.y, z = freq.z;
+        
+        String name = ElectricExpansion.useHashCodes ? Integer.valueOf(this.owningPlayer.hashCode()).toString() : this.owningPlayer;
+        
+        return PacketManager.getPacket(ElectricExpansion.CHANNEL, this, x, y, z, this.getEnergyStored(), name);
     }
     
     @Override
@@ -97,7 +100,8 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         {
             try
             {
-                this.frequency = dataStream.readByte();
+                float x = dataStream.readFloat(), y = dataStream.readFloat(), z = dataStream.readFloat();
+                this.coords = new EnergyCoordinates(x, y, z);
                 this.joulesForDisplay = dataStream.readFloat();
                 this.owningPlayer = dataStream.readUTF();
             }
@@ -110,7 +114,8 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         {
             try
             {
-                this.setFrequency(dataStream.readByte());
+                float x = dataStream.readFloat(), y = dataStream.readFloat(), z = dataStream.readFloat();
+                this.setFrequency(new EnergyCoordinates(x, y, z));
             }
             catch (Exception e)
             {
@@ -137,11 +142,15 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         super.readFromNBT(par1NBTTagCompound);
         try
         {
-            this.frequency = par1NBTTagCompound.getByte("frequency");
+            float x = par1NBTTagCompound.getFloat("frequency_x");
+            float y = par1NBTTagCompound.getFloat("frequency_y");
+            float z = par1NBTTagCompound.getFloat("frequency_z");
+            
+            this.coords = new EnergyCoordinates(x, y, z);
         }
         catch (Exception e)
         {
-            this.frequency = 0;
+            this.coords = null;
         }
         
         try
@@ -158,26 +167,28 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     public void writeToNBT(NBTTagCompound par1NBTTagCompound)
     {
         super.writeToNBT(par1NBTTagCompound);
-        par1NBTTagCompound.setShort("frequency", this.frequency);
+        par1NBTTagCompound.setFloat("frequency_x", this.coords.x);
+        par1NBTTagCompound.setFloat("frequency_y", this.coords.y);
+        par1NBTTagCompound.setFloat("frequency_z", this.coords.z);
         par1NBTTagCompound.setString("owner", this.owningPlayer);
     }
     
     @Override
     public float getEnergyStored()
     {
-        return ElectricExpansion.DistributionNetworksInstance.getJoules(this.owningPlayer, this.frequency);
+        return ElectricExpansion.DistributionNetworksInstance.getJoules(this.coords);
     }
     
     @Override
     public void removeJoules(float outputWatts)
     {
-        ElectricExpansion.DistributionNetworksInstance.removeJoules(this.owningPlayer, this.frequency, outputWatts);
+        ElectricExpansion.DistributionNetworksInstance.removeJoules(this.coords, outputWatts);
     }
     
     @Override
     public void setEnergyStored(float joules)
     {
-        ElectricExpansion.DistributionNetworksInstance.setJoules(this.owningPlayer, this.frequency, joules);
+        ElectricExpansion.DistributionNetworksInstance.setJoules(this.coords, joules);
     }
     
     @Override
@@ -276,40 +287,20 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     }
     
     @Override
-    public byte getFrequency()
+    public EnergyCoordinates getFrequency()
     {
-        return this.frequency;
+        return this.coords;
     }
     
     @Override
-    public void setFrequency(byte newFrequency)
+    public void setFrequency(EnergyCoordinates coords)
     {
-        this.frequency = newFrequency;
+        this.coords = coords;
         
         if (this.worldObj.isRemote)
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, newFrequency));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, coords));
         }
-    }
-    
-    public void setFrequency(int frequency)
-    {
-        this.setFrequency((byte) frequency);
-    }
-    
-    public void setFrequency(short frequency)
-    {
-        this.setFrequency((byte) frequency);
-    }
-    
-    private int setFrequency(Object frequency)
-    {
-        if (frequency instanceof Double)
-        {
-            Double freq = (Double) frequency;
-            this.setFrequency((int) Math.floor(freq));
-        }
-        return this.frequency;
     }
     
     public String getOwningPlayer()
@@ -368,9 +359,9 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
             case getEnergyStored:
                 return new Object[] { this.getEnergyStored() };
             case getFrequency:
-                return new Object[] { this.getFrequency() };
+                return new Object[] { this.getFrequency().x, this.getFrequency().y, this.getFrequency().z };
             case setFrequency:
-                return new Object[] { arguments.length == 1 ? this.setFrequency(arguments[0]) : "Expected args for this function is 1. You have provided %s.".replace("%s", arguments.length + "") };
+                return arguments.length == 3 ? this.setFrequency(arguments) : new Object[] { "Expected args for this function is 3. You have provided %s.".replace("%s", arguments.length + "") };
             case getPlayer:
                 return new Object[] { this.getOwningPlayer() };
             default:
@@ -378,6 +369,13 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         }
     }
     
+    private Object[] setFrequency(Object[] args)
+    {
+        if (args.length == 3 && args[0] instanceof Double && args[1] instanceof Double && args[2] instanceof Double)
+            this.setFrequency(new EnergyCoordinates((float) args[0], (float) args[1], (float) args[2]));
+        return new Object[] {this.getFrequency().x, this.getFrequency().y, this.getFrequency().z};
+    }
+
     @Override
     public boolean canConnect(ForgeDirection direction)
     {
@@ -395,7 +393,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     {
         return false;
     }
-
+    
     @Override
     public float getProvide(ForgeDirection direction)
     {

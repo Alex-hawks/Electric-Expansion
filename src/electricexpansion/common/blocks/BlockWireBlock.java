@@ -1,27 +1,23 @@
 package electricexpansion.common.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.cables.TileEntityWireBlock;
+import electricexpansion.common.helpers.BlockWireBase;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import electricexpansion.common.misc.EETab;
 
-public class BlockWireBlock extends BlockConductor
+public class BlockWireBlock extends BlockWireBase
 {
     public BlockWireBlock(int id)
     {
@@ -73,17 +69,6 @@ public class BlockWireBlock extends BlockConductor
     
     @Override
     @SideOnly(Side.CLIENT)
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < 5; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
     public Icon getBlockTexture(IBlockAccess par1IBlockAccess, int x, int y, int z, int side)
     {
         return ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x, y, z)).textureItemStack == null ? this.blockIcon : ((TileEntityConductorBase) par1IBlockAccess.getBlockTileEntity(x,
@@ -93,6 +78,9 @@ public class BlockWireBlock extends BlockConductor
     @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
     {
+        if (super.onBlockActivated(world, x, y, z, player, par6, par7, par8, par9))
+            return true;
+
         TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
         if (tileEntity instanceof TileEntityConductorBase)
         {

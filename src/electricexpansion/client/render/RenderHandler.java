@@ -30,7 +30,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
         if (block.blockID == ElectricExpansionItems.blockWireMill.blockID)
         {
             FMLClientHandler.instance().getClient().renderEngine.bindTexture(TextureLocations.MODEL_WIRE_MILL);
-            GL11.glRotatef(180, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(-180, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(0.5F, .8F, 0.5F);
             GL11.glScalef(1F, -1F, -1F);
             this.wireMill.render(null, 0, 0, 0, 0, 0, 0.0625F);
@@ -38,7 +38,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
         }
         if (block.blockID == ElectricExpansionItems.blockTransformer.blockID)
         {
-            switch (metadata / 4)
+            switch (metadata)
             {
                 case 0:
                     FMLClientHandler.instance().getClient().renderEngine.bindTexture(TextureLocations.MODEL_TRANSFORMER_1);
@@ -54,6 +54,7 @@ public class RenderHandler implements ISimpleBlockRenderingHandler
             GL11.glTranslatef(0.5F, .8F, 0.5F);
             GL11.glScalef(1F, -1F, -1F);
             this.transformer.render(null, 0, 0, 0, 0, 0, 0.0625F);
+            this.transformer.renderAll(0.0625F);
             GL11.glPopMatrix();
         }
     }

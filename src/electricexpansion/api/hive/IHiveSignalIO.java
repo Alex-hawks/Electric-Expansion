@@ -17,4 +17,6 @@ public interface IHiveSignalIO extends IHiveNetworkMember
     public void processData(byte[] data);
     
     public byte getDeviceTypeID();
+    
+    public Byte getNetworkUniqueID();
 }

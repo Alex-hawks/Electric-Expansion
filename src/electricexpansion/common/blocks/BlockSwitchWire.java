@@ -1,22 +1,18 @@
 package electricexpansion.common.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import universalelectricity.prefab.block.BlockConductor;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.common.cables.TileEntitySwitchWire;
+import electricexpansion.common.helpers.BlockWireBase;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import electricexpansion.common.misc.EETab;
 
-public class BlockSwitchWire extends BlockConductor
+public class BlockSwitchWire extends BlockWireBase
 {
     public BlockSwitchWire(int id)
     {
@@ -63,17 +59,6 @@ public class BlockSwitchWire extends BlockConductor
     public boolean canProvidePower()
     {
         return true;
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List par3List)
-    {
-        for (int var4 = 0; var4 < 5; ++var4)
-        {
-            par3List.add(new ItemStack(par1, 1, var4));
-        }
     }
     
     @Override

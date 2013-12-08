@@ -4,6 +4,7 @@ import codechicken.nei.api.API;
 import codechicken.nei.api.IConfigureNEI;
 import electricexpansion.client.gui.GuiInsulationMachine;
 import electricexpansion.client.gui.GuiWireMill;
+import electricexpansion.common.ElectricExpansion;
 
 public class NEIElextricExpansionConfig implements IConfigureNEI
 {
@@ -30,7 +31,7 @@ public class NEIElextricExpansionConfig implements IConfigureNEI
     @Override
     public String getVersion()
     {
-        return "1.0.0";
+        return ElectricExpansion.VERSION;
     }
     
 }

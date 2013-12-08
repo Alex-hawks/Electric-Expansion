@@ -28,7 +28,7 @@ public class WireMillRecipeHandler extends EEMachineRecipeHandler
     @Override
     public void loadTransferRects()
     {
-        transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(77, 27, 22, 12), "wireMill", new Object[0]));
+        transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(77, 19, 22, 12), "wireMill", new Object[0]));
     }
     
     @Override
@@ -38,7 +38,7 @@ public class WireMillRecipeHandler extends EEMachineRecipeHandler
     }
     
     @Override
-    public double getWattsPerTick()
+    public float getWattsPerTick()
     {
         return TileEntityWireMill.WATTS_PER_TICK;
     }

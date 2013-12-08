@@ -20,7 +20,9 @@ public interface IHiveNetworkMember extends IConnector
     public IHiveNetwork getHiveNetwork();
     
     /**
-     * @return true if successful. DO NOT reassign your TileEntity's HiveNetwork unless mustOverride is true
+     * If your TileEntity is a {@link IHiveSignalIO}, then register the IO to the new network here, 
+     * after ensuring that it isn't registered to any network
+     * @return true if successful. DO NOT reassign your TileEntity's HiveNetwork unless mustOverride is true or it is null
      */
     public boolean setHiveNetwork(IHiveNetwork hiveNetwork, boolean mustOverride);
 }

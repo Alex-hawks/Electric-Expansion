@@ -1,6 +1,8 @@
 package electricexpansion.common.cables;
 
 import com.google.common.io.ByteArrayDataInput;
+
+import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.helpers.TileEntityConductorBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,7 +29,6 @@ public class TileEntityWireBlock extends TileEntityConductorBase
                 this.textureItemStack = new ItemStack(par1, par2, par3);
             }
         }
-
     }
 
     @Override
@@ -46,4 +47,9 @@ public class TileEntityWireBlock extends TileEntityConductorBase
         }
     }
 
+    @Override
+    protected int getID()
+    {
+        return ElectricExpansionItems.blockWireBlock.blockID;
+    }
 }

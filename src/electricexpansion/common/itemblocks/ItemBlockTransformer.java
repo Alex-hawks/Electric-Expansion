@@ -21,20 +21,13 @@ public class ItemBlockTransformer extends ItemBlock
     public String getUnlocalizedName(ItemStack i)
     {
         String name = null;
-        int j = i.getItemDamage();
-        int tier = j - (j & 3);
+        int tier = i.getItemDamage();
         if (tier == 0)
-        {
             name = "2x";
-        }
-        if (tier == 4)
-        {
+        if (tier == 1)
             name = "4x";
-        }
-        if (tier == 8)
-        {
+        if (tier == 2)
             name = "8x";
-        }
         return i.getItem().getUnlocalizedName() + "." + name;
     }
 }
