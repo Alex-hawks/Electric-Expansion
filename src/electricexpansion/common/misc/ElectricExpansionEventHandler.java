@@ -1,16 +1,21 @@
 package electricexpansion.common.misc;
 
+import ic2.api.event.PaintEvent;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import universalelectricity.core.block.IConductor;
 import universalelectricity.core.electricity.ElectricalEvent;
 import universalelectricity.core.electricity.ElectricityPack;
 import universalelectricity.core.grid.IElectricityNetwork;
@@ -18,6 +23,8 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import electricexpansion.api.ElectricExpansionItems;
 import electricexpansion.common.ElectricExpansion;
+import electricexpansion.common.helpers.BlockWireBase;
+import electricexpansion.common.helpers.TileEntityConductorBase;
 
 public class ElectricExpansionEventHandler
 {
@@ -102,5 +109,23 @@ public class ElectricExpansionEventHandler
     public ElectricityPack getNetworkStat(IElectricityNetwork net)
     {
         return this.electricityMap.get(net);
+    }
+    
+    @ForgeSubscribe
+    public void onPaint(PaintEvent event)
+    {
+        if (!(Block.blocksList[event.world.getBlockId(event.x, event.y, event.z)] instanceof BlockWireBase)) 
+            return;
+        TileEntity te = event.world.getBlockTileEntity(event.x, event.y, event.z);
+        if (event.color != ((TileEntityConductorBase) te).getFrequency().getIndex()) 
+        {
+            ((TileEntityConductorBase) event.world.getBlockTileEntity(event.x, event.y, event.z)).setFrequency((byte) event.color);
+            
+
+            ((IConductor) te).refresh();
+            BlockWireBase.updateWireSwitch(event.world, event.x, event.y, event.z);
+            
+            event.painted = true;
+        }
     }
 }

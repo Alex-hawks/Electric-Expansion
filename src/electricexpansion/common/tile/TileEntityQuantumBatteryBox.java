@@ -289,6 +289,9 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
     @Override
     public EnergyCoordinates getFrequency()
     {
+        if (this.coords == null)
+            this.coords = new EnergyCoordinates(0, 0, 0);
+        
         return this.coords;
     }
     
@@ -299,7 +302,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
         
         if (this.worldObj.isRemote)
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, coords));
+            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this, this.coords.x, this.coords.y, this.coords.z));
         }
     }
     
@@ -375,7 +378,7 @@ implements IWirelessPowerMachine, IPacketReceiver, IInventory, IPeripheral
             this.setFrequency(new EnergyCoordinates((float) args[0], (float) args[1], (float) args[2]));
         return new Object[] {this.getFrequency().x, this.getFrequency().y, this.getFrequency().z};
     }
-
+    
     @Override
     public boolean canConnect(ForgeDirection direction)
     {

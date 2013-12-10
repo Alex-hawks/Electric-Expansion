@@ -193,7 +193,7 @@ implements IPacketReceiver, IAdvancedConductor, IHiveConductor
     
     public void updateConnection(TileEntity that, ForgeDirection side)
     {
-        if (!this.worldObj.isRemote && that != null)
+        if (!this.worldObj.isRemote && that != null && this.canConnect(side))
         {
             if (that instanceof TileEntityConductorBase)
             {

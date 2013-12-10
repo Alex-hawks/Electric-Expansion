@@ -97,7 +97,7 @@ public class BlockRedstonePaintedWire extends BlockWireBase implements ITileEnti
             if (tileEntity instanceof IConductor)
             {
                 ((IConductor) tileEntity).refresh();
-                this.updateWireSwitch(world, x, y, z);
+                updateWireSwitch(world, x, y, z);
             }
         }
         

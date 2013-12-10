@@ -5,6 +5,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import universalelectricity.core.electricity.ElectricityDisplay;
@@ -13,6 +14,7 @@ import universalelectricity.prefab.network.PacketManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import electricexpansion.api.tile.EnergyCoordinates;
 import electricexpansion.client.misc.TextureLocations;
 import electricexpansion.common.ElectricExpansion;
 import electricexpansion.common.containers.ContainerDistribution;
@@ -23,7 +25,9 @@ public class GuiQuantumBatteryBox extends GuiContainer
 {
     private TileEntityQuantumBatteryBox tileEntity;
     
-    private GuiTextField textFieldFrequency;
+    private GuiTextField textFieldX;
+    private GuiTextField textFieldY;
+    private GuiTextField textFieldZ;
     
     private int containerWidth;
     private int containerHeight;
@@ -44,11 +48,24 @@ public class GuiQuantumBatteryBox extends GuiContainer
     public void initGui()
     {
         super.initGui();
+        this.xSize = 235;
         int var1 = (this.width - this.xSize) / 2;
         int var2 = (this.height - this.ySize) / 2;
-        this.textFieldFrequency = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
-        this.textFieldFrequency.setMaxStringLength(3);
-        this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
+        //this.textFieldFrequency = new GuiTextField(this.fontRenderer, 6, 45, 49, 13);
+        //this.textFieldFrequency.setMaxStringLength(3);
+        //this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
+        
+        this.textFieldX = new GuiTextField(this.fontRenderer, 150, 5, 45, 11);
+        this.textFieldX.setMaxStringLength(5);
+        this.textFieldX.setText(this.tileEntity.getFrequency() + "");
+        
+        this.textFieldY = new GuiTextField(this.fontRenderer, 150, 19, 45, 11);
+        this.textFieldY.setMaxStringLength(5);
+        this.textFieldY.setText(this.tileEntity.getFrequency() + "");
+        
+        this.textFieldZ = new GuiTextField(this.fontRenderer, 150, 33, 45, 11);
+        this.textFieldZ.setMaxStringLength(5);
+        this.textFieldZ.setText(this.tileEntity.getFrequency() + "");
         
         this.buttonList.clear();
         
@@ -62,20 +79,22 @@ public class GuiQuantumBatteryBox extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
-        this.textFieldFrequency.drawTextBox();
+        this.textFieldX.drawTextBox();
+        this.textFieldY.drawTextBox();
+        this.textFieldZ.drawTextBox();
         
         String displayJoules = ElectricityDisplay.getDisplayShort(this.tileEntity.getJoulesForDisplay(), ElectricUnit.JOULES);
         
-        this.fontRenderer.drawString(this.tileEntity.getInvName(), 42, 6, 4210752);
-        this.fontRenderer.drawString("Current Frequency: " + this.tileEntity.getFrequency(), 10, 20, 4210752);
+        this.fontRenderer.drawString(this.tileEntity.getInvName(), 22, 6, 4210752);
+        //this.fontRenderer.drawString("Current Frequency: " + this.tileEntity.getFrequency(), 10, 20, 4210752);
         this.fontRenderer.drawString("Current Storage: " + displayJoules, 10, 30, 4210752);
         if (this.tileEntity.getOwningPlayer() != null)
         {
-            this.fontRenderer.drawString("Player: " + this.tileEntity.getOwningPlayer(), 65, 66, 4210752);
+            this.fontRenderer.drawString("Player: " + this.tileEntity.getOwningPlayer(), 40, 66, 4210752);
         }
         else
         {
-            this.fontRenderer.drawString("I have no owner. BUG!", 62, 66, 4210752);
+            this.fontRenderer.drawString("I have no owner. BUG!", 40, 66, 4210752);
         }
     }
     
@@ -106,7 +125,9 @@ public class GuiQuantumBatteryBox extends GuiContainer
     protected void mouseClicked(int par1, int par2, int par3)
     {
         super.mouseClicked(par1, par2, par3);
-        this.textFieldFrequency.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        this.textFieldX.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        this.textFieldY.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
+        this.textFieldZ.mouseClicked(par1 - this.containerWidth, par2 - this.containerHeight, par3);
     }
     
     /**
@@ -117,20 +138,21 @@ public class GuiQuantumBatteryBox extends GuiContainer
     protected void keyTyped(char par1, int par2)
     {
         super.keyTyped(par1, par2);
-        if (par2 == 28)
+        if (par2 == Keyboard.KEY_RETURN || par2 == Keyboard.KEY_NUMPADENTER)
         {
-            PacketDispatcher.sendPacketToServer(PacketManager.getPacket(ElectricExpansion.CHANNEL, this.tileEntity, this.frequency));
+            try
+            {
+                this.tileEntity.setFrequency(new EnergyCoordinates(Float.parseFloat(this.textFieldX.getText()), Float.parseFloat(this.textFieldY.getText()), Float.parseFloat(this.textFieldZ.getText())));
+            }
+            catch (Exception e) { }
         }
-        this.textFieldFrequency.textboxKeyTyped(par1, par2);
         
-        try
-        {
-            byte newFrequency = (byte) Math.max(Byte.parseByte(this.textFieldFrequency.getText()), 0);
-            this.frequency = newFrequency;
-        }
-        catch (Exception e)
-        {
-        }
+        if (this.textFieldX.isFocused())
+            this.textFieldX.textboxKeyTyped(par1, par2);
+        else if (this.textFieldY.isFocused())
+            this.textFieldY.textboxKeyTyped(par1, par2);
+        else if (this.textFieldZ.isFocused())
+            this.textFieldZ.textboxKeyTyped(par1, par2);
     }
     
     @Override
@@ -148,9 +170,20 @@ public class GuiQuantumBatteryBox extends GuiContainer
     @Override
     public void updateScreen()
     {
-        if (!this.textFieldFrequency.isFocused())
+        if (!this.textFieldX.isFocused())
         {
-            this.textFieldFrequency.setText(this.tileEntity.getFrequency() + "");
+            this.textFieldX.setText(this.tileEntity.getFrequency().x + "");
         }
+        
+        if (!this.textFieldY.isFocused())
+        {
+            this.textFieldY.setText(this.tileEntity.getFrequency().y + "");
+        }
+        
+        if (!this.textFieldZ.isFocused())
+        {
+            this.textFieldZ.setText(this.tileEntity.getFrequency().z + "");
+        }
+        
     }
 }

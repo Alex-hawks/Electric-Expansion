@@ -46,7 +46,7 @@ public abstract class BlockWireBase extends BlockConductor
             if (tileEntity instanceof IConductor)
             {
                 ((IConductor) tileEntity).refresh();
-                this.updateWireSwitch(world, x, y, z);
+                updateWireSwitch(world, x, y, z);
             }
         }
         
@@ -71,7 +71,7 @@ public abstract class BlockWireBase extends BlockConductor
                     
                     ((IConductor) tileEntity).refresh();
                     
-                    this.updateWireSwitch(par1World, x, y, z);
+                    updateWireSwitch(par1World, x, y, z);
                     
                     return true;
                 }
@@ -80,7 +80,7 @@ public abstract class BlockWireBase extends BlockConductor
         return false;
     }
     
-    protected void updateWireSwitch(World world, int x, int y, int z)
+    public static void updateWireSwitch(World world, int x, int y, int z)
     {
         TileEntityConductorBase tileEntity = (TileEntityConductorBase) world.getBlockTileEntity(x, y, z);
         

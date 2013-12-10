@@ -26,4 +26,17 @@ public class EnergyCoordinates
             return this.x == that.x && this.y == that.y && this.z == that.z;
         }
     }
+    
+    @Override
+    public String toString()
+    {
+        return "[" + this.x + ", " + this.y + ", " + this.z + "]";
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return ((Float) this.x).hashCode() & ((Float) this.y).hashCode() & ((Float) this.z).hashCode();
+    }
+    
 }

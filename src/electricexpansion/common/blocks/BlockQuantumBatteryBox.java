@@ -3,6 +3,7 @@ package electricexpansion.common.blocks;
 import java.util.HashMap;
 import java.util.List;
 
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -27,6 +28,7 @@ import electricexpansion.common.tile.TileEntityAdvancedBatteryBox;
 import electricexpansion.common.tile.TileEntityQuantumBatteryBox;
 
 public class BlockQuantumBatteryBox extends BlockAdvanced
+implements ITileEntityProvider
 {
     private HashMap<String, Icon> icons = new HashMap<String, Icon>();
     
@@ -87,7 +89,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
     }
     
     @Override
-    public TileEntity createTileEntity(World var1, int meta)
+    public TileEntity createNewTileEntity(World var1)
     {
         return new TileEntityQuantumBatteryBox();
     }
@@ -105,9 +107,7 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
             if (par5EntityPlayer.username == ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).getOwningPlayer() || isPlayerOp)
             {
                 par5EntityPlayer.openGui(ElectricExpansion.instance, 4, par1World, x, y, z);
-                return true;
             }
-            return true;
         }
         return true;
     }
@@ -141,7 +141,6 @@ public class BlockQuantumBatteryBox extends BlockAdvanced
             ((TileEntityQuantumBatteryBox) par1World.getBlockTileEntity(x, y, z)).setPlayer((EntityPlayer) par5EntityLiving);
         }
         
-        ((TileEntityAdvanced) par1World.getBlockTileEntity(x, y, z)).initiate();
         par1World.notifyBlocksOfNeighborChange(x, y, z, this.blockID);
     }
     
