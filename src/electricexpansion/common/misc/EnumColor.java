@@ -1,6 +1,6 @@
 package electricexpansion.common.misc;
 
-public enum EnumWireFrequency
+public enum EnumColor
 {
     NONE(-1),
     
@@ -22,7 +22,7 @@ public enum EnumWireFrequency
     WHITE(15);
     
     private final byte                 index;
-    private static EnumWireFrequency[] indexToName =
+    private static EnumColor[] indexToName =
                                                    {
                                                    BLACK, RED, DARK_GREEN, BROWN,
                                                    BLUE, PURPLE, CYAN, LIGHT_GRAY,
@@ -30,12 +30,12 @@ public enum EnumWireFrequency
                                                    LIGHT_BLUE, MAGENTA, ORANGE, WHITE
                                                    };
     
-    private EnumWireFrequency(byte i)
+    private EnumColor(byte i)
     {
         this.index = i;
     }
     
-    private EnumWireFrequency(int i)
+    private EnumColor(int i)
     {
         this((byte) i);
     }
@@ -45,7 +45,7 @@ public enum EnumWireFrequency
         return this.index;
     }
     
-    public static final EnumWireFrequency getFromIndex(byte i)
+    public static final EnumColor getFromIndex(byte i)
     {
         if (i >= 0 && i < indexToName.length)
         {

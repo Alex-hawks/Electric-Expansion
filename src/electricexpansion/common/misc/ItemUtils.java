@@ -5,7 +5,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemUtils
 {
-    public static EnumWireFrequency isDye(ItemStack is)
+    public static EnumColor isDye(ItemStack is)
     {
         String[] dyes =
         {
@@ -30,9 +30,9 @@ public class ItemUtils
         for (int i = 0; i < dyes.length; i++)
         {
             if (OreDictionary.getOreID(is) != -1 && OreDictionary.getOreName(OreDictionary.getOreID(is)).equals(dyes[i]))
-                return EnumWireFrequency.getFromIndex((byte) i);
+                return EnumColor.getFromIndex((byte) i);
         }
         
-        return EnumWireFrequency.NONE;
+        return EnumColor.NONE;
     }
 }
